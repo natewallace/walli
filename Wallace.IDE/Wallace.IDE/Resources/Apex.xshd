@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<SyntaxDefinition name="Apex"
+                  xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+  <!-- Colors -->
+  <Color name="Comment" foreground="Green" />
+  <Color name="DocComment" foreground="Gray" />
+  <Color name="DocCommentText" foreground="Green" fontStyle="italic" />
+  <Color name="String" foreground="DarkRed" />
+  <Color name="ApexKeyword" foreground="Blue" />
+  <Color name="SOQLKeyword" foreground="Purple" />
+  <Color name="Alert" foreground="Red" fontWeight="bold" />
+  <Color name="Warning" foreground="#EEE0E000" fontWeight="bold" />
+
+  <!-- Comment markers -->
+  <RuleSet name="CommentMarkers" ignoreCase="true">
+
+    <Keywords color="Alert">
+      <Word>TODO</Word>
+      <Word>FIXME</Word>
+    </Keywords>
+
+    <Keywords color="Warning">
+      <Word>HACK</Word>
+      <Word>UNDONE</Word>
+    </Keywords>
+
+  </RuleSet>
+
+  <!-- Main ruleset -->
+  <RuleSet ignoreCase="true">
+
+    <!-- Line comment -->
+    <Span color="Comment">
+      <Begin>//</Begin>
+      <RuleSet>
+        <Import ruleSet="CommentMarkers" />
+      </RuleSet>
+    </Span>
+
+    <!-- Block comment -->
+    <Span color="Comment" multiline="true">
+      <Begin>/\*([^*]|$)</Begin>
+      <End>\*/</End>
+      <RuleSet>
+        <Import ruleSet="CommentMarkers" />
+      </RuleSet>
+    </Span>
+
+    <!-- Documentation comment -->
+    <Span color="DocComment" multiline="true">
+      <Begin>/\*\*</Begin>
+      <End>\*/</End>
+      <RuleSet ignoreCase="true">
+        <Import ruleSet="CommentMarkers" />
+        <Span color="DocComment">
+          <Begin>^[ \t]*\*?[ \t]*@(([Pp][Aa][Rr][Aa][Mm][ \t]*[^ ]*)|([^ \t]*))</Begin>
+          <End>$|^|.(?=(\*/))</End>
+          <RuleSet>
+            <Rule color="DocCommentText">
+              .
+            </Rule>
+          </RuleSet>
+        </Span>
+        <Span color="DocComment">
+          <Begin>^[ \t]*\*(?!([*]*/))</Begin>
+          <End>$|^|.(?=(\*/))</End>
+          <RuleSet>
+            <Rule color="DocCommentText">
+              .
+            </Rule>
+          </RuleSet>
+        </Span>
+      </RuleSet>
+    </Span>
+
+    <!-- String -->
+    <Span color="String">
+      <Begin>'</Begin>
+      <End>'</End>
+      <RuleSet>
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <!-- SOQL -->
+    <Span multiline="true">
+      <Begin>\[</Begin>
+      <End>\]</End>
+      <RuleSet>
+
+        <!-- SOQL Line comment -->
+        <Span color="Comment">
+          <Begin>//</Begin>
+          <RuleSet ignoreCase="true">
+            <Import ruleSet="CommentMarkers" />
+          </RuleSet>
+        </Span>
+
+        <!-- SOQL Block comment -->
+        <Span color="Comment" multiline="true">
+          <Begin>/\*</Begin>
+          <End>\*/</End>
+          <RuleSet ignoreCase="true">
+            <Import ruleSet="CommentMarkers" />
+          </RuleSet>
+        </Span>
+
+        <!-- SOQL String -->
+        <Span color="String">
+          <Begin>'</Begin>
+          <End>'</End>
+          <RuleSet>
+            <Span begin="\\" end="." />
+          </RuleSet>
+        </Span>
+
+        <Keywords color="SOQLKeyword">
+          <Word>SELECT</Word>
+          <Word>AND</Word>
+          <Word>OR</Word>
+          <Word>NULL</Word>
+          <Word>END</Word>
+          <Word>TYPEOF</Word>
+          <Word>FROM</Word>
+          <Word>WHERE</Word>
+          <Word>WITH</Word>
+          <Word>GROUP</Word>
+          <Word>BY</Word>
+          <Word>ROLLUP</Word>
+          <Word>CUBE</Word>
+          <Word>HAVING</Word>
+          <Word>ORDER</Word>
+          <Word>ASC</Word>
+          <Word>DESC</Word>
+          <Word>NULLS</Word>
+          <Word>FIRST</Word>
+          <Word>LAST</Word>
+          <Word>LIMIT</Word>
+          <Word>LIKE</Word>
+          <Word>VIEW</Word>
+          <Word>REFERENCE</Word>
+          <Word>OFFSET</Word>
+          <Word>VIEWSTAT</Word>
+          <Word>FOR</Word>
+          <Word>UPDATE</Word>
+          <Word>IN</Word>
+        </Keywords>
+      </RuleSet>
+    </Span>
+
+    <!-- Keywords -->
+    <Keywords color="ApexKeyword">
+      <Word>abstract</Word>
+      <Word>after</Word>
+      <Word>before</Word>
+      <Word>blob</Word>
+      <Word>boolean</Word>
+      <Word>break</Word>
+      <Word>catch</Word>
+      <Word>class</Word>
+      <Word>continue</Word>
+      <Word>date</Word>
+      <Word>datetime</Word>
+      <Word>decimal</Word>
+      <Word>delete</Word>
+      <Word>do</Word>
+      <Word>double</Word>
+      <Word>else</Word>
+      <Word>enum</Word>
+      <Word>exception</Word>
+      <Word>extends</Word>
+      <Word>false</Word>
+      <Word>final</Word>
+      <Word>finally</Word>
+      <Word>for</Word>
+      <Word>get</Word>
+      <Word>global</Word>
+      <Word>id</Word>
+      <Word>if</Word>
+      <Word>implements</Word>
+      <Word>insert</Word>
+      <Word>interface</Word>
+      <Word>integer</Word>
+      <Word>list</Word>
+      <Word>long</Word>
+      <Word>map</Word>
+      <Word>merge</Word>
+      <Word>new</Word>
+      <Word>null</Word>
+      <Word>on</Word>
+      <Word>override</Word>
+      <Word>private</Word>
+      <Word>protected</Word>
+      <Word>public</Word>
+      <Word>return</Word>
+      <Word>rollback</Word>
+      <Word>set</Word>
+      <Word>static</Word>
+      <Word>string</Word>
+      <Word>super</Word>
+      <Word>system</Word>
+      <Word>testmethod</Word>
+      <Word>this</Word>
+      <Word>throw</Word>
+      <Word>trigger</Word>
+      <Word>true</Word>
+      <Word>try</Word>
+      <Word>undelete</Word>
+      <Word>update</Word>
+      <Word>upsert</Word>
+      <Word>value</Word>
+      <Word>virtual</Word>
+      <Word>void</Word>
+      <Word>webservice</Word>
+      <Word>while</Word>
+      <Word>with</Word>
+      <Word>without</Word>
+      <Word>sharing</Word>
+      <Word>null</Word>
+      <Word>true</Word>
+      <Word>false</Word>
+    </Keywords>
+
+  </RuleSet>
+
+</SyntaxDefinition>
+

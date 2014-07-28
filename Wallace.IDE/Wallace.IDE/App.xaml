@@ -1,0 +1,57 @@
+﻿<Application x:Class="Wallace.IDE.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Wallace.IDE"
+             DispatcherUnhandledException="Application_DispatcherUnhandledException">
+    <Application.Resources>
+        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Framework/Styles/ThemeColorStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/ChromeWindowStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/ChromeScrollViewerStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/ChromeTabStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/ChromeMenuStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/ChromeComboBoxStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/ChromeToolbarStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/TreeViewMultiSelectItemStyle.xaml" />
+                <ResourceDictionary Source="SalesForce/UI/SearchPanelStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style TargetType="FrameworkElement">
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+            </Style>
+            
+            <Style TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="Tahoma" />
+                <Setter Property="FontSize" Value="10pt" />
+            </Style>            
+
+            <Style BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" TargetType="ComboBox">                
+            </Style>
+            
+            <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="Button">
+                <Setter Property="Padding" Value="3" />
+            </Style>
+
+            <Style BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}" TargetType="ToggleButton">
+                <Setter Property="Padding" Value="3" />
+            </Style>
+            
+            <Style TargetType="Image">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.5" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style BasedOn="{StaticResource ChromeScrollBarStyle}" TargetType="{x:Type ScrollBar}" />
+
+            <Style BasedOn="{StaticResource ChromeToolbarStyle}" TargetType="{x:Type ToolBar}" />
+
+        </ResourceDictionary>        
+        
+    </Application.Resources>
+    
+</Application>

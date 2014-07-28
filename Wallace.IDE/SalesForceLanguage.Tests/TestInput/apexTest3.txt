@@ -1,0 +1,220 @@
+/*
+ * Collects all changes for the given timeframe and sends out an 
+ * email notification that lists all of those changes.
+ */
+public class ChangeNotifyEmailer {
+
+    /*
+     * The header for the html message that gets generated.
+     */
+    private static final string HTML_HEADER = '<html><head><style type="text/css">body {font: 12px "Courier New";} table {border: 1px solid black;border-collapse:collapse;} td {border: 1px solid black;padding-top: 5px;padding-bottom: 5px;padding-left: 5px;padding-right: 25px;} td.add {background-color: #B5EAAA;} td.edit {background-color: #FFE5B4;} td.delete {background-color: #E8ADAA;}</style></head><body><h4>The following objects have recently been changed.</h4><table><tr bgcolor="#BCC6CC"><td><b>Name</b></td><td><b>Change</b></td><td><b>Changed by</b></td><td><b>Changed date</b></td></tr>';
+    
+    /*
+     * The header for a table element.
+     * 
+     * {object} - replace with the name of the object.
+     */
+    private static final string TABLE_SECTION_HEADER = '<tr bgcolor="#98AFC7"><td colspan="4"><i>{object}</i></td></tr>';        
+        
+    /*
+     * A row within a table.
+     *
+     * {link} - replace with a url for the changed row.
+     * {name} - replace with the name of the changed row.
+     * {change} - replace with the type of change. add, edit, or delete.
+     * {changedBy} - replace with the user that changed the row.
+     * {changedDate} - replace with the date the row was changed.
+     */
+    private static final string TABLE_ROW = '<tr><td><a href="{link}">{name}</a></td><td class="{change}">{change}</td><td>{changedBy}</td><td>{changedDate}</td></tr>';    
+    
+    /*
+     * The footer for the html message that gets generated.
+     */
+    private static final string HTML_FOOTER = '</table><br/><br/></body></html>';          
+    
+    /*
+     * Send notifications of changes to users. Note that if there are no changes
+     * within the give time frame then there will be no notifications sent.
+     * 
+	 * @param recipients The email addresses that will recieve an email notification.
+     * @param hours The number of hours leading up to the current datetime to look for changes.
+     */
+    public void sendEmailNotifications(string[] recipients, integer hours) {
+        
+        datetime dateTimeFloor = DateTime.now().addHours(-1 * hours);        
+		
+        if (recipients.size() > 0) {    
+            map<string, ChangedRow[]> changedObjects = queryChangedRows(dateTimeFloor);
+            if (changedObjects.size() != 0) {
+                Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
+                message.setToAddresses(recipients);
+                message.setSubject('SalesForce change notification');
+                message.setHtmlBody(createHtmlBody(changedObjects)); 
+                Messaging.sendEmail(new Messaging.Email[] { message }, false);
+            }        
+		}
+    }
+    
+    /*
+     * Creates an HTML formatted message that includes the changed objects.
+     *
+     * @param changedObjects All of the changed objects.  The key of the map is the object name and the value 
+     *                       associated with the key are all of the changed rows within that object.
+     * @returns The HTML formatted message.
+     */
+    private string createHtmlBody(map<string, ChangedRow[]> changedObjects) {
+    
+        string[] output = new string[0];
+        output.add(HTML_HEADER);
+        
+        list<string> objectNames = new list<string>(changedObjects.keySet());
+        objectNames.sort();
+        
+        for (string objectName : objectNames) {
+			output.add(TABLE_SECTION_HEADER.replace('{object}', objectName));
+
+			string[] deleteBuffer = new string[0];
+			string[] addBuffer = new string[0];
+
+			ChangedRow[] objectRows = changedObjects.get(objectName);
+			for (ChangedRow objectRow : objectRows) {
+				string change = objectRow.getChange();
+				string line = TABLE_ROW.replace('{link}', objectRow.getLink())
+								       .replace('{name}', objectRow.getName())
+								       .replace('{change}', change)
+								       .replace('{changedBy}', objectRow.getLastModifiedByName())
+								       .replace('{changedDate}', String.valueOf(objectRow.getLastModifiedDate()));
+				if (change == 'edit')
+					output.add(line);
+				else if (change == 'delete')
+					deleteBuffer.add(line);
+				else if (change == 'add')
+					addBuffer.add(line);			   
+			}
+			
+			output.addAll(deleteBuffer);
+			output.addAll(addBuffer);
+        }
+        
+        output.add(HTML_FOOTER);
+        
+        return String.join(output, '');
+    }
+    
+    /*
+     * Queries the database for any rows on custom objects that have been changed since the datetime returned 
+     * by the getDateTimeFloor method.
+     *
+     * @param dateTimeFloor The lowest datetime for which changes will be queried.
+     * @returns All rows that have been changed.  The key of the map is the object name and the value 
+     *          associated with the key are all of the changed rows within that object.
+     */
+    public map<string, ChangedRow[]> queryChangedRows(datetime dateTimeFloor) {
+    
+        map<string, ChangedRow[]> output = new map<string, ChangedRow[]>();
+        
+        // get the names of all custom objects.
+        string[] customObjectNames = new string[0];
+        map<string, Schema.SObjectType> objects = Schema.getGlobalDescribe();
+        for (string key : objects.keySet())
+            if (key.endsWith('__c'))
+                customObjectNames.add(objects.get(key).getDescribe().getName());
+                
+        for (string name : customObjectNames) {                               
+            
+            SObject[] rows = Database.query(
+                'SELECT Id, Name, CreatedDate, LastModifiedBy.Name, LastModifiedDate, IsDeleted FROM ' + name + 
+                ' WHERE LastModifiedDate > ' + dateTimeFloor.format('yyyy-MM-dd\'T\'HH:mm:ss\'Z\'') +
+                ' ORDER BY Name ALL ROWS');
+                
+            if (rows.size() > 0) {
+                ChangedRow[] changedRows = new ChangedRow[0];
+                for (SObject row : rows)
+                    changedRows.add(new ChangedRow(row, dateTimeFloor));
+                    
+                output.put(name, changedRows);
+            }
+        }
+    
+        return output;
+    }    
+    
+    /*
+     * Represents a single row change and parses information from the
+     * SObject that holds the changed row.
+     */
+    private class ChangedRow {
+        
+        /*
+         * Holds the row that was changed.
+         */
+        private SObject mRow;
+        
+        /*
+         * Holds the lowest datetime for which changes are being evaluated.
+         */
+        private datetime mDateTimeFloor;
+        
+        /*
+         * Constructor.
+         *
+         * @param row The row that was changed.
+         * @param dateTimeFloor The lowest datetime for which changes are being evaluated.
+         */
+        public ChangedRow(SObject row, datetime dateTimeFloor) {
+            mRow = row;
+            mDateTimeFloor = dateTimeFloor;
+        }
+        
+        /*
+         * Get a link to the updated record.
+         *
+         * @returns A link to the updated record.
+         */
+        public string getLink() {
+            return 'https://' + System.URL.getSalesForceBaseURL().getHost() + '/' + mRow.get('Id');
+        }
+        
+        /*
+         * Get the name of the row.
+         *
+         * @returns The name of the row.
+         */
+        public string getName() {
+            return (string)mRow.get('Name');
+        }
+        
+        /*
+         * Get the change that occured with this row.
+         *
+         * @returns The change that occured with this row.
+         */
+        public string getChange() {
+            if (((boolean)mRow.get('IsDeleted')) == true)
+                return 'delete';
+            else if (((datetime)mRow.get('CreatedDate')) > mDateTimeFloor)
+                return 'add';
+            else 
+                return 'edit';
+        }
+        
+        /*
+         * Get the name of the user that last modified this row.
+         *
+         * @returns The name of the user that last modified this row.
+         */
+        public string getLastModifiedByName() {
+            return (string)mRow.getSObject('LastModifiedBy').get('Name');
+        }
+        
+        /*
+         * Get the date that this row was last modified.
+         *
+         * @returns The date that this row was last modified.
+         */
+        public datetime getLastModifiedDate() {
+            return (datetime)mRow.get('LastModifiedDate');
+        }
+    }
+
+}

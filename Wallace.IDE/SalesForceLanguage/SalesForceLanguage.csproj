@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DE715101-F43E-4F55-9957-310F36534F28}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SalesForceLanguage</RootNamespace>
+    <AssemblyName>SalesForceLanguage</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Apex\CodeModel\ClassDeclaration.cs" />
+    <Compile Include="Apex\CodeModel\CodeElementBase.cs" />
+    <Compile Include="Apex\CodeModel\ConstructorDeclaration.cs" />
+    <Compile Include="Apex\CodeModel\ICodeElement.cs" />
+    <Compile Include="Apex\CodeModel\InterfaceDeclaration.cs" />
+    <Compile Include="Apex\CodeModel\ParameterDeclaration.cs" />
+    <Compile Include="Apex\TextSymbolDocument.cs" />
+    <Compile Include="Apex\ParseResult.cs" />
+    <Compile Include="Apex\Parser\ApexLexerStateInfo.cs" />
+    <Compile Include="Apex\Parser\ApexLexer.cs" />
+    <Compile Include="Apex\Parser\ApexLexerExtension.cs" />
+    <Compile Include="Apex\Parser\ApexParser.cs" />
+    <Compile Include="Apex\Parser\ApexParserExtension.cs" />
+    <Compile Include="Apex\Parser\ApexSyntaxNode.cs" />
+    <Compile Include="Apex\Parser\ApexTextSpan.cs" />
+    <Compile Include="LanguageError.cs" />
+    <Compile Include="TextLocation.cs" />
+    <Compile Include="Apex\TextSymbol.cs" />
+    <Compile Include="Apex\TextSymbolType.cs" />
+    <Compile Include="Apex\CodeModel\MethodDeclaration.cs" />
+    <Compile Include="Apex\CodeModel\NameDeclaration.cs" />
+    <Compile Include="Apex\CodeModel\PropertyDeclaration.cs" />
+    <Compile Include="Apex\CodeModel\FieldDeclaration.cs" />
+    <Compile Include="Apex\Parser\ApexParserFactory.cs" />
+    <Compile Include="LanguageManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Apex\Parser\ShiftReduceParserCode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Apex\Apex.lex" />
+    <None Include="Apex\Apex.y" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\Gplex.exe" />
+    <Content Include="lib\gppg.exe" />
+    <Content Include="lib\QUT.ShiftReduceParser.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>"$(ProjectDir)lib\gppg.exe" /gplex /out:"$(ProjectDir)Apex\Parser\ApexParser.cs" "$(ProjectDir)\Apex\Apex.y"
+"$(ProjectDir)lib\Gplex.exe" /out:"$(ProjectDir)Apex\Parser\ApexLexer.cs" "$(ProjectDir)Apex\Apex.lex"</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
+  <Product Id="1F29EE89-6D6E-4363-A180-781DE041D516"
+           UpgradeCode="E333820A-5B39-44CF-81A0-BF56B02AEBF2"
+           Version="0.1.0.0"
+           Language="1033"
+           Name="Walli"
+           Manufacturer="natewallace@gmail.com">
+
+    <Package InstallerVersion="300" Compressed="yes" />
+    <Media Id="1" Cabinet="Walli.cab" EmbedCab="yes" />
+
+    <Icon Id="AppIcon.ico" SourceFile="..\Wallace.IDE\AppIcon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
+
+    <!-- Define the directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="APPLICATIONFOLDER" Name="Walli"/>
+      </Directory>      
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationMenuFolder" Name="Walli" />
+      </Directory>
+      <Directory Id="DesktopFolder" />
+    </Directory>
+
+    <!-- Add files to installer package -->
+    <DirectoryRef Id="APPLICATIONFOLDER">
+      <Component Id="Walli.exe" Guid="7E7FA26A-DA1B-4C30-9BF1-E10C6F3D9CE8">
+        <File Id="Walli.exe" Source="..\Wallace.IDE\bin\Release\Walli.exe" KeyPath="yes" Checksum="yes" />
+        <RemoveFolder Id="ProgramMenuAppFolder" On="uninstall" />
+      </Component>
+      <Component Id="ICSharpCode.AvalonEdit.dll" Guid="0A871829-5A52-4BDF-877E-4883D811E142">
+        <File Id="ICSharpCode.AvalonEdit.dll" Source="..\Wallace.IDE\bin\Release\ICSharpCode.AvalonEdit.dll" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="ICSharpCode.AvalonEdit.xml" Guid="5BE7265B-835B-4B8D-97A5-21F89118779D">
+        <File Id="ICSharpCode.AvalonEdit.xml" Source="..\Wallace.IDE\bin\Release\ICSharpCode.AvalonEdit.xml" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="Newtonsoft.Json.dll" Guid="20A4BD1C-84C2-4C49-82B0-78A35E479193">
+        <File Id="Newtonsoft.Json.dll" Source="..\Wallace.IDE\bin\Release\Newtonsoft.Json.dll" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="Newtonsoft.Json.xml" Guid="B19A2DB3-1463-450D-8803-F8FCDF84ACA9">
+        <File Id="Newtonsoft.Json.xml" Source="..\Wallace.IDE\bin\Release\Newtonsoft.Json.xml" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="SalesForceData.dll" Guid="C456DA60-D451-40EC-8BE7-96865A3242CE">
+        <File Id="SalesForceData.dll" Source="..\Wallace.IDE\bin\Release\SalesForceData.dll" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="SalesForceData.dll.config" Guid="62632BF3-AD6E-4460-A891-47FD46D73FF1">
+        <File Id="SalesForceData.dll.config" Source="..\Wallace.IDE\bin\Release\SalesForceData.dll.config" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="SalesForceData.pdb" Guid="2C04D138-6B30-47A8-A55B-0D08992C5A85">
+        <File Id="SalesForceData.pdb" Source="..\Wallace.IDE\bin\Release\SalesForceData.pdb" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="SalesForceLanguage.dll" Guid="AEADDC5F-5450-4C92-8936-F50A8BD0C163">
+        <File Id="SalesForceLanguage.dll" Source="..\Wallace.IDE\bin\Release\SalesForceLanguage.dll" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="SalesForceLanguage.pdb" Guid="1EAFAD7F-80F4-4197-99BF-47B8F6977AB7">
+        <File Id="SalesForceLanguage.pdb" Source="..\Wallace.IDE\bin\Release\SalesForceLanguage.pdb" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="Walli.exe.config" Guid="EBA92BD1-6D8B-4906-9677-8D38B9A0E955">
+        <File Id="Walli.exe.config" Source="..\Wallace.IDE\bin\Release\Walli.exe.config" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="Walli.pdb" Guid="DE83A058-1CDD-4628-B1EF-254830F04331">
+        <File Id="Walli.pdb" Source="..\Wallace.IDE\bin\Release\Walli.pdb" KeyPath="yes" Checksum="yes"/>
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="ApplicationMenuFolder">
+      <Component Id="Walli.exe.menuShortcut" Guid="14DBF453-34F0-4A43-9B2A-B264FC672682">
+        <Shortcut Id="Walli.exe.menuShortcut"
+                  Name="Walli.exe"
+                  Target="[#Walli.exe]"
+                  WorkingDirectory="ApplicationMenuFolder" 
+                  Icon="AppIcon.ico"/>
+        <RemoveFolder Id="ApplicationMenuFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\Walli" Name="menuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="Walli.exe.desktopShortcut" Guid="7FE88E9D-CA13-432E-BE3A-547C748B2BAB">
+        <Shortcut Id="Walli.exe.desktopShortcut"
+                  Name="Walli.exe"
+                  Target="[#Walli.exe]"
+                  WorkingDirectory="ApplicationMenuFolder"
+                  Icon="AppIcon.ico"/>
+        <RegistryValue Root="HKCU" Key="Software\Walli" Name="desktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Tell WiX to install the files -->
+    <Feature Id="WalliFiles" Title="Walli" Level="1">
+      <ComponentRef Id="Walli.exe" />
+      <ComponentRef Id="Walli.exe.menuShortcut" />
+      <ComponentRef Id="Walli.exe.desktopShortcut" />
+      <ComponentRef Id="ICSharpCode.AvalonEdit.dll" />
+      <ComponentRef Id="ICSharpCode.AvalonEdit.xml" />
+      <ComponentRef Id="Newtonsoft.Json.dll" />
+      <ComponentRef Id="Newtonsoft.Json.xml" />
+      <ComponentRef Id="SalesForceData.dll" />
+      <ComponentRef Id="SalesForceData.dll.config" />
+      <ComponentRef Id="SalesForceData.pdb" />
+      <ComponentRef Id="SalesForceLanguage.dll" />
+      <ComponentRef Id="SalesForceLanguage.pdb" />
+      <ComponentRef Id="Walli.exe.config" />
+      <ComponentRef Id="Walli.pdb" />
+    </Feature>
+
+    <!-- UI configuration -->
+    <UI>
+      <UIRef Id="WixUI_Advanced" />
+      <Publish Dialog="ExitDialog"
+               Control="Finish"
+               Event="DoAction"
+               Value="LaunchApplication">NOT Installed</Publish>
+    </UI>
+
+    <Property Id="ApplicationFolderName" Value="Walli" />
+    <Property Id="WixAppFolder" Value="WixPerUserFolder" />
+
+    <WixVariable Id="WixUIBannerBmp" Value="Banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="Dialog.bmp" />
+
+    <!-- Custom action to start the app -->
+    <CustomAction Id="LaunchApplication"
+                  FileKey="Walli.exe"
+                  ExeCommand="-first"
+                  Return="asyncNoWait"
+                  Impersonate="yes" />
+
+  </Product>
+
+</Wix>

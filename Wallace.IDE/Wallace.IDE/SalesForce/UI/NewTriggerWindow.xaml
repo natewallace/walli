@@ -1,0 +1,121 @@
+﻿<Window x:Class="Wallace.IDE.SalesForce.UI.NewTriggerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Create Trigger" 
+        Height="300" 
+        Width="550"
+        MinHeight="200"
+        MinWidth="200"        
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Style="{StaticResource ChromeWindowStyle}"
+        Background="{StaticResource CaptionBackgroundBrush}">    
+    <Border Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+        
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+        
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="5"
+                       Text="Trigger Name:"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold" />
+        
+            <TextBox x:Name="textBoxName"
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     Margin="5"
+                     MaxLength="255"/>
+
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       Margin="5"
+                       Text="Object:"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold" />
+        
+            <ComboBox x:Name="comboBoxObject"
+                      Grid.Row="1"
+                      Grid.Column="1"
+                      HorizontalAlignment="Stretch"
+                      Margin="5" />
+
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Margin="5"
+                       Text="Events:"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold" />
+        
+            <StackPanel Grid.Row="2"
+                        Grid.Column="1"
+                        Orientation="Horizontal">
+            
+                <StackPanel Margin="5">
+                    <CheckBox x:Name="checkBoxBeforeInsert"
+                              Margin="5">
+                        Before Insert
+                    </CheckBox>
+                    <CheckBox x:Name="checkBoxAfterInsert"
+                              Margin="5">
+                        After Insert
+                    </CheckBox>
+                </StackPanel>
+
+                <StackPanel Margin="5">
+                    <CheckBox x:Name="checkBoxBeforeUpdate"
+                              Margin="5">
+                        Before Update
+                    </CheckBox>
+                    <CheckBox x:Name="checkBoxAfterUpdate"
+                              Margin="5">
+                        After Update
+                    </CheckBox>
+                </StackPanel>
+
+                <StackPanel Margin="5">
+                    <CheckBox x:Name="checkBoxBeforeDelete"
+                              Margin="5">
+                        Before Delete
+                    </CheckBox>
+                    <CheckBox x:Name="checkBoxAfterDelete"
+                              Margin="5">
+                        After Delete
+                    </CheckBox>
+                    <CheckBox x:Name="checkBoxAfterUndelete"
+                              Margin="5">
+                        After Undelete
+                    </CheckBox>
+                </StackPanel>
+
+            </StackPanel>
+            
+            <StackPanel Grid.Row="3"
+                        Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom">
+                
+                <Button Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonCreate_Click">Create</Button>
+                
+                <Button Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonCancel_Click">Cancel</Button>
+                
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

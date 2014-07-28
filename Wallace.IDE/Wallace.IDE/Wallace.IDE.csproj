@@ -1,0 +1,480 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C7DF8A83-463C-4F7C-BF5B-F0106B922B47}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Wallace.IDE</RootNamespace>
+    <AssemblyName>Walli</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\packages\AvalonEdit.4.4.2.9744\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Framework\FunctionHost.cs" />
+    <Compile Include="Framework\Function\AboutFunction.cs" />
+    <Compile Include="Framework\Function\CloseAllDocumentsFunction.cs" />
+    <Compile Include="Framework\FunctionSeparator.cs" />
+    <Compile Include="Framework\UI\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UI\UniqueObservableCollection.cs" />
+    <Compile Include="Framework\UI\WindowIconImage.xaml.cs">
+      <DependentUpon>WindowIconImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\DataEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\ISourceFileEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\PackageEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\SourceFileEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\SourceFileEditorDocumentBase.cs" />
+    <Compile Include="SalesForce\Document\TriggerEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\VisualForceEditorDocument.cs" />
+    <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
+    <Compile Include="SalesForce\Framework\Project.cs" />
+    <Compile Include="SalesForce\Framework\SalesForceApplication.cs" />
+    <Compile Include="SalesForce\Framework\SecureStringUtility.cs" />
+    <Compile Include="SalesForce\Function\CloseProjectFunction.cs" />
+    <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
+    <Compile Include="SalesForce\Function\NewComponentFunction.cs" />
+    <Compile Include="SalesForce\Function\NewPageFunction.cs" />
+    <Compile Include="SalesForce\Function\DeleteSourceFileFunction.cs" />
+    <Compile Include="SalesForce\Function\NewClassFunction.cs" />
+    <Compile Include="SalesForce\Function\NewPackageFunction.cs" />
+    <Compile Include="SalesForce\Function\NewTriggerFunction.cs" />
+    <Compile Include="SalesForce\Function\RefreshFolderFunction.cs" />
+    <Compile Include="SalesForce\Function\RefreshSourceFileFunction.cs" />
+    <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
+    <Compile Include="SalesForce\Function\PropertiesFunction.cs" />
+    <Compile Include="SalesForce\Function\TextCopyFunction.cs" />
+    <Compile Include="SalesForce\Function\TextCutFunction.cs" />
+    <Compile Include="SalesForce\Function\TextFunctionBase.cs" />
+    <Compile Include="SalesForce\Function\TextGoToLineFunction.cs" />
+    <Compile Include="SalesForce\Function\TextPasteFunction.cs" />
+    <Compile Include="SalesForce\Function\TextRedoFunction.cs" />
+    <Compile Include="SalesForce\Function\TextSearchFunction.cs" />
+    <Compile Include="SalesForce\Function\TextSelectAllFunction.cs" />
+    <Compile Include="SalesForce\Function\TextUndoFunction.cs" />
+    <Compile Include="SalesForce\Node\ApexClassFolderNode.cs" />
+    <Compile Include="SalesForce\Node\ApexClassNode.cs" />
+    <Compile Include="SalesForce\Node\ApexComponentFolderNode.cs" />
+    <Compile Include="SalesForce\Node\ApexComponentNode.cs" />
+    <Compile Include="SalesForce\Node\ApexPageFolderNode.cs" />
+    <Compile Include="SalesForce\Node\ApexPageNode.cs" />
+    <Compile Include="SalesForce\Node\ApexTriggerFolderNode.cs" />
+    <Compile Include="SalesForce\Node\ApexTriggerNode.cs" />
+    <Compile Include="SalesForce\Node\DataFolderNode.cs" />
+    <Compile Include="SalesForce\Node\DeployFolderNode.cs" />
+    <Compile Include="SalesForce\Node\PackageNode.cs" />
+    <Compile Include="SalesForce\Node\SourceFolderNode.cs" />
+    <Compile Include="SalesForce\UI\ApexDocumentColorizingTransformer.cs" />
+    <Compile Include="SalesForce\UI\ApexEditorControl.xaml.cs">
+      <DependentUpon>ApexEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\ApexIndentationStrategy.cs" />
+    <Compile Include="SalesForce\UI\DataEditorControl.xaml.cs">
+      <DependentUpon>DataEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\Function\DataEditFunction.cs" />
+    <Compile Include="SalesForce\Node\DataObjectFieldNode.cs" />
+    <Compile Include="SalesForce\Node\DataObjectNode.cs" />
+    <Compile Include="SalesForce\Function\NewProjectFunction.cs" />
+    <Compile Include="SalesForce\UI\EditSalesForceCredentialWindow.xaml.cs">
+      <DependentUpon>EditSalesForceCredentialWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\Function\OpenProjectFunction.cs" />
+    <Compile Include="SalesForce\Node\SourceFileNode.cs" />
+    <Compile Include="SalesForce\UI\EnterValueWindow.xaml.cs">
+      <DependentUpon>EnterValueWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\ITextEditorView.cs" />
+    <Compile Include="SalesForce\UI\NewTriggerWindow.xaml.cs">
+      <DependentUpon>NewTriggerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\PackageEditorControl.xaml.cs">
+      <DependentUpon>PackageEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\SelectProjectWindow.xaml.cs">
+      <DependentUpon>SelectProjectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\Node\SourceFileFolderNode.cs" />
+    <Compile Include="SalesForce\UI\SourceFileEditorControl.xaml.cs">
+      <DependentUpon>SourceFileEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\PropertiesWindow.xaml.cs">
+      <DependentUpon>PropertiesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UI\TreeViewMultiSelectItem.cs" />
+    <Compile Include="SalesForce\UI\VisualForceEditorControl.xaml.cs">
+      <DependentUpon>VisualForceEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UI\AskUserWindow.xaml.cs">
+      <DependentUpon>AskUserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UI\DisposableWait.cs" />
+    <Compile Include="Framework\UI\ErrorProvider.cs" />
+    <Compile Include="Framework\UI\ButtonFunctionPresenter.cs" />
+    <Compile Include="Framework\UI\ToolBarFunctionManager.cs" />
+    <Compile Include="Framework\Function\ExitFunction.cs" />
+    <Compile Include="Framework\DocumentBase.cs" />
+    <Compile Include="Framework\FunctionBase.cs" />
+    <Compile Include="Framework\HostBase.cs" />
+    <Compile Include="Framework\IDocumentManager.cs" />
+    <Compile Include="Framework\IDocument.cs" />
+    <Compile Include="Framework\IDocumentPresenter.cs" />
+    <Compile Include="Framework\IFunction.cs" />
+    <Compile Include="Framework\IFunctionManager.cs" />
+    <Compile Include="Framework\IFunctionPresenter.cs" />
+    <Compile Include="Framework\INode.cs" />
+    <Compile Include="Framework\INodeManager.cs" />
+    <Compile Include="Framework\INodePresenter.cs" />
+    <Compile Include="Framework\UI\MenuFunctionManager.cs" />
+    <Compile Include="Framework\UI\MenuItemFunctionPresenter.cs" />
+    <Compile Include="Framework\NodeBase.cs" />
+    <Compile Include="Framework\FunctionGrouping.cs" />
+    <Compile Include="Framework\UI\TabControlDocumentManager.cs" />
+    <Compile Include="Framework\UI\TabItemDocumentPresenter.cs" />
+    <Compile Include="Framework\UI\TreeViewItemNodePresenter.cs" />
+    <Compile Include="Framework\UI\TreeViewNodeManager.cs" />
+    <Compile Include="Framework\UI\Commands.cs" />
+    <Compile Include="Framework\UI\TabOverflowButton.xaml.cs">
+      <DependentUpon>TabOverflowButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\VisualHelper.cs" />
+    <Compile Include="Framework\UI\WindowCaptionButton.xaml.cs">
+      <DependentUpon>WindowCaptionButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UI\WindowCloseButton.cs" />
+    <Compile Include="Framework\UI\WindowMaximizeButton.cs" />
+    <Compile Include="Framework\UI\WindowMinimizeButton.cs" />
+    <Compile Include="Framework\Win32\Constant.cs" />
+    <Compile Include="Framework\Win32\MINMAXINFO.cs" />
+    <Compile Include="Framework\Win32\POINT.cs" />
+    <Compile Include="Framework\Win32\RECT.cs" />
+    <Page Include="Framework\Styles\ChromeComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\Styles\ChromeToolbarStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\Styles\TreeViewMultiSelectItemStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\UI\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\UI\WindowIconImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\ApexEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\DataEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\EditSalesForceCredentialWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\EnterValueWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\NewTriggerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\PackageEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\SearchPanelStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\SelectProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\SourceFileEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\PropertiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\VisualForceEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\Styles\ChromeMenuStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\Styles\ChromeScrollViewerStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\Styles\ChromeTabStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\Styles\ThemeColorStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\Styles\ChromeWindowStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Framework\UI\AskUserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\UI\TabOverflowButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Framework\UI\WindowCaptionButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\Apex.xshd" />
+    <None Include="SalesForceData.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Resource Include="Resources\SOQL.xshd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\FolderClosed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SalesForceData\SalesForceData.csproj">
+      <Project>{f542f46a-3e41-405d-83d1-df675c810673}</Project>
+      <Name>SalesForceData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SalesForceLanguage\SalesForceLanguage.csproj">
+      <Project>{de715101-f43e-4f55-9957-310f36534f28}</Project>
+      <Name>SalesForceLanguage</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\SalesForceProject.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NewProject.png" />
+    <Resource Include="Resources\OpenProject.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Object.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ObjectField.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Table.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Run.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Error32.png" />
+    <Resource Include="Resources\Information32.png" />
+    <Resource Include="Resources\Question32.png" />
+    <Resource Include="Resources\Warning32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Class.png" />
+    <Resource Include="Resources\Field.png" />
+    <Resource Include="Resources\Interface.png" />
+    <Resource Include="Resources\Method.png" />
+    <Resource Include="Resources\Property.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NextAlt.png" />
+    <Resource Include="Resources\PreviousAlt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CloseAlt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MatchCase.png" />
+    <Resource Include="Resources\MatchWholeWord.png" />
+    <Resource Include="Resources\Regex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Package.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NewPackage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AppIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CloseProject.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NewDocument.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Copy.png" />
+    <Resource Include="Resources\Cut.png" />
+    <Resource Include="Resources\Paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pin.png" />
+    <Resource Include="Resources\PinAlt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\DocumentClass.png" />
+    <Resource Include="Resources\DocumentPage.png" />
+    <Resource Include="Resources\DocumentTrigger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NewDocumentClass.png" />
+    <Resource Include="Resources\NewDocumentPage.png" />
+    <Resource Include="Resources\NewDocumentTrigger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Redo.png" />
+    <Resource Include="Resources\Undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Add.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

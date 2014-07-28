@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:localUI="clr-namespace:Wallace.IDE.Framework.UI">
+    <Style TargetType="{x:Type localUI:TreeViewMultiSelectItem}">
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{x:Static SystemColors.ControlColor}" />
+        </Style.Resources>
+        <Style.Triggers>
+            <Trigger Property="IsMultiSelected" Value="True">
+                <Setter Property="Background" Value="{x:Static SystemColors.HighlightBrush}" />
+                <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,34 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Color x:Key="CaptionBorderColor">#007ACC</Color>
+    <SolidColorBrush x:Key="CaptionBorderBrush" Color="{DynamicResource CaptionBorderColor}" />
+    
+    <Color x:Key="CaptionBackgroundColor">White</Color>
+    <SolidColorBrush x:Key="CaptionBackgroundBrush" Color="{DynamicResource CaptionBackgroundColor}" />
+
+    <Color x:Key="HeaderBackgroundColor">#007ACC</Color>
+    <SolidColorBrush x:Key="HeaderBackgroundBrush" Color="{DynamicResource HeaderBackgroundColor}" />
+
+    <Color x:Key="HeaderForegroundColor">White</Color>
+    <SolidColorBrush x:Key="HeaderForegroundBrush" Color="{DynamicResource HeaderForegroundColor}" />
+    
+    <Color x:Key="HeaderHotTrackBackgroundColor">#1C97EA</Color>
+    <SolidColorBrush x:Key="HeaderHotTrackBackgroundBrush" Color="{DynamicResource HeaderHotTrackBackgroundColor}" />
+
+    <Color x:Key="HeaderHotTrackForegroundColor">White</Color>
+    <SolidColorBrush x:Key="HeaderHotTrackForegroundBrush" Color="{DynamicResource HeaderHotTrackForegroundColor}" />
+
+    <Color x:Key="ButtonHotTrackBackgroundColor">#EFEFF2</Color>
+    <SolidColorBrush x:Key="ButtonHotTrackBackgroundBrush" Color="{DynamicResource ButtonHotTrackBackgroundColor}" />
+
+    <Color x:Key="ButtonHotTrackForegroundColor">#007ACC</Color>
+    <SolidColorBrush x:Key="ButtonHotTrackForegroundBrush" Color="{DynamicResource ButtonHotTrackForegroundColor}" />
+
+    <Color x:Key="ButtonPressedBackgroundColor">#007ACC</Color>
+    <SolidColorBrush x:Key="ButtonPressedBackgroundBrush" Color="{DynamicResource ButtonPressedBackgroundColor}" />
+
+    <Color x:Key="ButtonPressedForegroundColor">White</Color>
+    <SolidColorBrush x:Key="ButtonPressedForegroundBrush" Color="{DynamicResource ButtonPressedForegroundColor}" />
+
+</ResourceDictionary>

@@ -1,0 +1,107 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+                    xmlns:localUI="clr-namespace:Wallace.IDE.Framework.UI">
+    <Style x:Key="ChromeWindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="shell:WindowChrome.WindowChrome">
+            <Setter.Value>
+                <shell:WindowChrome GlassFrameThickness="-1" 
+                                    ResizeBorderThickness="10"
+                                    CaptionHeight="26"
+                                    CornerRadius="0,0,0,0">
+                </shell:WindowChrome>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="AllowsTransparency" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="BorderThickness" Value="4" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="4"                   
+                                  ShadowDepth="0"
+                                  Color="Gray"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border Padding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness}">
+                        <Border Name="Border" BorderBrush="Gray" BorderThickness="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Window Caption -->
+                                <DockPanel Background="{StaticResource CaptionBackgroundBrush}"
+                                           Height="26"
+                                           LastChildFill="True"
+                                           Grid.Row="0">
+
+                                    <localUI:WindowCloseButton DockPanel.Dock="Right"
+                                                               Width="33"
+                                                               WindowChrome.IsHitTestVisibleInChrome="True"
+                                                               HotTrackBackground="{StaticResource ButtonHotTrackBackgroundBrush}"
+                                                               HotTrackForeground="Firebrick"
+                                                               PressedBackground="Firebrick"
+                                                               PressedForeground="White"
+                                                               />
+
+                                    <localUI:WindowMaximizeButton DockPanel.Dock="Right"
+                                                                  Width="33"
+                                                                  WindowChrome.IsHitTestVisibleInChrome="True"
+                                                                  HotTrackBackground="{StaticResource ButtonHotTrackBackgroundBrush}"
+                                                                  HotTrackForeground="{StaticResource ButtonHotTrackForegroundBrush}"
+                                                                  PressedBackground="{StaticResource ButtonPressedBackgroundBrush}"
+                                                                  PressedForeground="{StaticResource ButtonPressedForegroundBrush}"
+                                                                  />
+
+                                    <localUI:WindowMinimizeButton DockPanel.Dock="Right"
+                                                                  Width="33"
+                                                                  WindowChrome.IsHitTestVisibleInChrome="True"
+                                                                  HotTrackBackground="{StaticResource ButtonHotTrackBackgroundBrush}"
+                                                                  HotTrackForeground="{StaticResource ButtonHotTrackForegroundBrush}"
+                                                                  PressedBackground="{StaticResource ButtonPressedBackgroundBrush}"
+                                                                  PressedForeground="{StaticResource ButtonPressedForegroundBrush}"
+                                                                  />
+
+                                    <localUI:WindowIconImage DockPanel.Dock="Left"
+                                                             Height="24"
+                                                             Width="24" />
+                                    
+                                    <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}"
+                                               Foreground="Gray"
+                                               VerticalAlignment="Center" 
+                                               Margin="5,0,5,0" />                                    
+
+                                </DockPanel>
+
+                                <!-- Window Content -->
+                                <Border Background="White"                                
+                                        Grid.Row="1">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </Border>
+                            
+                            </Grid>
+                        </Border>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsActive" Value="true">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource CaptionBorderBrush}" />
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect BlurRadius="4"                   
+                                                      ShadowDepth="0"
+                                                      Color="{StaticResource CaptionBorderColor}"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

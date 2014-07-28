@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="Wallace.IDE.SalesForce.UI.DataEditControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Wallace.IDE.SalesForce.UI"
+             xmlns:data="clr-namespace:System.Data;assembly=System.Data"
+             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             mc:Ignorable="d" 
+             d:DesignHeight="345" d:DesignWidth="367">
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Margin="5"
+                   Text="Query:"                   
+                   Foreground="Black"
+                   FontWeight="Bold"/>
+
+        <DockPanel Grid.Row="1"
+                   LastChildFill="True">
+
+            <DockPanel DockPanel.Dock="Bottom"
+                       LastChildFill="False"
+                        Margin="0,0,0,5">
+                <Button x:Name="buttonExecute"
+                        Click="buttonExecute_Click"
+                        ToolTip="Execute the SOQL query that is entered above.">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Run.png" Height="16" Width="16" />
+                        <TextBlock>Execute</TextBlock>
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+
+            <avalonEdit:TextEditor x:Name="textEditor"
+                                   FontFamily="Consolas"
+                                   FontSize="10pt"
+                                   MinHeight="60"
+                                   Margin="0,0,0,3"
+                                   KeyDown="textEditor_KeyDown" 
+                                   HorizontalScrollBarVisibility="Auto"
+                                   VerticalScrollBarVisibility="Auto"
+                                   ShowLineNumbers="True"
+                                   TextChanged="textEditor_TextChanged">
+                <avalonEdit:TextEditor.Options>
+                    <avalonEdit:TextEditorOptions EnableHyperlinks="False" 
+                                                  EnableEmailHyperlinks="False" />
+                </avalonEdit:TextEditor.Options>
+            </avalonEdit:TextEditor>
+
+        </DockPanel>
+        
+        <GridSplitter Grid.Row="1" 
+                      Height="5"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Bottom"
+                      Background="White" />
+
+        <StackPanel x:Name="stackPanelResultsTitle"
+                    Grid.Row="2"
+                    Orientation="Horizontal">
+            <TextBlock Margin="5"
+                       Text="Result:"
+                       FontWeight="Bold"
+                       Foreground="Black"/>
+            <TextBlock x:Name="textBlockResultText"
+                       Margin="5"                       
+                       Foreground="Black"/>
+        </StackPanel>
+
+        <DataGrid x:Name="dataGridResults"
+                  Grid.Row="3" 
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="True"
+                  CanUserDeleteRows="True"
+                  CanUserResizeRows="False"
+                  Margin="0,0,0,3"
+                  MouseRightButtonDown="dataGridResults_MouseRightButtonDown">      
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Width" Value="18" />
+                </Style>
+            </DataGrid.Resources>
+        </DataGrid>
+
+        <DockPanel x:Name="dockPanelResultButtons"
+                   Grid.Row="4"
+                   LastChildFill="False">
+            <Button x:Name="buttonCommit"
+                    DockPanel.Dock="Left"
+                    ToolTip="Commit all changes that have been made to the data above."
+                    Click="buttonCommit_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Save.png" Height="16" Width="16" />
+                    <TextBlock>Commit</TextBlock>
+                </StackPanel>
+            </Button>
+            
+            <Button x:Name="buttonNext"
+                    DockPanel.Dock="Right"
+                    ToolTip="Display the next set of data results."
+                    Click="buttonNext_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Next.png" Height="16" Width="16" />
+                    <TextBlock>Next</TextBlock>
+                </StackPanel>
+            </Button>
+
+        </DockPanel>
+
+    </Grid>
+</UserControl>
