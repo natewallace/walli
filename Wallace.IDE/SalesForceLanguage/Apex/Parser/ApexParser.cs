@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  PTLLDVC0ZN1
-// DateTime: 7/28/2014 10:45:43 AM
+// DateTime: 7/28/2014 11:07:19 AM
 // UserName: DUX07
-// Input file <C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 7/28/2014 10:42:29 AM>
+// Input file <C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 7/28/2014 10:42:29 AM>
 
 // options: lines gplex
 
@@ -1227,1679 +1227,1679 @@ public partial class ApexParser: ShiftReduceParser<ApexSyntaxNode, ApexTextSpan>
     switch (action)
     {
       case 2: // Goal -> CompilationUnit
-#line 367 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 367 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { GoalNode = Node(Tokens.ProductionGoal, ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = GoalNode; }
         break;
       case 3: // Literal -> LITERAL_TRUE
-#line 372 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 372 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLiteral, ValueStack[ValueStack.Depth-1]); }
         break;
       case 4: // Literal -> LITERAL_FALSE
-#line 373 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 373 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLiteral, ValueStack[ValueStack.Depth-1]); }
         break;
       case 5: // Literal -> LITERAL_DOUBLE
-#line 374 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 374 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLiteral, ValueStack[ValueStack.Depth-1]); }
         break;
       case 6: // Literal -> LITERAL_INTEGER
-#line 375 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 375 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLiteral, ValueStack[ValueStack.Depth-1]); }
         break;
       case 7: // Literal -> LITERAL_LONG
-#line 376 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 376 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLiteral, ValueStack[ValueStack.Depth-1]); }
         break;
       case 8: // Literal -> LITERAL_NULL
-#line 377 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 377 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLiteral, ValueStack[ValueStack.Depth-1]); }
         break;
       case 9: // Literal -> LITERAL_STRING
-#line 378 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 378 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLiteral, ValueStack[ValueStack.Depth-1]); }
         break;
       case 10: // Type -> PrimitiveType
-#line 383 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 383 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 11: // Type -> ReferenceType
-#line 384 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 384 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 12: // PrimitiveType -> KEYWORD_BLOB
-#line 387 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 387 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 13: // PrimitiveType -> KEYWORD_BOOLEAN
-#line 388 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 388 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 14: // PrimitiveType -> KEYWORD_DATE
-#line 389 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 389 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 15: // PrimitiveType -> KEYWORD_DATETIME
-#line 390 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 390 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 16: // PrimitiveType -> KEYWORD_DECIMAL
-#line 391 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 391 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 17: // PrimitiveType -> KEYWORD_DOUBLE
-#line 392 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 392 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 18: // PrimitiveType -> KEYWORD_ID
-#line 393 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 393 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 19: // PrimitiveType -> KEYWORD_INTEGER
-#line 394 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 394 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 20: // PrimitiveType -> KEYWORD_LONG
-#line 395 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 395 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 21: // PrimitiveType -> KEYWORD_STRING
-#line 396 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 396 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimitiveType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 22: // TemplateParameterList -> OPERATOR_LESS_THAN, TemplateParameters, 
                //                          OPERATOR_GREATER_THAN
-#line 399 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 399 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTemplateParameterList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 23: // TemplateParameterList -> OPERATOR_LESS_THAN, TemplateParameters, 
                //                          OPERATOR_GREATER_THAN_A
-#line 400 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 400 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTemplateParameterList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 24: // TemplateParameterList -> OPERATOR_LESS_THAN, TemplateParameters, 
                //                          OPERATOR_GREATER_THAN_B
-#line 401 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 401 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTemplateParameterList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 25: // TemplateParameterList -> OPERATOR_LESS_THAN, TemplateParameters, 
                //                          OPERATOR_GREATER_THAN_C
-#line 402 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 402 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTemplateParameterList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 26: // TemplateParameters -> Type
-#line 405 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 405 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTemplateParameters, ValueStack[ValueStack.Depth-1]); }
         break;
       case 27: // TemplateParameters -> TemplateParameters, SEPARATOR_COMMA, Type
-#line 406 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 406 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTemplateParameters, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 28: // ReferenceType -> Name
-#line 409 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 409 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionReferenceType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 29: // ReferenceType -> Name, TemplateParameterList
-#line 410 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 410 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionReferenceType, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 30: // ReferenceType -> ArrayType
-#line 411 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 411 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionReferenceType, ValueStack[ValueStack.Depth-1]); }
         break;
       case 31: // ArrayType -> Type, SEPARATOR_BRACKET_EMPTY
-#line 414 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 414 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArrayType, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 32: // NonReservedIdentifier -> KEYWORD_AFTER
-#line 419 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 419 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 33: // NonReservedIdentifier -> KEYWORD_BEFORE
-#line 420 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 420 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 34: // NonReservedIdentifier -> RESERVED_JOIN
-#line 421 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 421 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 35: // NonReservedIdentifier -> RESERVED_SORT
-#line 422 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 422 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 36: // NonReservedIdentifier -> KEYWORD_GET
-#line 423 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 423 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 37: // NonReservedIdentifier -> KEYWORD_ID
-#line 424 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 424 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 38: // NonReservedIdentifier -> KEYWORD_SET
-#line 425 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 425 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 39: // NonReservedIdentifier -> KEYWORD_TRIGGER
-#line 426 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 426 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 40: // NonReservedIdentifier -> KEYWORD_INSERT
-#line 427 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 427 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 41: // NonReservedIdentifier -> KEYWORD_UNDELETE
-#line 428 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 428 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 42: // NonReservedIdentifier -> KEYWORD_UPDATE
-#line 429 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 429 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 43: // NonReservedIdentifier -> KEYWORD_UPSERT
-#line 430 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 430 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionNonReservedIdentifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 44: // Name -> SimpleName
-#line 433 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 433 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionName, ValueStack[ValueStack.Depth-1]); }
         break;
       case 45: // Name -> QualifiedName
-#line 434 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 434 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionName, ValueStack[ValueStack.Depth-1]); }
         break;
       case 46: // SimpleName -> IDENTIFIER
-#line 437 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 437 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionSimpleName, ValueStack[ValueStack.Depth-1]); }
         break;
       case 47: // SimpleName -> NonReservedIdentifier
-#line 438 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 438 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionSimpleName, ValueStack[ValueStack.Depth-1]); }
         break;
       case 48: // QualifiedName -> Name, SEPARATOR_DOT, SimpleName
-#line 441 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 441 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionQualifiedName, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 49: // QualifiedName -> Name, SEPARATOR_DOT, KEYWORD_CLASS
-#line 442 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 442 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionQualifiedName, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 50: // QualifiedName -> Name, SEPARATOR_DOT, KEYWORD_NEW
-#line 443 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 443 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionQualifiedName, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 51: // QualifiedName -> Name, SEPARATOR_DOT, PrimitiveType
-#line 444 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 444 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionQualifiedName, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 52: // CompilationUnit -> TypeDeclaration
-#line 449 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 449 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCompilationUnit, ValueStack[ValueStack.Depth-1]); }
         break;
       case 53: // CompilationUnit -> TriggerDeclaration
-#line 450 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 450 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCompilationUnit, ValueStack[ValueStack.Depth-1]); }
         break;
       case 54: // TypeDeclaration -> ClassDeclaration
-#line 453 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 453 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTypeDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 55: // TypeDeclaration -> AnnotatedClassDeclaration
-#line 454 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 454 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTypeDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 56: // TypeDeclaration -> InterfaceDeclaration
-#line 455 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 455 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTypeDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 57: // TypeDeclaration -> AnnotatedInterfaceDeclaration
-#line 456 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 456 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTypeDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 58: // TypeDeclaration -> EnumDeclaration
-#line 457 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 457 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTypeDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 59: // TypeDeclaration -> AnnotatedEnumDeclaration
-#line 458 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 458 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTypeDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 60: // Modifiers -> Modifier
-#line 461 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 461 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifiers, ValueStack[ValueStack.Depth-1]); }
         break;
       case 61: // Modifiers -> Modifiers, Modifier
-#line 462 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 462 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifiers, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 62: // Modifier -> KEYWORD_PUBLIC
-#line 465 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 465 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 63: // Modifier -> KEYWORD_PROTECTED
-#line 466 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 466 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 64: // Modifier -> KEYWORD_PRIVATE
-#line 467 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 467 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 65: // Modifier -> KEYWORD_ABSTRACT
-#line 468 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 468 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 66: // Modifier -> KEYWORD_STATIC
-#line 469 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 469 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 67: // Modifier -> KEYWORD_GLOBAL
-#line 470 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 470 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 68: // Modifier -> KEYWORD_OVERRIDE
-#line 471 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 471 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 69: // Modifier -> KEYWORD_VIRTUAL
-#line 472 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 472 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 70: // Modifier -> KEYWORD_TESTMETHOD
-#line 473 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 473 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 71: // Modifier -> KEYWORD_WITHSHARING
-#line 474 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 474 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 72: // Modifier -> KEYWORD_WITHOUTSHARING
-#line 475 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 475 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 73: // Modifier -> KEYWORD_TRANSIENT
-#line 476 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 476 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 74: // Modifier -> KEYWORD_FINAL
-#line 477 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 477 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 75: // Modifier -> KEYWORD_WEBSERVICE
-#line 478 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 478 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionModifier, ValueStack[ValueStack.Depth-1]); }
         break;
       case 76: // AnnotatedClassDeclaration -> Annotations, ClassDeclaration
-#line 483 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 483 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotatedClassDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 77: // ClassDeclaration -> KEYWORD_CLASS, SimpleName, ClassBody
-#line 486 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 486 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassDeclaration, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 78: // ClassDeclaration -> KEYWORD_CLASS, SimpleName, Interfaces, ClassBody
-#line 487 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 487 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassDeclaration, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 79: // ClassDeclaration -> KEYWORD_CLASS, SimpleName, Super, ClassBody
-#line 488 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 488 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassDeclaration, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 80: // ClassDeclaration -> KEYWORD_CLASS, SimpleName, Super, Interfaces, ClassBody
-#line 489 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 489 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassDeclaration, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 81: // ClassDeclaration -> Modifiers, KEYWORD_CLASS, SimpleName, ClassBody
-#line 490 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 490 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassDeclaration, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 82: // ClassDeclaration -> Modifiers, KEYWORD_CLASS, SimpleName, Interfaces, ClassBody
-#line 491 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 491 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassDeclaration, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 83: // ClassDeclaration -> Modifiers, KEYWORD_CLASS, SimpleName, Super, ClassBody
-#line 492 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 492 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassDeclaration, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 84: // ClassDeclaration -> Modifiers, KEYWORD_CLASS, SimpleName, Super, Interfaces, 
                //                     ClassBody
-#line 493 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 493 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassDeclaration, ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 85: // Super -> KEYWORD_EXTENDS, ReferenceType
-#line 496 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 496 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionSuper, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 86: // Interfaces -> KEYWORD_IMPLEMENTS, InterfaceTypeList
-#line 499 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 499 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaces, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 87: // InterfaceTypeList -> ReferenceType
-#line 502 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 502 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceTypeList, ValueStack[ValueStack.Depth-1]); }
         break;
       case 88: // InterfaceTypeList -> InterfaceTypeList, SEPARATOR_COMMA, ReferenceType
-#line 503 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 503 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceTypeList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 89: // ClassBody -> SEPARATOR_BRACE_LEFT, SEPARATOR_BRACE_RIGHT
-#line 506 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 506 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassBody, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 90: // ClassBody -> SEPARATOR_BRACE_LEFT, ClassBodyDeclarations, SEPARATOR_BRACE_RIGHT
-#line 507 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 507 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassBody, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 91: // ClassBodyDeclarations -> ClassBodyDeclaration
-#line 510 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 510 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassBodyDeclarations, ValueStack[ValueStack.Depth-1]); }
         break;
       case 92: // ClassBodyDeclarations -> ClassBodyDeclarations, ClassBodyDeclaration
-#line 511 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 511 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassBodyDeclarations, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 93: // ClassBodyDeclaration -> ClassMemberDeclaration
-#line 514 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 514 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassBodyDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 94: // ClassBodyDeclaration -> StaticInitializer
-#line 515 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 515 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassBodyDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 95: // ClassBodyDeclaration -> ConstructorDeclaration
-#line 516 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 516 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassBodyDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 96: // ClassMemberDeclaration -> FieldDeclaration
-#line 519 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 519 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassMemberDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 97: // ClassMemberDeclaration -> AnnotatedFieldDeclaration
-#line 520 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 520 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassMemberDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 98: // ClassMemberDeclaration -> MethodDeclaration
-#line 521 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 521 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassMemberDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 99: // ClassMemberDeclaration -> AnnotatedMethodDeclaration
-#line 522 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 522 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassMemberDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 100: // ClassMemberDeclaration -> PropertyDeclaration
-#line 523 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 523 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassMemberDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 101: // ClassMemberDeclaration -> TypeDeclaration
-#line 524 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 524 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassMemberDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 102: // AnnotatedFieldDeclaration -> Annotations, FieldDeclaration
-#line 530 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 530 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotatedFieldDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 103: // FieldDeclaration -> Type, VariableDeclarators, SEPARATOR_SEMICOLON
-#line 533 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 533 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldDeclaration, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 104: // FieldDeclaration -> Modifiers, Type, VariableDeclarators, SEPARATOR_SEMICOLON
-#line 534 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 534 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldDeclaration, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 105: // FieldDeclaration -> error
-#line 535 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 535 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { Error(Tokens.ProductionFieldDeclaration, "Invalid field declaration."); }
         break;
       case 106: // VariableDeclarators -> VariableDeclarator
-#line 538 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 538 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableDeclarators, ValueStack[ValueStack.Depth-1]); }
         break;
       case 107: // VariableDeclarators -> VariableDeclarators, SEPARATOR_COMMA, VariableDeclarator
-#line 539 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 539 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableDeclarators, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 108: // VariableDeclarator -> VariableDeclaratorId
-#line 542 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 542 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableDeclarator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 109: // VariableDeclarator -> VariableDeclaratorId, OPERATOR_ASSIGNMENT, 
                 //                       VariableInitializer
-#line 543 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 543 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableDeclarator, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 110: // VariableDeclaratorId -> SimpleName
-#line 546 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 546 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableDeclaratorId, ValueStack[ValueStack.Depth-1]); }
         break;
       case 111: // VariableInitializer -> Expression
-#line 549 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 549 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableInitializer, ValueStack[ValueStack.Depth-1]); }
         break;
       case 112: // VariableInitializer -> ArrayInitializer
-#line 550 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 550 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableInitializer, ValueStack[ValueStack.Depth-1]); }
         break;
       case 113: // TriggerDeclaration -> TriggerHeader, MethodBody
-#line 555 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 555 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 114: // TriggerHeader -> KEYWORD_TRIGGER, SimpleName, KEYWORD_ON, SimpleName, 
                 //                  SEPARATOR_PARENTHESES_LEFT, TriggerEvents, 
                 //                  SEPARATOR_PARENTHESES_RIGHT
-#line 558 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 558 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerHeader, ValueStack[ValueStack.Depth-7], ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 115: // TriggerEvents -> TriggerEvent
-#line 561 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 561 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvents, ValueStack[ValueStack.Depth-1]); }
         break;
       case 116: // TriggerEvents -> TriggerEvents, SEPARATOR_COMMA, TriggerEvent
-#line 562 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 562 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvents, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 117: // TriggerEvent -> KEYWORD_BEFORE, KEYWORD_INSERT
-#line 565 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 565 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvent, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 118: // TriggerEvent -> KEYWORD_BEFORE, KEYWORD_UPDATE
-#line 566 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 566 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvent, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 119: // TriggerEvent -> KEYWORD_BEFORE, KEYWORD_DELETE
-#line 567 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 567 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvent, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 120: // TriggerEvent -> KEYWORD_AFTER, KEYWORD_INSERT
-#line 568 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 568 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvent, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 121: // TriggerEvent -> KEYWORD_AFTER, KEYWORD_UPDATE
-#line 569 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 569 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvent, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 122: // TriggerEvent -> KEYWORD_AFTER, KEYWORD_DELETE
-#line 570 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 570 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvent, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 123: // TriggerEvent -> KEYWORD_AFTER, KEYWORD_UNDELETE
-#line 571 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 571 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTriggerEvent, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 124: // PropertyDeclaration -> Type, SimpleName, SEPARATOR_BRACE_LEFT, 
                 //                        AccessorDeclarations, SEPARATOR_BRACE_RIGHT
-#line 576 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 576 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPropertyDeclaration, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 125: // PropertyDeclaration -> Modifiers, Type, SimpleName, SEPARATOR_BRACE_LEFT, 
                 //                        AccessorDeclarations, SEPARATOR_BRACE_RIGHT
-#line 577 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 577 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPropertyDeclaration, ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 126: // AccessorDeclarations -> GetAccessorDeclaration
-#line 580 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 580 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAccessorDeclarations, ValueStack[ValueStack.Depth-1]); }
         break;
       case 127: // AccessorDeclarations -> GetAccessorDeclaration, SetAccessorDeclaration
-#line 581 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 581 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAccessorDeclarations, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 128: // AccessorDeclarations -> SetAccessorDeclaration
-#line 582 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 582 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAccessorDeclarations, ValueStack[ValueStack.Depth-1]); }
         break;
       case 129: // AccessorDeclarations -> SetAccessorDeclaration, GetAccessorDeclaration
-#line 583 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 583 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAccessorDeclarations, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 130: // GetAccessorDeclaration -> KEYWORD_GET, AccessorBody
-#line 586 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 586 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionGetAccessorDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 131: // GetAccessorDeclaration -> Modifiers, KEYWORD_GET, AccessorBody
-#line 587 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 587 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionGetAccessorDeclaration, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 132: // SetAccessorDeclaration -> KEYWORD_SET, AccessorBody
-#line 590 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 590 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionSetAccessorDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 133: // SetAccessorDeclaration -> Modifiers, KEYWORD_SET, AccessorBody
-#line 591 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 591 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionSetAccessorDeclaration, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 134: // AccessorBody -> Block
-#line 594 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 594 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAccessorBody, ValueStack[ValueStack.Depth-1]); }
         break;
       case 135: // AccessorBody -> SEPARATOR_SEMICOLON
-#line 595 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 595 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAccessorBody, ValueStack[ValueStack.Depth-1]); }
         break;
       case 136: // AnnotatedMethodDeclaration -> Annotations, MethodDeclaration
-#line 600 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 600 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotatedMethodDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 137: // MethodDeclaration -> MethodHeader, MethodBody
-#line 603 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 603 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 138: // MethodHeader -> Modifiers, Type, MethodDeclarator
-#line 606 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 606 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodHeader, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 139: // MethodHeader -> Type, MethodDeclarator
-#line 607 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 607 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodHeader, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 140: // MethodHeader -> Modifiers, KEYWORD_VOID, MethodDeclarator
-#line 608 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 608 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodHeader, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 141: // MethodHeader -> KEYWORD_VOID, MethodDeclarator
-#line 609 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 609 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodHeader, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 142: // MethodDeclarator -> SimpleName, SEPARATOR_PARENTHESES_LEFT, 
                 //                     SEPARATOR_PARENTHESES_RIGHT
-#line 612 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 612 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodDeclarator, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 143: // MethodDeclarator -> SimpleName, SEPARATOR_PARENTHESES_LEFT, FormalParameterList, 
                 //                     SEPARATOR_PARENTHESES_RIGHT
-#line 613 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 613 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodDeclarator, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 144: // FormalParameterList -> FormalParameter
-#line 616 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 616 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFormalParameterList, ValueStack[ValueStack.Depth-1]); }
         break;
       case 145: // FormalParameterList -> FormalParameterList, SEPARATOR_COMMA, FormalParameter
-#line 617 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 617 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFormalParameterList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 146: // FormalParameter -> Type, VariableDeclaratorId
-#line 620 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 620 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFormalParameter, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 147: // MethodBody -> Block
-#line 623 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 623 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodBody, ValueStack[ValueStack.Depth-1]); }
         break;
       case 148: // MethodBody -> SEPARATOR_SEMICOLON
-#line 624 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 624 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodBody, ValueStack[ValueStack.Depth-1]); }
         break;
       case 149: // StaticInitializer -> KEYWORD_STATIC, Block
-#line 629 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 629 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStaticInitializer, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 150: // ConstructorDeclaration -> ConstructorDeclarator, ConstructorBody
-#line 634 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 634 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConstructorDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 151: // ConstructorDeclaration -> Modifiers, ConstructorDeclarator, ConstructorBody
-#line 635 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 635 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConstructorDeclaration, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 152: // ConstructorDeclarator -> Name, SEPARATOR_PARENTHESES_LEFT, 
                 //                          SEPARATOR_PARENTHESES_RIGHT
-#line 638 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 638 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConstructorDeclarator, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 153: // ConstructorDeclarator -> Name, SEPARATOR_PARENTHESES_LEFT, FormalParameterList, 
                 //                          SEPARATOR_PARENTHESES_RIGHT
-#line 639 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 639 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConstructorDeclarator, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 154: // ConstructorBody -> SEPARATOR_BRACE_LEFT, SEPARATOR_BRACE_RIGHT
-#line 642 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 642 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConstructorBody, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 155: // ConstructorBody -> SEPARATOR_BRACE_LEFT, ExplicitConstructorInvocation, 
                 //                    SEPARATOR_BRACE_RIGHT
-#line 643 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 643 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConstructorBody, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 156: // ConstructorBody -> SEPARATOR_BRACE_LEFT, BlockStatements, SEPARATOR_BRACE_RIGHT
-#line 644 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 644 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConstructorBody, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 157: // ConstructorBody -> SEPARATOR_BRACE_LEFT, ExplicitConstructorInvocation, 
                 //                    BlockStatements, SEPARATOR_BRACE_RIGHT
-#line 645 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 645 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConstructorBody, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 158: // ExplicitConstructorInvocation -> KEYWORD_THIS, SEPARATOR_PARENTHESES_LEFT, 
                 //                                  SEPARATOR_PARENTHESES_RIGHT, 
                 //                                  SEPARATOR_SEMICOLON
-#line 648 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 648 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExplicitConstructorInvocation, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 159: // ExplicitConstructorInvocation -> KEYWORD_THIS, SEPARATOR_PARENTHESES_LEFT, 
                 //                                  ArgumentList, SEPARATOR_PARENTHESES_RIGHT, 
                 //                                  SEPARATOR_SEMICOLON
-#line 649 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 649 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExplicitConstructorInvocation, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 160: // ExplicitConstructorInvocation -> KEYWORD_SUPER, SEPARATOR_PARENTHESES_LEFT, 
                 //                                  SEPARATOR_PARENTHESES_RIGHT, 
                 //                                  SEPARATOR_SEMICOLON
-#line 650 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 650 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExplicitConstructorInvocation, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 161: // ExplicitConstructorInvocation -> KEYWORD_SUPER, SEPARATOR_PARENTHESES_LEFT, 
                 //                                  ArgumentList, SEPARATOR_PARENTHESES_RIGHT, 
                 //                                  SEPARATOR_SEMICOLON
-#line 651 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 651 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExplicitConstructorInvocation, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 162: // AnnotatedInterfaceDeclaration -> Annotations, InterfaceDeclaration
-#line 656 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 656 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotatedInterfaceDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 163: // InterfaceDeclaration -> KEYWORD_INTERFACE, SimpleName, InterfaceBody
-#line 659 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 659 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceDeclaration, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 164: // InterfaceDeclaration -> KEYWORD_INTERFACE, SimpleName, ExtendsInterfaces, 
                 //                         InterfaceBody
-#line 660 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 660 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceDeclaration, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 165: // InterfaceDeclaration -> Modifiers, KEYWORD_INTERFACE, SimpleName, InterfaceBody
-#line 661 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 661 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceDeclaration, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 166: // InterfaceDeclaration -> Modifiers, KEYWORD_INTERFACE, SimpleName, 
                 //                         ExtendsInterfaces, InterfaceBody
-#line 662 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 662 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceDeclaration, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 167: // ExtendsInterfaces -> KEYWORD_EXTENDS, Name
-#line 665 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 665 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExtendsInterfaces, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 168: // ExtendsInterfaces -> ExtendsInterfaces, SEPARATOR_COMMA, Name
-#line 666 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 666 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExtendsInterfaces, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 169: // InterfaceBody -> SEPARATOR_BRACE_LEFT, SEPARATOR_BRACE_RIGHT
-#line 669 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 669 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceBody, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 170: // InterfaceBody -> SEPARATOR_BRACE_LEFT, InterfaceMemberDeclarations, 
                 //                  SEPARATOR_BRACE_RIGHT
-#line 670 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 670 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceBody, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 171: // InterfaceMemberDeclarations -> InterfaceMemberDeclaration
-#line 673 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 673 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceMemberDeclarations, ValueStack[ValueStack.Depth-1]); }
         break;
       case 172: // InterfaceMemberDeclarations -> InterfaceMemberDeclarations, 
                 //                                InterfaceMemberDeclaration
-#line 674 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 674 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceMemberDeclarations, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 173: // InterfaceMemberDeclaration -> AbstractMethodDeclaration
-#line 677 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 677 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInterfaceMemberDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 174: // AbstractMethodDeclaration -> MethodHeader, SEPARATOR_SEMICOLON
-#line 680 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 680 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAbstractMethodDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 175: // AnnotatedEnumDeclaration -> Annotations, EnumDeclaration
-#line 685 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 685 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotatedEnumDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 176: // EnumDeclaration -> KEYWORD_ENUM, SimpleName, EnumBody
-#line 688 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 688 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEnumDeclaration, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 177: // EnumDeclaration -> Modifiers, KEYWORD_ENUM, SimpleName, EnumBody
-#line 689 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 689 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEnumDeclaration, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 178: // EnumBody -> SEPARATOR_BRACE_LEFT, SEPARATOR_BRACE_RIGHT
-#line 692 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 692 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEnumBody, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 179: // EnumBody -> SEPARATOR_BRACE_LEFT, EnumMemberDeclarations, SEPARATOR_BRACE_RIGHT
-#line 693 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 693 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEnumBody, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 180: // EnumMemberDeclarations -> EnumMemberDeclaration
-#line 696 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 696 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEnumMemberDeclarations, ValueStack[ValueStack.Depth-1]); }
         break;
       case 181: // EnumMemberDeclarations -> EnumMemberDeclarations, SEPARATOR_COMMA, 
                 //                           EnumMemberDeclaration
-#line 697 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 697 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEnumMemberDeclarations, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 182: // EnumMemberDeclaration -> SimpleName
-#line 700 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 700 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEnumMemberDeclaration, ValueStack[ValueStack.Depth-1]); }
         break;
       case 183: // ArrayInitializer -> SEPARATOR_BRACE_LEFT, SEPARATOR_BRACE_RIGHT
-#line 705 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 705 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArrayInitializer, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 184: // ArrayInitializer -> SEPARATOR_BRACE_LEFT, VariableInitializers, 
                 //                     SEPARATOR_BRACE_RIGHT
-#line 706 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 706 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArrayInitializer, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 185: // VariableInitializers -> VariableInitializer
-#line 709 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 709 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableInitializers, ValueStack[ValueStack.Depth-1]); }
         break;
       case 186: // VariableInitializers -> VariableInitializers, SEPARATOR_COMMA, 
                 //                         VariableInitializer
-#line 710 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 710 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionVariableInitializers, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 187: // Block -> SEPARATOR_BRACE_LEFT, SEPARATOR_BRACE_RIGHT
-#line 715 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 715 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionBlock, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 188: // Block -> SEPARATOR_BRACE_LEFT, BlockStatements, SEPARATOR_BRACE_RIGHT
-#line 716 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 716 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionBlock, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 189: // BlockStatements -> BlockStatement
-#line 719 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 719 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionBlockStatements, ValueStack[ValueStack.Depth-1]); }
         break;
       case 190: // BlockStatements -> BlockStatements, BlockStatement
-#line 720 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 720 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionBlockStatements, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 191: // BlockStatement -> LocalVariableDeclarationStatement
-#line 723 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 723 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionBlockStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 192: // BlockStatement -> Statement
-#line 724 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 724 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionBlockStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 193: // LocalVariableDeclarationStatement -> LocalVariableDeclaration, 
                 //                                      SEPARATOR_SEMICOLON
-#line 727 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 727 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLocalVariableDeclarationStatement, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 194: // LocalVariableDeclarationStatement -> Modifiers, LocalVariableDeclaration, 
                 //                                      SEPARATOR_SEMICOLON
-#line 728 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 728 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLocalVariableDeclarationStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 195: // LocalVariableDeclaration -> Type, VariableDeclarators
-#line 731 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 731 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionLocalVariableDeclaration, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 196: // Statement -> StatementWithoutTrailingSubstatement
-#line 734 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 734 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 197: // Statement -> IfThenStatement
-#line 735 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 735 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 198: // Statement -> IfThenElseStatement
-#line 736 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 736 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 199: // Statement -> WhileStatement
-#line 737 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 737 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 200: // Statement -> ForStatement
-#line 738 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 738 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 201: // Statement -> ForEachStatement
-#line 739 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 739 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 202: // StatementNoShortIf -> StatementWithoutTrailingSubstatement
-#line 742 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 742 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementNoShortIf, ValueStack[ValueStack.Depth-1]); }
         break;
       case 203: // StatementNoShortIf -> IfThenElseStatementNoShortIf
-#line 743 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 743 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementNoShortIf, ValueStack[ValueStack.Depth-1]); }
         break;
       case 204: // StatementNoShortIf -> WhileStatementNoShortIf
-#line 744 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 744 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementNoShortIf, ValueStack[ValueStack.Depth-1]); }
         break;
       case 205: // StatementNoShortIf -> ForStatementNoShortIf
-#line 745 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 745 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementNoShortIf, ValueStack[ValueStack.Depth-1]); }
         break;
       case 206: // StatementNoShortIf -> ForEachStatementNoShortIf
-#line 746 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 746 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementNoShortIf, ValueStack[ValueStack.Depth-1]); }
         break;
       case 207: // StatementWithoutTrailingSubstatement -> Block
-#line 749 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 749 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 208: // StatementWithoutTrailingSubstatement -> LocalVariableDeclarationStatement
-#line 750 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 750 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 209: // StatementWithoutTrailingSubstatement -> EmptyStatement
-#line 751 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 751 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 210: // StatementWithoutTrailingSubstatement -> ExpressionStatement
-#line 752 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 752 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 211: // StatementWithoutTrailingSubstatement -> DoStatement
-#line 753 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 753 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 212: // StatementWithoutTrailingSubstatement -> BreakStatement
-#line 754 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 754 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 213: // StatementWithoutTrailingSubstatement -> ContinueStatement
-#line 755 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 755 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 214: // StatementWithoutTrailingSubstatement -> ReturnStatement
-#line 756 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 756 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 215: // StatementWithoutTrailingSubstatement -> ThrowStatement
-#line 757 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 757 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 216: // StatementWithoutTrailingSubstatement -> TryStatement
-#line 758 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 758 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 217: // StatementWithoutTrailingSubstatement -> DMLStatement
-#line 759 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 759 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 218: // EmptyStatement -> SEPARATOR_SEMICOLON
-#line 762 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 762 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEmptyStatement, ValueStack[ValueStack.Depth-1]); }
         break;
       case 219: // ExpressionStatement -> StatementExpression, SEPARATOR_SEMICOLON
-#line 765 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 765 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExpressionStatement, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 220: // ExpressionStatement -> MethodInvocation, Block
-#line 766 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 766 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExpressionStatement, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 221: // ExpressionStatement -> error, SEPARATOR_SEMICOLON
-#line 767 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 767 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { Error(Tokens.ProductionExpressionStatement, "Invalid expression."); }
         break;
       case 222: // ExpressionStatement -> error
-#line 768 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 768 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { Error(Tokens.ProductionExpressionStatement, "';' expected."); }
         break;
       case 223: // StatementExpression -> Assignment
-#line 771 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 771 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 224: // StatementExpression -> PreIncrementExpression
-#line 772 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 772 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 225: // StatementExpression -> PreDecrementExpression
-#line 773 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 773 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 226: // StatementExpression -> PostIncrementExpression
-#line 774 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 774 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 227: // StatementExpression -> PostDecrementExpression
-#line 775 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 775 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 228: // StatementExpression -> MethodInvocation
-#line 776 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 776 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 229: // StatementExpression -> ClassInstanceCreationExpression
-#line 777 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 777 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 230: // IfThenStatement -> KEYWORD_IF, SEPARATOR_PARENTHESES_LEFT, Expression, 
                 //                    SEPARATOR_PARENTHESES_RIGHT, Statement
-#line 780 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 780 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionIfThenStatement, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 231: // IfThenElseStatement -> KEYWORD_IF, SEPARATOR_PARENTHESES_LEFT, Expression, 
                 //                        SEPARATOR_PARENTHESES_RIGHT, StatementNoShortIf, 
                 //                        KEYWORD_ELSE, Statement
-#line 783 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 783 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionIfThenElseStatement, ValueStack[ValueStack.Depth-7], ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2]); }
         break;
       case 232: // IfThenElseStatementNoShortIf -> KEYWORD_IF, SEPARATOR_PARENTHESES_LEFT, 
                 //                                 Expression, SEPARATOR_PARENTHESES_RIGHT, 
                 //                                 StatementNoShortIf, KEYWORD_ELSE, 
                 //                                 StatementNoShortIf
-#line 786 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 786 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionIfThenElseStatementNoShortIf, ValueStack[ValueStack.Depth-7], ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 233: // WhileStatement -> KEYWORD_WHILE, SEPARATOR_PARENTHESES_LEFT, Expression, 
                 //                   SEPARATOR_PARENTHESES_RIGHT, Statement
-#line 789 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 789 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionWhileStatement, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 234: // WhileStatementNoShortIf -> KEYWORD_WHILE, SEPARATOR_PARENTHESES_LEFT, 
                 //                            Expression, SEPARATOR_PARENTHESES_RIGHT, 
                 //                            StatementNoShortIf
-#line 792 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 792 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionWhileStatementNoShortIf, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 235: // DoStatement -> KEYWORD_DO, Statement, KEYWORD_WHILE, SEPARATOR_PARENTHESES_LEFT, 
                 //                Expression, SEPARATOR_PARENTHESES_RIGHT, SEPARATOR_SEMICOLON
-#line 795 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 795 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDoStatement, ValueStack[ValueStack.Depth-7], ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 236: // ForEachStatement -> KEYWORD_FOR, SEPARATOR_PARENTHESES_LEFT, Type, SimpleName, 
                 //                     SEPARATOR_COLON, Expression, SEPARATOR_PARENTHESES_RIGHT, 
                 //                     Statement
-#line 798 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 798 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForEachStatement, ValueStack[ValueStack.Depth-8], ValueStack[ValueStack.Depth-7], ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 237: // ForEachStatementNoShortIf -> KEYWORD_FOR, SEPARATOR_PARENTHESES_LEFT, Type, 
                 //                              SimpleName, SEPARATOR_COLON, Expression, 
                 //                              SEPARATOR_PARENTHESES_RIGHT, 
                 //                              ForStatementNoShortIf
-#line 801 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 801 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForEachStatementNoShortIf, ValueStack[ValueStack.Depth-8], ValueStack[ValueStack.Depth-7], ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 238: // ForStatement -> KEYWORD_FOR, SEPARATOR_PARENTHESES_LEFT, ForInit, 
                 //                 SEPARATOR_SEMICOLON, ForExpression, SEPARATOR_SEMICOLON, 
                 //                 ForUpdate, SEPARATOR_PARENTHESES_RIGHT, Statement
-#line 804 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 804 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForStatement, ValueStack[ValueStack.Depth-9], ValueStack[ValueStack.Depth-8], ValueStack[ValueStack.Depth-7], ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 239: // ForStatementNoShortIf -> KEYWORD_FOR, SEPARATOR_PARENTHESES_LEFT, ForInit, 
                 //                          SEPARATOR_SEMICOLON, ForExpression, 
                 //                          SEPARATOR_SEMICOLON, ForUpdate, 
                 //                          SEPARATOR_PARENTHESES_RIGHT, StatementNoShortIf
-#line 807 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 807 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForStatementNoShortIf, ValueStack[ValueStack.Depth-9], ValueStack[ValueStack.Depth-8], ValueStack[ValueStack.Depth-7], ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 240: // ForInit -> /* empty */
-#line 810 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 810 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForInit); }
         break;
       case 241: // ForInit -> StatementExpressionList
-#line 811 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 811 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForInit, ValueStack[ValueStack.Depth-1]); }
         break;
       case 242: // ForInit -> LocalVariableDeclaration
-#line 812 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 812 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForInit, ValueStack[ValueStack.Depth-1]); }
         break;
       case 243: // ForExpression -> /* empty */
-#line 815 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 815 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForExpression); }
         break;
       case 244: // ForExpression -> Expression
-#line 816 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 816 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 245: // ForUpdate -> /* empty */
-#line 819 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 819 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForUpdate); }
         break;
       case 246: // ForUpdate -> StatementExpressionList
-#line 820 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 820 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionForUpdate, ValueStack[ValueStack.Depth-1]); }
         break;
       case 247: // StatementExpressionList -> StatementExpression
-#line 823 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 823 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpressionList, ValueStack[ValueStack.Depth-1]); }
         break;
       case 248: // StatementExpressionList -> StatementExpressionList, SEPARATOR_COMMA, 
                 //                            StatementExpression
-#line 824 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 824 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionStatementExpressionList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 249: // BreakStatement -> KEYWORD_BREAK, SEPARATOR_SEMICOLON
-#line 827 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 827 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionBreakStatement, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 250: // ContinueStatement -> KEYWORD_CONTINUE, SEPARATOR_SEMICOLON
-#line 830 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 830 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionContinueStatement, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 251: // ReturnStatement -> KEYWORD_RETURN, SEPARATOR_SEMICOLON
-#line 833 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 833 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionReturnStatement, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 252: // ReturnStatement -> KEYWORD_RETURN, Expression, SEPARATOR_SEMICOLON
-#line 834 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 834 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionReturnStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 253: // ThrowStatement -> KEYWORD_THROW, Expression, SEPARATOR_SEMICOLON
-#line 837 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 837 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionThrowStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 254: // TryStatement -> KEYWORD_TRY, Block, Catches
-#line 840 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 840 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTryStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 255: // TryStatement -> KEYWORD_TRY, Block, Catches, Finally
-#line 841 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 841 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTryStatement, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 256: // TryStatement -> KEYWORD_TRY, Block, Finally
-#line 842 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 842 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionTryStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 257: // Catches -> CatchClause
-#line 845 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 845 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCatches, ValueStack[ValueStack.Depth-1]); }
         break;
       case 258: // Catches -> Catches, CatchClause
-#line 846 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 846 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCatches, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 259: // CatchClause -> KEYWORD_CATCH, SEPARATOR_PARENTHESES_LEFT, FormalParameter, 
                 //                SEPARATOR_PARENTHESES_RIGHT, Block
-#line 849 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 849 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCatchClause, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 260: // Finally -> KEYWORD_FINALLY, Block
-#line 852 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 852 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFinally, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 261: // DMLStatement -> KEYWORD_INSERT, Expression, SEPARATOR_SEMICOLON
-#line 855 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 855 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDMLStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 262: // DMLStatement -> KEYWORD_UPDATE, Expression, SEPARATOR_SEMICOLON
-#line 856 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 856 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDMLStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 263: // DMLStatement -> KEYWORD_UPSERT, Expression, SEPARATOR_SEMICOLON
-#line 857 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 857 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDMLStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 264: // DMLStatement -> KEYWORD_DELETE, Expression, SEPARATOR_SEMICOLON
-#line 858 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 858 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDMLStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 265: // DMLStatement -> KEYWORD_UNDELETE, Expression, SEPARATOR_SEMICOLON
-#line 859 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 859 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDMLStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 266: // DMLStatement -> KEYWORD_MERGE, Expression, SEPARATOR_SEMICOLON
-#line 860 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 860 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDMLStatement, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 267: // Primary -> PrimaryNoNewArray
-#line 865 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 865 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimary, ValueStack[ValueStack.Depth-1]); }
         break;
       case 268: // Primary -> ArrayCreationExpression
-#line 866 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 866 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimary, ValueStack[ValueStack.Depth-1]); }
         break;
       case 269: // PrimaryNoNewArray -> Literal
-#line 869 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 869 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-1]); }
         break;
       case 270: // PrimaryNoNewArray -> KEYWORD_THIS
-#line 870 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 870 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-1]); }
         break;
       case 271: // PrimaryNoNewArray -> SEPARATOR_PARENTHESES_LEFT, Expression, 
                 //                      SEPARATOR_PARENTHESES_RIGHT
-#line 871 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 871 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 272: // PrimaryNoNewArray -> ClassInstanceCreationExpression
-#line 872 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 872 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-1]); }
         break;
       case 273: // PrimaryNoNewArray -> FieldAccess
-#line 873 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 873 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-1]); }
         break;
       case 274: // PrimaryNoNewArray -> MethodInvocation
-#line 874 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 874 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-1]); }
         break;
       case 275: // PrimaryNoNewArray -> ArrayAccess
-#line 875 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 875 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-1]); }
         break;
       case 276: // PrimaryNoNewArray -> SOQL
-#line 876 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 876 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-1]); }
         break;
       case 277: // PrimaryNoNewArray -> SOSL
-#line 877 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 877 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPrimaryNoNewArray, ValueStack[ValueStack.Depth-1]); }
         break;
       case 278: // ClassInstanceCreationExpression -> KEYWORD_NEW, Type, 
                 //                                    SEPARATOR_PARENTHESES_LEFT, 
                 //                                    SEPARATOR_PARENTHESES_RIGHT
-#line 880 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 880 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassInstanceCreationExpression, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 279: // ClassInstanceCreationExpression -> KEYWORD_NEW, Type, 
                 //                                    SEPARATOR_PARENTHESES_LEFT, ArgumentList, 
                 //                                    SEPARATOR_PARENTHESES_RIGHT
-#line 881 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 881 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassInstanceCreationExpression, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 280: // ClassInstanceCreationExpression -> KEYWORD_NEW, Type, SEPARATOR_BRACE_LEFT, 
                 //                                    SEPARATOR_BRACE_RIGHT
-#line 882 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 882 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassInstanceCreationExpression, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 281: // ClassInstanceCreationExpression -> KEYWORD_NEW, Type, SEPARATOR_BRACE_LEFT, 
                 //                                    ArgumentList, SEPARATOR_BRACE_RIGHT
-#line 883 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 883 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassInstanceCreationExpression, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 282: // ClassInstanceCreationExpression -> KEYWORD_NEW, Type, SEPARATOR_BRACE_LEFT, 
                 //                                    MapArgumentAssignmentList, 
                 //                                    SEPARATOR_BRACE_RIGHT
-#line 884 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 884 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionClassInstanceCreationExpression, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 283: // MapArgumentAssignmentList -> MapArgumentAssignment
-#line 887 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 887 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMapArgumentAssignmentList, ValueStack[ValueStack.Depth-1]); }
         break;
       case 284: // MapArgumentAssignmentList -> MapArgumentAssignmentList, SEPARATOR_COMMA, 
                 //                              MapArgumentAssignment
-#line 888 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 888 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMapArgumentAssignmentList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 285: // MapArgumentAssignment -> Expression, OPERATOR_ASSIGNMENT_MAP, Expression
-#line 891 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 891 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMapArgumentAssignment, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 286: // ArgumentList -> Expression
-#line 894 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 894 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArgumentList, ValueStack[ValueStack.Depth-1]); }
         break;
       case 287: // ArgumentList -> ArgumentList, SEPARATOR_COMMA, Expression
-#line 895 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 895 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArgumentList, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 288: // ArrayCreationExpression -> KEYWORD_NEW, Type, DimExprs
-#line 898 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 898 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArrayCreationExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 289: // ArrayCreationExpression -> KEYWORD_NEW, Type, DimExprs, Dims
-#line 899 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 899 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArrayCreationExpression, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 290: // DimExprs -> DimExpr
-#line 902 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 902 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDimExprs, ValueStack[ValueStack.Depth-1]); }
         break;
       case 291: // DimExprs -> DimExprs, DimExpr
-#line 903 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 903 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDimExprs, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 292: // DimExpr -> SEPARATOR_BRACKET_LEFT, Expression, SEPARATOR_BRACKET_RIGHT
-#line 906 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 906 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDimExpr, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 293: // Dims -> SEPARATOR_BRACKET_EMPTY
-#line 909 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 909 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDims, ValueStack[ValueStack.Depth-1]); }
         break;
       case 294: // Dims -> Dims, SEPARATOR_BRACKET_EMPTY
-#line 910 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 910 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionDims, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 295: // FieldAccess -> Primary, SEPARATOR_DOT, SimpleName
-#line 913 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 913 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldAccess, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 296: // FieldAccess -> Primary, SEPARATOR_DOT, KEYWORD_CLASS
-#line 914 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 914 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldAccess, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 297: // FieldAccess -> Primary, SEPARATOR_DOT, KEYWORD_NEW
-#line 915 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 915 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldAccess, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 298: // FieldAccess -> Primary, SEPARATOR_DOT, PrimitiveType
-#line 916 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 916 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldAccess, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 299: // FieldAccess -> KEYWORD_SUPER, SEPARATOR_DOT, SimpleName
-#line 917 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 917 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldAccess, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 300: // FieldAccess -> KEYWORD_SUPER, SEPARATOR_DOT, KEYWORD_CLASS
-#line 918 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 918 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldAccess, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 301: // FieldAccess -> Primary, SEPARATOR_DOT, KEYWORD_NEW
-#line 919 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 919 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldAccess, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 302: // FieldAccess -> KEYWORD_SUPER, SEPARATOR_DOT, PrimitiveType
-#line 920 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 920 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionFieldAccess, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 303: // Annotations -> Annotation
-#line 923 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 923 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotations, ValueStack[ValueStack.Depth-1]); }
         break;
       case 304: // Annotations -> Annotations, Annotation
-#line 924 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 924 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotations, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 305: // Annotation -> KEYWORD_ANNOTATE, SimpleName
-#line 927 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 927 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotation, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 306: // Annotation -> KEYWORD_ANNOTATE, SimpleName, SEPARATOR_PARENTHESES_LEFT, 
                 //               SEPARATOR_PARENTHESES_RIGHT
-#line 928 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 928 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotation, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 307: // Annotation -> KEYWORD_ANNOTATE, SimpleName, SEPARATOR_PARENTHESES_LEFT, 
                 //               VariableInitializers, SEPARATOR_PARENTHESES_RIGHT
-#line 929 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 929 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAnnotation, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 308: // MethodInvocation -> Name, SEPARATOR_PARENTHESES_LEFT, 
                 //                     SEPARATOR_PARENTHESES_RIGHT
-#line 932 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 932 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodInvocation, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 309: // MethodInvocation -> Name, SEPARATOR_PARENTHESES_LEFT, ArgumentList, 
                 //                     SEPARATOR_PARENTHESES_RIGHT
-#line 933 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 933 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodInvocation, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 310: // MethodInvocation -> PrimitiveType, SEPARATOR_DOT, SimpleName, 
                 //                     SEPARATOR_PARENTHESES_LEFT, SEPARATOR_PARENTHESES_RIGHT
-#line 934 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 934 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodInvocation, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 311: // MethodInvocation -> PrimitiveType, SEPARATOR_DOT, SimpleName, 
                 //                     SEPARATOR_PARENTHESES_LEFT, ArgumentList, 
                 //                     SEPARATOR_PARENTHESES_RIGHT
-#line 935 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 935 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodInvocation, ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 312: // MethodInvocation -> Primary, SEPARATOR_DOT, SimpleName, 
                 //                     SEPARATOR_PARENTHESES_LEFT, SEPARATOR_PARENTHESES_RIGHT
-#line 936 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 936 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodInvocation, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 313: // MethodInvocation -> Primary, SEPARATOR_DOT, SimpleName, 
                 //                     SEPARATOR_PARENTHESES_LEFT, ArgumentList, 
                 //                     SEPARATOR_PARENTHESES_RIGHT
-#line 937 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 937 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodInvocation, ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 314: // MethodInvocation -> KEYWORD_SUPER, SEPARATOR_DOT, SimpleName, 
                 //                     SEPARATOR_PARENTHESES_LEFT, SEPARATOR_PARENTHESES_RIGHT
-#line 938 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 938 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodInvocation, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 315: // MethodInvocation -> KEYWORD_SUPER, SEPARATOR_DOT, SimpleName, 
                 //                     SEPARATOR_PARENTHESES_LEFT, ArgumentList, 
                 //                     SEPARATOR_PARENTHESES_RIGHT
-#line 939 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 939 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMethodInvocation, ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 316: // ArrayAccess -> Name, SEPARATOR_BRACKET_LEFT, Expression, 
                 //                SEPARATOR_BRACKET_RIGHT
-#line 942 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 942 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArrayAccess, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 317: // ArrayAccess -> PrimaryNoNewArray, SEPARATOR_BRACKET_LEFT, Expression, 
                 //                SEPARATOR_BRACKET_RIGHT
-#line 943 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 943 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionArrayAccess, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 318: // PostfixExpression -> Primary
-#line 946 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 946 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPostfixExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 319: // PostfixExpression -> Name
-#line 947 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 947 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPostfixExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 320: // PostfixExpression -> PostIncrementExpression
-#line 948 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 948 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPostfixExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 321: // PostfixExpression -> PostDecrementExpression
-#line 949 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 949 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPostfixExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 322: // PostIncrementExpression -> PostfixExpression, OPERATOR_INCREMENT
-#line 952 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 952 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPostIncrementExpression, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 323: // PostDecrementExpression -> PostfixExpression, OPERATOR_DECREMENT
-#line 955 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 955 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPostDecrementExpression, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 324: // UnaryExpression -> PreIncrementExpression
-#line 958 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 958 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionUnaryExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 325: // UnaryExpression -> PreDecrementExpression
-#line 959 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 959 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionUnaryExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 326: // UnaryExpression -> OPERATOR_ADDITION, UnaryExpression
-#line 960 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 960 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionUnaryExpression, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 327: // UnaryExpression -> OPERATOR_SUBTRACTION, UnaryExpression
-#line 961 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 961 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionUnaryExpression, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 328: // UnaryExpression -> UnaryExpressionNotPlusMinus
-#line 962 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 962 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionUnaryExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 329: // PreIncrementExpression -> OPERATOR_INCREMENT, UnaryExpression
-#line 965 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 965 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPreIncrementExpression, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 330: // PreDecrementExpression -> OPERATOR_DECREMENT, UnaryExpression
-#line 968 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 968 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionPreDecrementExpression, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 331: // UnaryExpressionNotPlusMinus -> PostfixExpression
-#line 971 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 971 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionUnaryExpressionNotPlusMinus, ValueStack[ValueStack.Depth-1]); }
         break;
       case 332: // UnaryExpressionNotPlusMinus -> OPERATOR_LOGICAL_COMPLEMENT, UnaryExpression
-#line 972 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 972 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionUnaryExpressionNotPlusMinus, ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 333: // UnaryExpressionNotPlusMinus -> CastExpression
-#line 973 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 973 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionUnaryExpressionNotPlusMinus, ValueStack[ValueStack.Depth-1]); }
         break;
       case 334: // CastExpression -> SEPARATOR_PARENTHESES_LEFT, PrimitiveType, 
                 //                   SEPARATOR_PARENTHESES_RIGHT, UnaryExpression
-#line 976 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 976 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCastExpression, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 335: // CastExpression -> SEPARATOR_PARENTHESES_LEFT, ReferenceType, 
                 //                   SEPARATOR_PARENTHESES_RIGHT, UnaryExpressionNotPlusMinus
-#line 977 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 977 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCastExpression, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 336: // CastExpression -> SEPARATOR_PARENTHESES_LEFT, PrimitiveType, 
                 //                   SEPARATOR_PARENTHESES_RIGHT, SEPARATOR_PARENTHESES_LEFT, 
                 //                   IDENTIFIER, SEPARATOR_PARENTHESES_RIGHT
-#line 978 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 978 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCastExpression, ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 337: // CastExpression -> SEPARATOR_PARENTHESES_LEFT, ReferenceType, 
                 //                   SEPARATOR_PARENTHESES_RIGHT, SEPARATOR_PARENTHESES_LEFT, 
                 //                   IDENTIFIER, SEPARATOR_PARENTHESES_RIGHT
-#line 979 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 979 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionCastExpression, ValueStack[ValueStack.Depth-6], ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 338: // MultiplicativeExpression -> UnaryExpression
-#line 982 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 982 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMultiplicativeExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 339: // MultiplicativeExpression -> MultiplicativeExpression, OPERATOR_MULTIPLICATION, 
                 //                             UnaryExpression
-#line 983 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 983 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMultiplicativeExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 340: // MultiplicativeExpression -> MultiplicativeExpression, OPERATOR_DIVISION, 
                 //                             UnaryExpression
-#line 984 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 984 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionMultiplicativeExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 341: // AdditiveExpression -> MultiplicativeExpression
-#line 987 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 987 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAdditiveExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 342: // AdditiveExpression -> AdditiveExpression, OPERATOR_ADDITION, 
                 //                       MultiplicativeExpression
-#line 988 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 988 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAdditiveExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 343: // AdditiveExpression -> AdditiveExpression, OPERATOR_SUBTRACTION, 
                 //                       MultiplicativeExpression
-#line 989 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 989 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAdditiveExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 344: // ShiftExpression -> AdditiveExpression
-#line 992 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 992 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 345: // ShiftExpression -> ShiftExpression, OPERATOR_BITWISE_SHIFT_LEFT, 
                 //                    AdditiveExpression
-#line 993 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 993 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionShiftExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 346: // ShiftExpression -> ShiftExpression, OPERATOR_GREATER_THAN_A, 
                 //                    OPERATOR_GREATER_THAN_B, AdditiveExpression
-#line 994 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 994 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionShiftExpression, ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 347: // ShiftExpression -> ShiftExpression, OPERATOR_GREATER_THAN_A, 
                 //                    OPERATOR_GREATER_THAN_B, OPERATOR_GREATER_THAN_C, 
                 //                    AdditiveExpression
-#line 995 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 995 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionShiftExpression, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 348: // RelationalExpression -> ShiftExpression
-#line 998 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 998 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 349: // RelationalExpression -> RelationalExpression, OPERATOR_LESS_THAN, 
                 //                         ShiftExpression
-#line 999 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 999 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 350: // RelationalExpression -> IDENTIFIER, OPERATOR_LESS_THAN, ShiftExpression
-#line 1000 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1000 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 351: // RelationalExpression -> RelationalExpression, OPERATOR_GREATER_THAN, 
                 //                         ShiftExpression
-#line 1001 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1001 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 352: // RelationalExpression -> RelationalExpression, OPERATOR_LESS_THAN_OR_EQUAL, 
                 //                         ShiftExpression
-#line 1002 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1002 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 353: // RelationalExpression -> RelationalExpression, OPERATOR_GREATER_THAN_OR_EQUAL, 
                 //                         ShiftExpression
-#line 1003 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1003 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 354: // RelationalExpression -> RelationalExpression, OPERATOR_INSTANCEOF, Type
-#line 1004 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1004 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 355: // EqualityExpression -> RelationalExpression
-#line 1007 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1007 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionRelationalExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 356: // EqualityExpression -> EqualityExpression, OPERATOR_EQUALITY, 
                 //                       RelationalExpression
-#line 1008 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1008 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEqualityExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 357: // EqualityExpression -> EqualityExpression, OPERATOR_EQUALITY_EXACT, 
                 //                       RelationalExpression
-#line 1009 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1009 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEqualityExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 358: // EqualityExpression -> EqualityExpression, OPERATOR_INEQUALITY, 
                 //                       RelationalExpression
-#line 1010 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1010 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEqualityExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 359: // EqualityExpression -> EqualityExpression, OPERATOR_INEQUALITY_ALT, 
                 //                       RelationalExpression
-#line 1011 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1011 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEqualityExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 360: // EqualityExpression -> EqualityExpression, OPERATOR_INEQUALITY_EXACT, 
                 //                       RelationalExpression
-#line 1012 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1012 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionEqualityExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 361: // AndExpression -> EqualityExpression
-#line 1015 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1015 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAndExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 362: // AndExpression -> AndExpression, OPERATOR_BITWISE_AND, EqualityExpression
-#line 1016 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1016 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAndExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 363: // ExclusiveOrExpression -> AndExpression
-#line 1019 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1019 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExclusiveOrExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 364: // ExclusiveOrExpression -> ExclusiveOrExpression, OPERATOR_BITWISE_EXCLUSIVE_OR, 
                 //                          AndExpression
-#line 1020 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1020 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExclusiveOrExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 365: // InclusiveOrExpression -> ExclusiveOrExpression
-#line 1023 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1023 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInclusiveOrExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 366: // InclusiveOrExpression -> InclusiveOrExpression, OPERATOR_BITWISE_OR, 
                 //                          ExclusiveOrExpression
-#line 1024 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1024 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionInclusiveOrExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 367: // ConditionalAndExpression -> InclusiveOrExpression
-#line 1027 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1027 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConditionalAndExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 368: // ConditionalAndExpression -> ConditionalAndExpression, OPERATOR_AND, 
                 //                             InclusiveOrExpression
-#line 1028 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1028 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConditionalAndExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 369: // ConditionalOrExpression -> ConditionalAndExpression
-#line 1031 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1031 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConditionalOrExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 370: // ConditionalOrExpression -> ConditionalOrExpression, OPERATOR_OR, 
                 //                            ConditionalAndExpression
-#line 1032 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1032 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConditionalOrExpression, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 371: // ConditionalExpression -> ConditionalOrExpression
-#line 1035 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1035 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConditionalExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 372: // ConditionalExpression -> ConditionalOrExpression, OPERATOR_QUESTION_MARK, 
                 //                          Expression, SEPARATOR_COLON, ConditionalExpression
-#line 1036 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1036 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionConditionalExpression, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-4], ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 373: // AssignmentExpression -> ConditionalExpression
-#line 1039 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1039 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 374: // AssignmentExpression -> Assignment
-#line 1040 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1040 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 375: // Assignment -> Name, AssignmentOperator, Expression
-#line 1043 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1043 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignment, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 376: // Assignment -> KEYWORD_ID, AssignmentOperator, Expression
-#line 1044 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1044 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignment, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 377: // Assignment -> FieldAccess, AssignmentOperator, Expression
-#line 1045 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1045 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignment, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 378: // Assignment -> ArrayAccess, AssignmentOperator, Expression
-#line 1046 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1046 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignment, ValueStack[ValueStack.Depth-3], ValueStack[ValueStack.Depth-2], ValueStack[ValueStack.Depth-1]); }
         break;
       case 379: // AssignmentOperator -> OPERATOR_ASSIGNMENT
-#line 1049 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1049 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 380: // AssignmentOperator -> OPERATOR_ASSIGNMENT_MAP
-#line 1050 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1050 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 381: // AssignmentOperator -> OPERATOR_ASSIGNMENT_ADDITION
-#line 1051 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1051 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 382: // AssignmentOperator -> OPERATOR_ASSIGNMENT_MULTIPLICATION
-#line 1052 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1052 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 383: // AssignmentOperator -> OPERATOR_ASSIGNMENT_SUBTRACTION
-#line 1053 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1053 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 384: // AssignmentOperator -> OPERATOR_ASSIGNMENT_DIVISION
-#line 1054 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1054 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 385: // AssignmentOperator -> OPERATOR_ASSIGNMENT_OR
-#line 1055 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1055 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 386: // AssignmentOperator -> OPERATOR_ASSIGNMENT_AND
-#line 1056 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1056 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 387: // AssignmentOperator -> OPERATOR_ASSIGNMENT_EXCLUSIVE_OR
-#line 1057 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1057 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 388: // AssignmentOperator -> OPERATOR_ASSIGNMENT_BITWISE_SHIFT_LEFT
-#line 1058 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1058 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 389: // AssignmentOperator -> OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT
-#line 1059 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1059 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 390: // AssignmentOperator -> OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT_UNSIGNED
-#line 1060 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1060 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionAssignmentOperator, ValueStack[ValueStack.Depth-1]); }
         break;
       case 391: // Expression -> AssignmentExpression
-#line 1063 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1063 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 392: // Expression -> SOQL
-#line 1064 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1064 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExpression, ValueStack[ValueStack.Depth-1]); }
         break;
       case 393: // Expression -> SOSL
-#line 1065 "C:\Users\DUX07\Source\Repos\Wallace.IDE\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 1065 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { CurrentSemanticValue = Node(Tokens.ProductionExpression, ValueStack[ValueStack.Depth-1]); }
         break;
     }
