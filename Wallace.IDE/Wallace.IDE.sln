@@ -14,6 +14,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesForceLanguage.Tests", "SalesForceLanguage.Tests\SalesForceLanguage.Tests.csproj", "{1A17D4EB-F006-4FE4-9B74-739258703FB2}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Wallace.IDE.Installer", "Wallace.IDE.Installer\Wallace.IDE.Installer.wixproj", "{D7A59436-FD37-4CA2-9FCF-D6B2415D241F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DE715101-F43E-4F55-9957-310F36534F28} = {DE715101-F43E-4F55-9957-310F36534F28}
+		{F542F46A-3E41-405D-83D1-DF675C810673} = {F542F46A-3E41-405D-83D1-DF675C810673}
+		{C7DF8A83-463C-4F7C-BF5B-F0106B922B47} = {C7DF8A83-463C-4F7C-BF5B-F0106B922B47}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
