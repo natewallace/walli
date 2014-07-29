@@ -25,9 +25,9 @@ using Wallace.IDE.Framework.UI;
 namespace Wallace.IDE.Framework.Function
 {
     /// <summary>
-    /// Displays the about dialog.
+    /// Opens the user guide.
     /// </summary>
-    public class AboutFunction : FunctionBase
+    public class UserGuideFunction : FunctionBase
     {
         #region Methods
 
@@ -38,15 +38,22 @@ namespace Wallace.IDE.Framework.Function
         /// <param name="presenter">Presenter to use.</param>
         public override void Init(FunctionHost host, IFunctionPresenter presenter)
         {
-            presenter.Header = VisualHelper.CreateIconHeader("About Walli...", null);
+            presenter.Header = VisualHelper.CreateIconHeader("User guide...", null);
         }
 
         /// <summary>
-        /// Display about dialog.
+        /// Display user guide.
         /// </summary>
         public override void Execute()
         {
-            App.ShowDialog(new AboutWindow());
+            try
+            {
+                using (App.Wait("Opening user guide..."))
+                    System.Diagnostics.Process.Start("https://walli.codeplex.com/documentation");
+            }
+            catch
+            {
+            }
         }
 
         #endregion

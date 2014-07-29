@@ -160,6 +160,7 @@ namespace Wallace.IDE
             Menu.AddFunction(new FunctionGrouping("DOCUMENT", "DOCUMENT", false));
 
             Menu.AddFunction(new FunctionGrouping("HELP", "HELP", false));
+            Menu.AddFunction(new UserGuideFunction(), "HELP");
             Menu.AddFunction(new AboutFunction(), "HELP");
 
             SalesForceApp.LoadFunctions();

@@ -66,6 +66,7 @@
     <Compile Include="Framework\Function\AboutFunction.cs" />
     <Compile Include="Framework\Function\CloseAllDocumentsFunction.cs" />
     <Compile Include="Framework\FunctionSeparator.cs" />
+    <Compile Include="Framework\Function\UserGuideFunction.cs" />
     <Compile Include="Framework\UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
