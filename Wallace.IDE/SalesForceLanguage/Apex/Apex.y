@@ -313,6 +313,7 @@
 %token ProductionQualifiedName
 %token ProductionReferenceType
 %token ProductionRelationalExpression
+%token ProductionRelationalOperator
 %token ProductionReturnStatement
 %token ProductionSetAccessorDeclaration
 %token ProductionShiftExpression
@@ -975,8 +976,8 @@ UnaryExpressionNotPlusMinus :
 CastExpression :					
 	SEPARATOR_PARENTHESES_LEFT PrimitiveType SEPARATOR_PARENTHESES_RIGHT UnaryExpression													{ $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4); } |
 	SEPARATOR_PARENTHESES_LEFT ReferenceType SEPARATOR_PARENTHESES_RIGHT UnaryExpressionNotPlusMinus										{ $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4); } |
-	SEPARATOR_PARENTHESES_LEFT PrimitiveType SEPARATOR_PARENTHESES_RIGHT SEPARATOR_PARENTHESES_LEFT IDENTIFIER SEPARATOR_PARENTHESES_RIGHT	{ $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4, $5, $6); } |
-	SEPARATOR_PARENTHESES_LEFT ReferenceType SEPARATOR_PARENTHESES_RIGHT SEPARATOR_PARENTHESES_LEFT IDENTIFIER SEPARATOR_PARENTHESES_RIGHT	{ $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4, $5, $6); } ;
+	SEPARATOR_PARENTHESES_LEFT PrimitiveType SEPARATOR_PARENTHESES_RIGHT SEPARATOR_PARENTHESES_LEFT IDENTIFIER SEPARATOR_PARENTHESES_RIGHT  { $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4, $5, $6); } |
+    SEPARATOR_PARENTHESES_LEFT ReferenceType SEPARATOR_PARENTHESES_RIGHT SEPARATOR_PARENTHESES_LEFT IDENTIFIER SEPARATOR_PARENTHESES_RIGHT  { $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4, $5, $6); } ;
 											
 MultiplicativeExpression :			
 	UnaryExpression														{ $$ = Node(Tokens.ProductionMultiplicativeExpression, $1); } |
@@ -996,12 +997,15 @@ ShiftExpression :
 											
 RelationalExpression :				
 	ShiftExpression														{ $$ = Node(Tokens.ProductionRelationalExpression, $1); } |
-	RelationalExpression OPERATOR_LESS_THAN ShiftExpression				{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
-	IDENTIFIER OPERATOR_LESS_THAN ShiftExpression						{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
-	RelationalExpression OPERATOR_GREATER_THAN ShiftExpression			{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
-	RelationalExpression OPERATOR_LESS_THAN_OR_EQUAL ShiftExpression	{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
-	RelationalExpression OPERATOR_GREATER_THAN_OR_EQUAL ShiftExpression	{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
+	RelationalExpression RelationalOperator ShiftExpression				{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
+	RelationalExpression RelationalOperator ShiftExpression				{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
 	RelationalExpression OPERATOR_INSTANCEOF Type						{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } ;
+
+RelationalOperator:
+	OPERATOR_LESS_THAN				{ $$ = Node(Tokens.ProductionRelationalOperator, $1); } |
+	OPERATOR_GREATER_THAN			{ $$ = Node(Tokens.ProductionRelationalOperator, $1); } |
+	OPERATOR_LESS_THAN_OR_EQUAL		{ $$ = Node(Tokens.ProductionRelationalOperator, $1); } |
+	OPERATOR_GREATER_THAN_OR_EQUAL	{ $$ = Node(Tokens.ProductionRelationalOperator, $1); } ;
 											
 EqualityExpression :				
 	RelationalExpression												{ $$ = Node(Tokens.ProductionRelationalExpression, $1); } |
@@ -1028,8 +1032,8 @@ ConditionalAndExpression :
 	ConditionalAndExpression OPERATOR_AND InclusiveOrExpression	{ $$ = Node(Tokens.ProductionConditionalAndExpression, $1, $2, $3); } ;
 											
 ConditionalOrExpression :			
-	ConditionalAndExpression										{ $$ = Node(Tokens.ProductionConditionalOrExpression, $1); } |
-	ConditionalOrExpression OPERATOR_OR ConditionalAndExpression	{ $$ = Node(Tokens.ProductionConditionalOrExpression, $1, $2, $3); } ;
+	ConditionalAndExpression																		{ $$ = Node(Tokens.ProductionConditionalOrExpression, $1); } |
+	ConditionalOrExpression OPERATOR_OR ConditionalAndExpression									{ $$ = Node(Tokens.ProductionConditionalOrExpression, $1, $2, $3); } ;
 											
 ConditionalExpression :			
 	ConditionalOrExpression                                                                         { $$ = Node(Tokens.ProductionConditionalExpression, $1); } |
