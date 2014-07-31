@@ -6,11 +6,12 @@
 %YYLTYPE ApexTextSpan
 %partial 
 %sharetokens
-%start Goal
+%start compilation_unit
 
 /* Terminals (tokens returned by the scanner). */
 %token IDENTIFIER   
 %token WHITESPACE
+%token NEWLINE
 %token SOQL
 %token SOSL
 
@@ -202,148 +203,179 @@
 %token RESERVED_WHERE
 
 // Non terminals
-%token ProductionAbstractMethodDeclaration
-%token ProductionAccessorBody
-%token ProductionAccessorDeclarations
-%token ProductionAdditiveExpression
-%token ProductionAndExpression
-%token ProductionAnnotation
-%token ProductionAnnotatedClassDeclaration
-%token ProductionAnnotatedEnumDeclaration
-%token ProductionAnnotatedFieldDeclaration
-%token ProductionAnnotatedInterfaceDeclaration
-%token ProductionAnnotatedMethodDeclaration
-%token ProductionAnnotations
-%token ProductionArgumentList
-%token ProductionArrayAccess
-%token ProductionArrayCreationExpression
-%token ProductionArrayInitializer
-%token ProductionArrayType
-%token ProductionAssignment
-%token ProductionAssignmentExpression
-%token ProductionAssignmentOperator
-%token ProductionMapArgumentAssignment
-%token ProductionMapArgumentAssignmentList
-%token ProductionBlock
-%token ProductionBlockStatement
-%token ProductionBlockStatements
-%token ProductionBreakStatement
-%token ProductionCatchClause
-%token ProductionCatches
-%token ProductionClassBody
-%token ProductionClassBodyDeclaration
-%token ProductionClassBodyDeclarations
-%token ProductionClassDeclaration
-%token ProductionClassInstanceCreationExpression
-%token ProductionClassMemberDeclaration
-%token ProductionCastExpression
-%token ProductionCollectionType
-%token ProductionCompilationUnit
-%token ProductionConditionalAndExpression
-%token ProductionConditionalExpression
-%token ProductionConditionalOrExpression
-%token ProductionConstantExpression
-%token ProductionConstructorBody
-%token ProductionConstructorDeclaration
-%token ProductionConstructorDeclarator
-%token ProductionContinueStatement
-%token ProductionDimExpr
-%token ProductionDimExprs
-%token ProductionDims
-%token ProductionDMLStatement
-%token ProductionDoStatement
-%token ProductionEmptyStatement
-%token ProductionEnumBody
-%token ProductionEnumDeclaration
-%token ProductionEnumMemberDeclaration
-%token ProductionEnumMemberDeclarations
-%token ProductionEqualityExpression
-%token ProductionExclusiveOrExpression
-%token ProductionExplicitConstructorInvocation
-%token ProductionExpression
-%token ProductionExpressionStatement
-%token ProductionExtendsInterfaces
-%token ProductionFieldAccess
-%token ProductionFieldDeclaration
-%token ProductionFinally
-%token ProductionForEachStatement
-%token ProductionForEachStatementNoShortIf
-%token ProductionForExpression
-%token ProductionForInit
-%token ProductionFormalParameter
-%token ProductionFormalParameterList
-%token ProductionForUpdate
-%token ProductionForStatement
-%token ProductionForStatementNoShortIf
-%token ProductionGetAccessorDeclaration
-%token ProductionGoal
-%token ProductionIfThenElseStatement
-%token ProductionIfThenElseStatementNoShortIf
-%token ProductionIfThenStatement
-%token ProductionInclusiveOrExpression
-%token ProductionInterfaceBody
-%token ProductionInterfaceDeclaration
-%token ProductionInterfaceMemberDeclaration
-%token ProductionInterfaceMemberDeclarations
-%token ProductionInterfaces
-%token ProductionInterfaceTypeList
-%token ProductionLeftHandSide
-%token ProductionLiteral
-%token ProductionLocalVariableDeclaration
-%token ProductionLocalVariableDeclarationStatement
-%token ProductionMethodBody
-%token ProductionMethodDeclaration
-%token ProductionMethodDeclarator
-%token ProductionMethodHeader
-%token ProductionMethodInvocation
-%token ProductionModifier
-%token ProductionModifiers
-%token ProductionMultiplicativeExpression
-%token ProductionName
-%token ProductionNonReservedIdentifier
-%token ProductionPostDecrementExpression
-%token ProductionPostIncrementExpression
-%token ProductionPostfixExpression
-%token ProductionPreDecrementExpression
-%token ProductionPreIncrementExpression
-%token ProductionPrimary
-%token ProductionPrimaryNoNewArray
-%token ProductionPrimitiveType
-%token ProductionPropertyDeclaration
-%token ProductionQualifiedName
-%token ProductionReferenceType
-%token ProductionRelationalExpression
-%token ProductionRelationalOperator
-%token ProductionReturnStatement
-%token ProductionSetAccessorDeclaration
-%token ProductionShiftExpression
-%token ProductionSimpleName
-%token ProductionStatement
-%token ProductionStatementExpression
-%token ProductionStatementExpressionList
-%token ProductionStatementNoShortIf
-%token ProductionStatementWithoutTrailingSubstatement
-%token ProductionStaticInitializer
-%token ProductionSuper
-%token ProductionTemplateParameterList
-%token ProductionTemplateParameters
-%token ProductionThrowStatement
-%token ProductionTriggerDeclaration
-%token ProductionTriggerEvent
-%token ProductionTriggerEvents
-%token ProductionTriggerHeader
-%token ProductionTryStatement
-%token ProductionType
-%token ProductionTypeDeclaration
-%token ProductionUnaryExpression
-%token ProductionUnaryExpressionNotPlusMinus
-%token ProductionVariableDeclarator
-%token ProductionVariableDeclaratorId
-%token ProductionVariableDeclarators
-%token ProductionVariableInitializer
-%token ProductionVariableInitializers
-%token ProductionWhileStatement
-%token ProductionWhileStatementNoShortIf
+%token grammar_identifier
+%token grammar_literal
+%token grammar_type_name
+%token grammar_namespace_or_type_name
+%token grammar_type
+%token grammar_value_type
+%token grammar_struct_type
+%token grammar_simple_type
+%token grammar_numeric_type
+%token grammar_integral_type
+%token grammar_floating_point_type
+%token grammar_enum_type
+%token grammar_reference_type
+%token grammar_class_type
+%token grammar_interface_type
+%token grammar_array_type
+%token grammar_non_array_type
+%token grammar_rank_specifiers
+%token grammar_rank_specifier
+%token grammar_dim_separators
+%token grammar_argument_list
+%token grammar_argument
+%token grammar_primary_expression
+%token grammar_primary_no_array_creation_expression
+%token grammar_simple_name
+%token grammar_parenthesized_expression
+%token grammar_member_access
+%token grammar_predefined_type
+%token grammar_invocation_expression
+%token grammar_element_access
+%token grammar_expression_list
+%token grammar_this_access
+%token grammar_base_access
+%token grammar_post_increment_expression
+%token grammar_post_decrement_expression
+%token grammar_object_creation_expression
+%token grammar_array_creation_expression
+%token grammar_unary_expression
+%token grammar_pre_increment_expression
+%token grammar_pre_decrement_expression
+%token grammar_cast_expression
+%token grammar_multiplicative_expression
+%token grammar_additive_expression
+%token grammar_shift_expression
+%token grammar_relational_expression
+%token grammar_equality_expression
+%token grammar_and_expression
+%token grammar_exclusive_or_expression
+%token grammar_inclusive_or_expression
+%token grammar_conditional_and_expression
+%token grammar_conditional_or_expression
+%token grammar_conditional_expression
+%token grammar_assignment
+%token grammar_assignment_operator
+%token grammar_expression
+%token grammar_constant_expression
+%token grammar_boolean_expression
+%token grammar_statement
+%token grammar_embedded_statement
+%token grammar_block
+%token grammar_statement_list
+%token grammar_empty_statement
+%token grammar_declaration_statement
+%token grammar_local_variable_declaration
+%token grammar_local_variable_declarators
+%token grammar_local_variable_declarator
+%token grammar_local_variable_initializer
+%token grammar_local_constant_declaration
+%token grammar_constant_declarators
+%token grammar_constant_declarator
+%token grammar_expression_statement
+%token grammar_statement_expression
+%token grammar_selection_statement
+%token grammar_if_statement
+%token grammar_boolean_expression
+%token grammar_iteration_statement
+%token grammar_while_statement
+%token grammar_do_statement
+%token grammar_for_statement
+%token grammar_for_initializer
+%token grammar_for_condition
+%token grammar_for_iterator
+%token grammar_statement_expression_list
+%token grammar_foreach_statement
+%token grammar_jump_statement
+%token grammar_break_statement
+%token grammar_continue_statement
+%token grammar_return_statement
+%token grammar_throw_statement
+%token grammar_try_statement
+%token grammar_catch_clauses
+%token grammar_specific_catch_clauses
+%token grammar_specific_catch_clause
+%token grammar_general_catch_clause
+%token grammar_finally_clause
+%token grammar_compilation_unit
+%token grammar_type_declaration
+%token grammar_class_declaration
+%token grammar_class_modifiers
+%token grammar_class_modifier
+%token grammar_class_base
+%token grammar_interface_type_list
+%token grammar_class_body
+%token grammar_class_member_declarations
+%token grammar_class_member_declaration
+%token grammar_constant_declaration
+%token grammar_constant_modifiers
+%token grammar_constant_modifier
+%token grammar_constant_declarators
+%token grammar_constant_declarator
+%token grammar_field_declaration
+%token grammar_field_modifiers
+%token grammar_field_modifier
+%token grammar_variable_declarators
+%token grammar_variable_declarator
+%token grammar_variable_initializer
+%token grammar_method_declaration
+%token grammar_method_header
+%token grammar_method_modifiers
+%token grammar_method_modifier
+%token grammar_return_type
+%token grammar_member_name
+%token grammar_method_body
+%token grammar_formal_parameter_list
+%token grammar_fixed_parameters
+%token grammar_fixed_parameter
+%token grammar_property_declaration
+%token grammar_property_modifiers
+%token grammar_property_modifier
+%token grammar_member_name
+%token grammar_accessor_declarations
+%token grammar_get_accessor_declaration
+%token grammar_set_accessor_declaration
+%token grammar_accessor_body
+%token grammar_constructor_declaration
+%token grammar_constructor_modifiers
+%token grammar_constructor_modifier
+%token grammar_constructor_declarator
+%token grammar_constructor_body
+%token grammar_static_constructor_declaration
+%token grammar_static_constructor_body
+%token grammar_array_initializer
+%token grammar_variable_initializer_list
+%token grammar_variable_initializer
+%token grammar_interface_declaration
+%token grammar_interface_modifiers
+%token grammar_interface_modifier
+%token grammar_interface_base
+%token grammar_interface_body
+%token grammar_interface_member_declarations
+%token grammar_interface_member_declaration
+%token grammar_interface_method_declaration
+%token grammar_interface_property_declaration
+%token grammar_interface_accessors
+%token grammar_enum_declaration
+%token grammar_enum_body
+%token grammar_enum_modifiers
+%token grammar_enum_modifier
+%token grammar_enum_member_declarations
+%token grammar_enum_member_declaration
+%token grammar_attributes
+%token grammar_attribute_sections
+%token grammar_attribute_section
+%token grammar_attribute_list
+%token grammar_attribute
+%token grammar_attribute_name
+%token grammar_attribute_arguments
+%token grammar_positional_argument_list
+%token grammar_positional_argument
+%token grammar_named_argument_list
+%token grammar_named_argument
+%token grammar_attribute_argument_expression
+%token grammar_expression
 
 /* Precedences */
 %right OPERATOR_ASSIGNMENT OPERATOR_ASSIGNMENT_MAP OPERATOR_ASSIGNMENT_ADDITION OPERATOR_ASSIGNMENT_SUBTRACTION OPERATOR_ASSIGNMENT_MULTIPLICATION OPERATOR_ASSIGNMENT_DIVISION OPERATOR_ASSIGNMENT_AND OPERATOR_ASSIGNMENT_EXCLUSIVE_OR OPERATOR_ASSIGNMENT_BITWISE_SHIFT_LEFT OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT_UNSIGNED
@@ -361,711 +393,827 @@
 %right OPERATOR_INCREMENT OPERATOR_DECREMENT OPERATOR_LOGICAL_COMPLEMENT
 
 %%
-
-/* Grammar ===============================================================================================================*/
-
-Goal :					
-	CompilationUnit 	{ GoalNode = Node(Tokens.ProductionGoal, $1); $$ = GoalNode; } ;
-
-/* Lexical Structure =====================================================================================================*/
-
-Literal :               
-	LITERAL_TRUE	{ $$ = Node(Tokens.ProductionLiteral, $1); } |
-	LITERAL_FALSE 	{ $$ = Node(Tokens.ProductionLiteral, $1); } |
-	LITERAL_DOUBLE 	{ $$ = Node(Tokens.ProductionLiteral, $1); } |
-	LITERAL_INTEGER { $$ = Node(Tokens.ProductionLiteral, $1); } |
-	LITERAL_LONG	{ $$ = Node(Tokens.ProductionLiteral, $1); } |
-	LITERAL_NULL	{ $$ = Node(Tokens.ProductionLiteral, $1); } |     
-	LITERAL_STRING 	{ $$ = Node(Tokens.ProductionLiteral, $1); } ; 
-
-/* Types, Values, and Variables ==========================================================================================*/
-
-Type :					
-	PrimitiveType 	{ $$ = Node(Tokens.ProductionType, $1); } |
-	ReferenceType	{ $$ = Node(Tokens.ProductionType, $1); } ;
-											
-PrimitiveType :			
-	KEYWORD_BLOB		{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_BOOLEAN		{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_DATE		{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_DATETIME	{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_DECIMAL		{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_DOUBLE		{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_ID			{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_INTEGER		{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_LONG		{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } |
-	KEYWORD_STRING		{ $$ = Node(Tokens.ProductionPrimitiveType, $1); } ;
-														
-TemplateParameterList :				
-	OPERATOR_LESS_THAN TemplateParameters OPERATOR_GREATER_THAN		{ $$ = Node(Tokens.ProductionTemplateParameterList, $1, $2, $3); } |
-	OPERATOR_LESS_THAN TemplateParameters OPERATOR_GREATER_THAN_A	{ $$ = Node(Tokens.ProductionTemplateParameterList, $1, $2, $3); } |
-	OPERATOR_LESS_THAN TemplateParameters OPERATOR_GREATER_THAN_B	{ $$ = Node(Tokens.ProductionTemplateParameterList, $1, $2, $3); } |
-	OPERATOR_LESS_THAN TemplateParameters OPERATOR_GREATER_THAN_C	{ $$ = Node(Tokens.ProductionTemplateParameterList, $1, $2, $3); } ;
-														
-TemplateParameters :	
-	Type									{ $$ = Node(Tokens.ProductionTemplateParameters, $1); } |
-	TemplateParameters SEPARATOR_COMMA Type	{ $$ = Node(Tokens.ProductionTemplateParameters, $1, $2, $3); } ;
-											
-ReferenceType :				
-	Name						{ $$ = Node(Tokens.ProductionReferenceType, $1); } |
-	Name TemplateParameterList	{ $$ = Node(Tokens.ProductionReferenceType, $1, $2); } |
-	ArrayType					{ $$ = Node(Tokens.ProductionReferenceType, $1); } ;		
-
-ArrayType :					
-	Type SEPARATOR_BRACKET_EMPTY	{ $$ = Node(Tokens.ProductionArrayType, $1, $2); } ;
-
-/* Names =================================================================================================================*/
-
-NonReservedIdentifier :	
-	KEYWORD_AFTER		{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_BEFORE		{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	RESERVED_JOIN		{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	RESERVED_SORT		{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_GET			{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_ID			{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_SET			{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_TRIGGER		{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_INSERT		{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_UNDELETE	{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_UPDATE		{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } |
-	KEYWORD_UPSERT		{ $$ = Node(Tokens.ProductionNonReservedIdentifier, $1); } ;
-
-Name :					
-	SimpleName			{ $$ = Node(Tokens.ProductionName, $1); } |
-	QualifiedName		{ $$ = Node(Tokens.ProductionName, $1); } ;
-											
-SimpleName :			
-	IDENTIFIER				{ $$ = Node(Tokens.ProductionSimpleName, $1); } |
-	NonReservedIdentifier	{ $$ = Node(Tokens.ProductionSimpleName, $1); } ;
-
-QualifiedName :			
-	Name SEPARATOR_DOT SimpleName		{ $$ = Node(Tokens.ProductionQualifiedName, $1, $2, $3); } |
-	Name SEPARATOR_DOT KEYWORD_CLASS	{ $$ = Node(Tokens.ProductionQualifiedName, $1, $2, $3); } |
-	Name SEPARATOR_DOT KEYWORD_NEW		{ $$ = Node(Tokens.ProductionQualifiedName, $1, $2, $3); } |
-	Name SEPARATOR_DOT PrimitiveType	{ $$ = Node(Tokens.ProductionQualifiedName, $1, $2, $3); } ;
-
-/* Packages ==============================================================================================================*/
-
-CompilationUnit :		
-	TypeDeclaration		{ $$ = Node(Tokens.ProductionCompilationUnit, $1); } |
-	TriggerDeclaration	{ $$ = Node(Tokens.ProductionCompilationUnit, $1); } ;											
-											
-TypeDeclaration :		
-	ClassDeclaration				{ $$ = Node(Tokens.ProductionTypeDeclaration, $1); } |
-	AnnotatedClassDeclaration 		{ $$ = Node(Tokens.ProductionTypeDeclaration, $1); } |
-	InterfaceDeclaration			{ $$ = Node(Tokens.ProductionTypeDeclaration, $1); } |
-	AnnotatedInterfaceDeclaration	{ $$ = Node(Tokens.ProductionTypeDeclaration, $1); } |
-	EnumDeclaration					{ $$ = Node(Tokens.ProductionTypeDeclaration, $1); } |
-	AnnotatedEnumDeclaration		{ $$ = Node(Tokens.ProductionTypeDeclaration, $1); } ;
-
-Modifiers :				
-	Modifier			{ $$ = Node(Tokens.ProductionModifiers, $1); } |
-	Modifiers Modifier	{ $$ = Node(Tokens.ProductionModifiers, $1, $2); } ;
-											
-Modifier :				
-	KEYWORD_PUBLIC            { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_PROTECTED         { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_PRIVATE           { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_ABSTRACT          { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_STATIC            { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_GLOBAL            { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_OVERRIDE          { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_VIRTUAL           { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_TESTMETHOD        { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_WITHSHARING       { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_WITHOUTSHARING    { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_TRANSIENT		  { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_FINAL             { $$ = Node(Tokens.ProductionModifier, $1); } |
-	KEYWORD_WEBSERVICE		  { $$ = Node(Tokens.ProductionModifier, $1); } ;
-
-/* Class Declarations ====================================================================================================*/
-
-AnnotatedClassDeclaration :		
-	Annotations ClassDeclaration  { $$ = Node(Tokens.ProductionAnnotatedClassDeclaration, $1, $2); } ;
-
-ClassDeclaration :		
-				KEYWORD_CLASS SimpleName 					ClassBody { $$ = Node(Tokens.ProductionClassDeclaration, $1, $2, $3); } |
-				KEYWORD_CLASS SimpleName 		Interfaces	ClassBody { $$ = Node(Tokens.ProductionClassDeclaration, $1, $2, $3, $4); } |
-				KEYWORD_CLASS SimpleName Super 				ClassBody { $$ = Node(Tokens.ProductionClassDeclaration, $1, $2, $3, $4); } |
-				KEYWORD_CLASS SimpleName Super	Interfaces	ClassBody { $$ = Node(Tokens.ProductionClassDeclaration, $1, $2, $3, $4, $5); } |
-	Modifiers	KEYWORD_CLASS SimpleName 					ClassBody { $$ = Node(Tokens.ProductionClassDeclaration, $1, $2, $3, $4); } |
-	Modifiers	KEYWORD_CLASS SimpleName 		Interfaces 	ClassBody { $$ = Node(Tokens.ProductionClassDeclaration, $1, $2, $3, $4, $5); } |
-	Modifiers	KEYWORD_CLASS SimpleName Super				ClassBody { $$ = Node(Tokens.ProductionClassDeclaration, $1, $2, $3, $4, $5); } |
-	Modifiers	KEYWORD_CLASS SimpleName Super	Interfaces	ClassBody { $$ = Node(Tokens.ProductionClassDeclaration, $1, $2, $3, $4, $5, $6); } ;										
-											
-Super :					
-	KEYWORD_EXTENDS ReferenceType 			{ $$ = Node(Tokens.ProductionSuper, $1, $2); } ;
-
-Interfaces :			
-	KEYWORD_IMPLEMENTS InterfaceTypeList { $$ = Node(Tokens.ProductionInterfaces, $1, $2); } ;
-
-InterfaceTypeList :		
-	ReferenceType									{ $$ = Node(Tokens.ProductionInterfaceTypeList, $1); } |
-	InterfaceTypeList SEPARATOR_COMMA ReferenceType	{ $$ = Node(Tokens.ProductionInterfaceTypeList, $1, $2, $3); } ;
-											
-ClassBody :				
-	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT 							{ $$ = Node(Tokens.ProductionClassBody, $1, $2); } |
-	SEPARATOR_BRACE_LEFT ClassBodyDeclarations SEPARATOR_BRACE_RIGHT	{ $$ = Node(Tokens.ProductionClassBody, $1, $2, $3); } ;
-											
-ClassBodyDeclarations :	
-	ClassBodyDeclaration 						{ $$ = Node(Tokens.ProductionClassBodyDeclarations, $1); } |
-	ClassBodyDeclarations ClassBodyDeclaration	{ $$ = Node(Tokens.ProductionClassBodyDeclarations, $1, $2); } ;
-											
-ClassBodyDeclaration :	
-	ClassMemberDeclaration	{ $$ = Node(Tokens.ProductionClassBodyDeclaration, $1); } |
-	StaticInitializer		{ $$ = Node(Tokens.ProductionClassBodyDeclaration, $1); } |
-	ConstructorDeclaration	{ $$ = Node(Tokens.ProductionClassBodyDeclaration, $1); } ;
-											
-ClassMemberDeclaration :	
-	FieldDeclaration			{ $$ = Node(Tokens.ProductionClassMemberDeclaration, $1); } |
-	AnnotatedFieldDeclaration	{ $$ = Node(Tokens.ProductionClassMemberDeclaration, $1); } |
-	MethodDeclaration			{ $$ = Node(Tokens.ProductionClassMemberDeclaration, $1); } |
-	AnnotatedMethodDeclaration	{ $$ = Node(Tokens.ProductionClassMemberDeclaration, $1); } |
-	PropertyDeclaration			{ $$ = Node(Tokens.ProductionClassMemberDeclaration, $1); } |
-	TypeDeclaration				{ $$ = Node(Tokens.ProductionClassMemberDeclaration, $1); } ;
-	
-											
-/* Field Declarations ====================================================================================================*/
-
-AnnotatedFieldDeclaration :	
-	Annotations FieldDeclaration	{ $$ = Node(Tokens.ProductionAnnotatedFieldDeclaration, $1, $2); } ;
-
-FieldDeclaration :		
-	Type VariableDeclarators SEPARATOR_SEMICOLON			{ $$ = Node(Tokens.ProductionFieldDeclaration, $1, $2, $3); } |
-	Modifiers Type VariableDeclarators SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionFieldDeclaration, $1, $2, $3, $4); } |
-	error													{ Error(Tokens.ProductionFieldDeclaration, "Invalid field declaration."); } ;
-
-VariableDeclarators :	
-	VariableDeclarator										{ $$ = Node(Tokens.ProductionVariableDeclarators, $1); } |
-	VariableDeclarators SEPARATOR_COMMA VariableDeclarator	{ $$ = Node(Tokens.ProductionVariableDeclarators, $1, $2, $3); } ;
-											
-VariableDeclarator :	
-	VariableDeclaratorId											{ $$ = Node(Tokens.ProductionVariableDeclarator, $1); } |
-	VariableDeclaratorId OPERATOR_ASSIGNMENT VariableInitializer	{ $$ = Node(Tokens.ProductionVariableDeclarator, $1, $2, $3); } ;
-											
-VariableDeclaratorId :	
-	SimpleName															{ $$ = Node(Tokens.ProductionVariableDeclaratorId, $1); } ;
-											
-VariableInitializer :	
-	Expression			{ $$ = Node(Tokens.ProductionVariableInitializer, $1); } |
-	ArrayInitializer	{ $$ = Node(Tokens.ProductionVariableInitializer, $1); } ;
-											
-/* Trigger Declarations ==================================================================================================*/
-
-TriggerDeclaration :	
-	TriggerHeader MethodBody { $$ = Node(Tokens.ProductionTriggerDeclaration, $1, $2); } ;
-
-TriggerHeader :			
-	KEYWORD_TRIGGER SimpleName KEYWORD_ON SimpleName SEPARATOR_PARENTHESES_LEFT TriggerEvents SEPARATOR_PARENTHESES_RIGHT  { $$ = Node(Tokens.ProductionTriggerHeader, $1, $2, $3, $4, $5, $6, $7); } ;
-				
-TriggerEvents :			
-	TriggerEvent								{ $$ = Node(Tokens.ProductionTriggerEvents, $1); } |
-	TriggerEvents SEPARATOR_COMMA TriggerEvent	{ $$ = Node(Tokens.ProductionTriggerEvents, $1, $2, $3); } ;
-				
-TriggerEvent :			
-	KEYWORD_BEFORE KEYWORD_INSERT	{ $$ = Node(Tokens.ProductionTriggerEvent, $1, $2); } |											
-	KEYWORD_BEFORE KEYWORD_UPDATE	{ $$ = Node(Tokens.ProductionTriggerEvent, $1, $2); } |	
-	KEYWORD_BEFORE KEYWORD_DELETE	{ $$ = Node(Tokens.ProductionTriggerEvent, $1, $2); } |	
-	KEYWORD_AFTER KEYWORD_INSERT	{ $$ = Node(Tokens.ProductionTriggerEvent, $1, $2); } |											
-	KEYWORD_AFTER KEYWORD_UPDATE	{ $$ = Node(Tokens.ProductionTriggerEvent, $1, $2); } |	
-	KEYWORD_AFTER KEYWORD_DELETE	{ $$ = Node(Tokens.ProductionTriggerEvent, $1, $2); } |	
-	KEYWORD_AFTER KEYWORD_UNDELETE	{ $$ = Node(Tokens.ProductionTriggerEvent, $1, $2); } ;
-											
-/* Property Declarations =================================================================================================*/
-
-PropertyDeclaration :	
-	Type SimpleName SEPARATOR_BRACE_LEFT AccessorDeclarations SEPARATOR_BRACE_RIGHT				{ $$ = Node(Tokens.ProductionPropertyDeclaration, $1, $2, $3, $4, $5); } |
-	Modifiers Type SimpleName SEPARATOR_BRACE_LEFT AccessorDeclarations SEPARATOR_BRACE_RIGHT	{ $$ = Node(Tokens.ProductionPropertyDeclaration, $1, $2, $3, $4, $5, $6); } ;
-
-AccessorDeclarations :	
-	GetAccessorDeclaration							{ $$ = Node(Tokens.ProductionAccessorDeclarations, $1); } |
-	GetAccessorDeclaration SetAccessorDeclaration	{ $$ = Node(Tokens.ProductionAccessorDeclarations, $1, $2); } |
-	SetAccessorDeclaration							{ $$ = Node(Tokens.ProductionAccessorDeclarations, $1); } |
-	SetAccessorDeclaration GetAccessorDeclaration	{ $$ = Node(Tokens.ProductionAccessorDeclarations, $1, $2); } ;
-
-GetAccessorDeclaration :	
-	KEYWORD_GET AccessorBody			{ $$ = Node(Tokens.ProductionGetAccessorDeclaration, $1, $2); } |
-	Modifiers KEYWORD_GET AccessorBody	{ $$ = Node(Tokens.ProductionGetAccessorDeclaration, $1, $2, $3); } ;
-
-SetAccessorDeclaration :	
-	KEYWORD_SET AccessorBody			{ $$ = Node(Tokens.ProductionSetAccessorDeclaration, $1, $2); } |
-	Modifiers KEYWORD_SET AccessorBody	{ $$ = Node(Tokens.ProductionSetAccessorDeclaration, $1, $2, $3); } ;
-											
-AccessorBody :			
-	Block					{ $$ = Node(Tokens.ProductionAccessorBody, $1); } |
-	SEPARATOR_SEMICOLON 	{ $$ = Node(Tokens.ProductionAccessorBody, $1); } ;
-											
-/* Method Declarations ===================================================================================================*/
-
-AnnotatedMethodDeclaration :	
-	Annotations MethodDeclaration { $$ = Node(Tokens.ProductionAnnotatedMethodDeclaration, $1, $2); } ;
-
-MethodDeclaration :				
-	MethodHeader MethodBody	{ $$ = Node(Tokens.ProductionMethodDeclaration, $1, $2); } ;
-
-MethodHeader :			
-	Modifiers Type MethodDeclarator				{ $$ = Node(Tokens.ProductionMethodHeader, $1, $2, $3); } |
-	Type MethodDeclarator						{ $$ = Node(Tokens.ProductionMethodHeader, $1, $2); } |
-	Modifiers KEYWORD_VOID MethodDeclarator		{ $$ = Node(Tokens.ProductionMethodHeader, $1, $2, $3); } |
-	KEYWORD_VOID MethodDeclarator				{ $$ = Node(Tokens.ProductionMethodHeader, $1, $2); } ;
-											
-MethodDeclarator :		
-	SimpleName SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT						{ $$ = Node(Tokens.ProductionMethodDeclarator, $1, $2, $3); } |
-	SimpleName SEPARATOR_PARENTHESES_LEFT FormalParameterList SEPARATOR_PARENTHESES_RIGHT   { $$ = Node(Tokens.ProductionMethodDeclarator, $1, $2, $3, $4); } ;
-
-FormalParameterList :	
-	FormalParameter 									{ $$ = Node(Tokens.ProductionFormalParameterList, $1); } |
-	FormalParameterList SEPARATOR_COMMA FormalParameter	{ $$ = Node(Tokens.ProductionFormalParameterList, $1, $2, $3); } ;
-											
-FormalParameter :		
-	Type VariableDeclaratorId	{ $$ = Node(Tokens.ProductionFormalParameter, $1, $2); } ;
-
-MethodBody :			
-	Block				{ $$ = Node(Tokens.ProductionMethodBody, $1); } |
-	SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionMethodBody, $1); } ;
-											
-/* Static Initializers ===================================================================================================*/
-
-StaticInitializer :		
-	KEYWORD_STATIC Block  { $$ = Node(Tokens.ProductionStaticInitializer, $1, $2); } ;
-
-/* Constructor Declarations ==============================================================================================*/
-
-ConstructorDeclaration :	
-	ConstructorDeclarator ConstructorBody			{ $$ = Node(Tokens.ProductionConstructorDeclaration, $1, $2); } |
-	Modifiers ConstructorDeclarator ConstructorBody	{ $$ = Node(Tokens.ProductionConstructorDeclaration, $1, $2, $3); } ;
-											
-ConstructorDeclarator :	
-	Name SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT						{ $$ = Node(Tokens.ProductionConstructorDeclarator, $1, $2, $3); } |
-	Name SEPARATOR_PARENTHESES_LEFT FormalParameterList SEPARATOR_PARENTHESES_RIGHT	{ $$ = Node(Tokens.ProductionConstructorDeclarator, $1, $2, $3, $4); } ;
-											
-ConstructorBody :		
-	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT													{ $$ = Node(Tokens.ProductionConstructorBody, $1, $2); } |
-	SEPARATOR_BRACE_LEFT ExplicitConstructorInvocation SEPARATOR_BRACE_RIGHT					{ $$ = Node(Tokens.ProductionConstructorBody, $1, $2, $3); } |
-	SEPARATOR_BRACE_LEFT BlockStatements SEPARATOR_BRACE_RIGHT									{ $$ = Node(Tokens.ProductionConstructorBody, $1, $2, $3); } |
-	SEPARATOR_BRACE_LEFT ExplicitConstructorInvocation BlockStatements SEPARATOR_BRACE_RIGHT	{ $$ = Node(Tokens.ProductionConstructorBody, $1, $2, $3, $4); } ;
-											
-ExplicitConstructorInvocation :		
-	KEYWORD_THIS SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON					{ $$ = Node(Tokens.ProductionExplicitConstructorInvocation, $1, $2, $3, $4); } |
-	KEYWORD_THIS SEPARATOR_PARENTHESES_LEFT ArgumentList SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionExplicitConstructorInvocation, $1, $2, $3, $4, $5); } |
-	KEYWORD_SUPER SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON				{ $$ = Node(Tokens.ProductionExplicitConstructorInvocation, $1, $2, $3, $4); } |
-	KEYWORD_SUPER SEPARATOR_PARENTHESES_LEFT ArgumentList SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionExplicitConstructorInvocation, $1, $2, $3, $4, $5); } ;
-											
-/* Interface Declarations ================================================================================================*/
-
-AnnotatedInterfaceDeclaration :		
-	Annotations InterfaceDeclaration  { $$ = Node(Tokens.ProductionAnnotatedInterfaceDeclaration, $1, $2); } ;
-
-InterfaceDeclaration :	
-				KEYWORD_INTERFACE SimpleName 					InterfaceBody	{ $$ = Node(Tokens.ProductionInterfaceDeclaration, $1, $2, $3); } |
-                KEYWORD_INTERFACE SimpleName ExtendsInterfaces	InterfaceBody	{ $$ = Node(Tokens.ProductionInterfaceDeclaration, $1, $2, $3, $4); } |
-	Modifiers 	KEYWORD_INTERFACE SimpleName 					InterfaceBody	{ $$ = Node(Tokens.ProductionInterfaceDeclaration, $1, $2, $3, $4); } |
-	Modifiers 	KEYWORD_INTERFACE SimpleName ExtendsInterfaces	InterfaceBody	{ $$ = Node(Tokens.ProductionInterfaceDeclaration, $1, $2, $3, $4, $5); } ;
-
-ExtendsInterfaces :		
-	KEYWORD_EXTENDS Name					{ $$ = Node(Tokens.ProductionExtendsInterfaces, $1, $2); } |
-	ExtendsInterfaces SEPARATOR_COMMA Name	{ $$ = Node(Tokens.ProductionExtendsInterfaces, $1, $2, $3); } ;
-											
-InterfaceBody :			
-	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT								{ $$ = Node(Tokens.ProductionInterfaceBody, $1, $2); } |
-	SEPARATOR_BRACE_LEFT InterfaceMemberDeclarations SEPARATOR_BRACE_RIGHT	{ $$ = Node(Tokens.ProductionInterfaceBody, $1, $2, $3); } ;
-											
-InterfaceMemberDeclarations :	
-	InterfaceMemberDeclaration								{ $$ = Node(Tokens.ProductionInterfaceMemberDeclarations, $1); } |
-	InterfaceMemberDeclarations InterfaceMemberDeclaration	{ $$ = Node(Tokens.ProductionInterfaceMemberDeclarations, $1, $2); } ;
-											
-InterfaceMemberDeclaration :	
-	AbstractMethodDeclaration	{ $$ = Node(Tokens.ProductionInterfaceMemberDeclaration, $1); } ;
-
-AbstractMethodDeclaration :		
-	MethodHeader SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionAbstractMethodDeclaration, $1, $2); } ;
-
-/* Enum Declarations =====================================================================================================*/
-
-AnnotatedEnumDeclaration :	
-	Annotations EnumDeclaration { $$ = Node(Tokens.ProductionAnnotatedEnumDeclaration, $1, $2); } ;
-
-EnumDeclaration :		
-	KEYWORD_ENUM SimpleName EnumBody 			{ $$ = Node(Tokens.ProductionEnumDeclaration, $1, $2, $3); } |
-	Modifiers KEYWORD_ENUM SimpleName EnumBody 	{ $$ = Node(Tokens.ProductionEnumDeclaration, $1, $2, $3, $4); } ;
-
-EnumBody :				
-	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT 							{ $$ = Node(Tokens.ProductionEnumBody, $1, $2); } |
-	SEPARATOR_BRACE_LEFT EnumMemberDeclarations SEPARATOR_BRACE_RIGHT 	{ $$ = Node(Tokens.ProductionEnumBody, $1, $2, $3); } ;
-
-EnumMemberDeclarations :	
-	EnumMemberDeclaration											{ $$ = Node(Tokens.ProductionEnumMemberDeclarations, $1); } |
-	EnumMemberDeclarations SEPARATOR_COMMA EnumMemberDeclaration 	{ $$ = Node(Tokens.ProductionEnumMemberDeclarations, $1, $2, $3); } ;
-											
-EnumMemberDeclaration :		
-	SimpleName  { $$ = Node(Tokens.ProductionEnumMemberDeclaration, $1); };
-
-/* Arrays ================================================================================================================*/
-
-ArrayInitializer :		
-	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT						{ $$ = Node(Tokens.ProductionArrayInitializer, $1, $2); } |
-	SEPARATOR_BRACE_LEFT VariableInitializers SEPARATOR_BRACE_RIGHT	{ $$ = Node(Tokens.ProductionArrayInitializer, $1, $2, $3); } ;
-											
-VariableInitializers :	
-	VariableInitializer											{ $$ = Node(Tokens.ProductionVariableInitializers, $1); } |
-	VariableInitializers SEPARATOR_COMMA VariableInitializer	{ $$ = Node(Tokens.ProductionVariableInitializers, $1, $2, $3); } ;
-
-/* Blocks and Statements =================================================================================================*/
-
-Block :					
-	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT					{ $$ = Node(Tokens.ProductionBlock, $1, $2); } |
-	SEPARATOR_BRACE_LEFT BlockStatements SEPARATOR_BRACE_RIGHT	{ $$ = Node(Tokens.ProductionBlock, $1, $2, $3); } ;
-
-BlockStatements :		
-	BlockStatement					{ $$ = Node(Tokens.ProductionBlockStatements, $1); } |
-	BlockStatements BlockStatement	{ $$ = Node(Tokens.ProductionBlockStatements, $1, $2); } ;
-											
-BlockStatement :		
-	LocalVariableDeclarationStatement	{ $$ = Node(Tokens.ProductionBlockStatement, $1); } |
-	Statement							{ $$ = Node(Tokens.ProductionBlockStatement, $1); } ;
-											
-LocalVariableDeclarationStatement :		
-	LocalVariableDeclaration SEPARATOR_SEMICOLON				{ $$ = Node(Tokens.ProductionLocalVariableDeclarationStatement, $1, $2); } |
-	Modifiers LocalVariableDeclaration SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionLocalVariableDeclarationStatement, $1, $2, $3); } ;
-
-LocalVariableDeclaration :	
-	Type VariableDeclarators	{ $$ = Node(Tokens.ProductionLocalVariableDeclaration, $1, $2); } ;											
-
-Statement :				
-	StatementWithoutTrailingSubstatement	{ $$ = Node(Tokens.ProductionStatement, $1); } |
-	IfThenStatement							{ $$ = Node(Tokens.ProductionStatement, $1); } |
-	IfThenElseStatement						{ $$ = Node(Tokens.ProductionStatement, $1); } |
-	WhileStatement							{ $$ = Node(Tokens.ProductionStatement, $1); } |
-	ForStatement							{ $$ = Node(Tokens.ProductionStatement, $1); } |
-	ForEachStatement						{ $$ = Node(Tokens.ProductionStatement, $1); } ;											
-											
-StatementNoShortIf :	
-	StatementWithoutTrailingSubstatement	{ $$ = Node(Tokens.ProductionStatementNoShortIf, $1); } |
-	IfThenElseStatementNoShortIf			{ $$ = Node(Tokens.ProductionStatementNoShortIf, $1); } |
-	WhileStatementNoShortIf					{ $$ = Node(Tokens.ProductionStatementNoShortIf, $1); } |
-	ForStatementNoShortIf					{ $$ = Node(Tokens.ProductionStatementNoShortIf, $1); } |
-	ForEachStatementNoShortIf				{ $$ = Node(Tokens.ProductionStatementNoShortIf, $1); } ;
-											
-StatementWithoutTrailingSubstatement :		
-	Block								{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	LocalVariableDeclarationStatement   { $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	EmptyStatement						{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	ExpressionStatement					{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	DoStatement							{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	BreakStatement						{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	ContinueStatement					{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	ReturnStatement						{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	ThrowStatement						{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	TryStatement						{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } |
-	DMLStatement						{ $$ = Node(Tokens.ProductionStatementWithoutTrailingSubstatement, $1); } ;
-											
-EmptyStatement :		
-	SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionEmptyStatement, $1); } ;
-
-ExpressionStatement :	
-	StatementExpression SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionExpressionStatement, $1, $2); } |
-	MethodInvocation Block					{ $$ = Node(Tokens.ProductionExpressionStatement, $1, $2); } |
-	error SEPARATOR_SEMICOLON				{ Error(Tokens.ProductionExpressionStatement, "Invalid expression."); } |
-	error									{ Error(Tokens.ProductionExpressionStatement, "';' expected."); } ;
-
-StatementExpression :	
-	Assignment						{ $$ = Node(Tokens.ProductionStatementExpression, $1); } |
-	PreIncrementExpression			{ $$ = Node(Tokens.ProductionStatementExpression, $1); } |
-	PreDecrementExpression			{ $$ = Node(Tokens.ProductionStatementExpression, $1); } |
-	PostIncrementExpression			{ $$ = Node(Tokens.ProductionStatementExpression, $1); } |
-	PostDecrementExpression			{ $$ = Node(Tokens.ProductionStatementExpression, $1); } |
-	MethodInvocation				{ $$ = Node(Tokens.ProductionStatementExpression, $1); } |
-	ClassInstanceCreationExpression	{ $$ = Node(Tokens.ProductionStatementExpression, $1); } ;
-											
-IfThenStatement :				
-	KEYWORD_IF SEPARATOR_PARENTHESES_LEFT Expression SEPARATOR_PARENTHESES_RIGHT Statement	{ $$ = Node(Tokens.ProductionIfThenStatement, $1, $2, $3, $4, $5); };
-
-IfThenElseStatement :			
-	KEYWORD_IF SEPARATOR_PARENTHESES_LEFT Expression SEPARATOR_PARENTHESES_RIGHT StatementNoShortIf KEYWORD_ELSE Statement	{ $$ = Node(Tokens.ProductionIfThenElseStatement, $1, $2, $3, $4, $5, $6); } ;
-
-IfThenElseStatementNoShortIf :	
-	KEYWORD_IF SEPARATOR_PARENTHESES_LEFT Expression SEPARATOR_PARENTHESES_RIGHT StatementNoShortIf KEYWORD_ELSE StatementNoShortIf	{ $$ = Node(Tokens.ProductionIfThenElseStatementNoShortIf, $1, $2, $3, $4, $5, $6, $7); } ;
-
-WhileStatement :				
-	KEYWORD_WHILE SEPARATOR_PARENTHESES_LEFT Expression SEPARATOR_PARENTHESES_RIGHT Statement	{ $$ = Node(Tokens.ProductionWhileStatement, $1, $2, $3, $4, $5); } ;
-
-WhileStatementNoShortIf :		
-	KEYWORD_WHILE SEPARATOR_PARENTHESES_LEFT Expression SEPARATOR_PARENTHESES_RIGHT StatementNoShortIf	{ $$ = Node(Tokens.ProductionWhileStatementNoShortIf, $1, $2, $3, $4, $5); } ;
-
-DoStatement :					
-	KEYWORD_DO Statement KEYWORD_WHILE SEPARATOR_PARENTHESES_LEFT Expression SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionDoStatement, $1, $2, $3, $4, $5, $6, $7); } ;
-
-ForEachStatement :				
-	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT Type SimpleName SEPARATOR_COLON Expression SEPARATOR_PARENTHESES_RIGHT Statement 	{ $$ = Node(Tokens.ProductionForEachStatement, $1, $2, $3, $4, $5, $6, $7, $8); } ;
-
-ForEachStatementNoShortIf :		
-	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT Type SimpleName SEPARATOR_COLON Expression SEPARATOR_PARENTHESES_RIGHT ForStatementNoShortIf 	{ $$ = Node(Tokens.ProductionForEachStatementNoShortIf, $1, $2, $3, $4, $5, $6, $7, $8); } ;
-
-ForStatement :					
-	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT ForInit	SEPARATOR_SEMICOLON ForExpression	SEPARATOR_SEMICOLON ForUpdate	SEPARATOR_PARENTHESES_RIGHT Statement	{ $$ = Node(Tokens.ProductionForStatement, $1, $2, $3, $4, $5, $6, $7, $8, $9); } ;
-											
-ForStatementNoShortIf :			
-	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT ForInit	SEPARATOR_SEMICOLON ForExpression	SEPARATOR_SEMICOLON ForUpdate	SEPARATOR_PARENTHESES_RIGHT StatementNoShortIf	{ $$ = Node(Tokens.ProductionForStatementNoShortIf, $1, $2, $3, $4, $5, $6, $7, $8, $9); } ;
-											
-ForInit :				
-								{ $$ = Node(Tokens.ProductionForInit); } |
-	StatementExpressionList		{ $$ = Node(Tokens.ProductionForInit, $1); } |
-	LocalVariableDeclaration	{ $$ = Node(Tokens.ProductionForInit, $1); } ;
-											
-ForExpression :			
-				{ $$ = Node(Tokens.ProductionForExpression); } |
-	Expression	{ $$ = Node(Tokens.ProductionForExpression, $1); } ;
-											
-ForUpdate :				
-							{ $$ = Node(Tokens.ProductionForUpdate); } |
-	StatementExpressionList	{ $$ = Node(Tokens.ProductionForUpdate, $1); } ;
-
-StatementExpressionList :	
-	StatementExpression											{ $$ = Node(Tokens.ProductionStatementExpressionList, $1); } |
-	StatementExpressionList SEPARATOR_COMMA StatementExpression	{ $$ = Node(Tokens.ProductionStatementExpressionList, $1, $2, $3); } ;
-											
-BreakStatement :		
-	KEYWORD_BREAK SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionBreakStatement, $1, $2); } ;
-
-ContinueStatement :		
-	KEYWORD_CONTINUE SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionContinueStatement, $1, $2); } ;
-
-ReturnStatement :		
-	KEYWORD_RETURN SEPARATOR_SEMICOLON				{ $$ = Node(Tokens.ProductionReturnStatement, $1, $2); } |
-	KEYWORD_RETURN Expression SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionReturnStatement, $1, $2, $3); } ;
-											
-ThrowStatement :		
-	KEYWORD_THROW Expression SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionThrowStatement, $1, $2, $3); } ;
-
-TryStatement :			
-	KEYWORD_TRY Block Catches			{ $$ = Node(Tokens.ProductionTryStatement, $1, $2, $3); } |
-	KEYWORD_TRY Block Catches Finally	{ $$ = Node(Tokens.ProductionTryStatement, $1, $2, $3, $4); } |
-	KEYWORD_TRY Block Finally			{ $$ = Node(Tokens.ProductionTryStatement, $1, $2, $3); } ;
-											
-Catches :				
-	CatchClause			{ $$ = Node(Tokens.ProductionCatches, $1); } |
-	Catches CatchClause	{ $$ = Node(Tokens.ProductionCatches, $1, $2); } ;
-											
-CatchClause :			
-	KEYWORD_CATCH SEPARATOR_PARENTHESES_LEFT FormalParameter SEPARATOR_PARENTHESES_RIGHT Block	{ $$ = Node(Tokens.ProductionCatchClause, $1, $2, $3, $4, $5); } ;
-
-Finally :				
-	KEYWORD_FINALLY Block	{ $$ = Node(Tokens.ProductionFinally, $1, $2); } ;
-
-DMLStatement :			
-	KEYWORD_INSERT Expression SEPARATOR_SEMICOLON  	{ $$ = Node(Tokens.ProductionDMLStatement, $1, $2, $3); } |
-	KEYWORD_UPDATE Expression SEPARATOR_SEMICOLON  	{ $$ = Node(Tokens.ProductionDMLStatement, $1, $2, $3); } |
-	KEYWORD_UPSERT Expression SEPARATOR_SEMICOLON  	{ $$ = Node(Tokens.ProductionDMLStatement, $1, $2, $3); } |
-	KEYWORD_DELETE Expression SEPARATOR_SEMICOLON  	{ $$ = Node(Tokens.ProductionDMLStatement, $1, $2, $3); } |
-	KEYWORD_UNDELETE Expression SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionDMLStatement, $1, $2, $3); } |
-	KEYWORD_MERGE Expression SEPARATOR_SEMICOLON	{ $$ = Node(Tokens.ProductionDMLStatement, $1, $2, $3); } ;
-
-/* Expressions ===========================================================================================================*/
-
-Primary :
-	PrimaryNoNewArray			{ $$ = Node(Tokens.ProductionPrimary, $1); } |
-	ArrayCreationExpression		{ $$ = Node(Tokens.ProductionPrimary, $1); } ;
-
-PrimaryNoNewArray :		
-	Literal																{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1); } |
-	KEYWORD_THIS														{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1); } |
-	SEPARATOR_PARENTHESES_LEFT Expression SEPARATOR_PARENTHESES_RIGHT	{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1, $2, $3); } |
-	ClassInstanceCreationExpression										{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1); } |
-	FieldAccess															{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1); } |
-	MethodInvocation													{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1); } |
-	ArrayAccess															{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1); } |
-	SOQL																{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1); } |
-	SOSL																{ $$ = Node(Tokens.ProductionPrimaryNoNewArray, $1); } ;
-											
-ClassInstanceCreationExpression :	
-	KEYWORD_NEW Type SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT					{ $$ = Node(Tokens.ProductionClassInstanceCreationExpression, $1, $2, $3, $4); } |
-	KEYWORD_NEW Type SEPARATOR_PARENTHESES_LEFT ArgumentList SEPARATOR_PARENTHESES_RIGHT	{ $$ = Node(Tokens.ProductionClassInstanceCreationExpression, $1, $2, $3, $4, $5); } |
-	KEYWORD_NEW Type SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT								{ $$ = Node(Tokens.ProductionClassInstanceCreationExpression, $1, $2, $3, $4); } |
-	KEYWORD_NEW Type SEPARATOR_BRACE_LEFT ArgumentList SEPARATOR_BRACE_RIGHT   { $$ = Node(Tokens.ProductionClassInstanceCreationExpression, $1, $2, $3, $4, $5); } |
-	KEYWORD_NEW Type SEPARATOR_BRACE_LEFT MapArgumentAssignmentList SEPARATOR_BRACE_RIGHT   { $$ = Node(Tokens.ProductionClassInstanceCreationExpression, $1, $2, $3, $4, $5); } ;
-
-MapArgumentAssignmentList :			
-	MapArgumentAssignment											{ $$ = Node(Tokens.ProductionMapArgumentAssignmentList, $1); } |
-	MapArgumentAssignmentList SEPARATOR_COMMA MapArgumentAssignment	{ $$ = Node(Tokens.ProductionMapArgumentAssignmentList, $1, $2, $3); } ;
-
-MapArgumentAssignment :				
-	Expression OPERATOR_ASSIGNMENT_MAP Expression  { $$ = Node(Tokens.ProductionMapArgumentAssignment, $1, $2, $3); } ;
-											
-ArgumentList :						
-	Expression								{ $$ = Node(Tokens.ProductionArgumentList, $1); } |
-	ArgumentList SEPARATOR_COMMA Expression	{ $$ = Node(Tokens.ProductionArgumentList, $1, $2, $3); } ;
-											
-ArrayCreationExpression :			
-	KEYWORD_NEW Type DimExprs																									{ $$ = Node(Tokens.ProductionArrayCreationExpression, $1, $2, $3); } |
-	KEYWORD_NEW Type DimExprs Dims																								{ $$ = Node(Tokens.ProductionArrayCreationExpression, $1, $2, $3, $4); } ;
-											
-DimExprs :							
-	DimExpr				{ $$ = Node(Tokens.ProductionDimExprs, $1); } |
-	DimExprs DimExpr	{ $$ = Node(Tokens.ProductionDimExprs, $1, $2); } ;
-											
-DimExpr :							
-	SEPARATOR_BRACKET_LEFT Expression SEPARATOR_BRACKET_RIGHT	{ $$ = Node(Tokens.ProductionDimExpr, $1, $2, $3); } ;
-
-Dims :								
-	SEPARATOR_BRACKET_EMPTY			{ $$ = Node(Tokens.ProductionDims, $1); } |
-	Dims SEPARATOR_BRACKET_EMPTY	{ $$ = Node(Tokens.ProductionDims, $1, $2); } ;
-											
-FieldAccess :						
-	Primary SEPARATOR_DOT SimpleName			{ $$ = Node(Tokens.ProductionFieldAccess, $1, $2, $3); } |											
-	Primary SEPARATOR_DOT KEYWORD_CLASS			{ $$ = Node(Tokens.ProductionFieldAccess, $1, $2, $3); } |
-	Primary SEPARATOR_DOT KEYWORD_NEW			{ $$ = Node(Tokens.ProductionFieldAccess, $1, $2, $3); } |
-	Primary SEPARATOR_DOT PrimitiveType			{ $$ = Node(Tokens.ProductionFieldAccess, $1, $2, $3); } |											
-	KEYWORD_SUPER SEPARATOR_DOT SimpleName		{ $$ = Node(Tokens.ProductionFieldAccess, $1, $2, $3); } |
-	KEYWORD_SUPER SEPARATOR_DOT KEYWORD_CLASS	{ $$ = Node(Tokens.ProductionFieldAccess, $1, $2, $3); } |
-	Primary SEPARATOR_DOT KEYWORD_NEW			{ $$ = Node(Tokens.ProductionFieldAccess, $1, $2, $3); } |
-	KEYWORD_SUPER SEPARATOR_DOT PrimitiveType	{ $$ = Node(Tokens.ProductionFieldAccess, $1, $2, $3); } ;
-											
-Annotations :						
-	Annotation				{ $$ = Node(Tokens.ProductionAnnotations, $1); } |
-	Annotations Annotation	{ $$ = Node(Tokens.ProductionAnnotations, $1, $2); } ;
-											
-Annotation :						
-	KEYWORD_ANNOTATE SimpleName																				{ $$ = Node(Tokens.ProductionAnnotation, $1, $2); } |
-	KEYWORD_ANNOTATE SimpleName SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT 						{ $$ = Node(Tokens.ProductionAnnotation, $1, $2, $3, $4); } |
-	KEYWORD_ANNOTATE SimpleName SEPARATOR_PARENTHESES_LEFT VariableInitializers SEPARATOR_PARENTHESES_RIGHT	{ $$ = Node(Tokens.ProductionAnnotation, $1, $2, $3, $4, $5); } ;
-											
-MethodInvocation :					
-	Name SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT													{ $$ = Node(Tokens.ProductionMethodInvocation, $1, $2, $3); } |
-	Name SEPARATOR_PARENTHESES_LEFT ArgumentList SEPARATOR_PARENTHESES_RIGHT									{ $$ = Node(Tokens.ProductionMethodInvocation, $1, $2, $3, $4); } |
-	PrimitiveType SEPARATOR_DOT SimpleName SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT               { $$ = Node(Tokens.ProductionMethodInvocation, $1, $2, $3, $4, $5); } |
-	PrimitiveType SEPARATOR_DOT SimpleName SEPARATOR_PARENTHESES_LEFT ArgumentList SEPARATOR_PARENTHESES_RIGHT	{ $$ = Node(Tokens.ProductionMethodInvocation, $1, $2, $3, $4, $5, $6); } |
-	Primary SEPARATOR_DOT SimpleName SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT						{ $$ = Node(Tokens.ProductionMethodInvocation, $1, $2, $3, $4, $5); } |
-	Primary SEPARATOR_DOT SimpleName SEPARATOR_PARENTHESES_LEFT ArgumentList SEPARATOR_PARENTHESES_RIGHT		{ $$ = Node(Tokens.ProductionMethodInvocation, $1, $2, $3, $4, $5, $6); } |
-	KEYWORD_SUPER SEPARATOR_DOT SimpleName SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT				{ $$ = Node(Tokens.ProductionMethodInvocation, $1, $2, $3, $4, $5); } |
-	KEYWORD_SUPER SEPARATOR_DOT SimpleName SEPARATOR_PARENTHESES_LEFT ArgumentList SEPARATOR_PARENTHESES_RIGHT	{ $$ = Node(Tokens.ProductionMethodInvocation, $1, $2, $3, $4, $5, $6); } ;
-										
-ArrayAccess :						
-	Name SEPARATOR_BRACKET_LEFT Expression SEPARATOR_BRACKET_RIGHT					{ $$ = Node(Tokens.ProductionArrayAccess, $1, $2, $3, $4); } |
-	PrimaryNoNewArray SEPARATOR_BRACKET_LEFT Expression SEPARATOR_BRACKET_RIGHT		{ $$ = Node(Tokens.ProductionArrayAccess, $1, $2, $3, $4); } ;
-											
-PostfixExpression :					
-	Primary															{ $$ = Node(Tokens.ProductionPostfixExpression, $1); } |
-	Name															{ $$ = Node(Tokens.ProductionPostfixExpression, $1); } |
-	PostIncrementExpression											{ $$ = Node(Tokens.ProductionPostfixExpression, $1); } |
-	PostDecrementExpression											{ $$ = Node(Tokens.ProductionPostfixExpression, $1); } ;
-											
-PostIncrementExpression :			
-	PostfixExpression OPERATOR_INCREMENT	{ $$ = Node(Tokens.ProductionPostIncrementExpression, $1, $2); } ;
-
-PostDecrementExpression :			
-	PostfixExpression OPERATOR_DECREMENT	{ $$ = Node(Tokens.ProductionPostDecrementExpression, $1, $2); } ;
-
-UnaryExpression :					
-	PreIncrementExpression													{ $$ = Node(Tokens.ProductionUnaryExpression, $1); } |
-	PreDecrementExpression													{ $$ = Node(Tokens.ProductionUnaryExpression, $1); } |
-	OPERATOR_ADDITION UnaryExpression										{ $$ = Node(Tokens.ProductionUnaryExpression, $1, $2); } |
-	OPERATOR_SUBTRACTION UnaryExpression									{ $$ = Node(Tokens.ProductionUnaryExpression, $1, $2); } |
-	UnaryExpressionNotPlusMinus												{ $$ = Node(Tokens.ProductionUnaryExpression, $1); } ;
-											
-PreIncrementExpression :			
-	OPERATOR_INCREMENT UnaryExpression	{ $$ = Node(Tokens.ProductionPreIncrementExpression, $1, $2); } ;
-
-PreDecrementExpression :			
-	OPERATOR_DECREMENT UnaryExpression	{ $$ = Node(Tokens.ProductionPreDecrementExpression, $1, $2); } ;
-
-UnaryExpressionNotPlusMinus :       
-	PostfixExpression							{ $$ = Node(Tokens.ProductionUnaryExpressionNotPlusMinus, $1); } |
-	OPERATOR_LOGICAL_COMPLEMENT UnaryExpression	{ $$ = Node(Tokens.ProductionUnaryExpressionNotPlusMinus, $1, $2); } |
-	CastExpression                              { $$ = Node(Tokens.ProductionUnaryExpressionNotPlusMinus, $1); } ;
-											
-CastExpression :					
-	SEPARATOR_PARENTHESES_LEFT PrimitiveType SEPARATOR_PARENTHESES_RIGHT UnaryExpression													{ $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4); } |
-	SEPARATOR_PARENTHESES_LEFT ReferenceType SEPARATOR_PARENTHESES_RIGHT UnaryExpressionNotPlusMinus										{ $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4); } |
-	SEPARATOR_PARENTHESES_LEFT PrimitiveType SEPARATOR_PARENTHESES_RIGHT SEPARATOR_PARENTHESES_LEFT IDENTIFIER SEPARATOR_PARENTHESES_RIGHT  { $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4, $5, $6); } |
-    SEPARATOR_PARENTHESES_LEFT ReferenceType SEPARATOR_PARENTHESES_RIGHT SEPARATOR_PARENTHESES_LEFT IDENTIFIER SEPARATOR_PARENTHESES_RIGHT  { $$ = Node(Tokens.ProductionCastExpression, $1, $2, $3, $4, $5, $6); } ;
-											
-MultiplicativeExpression :			
-	UnaryExpression														{ $$ = Node(Tokens.ProductionMultiplicativeExpression, $1); } |
-	MultiplicativeExpression OPERATOR_MULTIPLICATION UnaryExpression	{ $$ = Node(Tokens.ProductionMultiplicativeExpression, $1, $2, $3); } |
-	MultiplicativeExpression OPERATOR_DIVISION UnaryExpression			{ $$ = Node(Tokens.ProductionMultiplicativeExpression, $1, $2, $3); } ;
-											
-AdditiveExpression :				
-	MultiplicativeExpression											{ $$ = Node(Tokens.ProductionAdditiveExpression, $1); } |
-	AdditiveExpression OPERATOR_ADDITION MultiplicativeExpression		{ $$ = Node(Tokens.ProductionAdditiveExpression, $1, $2, $3); } |
-	AdditiveExpression OPERATOR_SUBTRACTION MultiplicativeExpression	{ $$ = Node(Tokens.ProductionAdditiveExpression, $1, $2, $3); } ;
-											
-ShiftExpression :					
-	AdditiveExpression																							{ $$ = Node(Tokens.ProductionRelationalExpression, $1); } |
-	ShiftExpression OPERATOR_BITWISE_SHIFT_LEFT AdditiveExpression												{ $$ = Node(Tokens.ProductionShiftExpression, $1, $2, $3); } |
-	ShiftExpression OPERATOR_GREATER_THAN_A OPERATOR_GREATER_THAN_B AdditiveExpression							{ $$ = Node(Tokens.ProductionShiftExpression, $1, $2, $3, $4); } |
-	ShiftExpression OPERATOR_GREATER_THAN_A OPERATOR_GREATER_THAN_B OPERATOR_GREATER_THAN_C AdditiveExpression	{ $$ = Node(Tokens.ProductionShiftExpression, $1, $2, $3, $4, $5); } ;
-											
-RelationalExpression :				
-	ShiftExpression														{ $$ = Node(Tokens.ProductionRelationalExpression, $1); } |
-	RelationalExpression RelationalOperator ShiftExpression				{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
-	RelationalExpression RelationalOperator ShiftExpression				{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } |
-	RelationalExpression OPERATOR_INSTANCEOF Type						{ $$ = Node(Tokens.ProductionRelationalExpression, $1, $2, $3); } ;
-
-RelationalOperator:
-	OPERATOR_LESS_THAN				{ $$ = Node(Tokens.ProductionRelationalOperator, $1); } |
-	OPERATOR_GREATER_THAN			{ $$ = Node(Tokens.ProductionRelationalOperator, $1); } |
-	OPERATOR_LESS_THAN_OR_EQUAL		{ $$ = Node(Tokens.ProductionRelationalOperator, $1); } |
-	OPERATOR_GREATER_THAN_OR_EQUAL	{ $$ = Node(Tokens.ProductionRelationalOperator, $1); } ;
-											
-EqualityExpression :				
-	RelationalExpression												{ $$ = Node(Tokens.ProductionRelationalExpression, $1); } |
-	EqualityExpression OPERATOR_EQUALITY RelationalExpression			{ $$ = Node(Tokens.ProductionEqualityExpression, $1, $2, $3); } |
-	EqualityExpression OPERATOR_EQUALITY_EXACT RelationalExpression		{ $$ = Node(Tokens.ProductionEqualityExpression, $1, $2, $3); } |
-	EqualityExpression OPERATOR_INEQUALITY RelationalExpression			{ $$ = Node(Tokens.ProductionEqualityExpression, $1, $2, $3); } |										
-	EqualityExpression OPERATOR_INEQUALITY_ALT RelationalExpression		{ $$ = Node(Tokens.ProductionEqualityExpression, $1, $2, $3); } |
-	EqualityExpression OPERATOR_INEQUALITY_EXACT RelationalExpression	{ $$ = Node(Tokens.ProductionEqualityExpression, $1, $2, $3); } ;
-											
-AndExpression :						
-	EqualityExpression                                      { $$ = Node(Tokens.ProductionAndExpression, $1); } |
-	AndExpression OPERATOR_BITWISE_AND EqualityExpression   { $$ = Node(Tokens.ProductionAndExpression, $1, $2, $3); } ;
-											
-ExclusiveOrExpression :				
-	AndExpression														{ $$ = Node(Tokens.ProductionExclusiveOrExpression, $1); } |
-	ExclusiveOrExpression OPERATOR_BITWISE_EXCLUSIVE_OR AndExpression	{ $$ = Node(Tokens.ProductionExclusiveOrExpression, $1, $2, $3); } ;
-											
-InclusiveOrExpression :				
-	ExclusiveOrExpression											{ $$ = Node(Tokens.ProductionInclusiveOrExpression, $1); } |
-	InclusiveOrExpression OPERATOR_BITWISE_OR ExclusiveOrExpression	{ $$ = Node(Tokens.ProductionInclusiveOrExpression, $1, $2, $3); } ;
-											
-ConditionalAndExpression :			
-	InclusiveOrExpression										{ $$ = Node(Tokens.ProductionConditionalAndExpression, $1); } |
-	ConditionalAndExpression OPERATOR_AND InclusiveOrExpression	{ $$ = Node(Tokens.ProductionConditionalAndExpression, $1, $2, $3); } ;
-											
-ConditionalOrExpression :			
-	ConditionalAndExpression																		{ $$ = Node(Tokens.ProductionConditionalOrExpression, $1); } |
-	ConditionalOrExpression OPERATOR_OR ConditionalAndExpression									{ $$ = Node(Tokens.ProductionConditionalOrExpression, $1, $2, $3); } ;
-											
-ConditionalExpression :			
-	ConditionalOrExpression                                                                         { $$ = Node(Tokens.ProductionConditionalExpression, $1); } |
-	ConditionalOrExpression OPERATOR_QUESTION_MARK Expression SEPARATOR_COLON ConditionalExpression	{ $$ = Node(Tokens.ProductionConditionalExpression, $1, $2, $3, $4, $5); } ;
-											
-AssignmentExpression :			
-	ConditionalExpression     { $$ = Node(Tokens.ProductionAssignmentExpression, $1); } |
-	Assignment                { $$ = Node(Tokens.ProductionAssignmentExpression, $1); } ;
-										
-Assignment :					
-	Name AssignmentOperator Expression			{ $$ = Node(Tokens.ProductionAssignment, $1, $2, $3); } |
-	KEYWORD_ID AssignmentOperator Expression	{ $$ = Node(Tokens.ProductionAssignment, $1, $2, $3); } |
-	FieldAccess AssignmentOperator Expression	{ $$ = Node(Tokens.ProductionAssignment, $1, $2, $3); } |
-    ArrayAccess AssignmentOperator Expression	{ $$ = Node(Tokens.ProductionAssignment, $1, $2, $3); } ;
-											
-AssignmentOperator :				
-	OPERATOR_ASSIGNMENT									{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_MAP								{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_ADDITION						{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_MULTIPLICATION					{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_SUBTRACTION						{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_DIVISION                        { $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_OR								{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_AND								{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_EXCLUSIVE_OR					{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_BITWISE_SHIFT_LEFT				{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT				{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } |
-	OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT_UNSIGNED	{ $$ = Node(Tokens.ProductionAssignmentOperator, $1); } ;
-											
-Expression :
-	AssignmentExpression												{ $$ = Node(Tokens.ProductionExpression, $1); } |
-	SOQL																{ $$ = Node(Tokens.ProductionExpression, $1); } |
-	SOSL																{ $$ = Node(Tokens.ProductionExpression, $1); } ;
+ 
+identifier:
+	KEYWORD_ANNOTATE IDENTIFIER |
+	IDENTIFIER ;
+
+literal:
+	LITERAL_TRUE |
+	LITERAL_FALSE |
+	LITERAL_DOUBLE |
+	LITERAL_INTEGER |
+	LITERAL_LONG |
+	LITERAL_NULL |
+	LITERAL_STRING ;
+
+type_name:
+	namespace_or_type_name ;
+
+namespace_or_type_name:
+	identifier |
+	namespace_or_type_name SEPARATOR_DOT identifier ;
+
+type:
+	value_type |
+	reference_type ;
+
+value_type:
+	struct_type |
+	enum_type ;
+
+struct_type:
+	type_name |
+	simple_type ;
+
+simple_type:
+	numeric_type |
+	KEYWORD_ID |
+	KEYWORD_BOOLEAN ;
+
+numeric_type:
+	integral_type |
+	floating_point_type |
+	KEYWORD_DECIMAL ;
+
+integral_type:
+	KEYWORD_INTEGER |
+	KEYWORD_LONG ;
+
+floating_point_type:
+	KEYWORD_DOUBLE ;
+
+enum_type:
+	type_name ;
+
+reference_type:
+	class_type |
+	interface_type |
+	array_type ;
+
+class_type:
+	type_name |
+	KEYWORD_STRING ;
+
+interface_type:
+	type_name ;
+
+array_type:
+	non_array_type rank_specifiers ;
+
+non_array_type:
+	type ;
+
+rank_specifiers:
+	rank_specifier |
+	rank_specifiers rank_specifier ;
+
+rank_specifier:
+	SEPARATOR_BRACKET_EMPTY |
+	SEPARATOR_BRACKET_LEFT dim_separators SEPARATOR_BRACKET_RIGHT ;
+
+dim_separators:
+	SEPARATOR_COMMA |
+	dim_separators SEPARATOR_COMMA ;
+
+argument_list:
+	argument |
+	argument_list SEPARATOR_COMMA argument ;
+
+argument:
+	expression ;
+
+primary_expression:
+	primary_no_array_creation_expression |
+	array_creation_expression ;
+
+primary_no_array_creation_expression:
+	literal |
+	simple_name |
+	parenthesized_expression |
+	member_access |
+	invocation_expression |
+	element_access |
+	this_access |
+	base_access |
+	post_increment_expression |
+	post_decrement_expression |
+	object_creation_expression ;
+
+simple_name:
+	identifier ;
+
+parenthesized_expression:
+	SEPARATOR_PARENTHESES_LEFT expression SEPARATOR_PARENTHESES_RIGHT ;
+
+member_access:
+	primary_expression SEPARATOR_DOT identifier |
+	predefined_type SEPARATOR_DOT identifier ;
+
+predefined_type:
+	KEYWORD_BOOLEAN |
+	KEYWORD_DECIMAL |
+	KEYWORD_DOUBLE |
+	KEYWORD_INTEGER |
+	KEYWORD_LONG |
+	KEYWORD_STRING |
+	KEYWORD_ID ;
+
+invocation_expression:
+	primary_expression SEPARATOR_PARENTHESES_LEFT argument_list SEPARATOR_PARENTHESES_RIGHT |
+	primary_expression SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT ;
+
+element_access:
+	primary_no_array_creation_expression SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT ;
+
+expression_list:
+	expression |
+	expression_list SEPARATOR_COMMA expression ;
+
+this_access:
+	KEYWORD_THIS ;
+
+base_access:
+	KEYWORD_SUPER SEPARATOR_DOT identifier |
+	KEYWORD_SUPER SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT ;
+
+post_increment_expression:
+	primary_expression OPERATOR_INCREMENT ;
+
+post_decrement_expression:
+	primary_expression OPERATOR_DECREMENT ;
+
+object_creation_expression:
+	KEYWORD_NEW type SEPARATOR_PARENTHESES_LEFT argument_list SEPARATOR_PARENTHESES_RIGHT |
+	KEYWORD_NEW type SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT ;
+
+array_creation_expression:
+	KEYWORD_NEW non_array_type SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT rank_specifiers array_initializer |
+	KEYWORD_NEW non_array_type SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT rank_specifiers |
+	KEYWORD_NEW non_array_type SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT array_initializer |
+	KEYWORD_NEW non_array_type SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT |
+	KEYWORD_NEW array_type array_initializer ;
+
+unary_expression:
+	primary_expression |
+	OPERATOR_ADDITION unary_expression |
+	OPERATOR_SUBTRACTION unary_expression |
+	OPERATOR_LOGICAL_COMPLEMENT unary_expression |
+	OPERATOR_MULTIPLICATION unary_expression |
+	pre_increment_expression |
+	pre_decrement_expression |
+	cast_expression ;
+
+pre_increment_expression:
+	OPERATOR_INCREMENT unary_expression ;
+
+pre_decrement_expression:
+	OPERATOR_DECREMENT unary_expression ;
+
+cast_expression:
+	SEPARATOR_PARENTHESES_LEFT type SEPARATOR_PARENTHESES_RIGHT unary_expression ;
+
+multiplicative_expression:
+	unary_expression |
+	multiplicative_expression OPERATOR_MULTIPLICATION unary_expression |
+	multiplicative_expression OPERATOR_DIVISION unary_expression ;
+
+additive_expression:
+	multiplicative_expression |
+	additive_expression OPERATOR_ADDITION multiplicative_expression |
+	additive_expression OPERATOR_SUBTRACTION multiplicative_expression ;
+
+shift_expression:
+	additive_expression |
+	shift_expression OPERATOR_BITWISE_SHIFT_LEFT additive_expression |
+	shift_expression OPERATOR_GREATER_THAN_A OPERATOR_GREATER_THAN_B additive_expression |
+	shift_expression OPERATOR_GREATER_THAN_A OPERATOR_GREATER_THAN_B OPERATOR_GREATER_THAN_C additive_expression ;
+
+relational_expression:
+	shift_expression |
+	relational_expression OPERATOR_LESS_THAN shift_expression |
+	relational_expression OPERATOR_GREATER_THAN shift_expression |
+	relational_expression OPERATOR_LESS_THAN_OR_EQUAL shift_expression |
+	relational_expression OPERATOR_GREATER_THAN_OR_EQUAL shift_expression |
+	relational_expression OPERATOR_INSTANCEOF type ;
+
+equality_expression:
+	relational_expression |
+	equality_expression OPERATOR_EQUALITY relational_expression |
+	equality_expression OPERATOR_EQUALITY_EXACT relational_expression |
+	equality_expression OPERATOR_INEQUALITY relational_expression |
+	equality_expression OPERATOR_INEQUALITY_ALT relational_expression |
+	equality_expression OPERATOR_INEQUALITY_EXACT relational_expression ;
+
+and_expression:
+	equality_expression |
+	and_expression OPERATOR_BITWISE_AND equality_expression ;
+
+exclusive_or_expression:
+	and_expression |
+	exclusive_or_expression OPERATOR_BITWISE_EXCLUSIVE_OR and_expression ;
+
+inclusive_or_expression:
+	exclusive_or_expression |
+	inclusive_or_expression OPERATOR_BITWISE_OR exclusive_or_expression ;
+
+conditional_and_expression:
+	inclusive_or_expression |
+	conditional_and_expression OPERATOR_AND inclusive_or_expression ;
+
+conditional_or_expression:
+	conditional_and_expression |
+	conditional_or_expression OPERATOR_OR conditional_and_expression ;
+
+conditional_expression:
+	conditional_or_expression |
+	conditional_or_expression OPERATOR_QUESTION_MARK expression SEPARATOR_COLON expression ;
+
+assignment:
+	unary_expression assignment_operator expression ;
+
+assignment_operator:
+	OPERATOR_ASSIGNMENT |
+	OPERATOR_ASSIGNMENT_MAP |
+	OPERATOR_ASSIGNMENT_ADDITION |
+	OPERATOR_ASSIGNMENT_MULTIPLICATION |
+	OPERATOR_ASSIGNMENT_SUBTRACTION |
+	OPERATOR_ASSIGNMENT_DIVISION |
+	OPERATOR_ASSIGNMENT_OR |
+	OPERATOR_ASSIGNMENT_AND |
+	OPERATOR_ASSIGNMENT_EXCLUSIVE_OR |
+	OPERATOR_ASSIGNMENT_BITWISE_SHIFT_LEFT |
+	OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT |
+	OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT_UNSIGNED ;
+
+expression:
+	conditional_expression |
+	assignment |
+	SOQL |
+	SOSL ;
+
+constant_expression:
+	expression ;
+
+boolean_expression:
+	expression ;
+
+statement:
+	declaration_statement |
+	embedded_statement ;
+
+embedded_statement:
+	block |
+	empty_statement |
+	expression_statement |
+	selection_statement |
+	iteration_statement |
+	jump_statement |
+	try_statement ;
+
+block:
+	SEPARATOR_BRACE_LEFT statement_list SEPARATOR_BRACE_RIGHT |
+	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT ;
+
+statement_list:
+	statement |
+	statement_list statement ;
+
+empty_statement:
+	SEPARATOR_SEMICOLON ;
+
+declaration_statement:
+	local_variable_declaration SEPARATOR_SEMICOLON |
+	local_constant_declaration SEPARATOR_SEMICOLON ;
+
+local_variable_declaration:
+	type local_variable_declarators ;
+
+local_variable_declarators:
+	local_variable_declarator |
+	local_variable_declarators SEPARATOR_COMMA local_variable_declarator ;
+
+local_variable_declarator:
+	identifier |
+	identifier OPERATOR_ASSIGNMENT local_variable_initializer ;
+
+local_variable_initializer:
+	expression |
+	array_initializer ;
+
+local_constant_declaration:
+	KEYWORD_FINAL type constant_declarators ;
+
+constant_declarators:
+	constant_declarator |
+	constant_declarators SEPARATOR_COMMA constant_declarator ;
+
+constant_declarator:
+	identifier OPERATOR_ASSIGNMENT constant_expression ;
+
+expression_statement:
+	statement_expression SEPARATOR_SEMICOLON ;
+
+statement_expression:
+	invocation_expression |
+	object_creation_expression |
+	assignment |
+	post_increment_expression |
+	post_decrement_expression |
+	pre_increment_expression |
+	pre_decrement_expression ;
+
+selection_statement:
+	if_statement ;
+
+if_statement:
+	KEYWORD_IF SEPARATOR_PARENTHESES_LEFT boolean_expression SEPARATOR_PARENTHESES_RIGHT embedded_statement |
+	KEYWORD_IF SEPARATOR_PARENTHESES_LEFT boolean_expression SEPARATOR_PARENTHESES_RIGHT embedded_statement KEYWORD_ELSE embedded_statement ;
+
+boolean_expression:
+	expression ;
+
+iteration_statement:
+	while_statement |
+	do_statement |
+	for_statement |
+	foreach_statement ;
+
+while_statement:
+	KEYWORD_WHILE SEPARATOR_PARENTHESES_LEFT boolean_expression SEPARATOR_PARENTHESES_RIGHT embedded_statement ;
+
+do_statement:
+	KEYWORD_DO embedded_statement KEYWORD_WHILE SEPARATOR_PARENTHESES_LEFT boolean_expression SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON ;
+
+for_statement:
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT                 SEPARATOR_SEMICOLON               SEPARATOR_SEMICOLON              SEPARATOR_PARENTHESES_RIGHT embedded_statement |
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT                 SEPARATOR_SEMICOLON               SEPARATOR_SEMICOLON for_iterator SEPARATOR_PARENTHESES_RIGHT embedded_statement |
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT                 SEPARATOR_SEMICOLON for_condition SEPARATOR_SEMICOLON              SEPARATOR_PARENTHESES_RIGHT embedded_statement |
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT                 SEPARATOR_SEMICOLON for_condition SEPARATOR_SEMICOLON for_iterator SEPARATOR_PARENTHESES_RIGHT embedded_statement |
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT for_initializer SEPARATOR_SEMICOLON               SEPARATOR_SEMICOLON              SEPARATOR_PARENTHESES_RIGHT embedded_statement |
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT for_initializer SEPARATOR_SEMICOLON               SEPARATOR_SEMICOLON for_iterator SEPARATOR_PARENTHESES_RIGHT embedded_statement |
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT for_initializer SEPARATOR_SEMICOLON for_condition SEPARATOR_SEMICOLON              SEPARATOR_PARENTHESES_RIGHT embedded_statement |
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT for_initializer SEPARATOR_SEMICOLON for_condition SEPARATOR_SEMICOLON for_iterator SEPARATOR_PARENTHESES_RIGHT embedded_statement ;
+
+for_initializer:
+	local_variable_declaration |
+	statement_expression_list ;
+
+for_condition:
+	boolean_expression ;
+
+for_iterator:
+	statement_expression_list ;
+
+statement_expression_list:
+	statement_expression |
+	statement_expression_list SEPARATOR_COMMA statement_expression ;
+
+foreach_statement:
+	KEYWORD_FOR SEPARATOR_PARENTHESES_LEFT type identifier SEPARATOR_COLON expression SEPARATOR_PARENTHESES_RIGHT embedded_statement ;
+
+jump_statement:
+	break_statement |
+	continue_statement |
+	return_statement |
+	throw_statement ;
+
+break_statement:
+	KEYWORD_BREAK SEPARATOR_SEMICOLON ;
+
+continue_statement:
+	KEYWORD_CONTINUE SEPARATOR_SEMICOLON ;
+
+return_statement:
+	KEYWORD_RETURN expression SEPARATOR_SEMICOLON |
+	KEYWORD_RETURN SEPARATOR_SEMICOLON ;
+
+throw_statement:
+	KEYWORD_THROW expression SEPARATOR_SEMICOLON ;
+
+try_statement:
+	KEYWORD_TRY block catch_clauses |
+	KEYWORD_TRY block finally_clause |
+	KEYWORD_TRY block catch_clauses finally_clause ;
+
+catch_clauses:
+	specific_catch_clauses general_catch_clause |
+	general_catch_clause specific_catch_clauses |
+	general_catch_clause |
+	specific_catch_clauses ;
+
+specific_catch_clauses:
+	specific_catch_clause |
+	specific_catch_clauses specific_catch_clause ;
+
+specific_catch_clause:
+	KEYWORD_CATCH SEPARATOR_PARENTHESES_LEFT class_type identifier SEPARATOR_PARENTHESES_RIGHT block |
+	KEYWORD_CATCH SEPARATOR_PARENTHESES_LEFT class_type SEPARATOR_PARENTHESES_RIGHT block ;
+
+general_catch_clause:
+	KEYWORD_CATCH block ;
+
+finally_clause:
+	KEYWORD_FINALLY block ;
+
+compilation_unit:
+	|
+	type_declaration ;
+
+type_declaration:
+	class_declaration |
+	interface_declaration |
+	enum_declaration ;
+
+class_declaration:
+	                           KEYWORD_CLASS identifier            class_body |
+	                           KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
+	                           KEYWORD_CLASS identifier class_base class_body |
+	                           KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
+	           class_modifiers KEYWORD_CLASS identifier            class_body |
+	           class_modifiers KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
+	           class_modifiers KEYWORD_CLASS identifier class_base class_body |
+	           class_modifiers KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
+	attributes                 KEYWORD_CLASS identifier            class_body |
+	attributes                 KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
+	attributes                 KEYWORD_CLASS identifier class_base class_body |
+	attributes                 KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
+	attributes class_modifiers KEYWORD_CLASS identifier            class_body |
+	attributes class_modifiers KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
+	attributes class_modifiers KEYWORD_CLASS identifier class_base class_body |
+	attributes class_modifiers KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON ;
+
+class_modifiers:
+	class_modifier |
+	class_modifiers class_modifier ;
+
+class_modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PRIVATE |
+	KEYWORD_ABSTRACT |
+	KEYWORD_STATIC |
+	KEYWORD_GLOBAL |
+	KEYWORD_VIRTUAL |
+	KEYWORD_WITHSHARING |
+	KEYWORD_WITHOUTSHARING ;
+
+class_base:
+	KEYWORD_EXTENDS class_type |
+	KEYWORD_IMPLEMENTS interface_type_list |
+	KEYWORD_EXTENDS class_type KEYWORD_IMPLEMENTS interface_type_list ;
+
+interface_type_list:
+	interface_type |
+	interface_type_list SEPARATOR_COMMA interface_type ;
+
+class_body:
+	SEPARATOR_BRACE_LEFT class_member_declarations SEPARATOR_BRACE_RIGHT |
+	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT ;
+
+class_member_declarations:
+	class_member_declaration |
+	class_member_declarations class_member_declaration ;
+
+class_member_declaration:
+	constant_declaration |
+	field_declaration |
+	method_declaration |
+	property_declaration |
+	constructor_declaration |
+	static_constructor_declaration |
+	type_declaration ;
+
+constant_declaration:
+	           constant_modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
+	                              KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
+	attributes constant_modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
+	attributes                    KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON ;
+
+constant_modifiers:
+	constant_modifier |
+	constant_modifiers constant_modifier ;
+
+constant_modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PRIVATE |
+	KEYWORD_STATIC |
+	KEYWORD_GLOBAL |
+	KEYWORD_PROTECTED ;
+
+constant_declarators:
+	constant_declarator |
+	constant_declarators SEPARATOR_COMMA constant_declarator ;
+
+constant_declarator:
+	identifier OPERATOR_ASSIGNMENT constant_expression ;
+
+field_declaration:
+	           field_modifiers type variable_declarators SEPARATOR_SEMICOLON |
+	                           type variable_declarators SEPARATOR_SEMICOLON |
+	attributes field_modifiers type variable_declarators SEPARATOR_SEMICOLON |
+	attributes                 type variable_declarators SEPARATOR_SEMICOLON ;
+
+field_modifiers:
+	field_modifier |
+	field_modifiers field_modifier ;
+
+field_modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PROTECTED |
+	KEYWORD_PRIVATE |
+	KEYWORD_STATIC |
+	KEYWORD_GLOBAL |
+	KEYWORD_TRANSIENT ;
+
+variable_declarators:
+	variable_declarator |
+	variable_declarators SEPARATOR_COMMA variable_declarator ;
+
+variable_declarator:
+	identifier |
+	identifier OPERATOR_ASSIGNMENT variable_initializer ;
+
+variable_initializer:
+	expression |
+	array_initializer ;
+
+method_declaration:
+	method_header method_body ;
+
+method_header:
+	                            return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	                            return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	           method_modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	           method_modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	attributes                  return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	attributes                  return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	attributes method_modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	attributes method_modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT ;
+
+method_modifiers:
+	method_modifier |
+	method_modifiers method_modifier ;
+
+method_modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PROTECTED |
+	KEYWORD_PRIVATE |
+	KEYWORD_ABSTRACT |
+	KEYWORD_STATIC |
+	KEYWORD_GLOBAL |
+	KEYWORD_OVERRIDE |
+	KEYWORD_VIRTUAL |
+	KEYWORD_TESTMETHOD |
+	KEYWORD_WEBSERVICE ;
+
+return_type:
+	type |
+	KEYWORD_VOID ;
+
+member_name:
+	identifier |
+	interface_type SEPARATOR_DOT identifier ;
+
+method_body:
+	block |
+	SEPARATOR_SEMICOLON ;
+
+formal_parameter_list:
+	fixed_parameters ;
+
+fixed_parameters:
+	fixed_parameter |
+	fixed_parameters SEPARATOR_COMMA fixed_parameter ;
+
+fixed_parameter:
+	type identifier ;
+
+property_declaration:
+	                              type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	           property_modifiers type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	attributes                    type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	attributes property_modifiers type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT ;
+
+property_modifiers:
+	property_modifier |
+	property_modifiers property_modifier ;
+
+property_modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PROTECTED |
+	KEYWORD_PRIVATE |
+	KEYWORD_ABSTRACT |
+	KEYWORD_STATIC |
+	KEYWORD_GLOBAL |
+	KEYWORD_OVERRIDE |
+	KEYWORD_VIRTUAL ;
+
+member_name:
+	identifier |
+	interface_type SEPARATOR_DOT identifier ;
+
+accessor_declarations:
+	get_accessor_declaration set_accessor_declaration |
+	get_accessor_declaration |
+	set_accessor_declaration get_accessor_declaration |
+	set_accessor_declaration ;
+
+get_accessor_declaration:
+	attributes KEYWORD_GET accessor_body |
+	           KEYWORD_GET accessor_body ;
+
+set_accessor_declaration:
+	attributes KEYWORD_GET accessor_body |
+	           KEYWORD_GET accessor_body ;
+
+accessor_body:
+	block |
+	SEPARATOR_SEMICOLON ;
+
+constructor_declaration:
+	                                 constructor_declarator constructor_body |
+	           constructor_modifiers constructor_declarator constructor_body |
+	attributes                       constructor_declarator constructor_body |
+	attributes constructor_modifiers constructor_declarator constructor_body ;
+
+constructor_modifiers:
+	constructor_modifier |
+	constructor_modifiers constructor_modifier ;
+
+constructor_modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PROTECTED |
+	KEYWORD_PRIVATE ;
+
+constructor_declarator:
+	identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	identifier SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT ;
+
+constructor_body:
+	block |
+	SEPARATOR_SEMICOLON ;
+
+static_constructor_declaration:
+	attributes KEYWORD_STATIC static_constructor_body |
+	           KEYWORD_STATIC static_constructor_body ;
+
+static_constructor_body:
+	block |
+	SEPARATOR_SEMICOLON ;
+
+array_initializer:
+	SEPARATOR_BRACE_LEFT variable_initializer_list SEPARATOR_BRACE_RIGHT |
+	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT |
+	SEPARATOR_BRACE_LEFT variable_initializer_list SEPARATOR_COMMA SEPARATOR_BRACE_RIGHT ;
+
+variable_initializer_list:
+	variable_initializer |
+	variable_initializer_list SEPARATOR_COMMA variable_initializer ;
+
+variable_initializer:
+	expression |
+	array_initializer ;
+
+interface_declaration:
+	                               KEYWORD_INTERFACE identifier                interface_body |
+	                               KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
+	                               KEYWORD_INTERFACE identifier interface_base interface_body |
+	                               KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
+	           interface_modifiers KEYWORD_INTERFACE identifier                interface_body |
+	           interface_modifiers KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
+	           interface_modifiers KEYWORD_INTERFACE identifier interface_base interface_body |
+	           interface_modifiers KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
+	attributes                     KEYWORD_INTERFACE identifier                interface_body |
+	attributes                     KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
+	attributes                     KEYWORD_INTERFACE identifier interface_base interface_body |
+	attributes                     KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
+	attributes interface_modifiers KEYWORD_INTERFACE identifier                interface_body |
+	attributes interface_modifiers KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
+	attributes interface_modifiers KEYWORD_INTERFACE identifier interface_base interface_body |
+	attributes interface_modifiers KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON ;
+
+interface_modifiers:
+	interface_modifier |
+	interface_modifiers interface_modifier ;
+
+interface_modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PROTECTED |
+	KEYWORD_PRIVATE ;
+ 
+interface_base:
+	KEYWORD_IMPLEMENTS interface_type_list ;
+
+interface_body:
+	SEPARATOR_BRACE_LEFT interface_member_declarations SEPARATOR_BRACE_RIGHT |
+	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT ;
+
+interface_member_declarations:
+	interface_member_declaration |
+	interface_member_declarations interface_member_declaration ;
+
+interface_member_declaration:
+	interface_method_declaration |
+	interface_property_declaration ;
+
+interface_method_declaration:
+	           return_type identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	           return_type identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	attributes return_type identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	attributes return_type identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON ;
+
+interface_property_declaration:
+	attributes type identifier SEPARATOR_BRACE_LEFT interface_accessors SEPARATOR_BRACE_RIGHT |
+	           type identifier SEPARATOR_BRACE_LEFT interface_accessors SEPARATOR_BRACE_RIGHT ;
+
+interface_accessors:
+	attributes KEYWORD_GET SEPARATOR_SEMICOLON |
+		       KEYWORD_GET SEPARATOR_SEMICOLON |
+	attributes KEYWORD_SET SEPARATOR_SEMICOLON |
+	           KEYWORD_SET SEPARATOR_SEMICOLON |
+	           KEYWORD_GET SEPARATOR_SEMICOLON            KEYWORD_SET SEPARATOR_SEMICOLON |
+	           KEYWORD_GET SEPARATOR_SEMICOLON attributes KEYWORD_SET SEPARATOR_SEMICOLON |
+	attributes KEYWORD_GET SEPARATOR_SEMICOLON            KEYWORD_SET SEPARATOR_SEMICOLON |
+	attributes KEYWORD_GET SEPARATOR_SEMICOLON attributes KEYWORD_SET SEPARATOR_SEMICOLON |
+	           KEYWORD_SET SEPARATOR_SEMICOLON            KEYWORD_GET SEPARATOR_SEMICOLON |
+	           KEYWORD_SET SEPARATOR_SEMICOLON attributes KEYWORD_GET SEPARATOR_SEMICOLON |
+	attributes KEYWORD_SET SEPARATOR_SEMICOLON            KEYWORD_GET SEPARATOR_SEMICOLON |
+	attributes KEYWORD_SET SEPARATOR_SEMICOLON attributes KEYWORD_GET SEPARATOR_SEMICOLON ;
+
+enum_declaration:
+	                          KEYWORD_ENUM identifier enum_body |
+	                          KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
+	           enum_modifiers KEYWORD_ENUM identifier enum_body |
+	           enum_modifiers KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
+	attributes                KEYWORD_ENUM identifier enum_body |
+	attributes                KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
+	attributes enum_modifiers KEYWORD_ENUM identifier enum_body |
+	attributes enum_modifiers KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON ;
+
+enum_body:
+	SEPARATOR_BRACE_LEFT enum_member_declarations SEPARATOR_BRACE_RIGHT |
+	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT |
+	SEPARATOR_BRACE_LEFT enum_member_declarations SEPARATOR_COMMA SEPARATOR_BRACE_RIGHT ;
+
+enum_modifiers:
+	enum_modifier |
+	enum_modifiers enum_modifier ;
+
+enum_modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PROTECTED |
+	KEYWORD_PRIVATE ;
+
+enum_member_declarations:
+	enum_member_declaration |
+	enum_member_declarations SEPARATOR_COMMA enum_member_declaration ;
+
+enum_member_declaration:
+	identifier ;
+
+attributes:
+	attribute_sections ;
+
+attribute_sections:
+	attribute_section |
+	attribute_sections attribute_section ;
+
+attribute_section:
+	SEPARATOR_BRACKET_LEFT attribute_list SEPARATOR_BRACKET_RIGHT |
+	SEPARATOR_BRACKET_LEFT attribute_list SEPARATOR_COMMA SEPARATOR_BRACKET_RIGHT ;
+
+attribute_list:
+	attribute |
+	attribute_list SEPARATOR_COMMA attribute ;
+
+attribute:
+	attribute_name attribute_arguments |
+	attribute_name ;
+
+attribute_name:
+	type_name ;
+
+attribute_arguments:
+	SEPARATOR_PARENTHESES_LEFT positional_argument_list SEPARATOR_PARENTHESES_RIGHT |
+	SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT |
+	SEPARATOR_PARENTHESES_LEFT positional_argument_list SEPARATOR_COMMA named_argument_list SEPARATOR_PARENTHESES_RIGHT |
+	SEPARATOR_PARENTHESES_LEFT named_argument_list SEPARATOR_PARENTHESES_RIGHT ;
+
+positional_argument_list:
+	positional_argument |
+	positional_argument_list SEPARATOR_COMMA positional_argument ;
+
+positional_argument:
+	attribute_argument_expression ;
+
+named_argument_list:
+	named_argument |
+	named_argument_list SEPARATOR_COMMA named_argument ;
+
+named_argument:
+	identifier OPERATOR_ASSIGNMENT attribute_argument_expression ;
+
+attribute_argument_expression:
+	expression ;
 
 %%

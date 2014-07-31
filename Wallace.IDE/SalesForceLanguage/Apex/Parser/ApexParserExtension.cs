@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using System;
 using System.Collections.Generic;
 using SalesForceLanguage.Apex.CodeModel;
 
@@ -116,248 +117,31 @@ namespace SalesForceLanguage.Apex.Parser
 
             Parse();
 
-            // Construct the code model.  This top down approach will change in the future.
-            List<ICodeElement> elements = new List<ICodeElement>();
-            ApexSyntaxNode node = GoalNode;
-            bool done = false;
-            while (!done)
-            {
-                switch (node.Token)
-                {
-                    case Tokens.ProductionGoal:
-                        node = node.GetChildNodeWithToken(Tokens.ProductionCompilationUnit);
-                        break;
-
-                    case Tokens.ProductionCompilationUnit:
-                        node = node.GetChildNodeWithToken(Tokens.ProductionTypeDeclaration);
-                        break;
-
-                    case Tokens.ProductionTypeDeclaration:
-                        node = node.Nodes[0];
-                        break;
-
-                    case Tokens.ProductionAnnotatedClassDeclaration:
-                        node = node.GetChildNodeWithToken(Tokens.ProductionClassDeclaration);
-                        break;
-
-                    case Tokens.ProductionAnnotatedInterfaceDeclaration:
-                        node = node.GetChildNodeWithToken(Tokens.ProductionInterfaceDeclaration);
-                        break;
-
-                    case Tokens.ProductionClassDeclaration:
-                        List<ClassDeclaration> classes = new List<ClassDeclaration>();
-                        ParseClassElements(node, classes);
-                        foreach (ClassDeclaration c in classes)
-                            elements.Add(c);
-                        done = true;
-                        break;
-
-                    case Tokens.ProductionInterfaceDeclaration:
-                        List<InterfaceDeclaration> interfaces = new List<InterfaceDeclaration>();
-                        ParseInterfaceElements(node, interfaces);
-                        foreach (InterfaceDeclaration i in interfaces)
-                            elements.Add(i);
-                        done = true;
-                        break;
-
-                    default:
-                        node = null;                        
-                        break;
-                }
-
-                if (node == null)
-                    break;
-            }
-
+            List<ICodeElement> elements = new List<ICodeElement>();            
             Elements = elements.ToArray();
         }
 
-        /// <summary>
-        /// Parse interface node.
-        /// </summary>
-        /// <param name="interfaceNode">The interface node to parse.</param>
-        /// <param name="elements">The elements collection to add parsed interfaces to.</param>
-        private void ParseInterfaceElements(ApexSyntaxNode interfaceNode, List<InterfaceDeclaration> elements)
-        {
-            // methods
-            ApexSyntaxNode[] methodNodes = interfaceNode.GetNodesWithToken(Tokens.ProductionAbstractMethodDeclaration);
-            List<MethodDeclaration> methods = new List<MethodDeclaration>();
-            foreach (ApexSyntaxNode methodNode in methodNodes)
-            {
-                ApexSyntaxNode methodNameNode = methodNode.GetNodeWithToken(Tokens.ProductionMethodDeclarator)
-                                                          .GetNodeWithToken(Tokens.ProductionSimpleName)
-                                                          .GetNodeWithText();
-
-                ApexSyntaxNode[] methodParameterNodes = methodNode.GetNodeWithToken(Tokens.ProductionMethodDeclarator)
-                                                                  .GetAllNodesWithToken(Tokens.ProductionFormalParameter);
-
-                List<ParameterDeclaration> parameters = new List<ParameterDeclaration>();
-                foreach (ApexSyntaxNode methodParameterNode in methodParameterNodes)
-                {
-                    ApexSyntaxNode methodParameterNameNode = methodParameterNode.GetNodeWithToken(Tokens.ProductionVariableDeclaratorId)
-                                                                                .GetNodeWithText();
-                    ApexSyntaxNode methodParameterTypeNode = methodParameterNode.GetNodeWithToken(Tokens.ProductionType);
-
-                    parameters.Add(new ParameterDeclaration(
-                        new NameDeclaration(methodParameterNameNode.Text, methodParameterNameNode.TextSpan),
-                        methodParameterNode.TextSpan,
-                        methodParameterTypeNode.GetLeavesDisplayText()));
-                }
-
-                methods.Add(new MethodDeclaration(new NameDeclaration(
-                    methodNameNode.Text,
-                    methodNameNode.TextSpan),
-                    methodNode.TextSpan,
-                    parameters.ToArray()));
-            }
-
-            // interface
-            ApexSyntaxNode interfaceNameNode = interfaceNode.GetChildNodeWithToken(Tokens.ProductionSimpleName)
-                                                            .GetNodeWithText();
-            elements.Add(new InterfaceDeclaration(
-                new NameDeclaration(interfaceNameNode.Text, interfaceNameNode.TextSpan),
-                interfaceNode.TextSpan,
-                methods.ToArray()));
-        }
+        
 
         /// <summary>
-        /// Parse the class node.
+        /// Process the reduce.
         /// </summary>
-        /// <param name="classNode">The class node to parse.</param>
-        /// <param name="elements">The elements collection to add parsed classes to.</param>
-        private void ParseClassElements(ApexSyntaxNode classNode, List<ClassDeclaration> elements)
+        /// <param name="token">The token that was generated from the reduce.</param>
+        /// <param name="values">The values that are being reduced.</param>
+        /// <param name="valuesLength">The number of values in the values parameter.</param>
+        protected override void ProcessReduce(int token, ApexSyntaxNode[] values, int valuesLength)
         {
-            // get inner classes
-            List<ClassDeclaration> innerClasses = new List<ClassDeclaration>();
-            ApexSyntaxNode[] innerClassNodes = classNode.GetNodeWithToken(Tokens.ProductionClassBody)
-                                                        .GetNodesWithToken(Tokens.ProductionClassDeclaration);
-            foreach (ApexSyntaxNode innerClassNode in innerClassNodes)
-                ParseClassElements(innerClassNode, innerClasses);
-
-            // get inner interfaces
-            List<InterfaceDeclaration> innerInterfaces = new List<InterfaceDeclaration>();
-            ApexSyntaxNode[] innerInterfaceNodes = classNode.GetNodeWithToken(Tokens.ProductionClassBody)
-                                                            .GetNodesWithToken(Tokens.ProductionInterfaceDeclaration);
-            foreach (ApexSyntaxNode innerInterfaceNode in innerInterfaceNodes)
+            Tokens tokenValue = (Tokens)token;
+            if (tokenValue == Tokens.error)
             {
-                bool canParse = true;
-                foreach (ClassDeclaration innerClass in innerClasses)
-                {
-                    if (innerClass.Location.ContainsLocation(innerInterfaceNode.TextSpan))
-                    {
-                        canParse = false;
-                        break;
-                    }
-                }
-
-                if (canParse)
-                    ParseInterfaceElements(innerInterfaceNode, innerInterfaces);
+                Error(tokenValue, "Invalid syntax.");
             }
-
-            // fields
-            ApexSyntaxNode[] fieldNodes = classNode.GetNodesWithToken(Tokens.ProductionFieldDeclaration);
-            List<FieldDeclaration> fields = new List<FieldDeclaration>();
-            foreach (ApexSyntaxNode fieldNode in fieldNodes)
+            else
             {
-                foreach (ApexSyntaxNode fieldNameNode in fieldNode.GetAllNodesWithToken(Tokens.ProductionVariableDeclaratorId))
-                {
-                    ApexSyntaxNode fieldNameTextNode = fieldNameNode.GetNodeWithText();
-                    fields.Add(new FieldDeclaration(new NameDeclaration(
-                        fieldNameTextNode.Text,
-                        fieldNameTextNode.TextSpan),
-                        fieldNode.TextSpan));
-                }
+                ApexSyntaxNode[] subNodes = new ApexSyntaxNode[valuesLength];
+                Array.Copy(values, subNodes, valuesLength);
+                CurrentSemanticValue = ParserFactory.Process(tokenValue, CurrentLocationSpan, subNodes);
             }
-
-            // constructors
-            ApexSyntaxNode[] constructorNodes = classNode.GetNodesWithToken(Tokens.ProductionConstructorDeclaration);
-            List<ConstructorDeclaration> constructors = new List<ConstructorDeclaration>();
-            foreach (ApexSyntaxNode constructorNode in constructorNodes)
-            {
-                ApexSyntaxNode constructorNameNode = constructorNode.GetNodeWithToken(Tokens.ProductionConstructorDeclarator)
-                                                                    .GetNodeWithToken(Tokens.ProductionName)
-                                                                    .GetNodeWithText();
-
-                ApexSyntaxNode[] constructorParameterNodes = constructorNode.GetNodeWithToken(Tokens.ProductionConstructorDeclarator)
-                                                                            .GetAllNodesWithToken(Tokens.ProductionFormalParameter);
-
-                List<ParameterDeclaration> parameters = new List<ParameterDeclaration>();
-                foreach (ApexSyntaxNode constructorParameterNode in constructorParameterNodes)
-                {
-                    ApexSyntaxNode constructorParameterNameNode = constructorParameterNode.GetNodeWithToken(Tokens.ProductionVariableDeclaratorId)
-                                                                                          .GetNodeWithText();
-                    ApexSyntaxNode constructorParameterTypeNode = constructorParameterNode.GetNodeWithToken(Tokens.ProductionType);
-
-                    parameters.Add(new ParameterDeclaration(
-                        new NameDeclaration(constructorParameterNameNode.Text, constructorParameterNameNode.TextSpan),
-                        constructorParameterNode.TextSpan,
-                        constructorParameterTypeNode.GetLeavesDisplayText()));
-                }
-
-                constructors.Add(new ConstructorDeclaration(new NameDeclaration(
-                    constructorNameNode.Text,
-                    constructorNameNode.TextSpan),
-                    constructorNode.TextSpan,
-                    parameters.ToArray()));
-            }
-
-            // properties
-            ApexSyntaxNode[] propertyNodes = classNode.GetNodesWithToken(Tokens.ProductionPropertyDeclaration);
-            List<PropertyDeclaration> properties = new List<PropertyDeclaration>();
-            foreach (ApexSyntaxNode propertyNode in propertyNodes)
-            {
-                ApexSyntaxNode propertyNameNode = propertyNode.GetChildNodeWithToken(Tokens.ProductionSimpleName)
-                                                              .GetNodeWithText();
-                properties.Add(new PropertyDeclaration(new NameDeclaration(
-                    propertyNameNode.Text,
-                    propertyNameNode.TextSpan),
-                    propertyNode.TextSpan));
-            }
-
-            // methods
-            ApexSyntaxNode[] methodNodes = classNode.GetNodesWithToken(Tokens.ProductionMethodDeclaration);
-            List<MethodDeclaration> methods = new List<MethodDeclaration>();
-            foreach (ApexSyntaxNode methodNode in methodNodes)
-            {
-                ApexSyntaxNode methodNameNode = methodNode.GetNodeWithToken(Tokens.ProductionMethodDeclarator)
-                                                          .GetNodeWithToken(Tokens.ProductionSimpleName)
-                                                          .GetNodeWithText();
-
-                ApexSyntaxNode[] methodParameterNodes = methodNode.GetNodeWithToken(Tokens.ProductionMethodDeclarator)
-                                                                  .GetAllNodesWithToken(Tokens.ProductionFormalParameter);
-
-                List<ParameterDeclaration> parameters = new List<ParameterDeclaration>();
-                foreach (ApexSyntaxNode methodParameterNode in methodParameterNodes)
-                {
-                    ApexSyntaxNode methodParameterNameNode = methodParameterNode.GetNodeWithToken(Tokens.ProductionVariableDeclaratorId)
-                                                                                .GetNodeWithText();
-                    ApexSyntaxNode methodParameterTypeNode = methodParameterNode.GetNodeWithToken(Tokens.ProductionType);
-
-                    parameters.Add(new ParameterDeclaration(
-                        new NameDeclaration(methodParameterNameNode.Text, methodParameterNameNode.TextSpan),
-                        methodParameterNode.TextSpan,
-                        methodParameterTypeNode.GetLeavesDisplayText()));
-                }
-
-                methods.Add(new MethodDeclaration(new NameDeclaration(
-                    methodNameNode.Text,
-                    methodNameNode.TextSpan),
-                    methodNode.TextSpan,
-                    parameters.ToArray()));
-            }
-
-            // class
-            ApexSyntaxNode classNameNode = classNode.GetChildNodeWithToken(Tokens.ProductionSimpleName)
-                                        .GetNodeWithText();
-            elements.Add(new ClassDeclaration(
-                new NameDeclaration(classNameNode.Text, classNameNode.TextSpan),
-                classNode.TextSpan,
-                fields.ToArray(),
-                constructors.ToArray(),
-                properties.ToArray(),
-                methods.ToArray(),
-                innerClasses.ToArray(),
-                innerInterfaces.ToArray()));
         }
 
         /// <summary>
@@ -368,14 +152,6 @@ namespace SalesForceLanguage.Apex.Parser
         /// <returns>The newly created syntax node.</returns>
         protected ApexSyntaxNode Node(Tokens token, params ApexSyntaxNode[] nodes)
         {
-
-#if DEBUG
-            // The commented out block is useful for debuging language parser failures
-            //System.Text.StringBuilder sb = new System.Text.StringBuilder(this.ValueStack.ToString());
-            //sb.AppendFormat(" => {0}", token);
-            //System.Console.WriteLine(sb.ToString());
-#endif
-
             return ParserFactory.Process(token, CurrentLocationSpan, nodes);
         }
 

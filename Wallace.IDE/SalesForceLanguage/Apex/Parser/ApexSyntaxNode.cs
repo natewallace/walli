@@ -114,9 +114,9 @@ namespace SalesForceLanguage.Apex.Parser
         {
             get
             {
-                if (Token == Tokens.ProductionNonReservedIdentifier)
-                    return GetText(Nodes[0].Token);
-                else
+                //if (Token == Tokens.ProductionNonReservedIdentifier)
+                //    return GetText(Nodes[0].Token);
+                //else
                     return _text;
             }
             set

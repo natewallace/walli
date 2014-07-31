@@ -66,19 +66,19 @@ namespace SalesForceLanguage.Apex.Parser
             {
                 switch (node.Token)
                 {
-                    // mark type references
-                    case Tokens.ProductionReferenceType:
-                        foreach (ApexSyntaxNode n in node.GetNodesWithText())
-                            SymbolDocument.Add(new TextSymbol(TextSymbolType.TypeReference, n.TextSpan));
-                        break;
+                    //// mark type references
+                    //case Tokens.ProductionReferenceType:
+                    //    foreach (ApexSyntaxNode n in node.GetNodesWithText())
+                    //        SymbolDocument.Add(new TextSymbol(TextSymbolType.TypeReference, n.TextSpan));
+                    //    break;
 
-                    // mark class and interface names
-                    case Tokens.ProductionClassDeclaration:
-                    case Tokens.ProductionInterfaceDeclaration:
-                        SymbolDocument.Add(new TextSymbol(
-                            TextSymbolType.TypeReference,
-                            node.GetChildNodeWithToken(Tokens.ProductionSimpleName).TextSpan));
-                        break;
+                    //// mark class and interface names
+                    //case Tokens.ProductionClassDeclaration:
+                    //case Tokens.ProductionInterfaceDeclaration:
+                    //    SymbolDocument.Add(new TextSymbol(
+                    //        TextSymbolType.TypeReference,
+                    //        node.GetChildNodeWithToken(Tokens.ProductionSimpleName).TextSpan));
+                    //    break;
 
                     default:
                         break;

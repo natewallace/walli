@@ -26,6 +26,12 @@ namespace QUT.Gppg
 #endif
  where TSpan : IMerge<TSpan>, new()
     {
+
+        /// <summary>
+        /// Holds values that will be passed to the ProcessReduce method. - Nate Wallace
+        /// </summary>
+        TValue[] _valueParameterList;
+
         private AbstractScanner<TValue, TSpan> scanner;
         /// <summary>
         /// The abstract scanner for this parser.
@@ -209,6 +215,8 @@ namespace QUT.Gppg
         /// unrecoverable errors</returns>
         public bool Parse()
         {
+            _valueParameterList = new TValue[15]; // added Nate Wallace
+
             Initialize();	// allow derived classes to instantiate rules, states and nonTerminals
 
             NextToken = 0;
@@ -343,14 +351,18 @@ namespace QUT.Gppg
                 }
             }
 
-            DoAction(ruleNumber);
+            // removed in favor of new ProcessReduce method - Nate Wallace
+            //DoAction(ruleNumber);  
 
-            for (int i = 0; i < rule.RightHandSide.Length; i++)
+            for (int i = rule.RightHandSide.Length - 1; i >=0; i--)
             {
+                _valueParameterList[i] = valueStack.Pop(); // capture the values - added by Nate Wallace
                 StateStack.Pop();
-                valueStack.Pop();
                 LocationStack.Pop();
             }
+
+            ProcessReduce(rule.LeftHandSide, _valueParameterList, rule.RightHandSide.Length); // process the reduce action - added by Nate Wallace
+
             FsaState = StateStack.TopElement();
 
             if (FsaState.Goto.ContainsKey(rule.LeftHandSide))
@@ -367,6 +379,16 @@ namespace QUT.Gppg
         /// </summary>
         /// <param name="actionNumber">Index of the action to perform</param>
         protected abstract void DoAction(int actionNumber);
+
+        /// <summary>
+        /// Process the reduce.
+        /// </summary>
+        /// <param name="token">The token that was generated from the reduce.</param>
+        /// <param name="values">The values that are being reduced.</param>
+        /// <param name="valuesLength">The number of values in the values parameter.</param>
+        protected virtual void ProcessReduce(int token, TValue[] values, int valuesLength)
+        {
+        }
 
         private bool ErrorRecovery()
         {
