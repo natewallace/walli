@@ -45,6 +45,12 @@
     <Compile Include="Apex\CodeModel\ICodeElement.cs" />
     <Compile Include="Apex\CodeModel\InterfaceDeclaration.cs" />
     <Compile Include="Apex\CodeModel\ParameterDeclaration.cs" />
+    <Compile Include="Apex\Parser\Gppg\AbstractScanner.cs" />
+    <Compile Include="Apex\Parser\Gppg\IMerge.cs" />
+    <Compile Include="Apex\Parser\Gppg\LexLocation.cs" />
+    <Compile Include="Apex\Parser\Gppg\PushdownPrefixState.cs" />
+    <Compile Include="Apex\Parser\Gppg\Rule.cs" />
+    <Compile Include="Apex\Parser\Gppg\State.cs" />
     <Compile Include="Apex\TextSymbolDocument.cs" />
     <Compile Include="Apex\ParseResult.cs" />
     <Compile Include="Apex\Parser\ApexLexerStateInfo.cs" />
@@ -65,7 +71,7 @@
     <Compile Include="Apex\Parser\ApexParserFactory.cs" />
     <Compile Include="LanguageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Apex\Parser\ShiftReduceParserCode.cs" />
+    <Compile Include="Apex\Parser\Gppg\ShiftReduceParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Apex\Apex.lex" />

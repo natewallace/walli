@@ -38,6 +38,11 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         private List<LanguageError> _errors;
 
+        /// <summary>
+        /// Holds the non terminal tokens.
+        /// </summary>
+        private static Tokens[] _nonTermTokens = null;
+
         #endregion
 
         #region Constructors
@@ -51,6 +56,7 @@ namespace SalesForceLanguage.Apex.Parser
         {
             _errors = new List<LanguageError>();
             SymbolDocument = null;
+            InitNonTermTokens();
         }
 
         /// <summary>
@@ -63,6 +69,7 @@ namespace SalesForceLanguage.Apex.Parser
         {
             _errors = new List<LanguageError>();
             SymbolDocument = symbolDocument;
+            InitNonTermTokens();
         }
 
         #endregion
@@ -102,6 +109,17 @@ namespace SalesForceLanguage.Apex.Parser
         #region Methods
 
         /// <summary>
+        /// Init the non term tokens.
+        /// </summary>
+        private void InitNonTermTokens()
+        {
+            _nonTermTokens = new Tokens[nonTerms.Length];
+            for (int i = 0; i < nonTerms.Length; i++)
+                if (!nonTerms[i].StartsWith("$"))
+                    _nonTermTokens[i] = (Tokens)Enum.Parse(typeof(Tokens), String.Format("grammar_{0}", nonTerms[i]));
+        }
+
+        /// <summary>
         /// Parse the apex code.
         /// </summary>
         public void ParseApex()
@@ -121,8 +139,6 @@ namespace SalesForceLanguage.Apex.Parser
             Elements = elements.ToArray();
         }
 
-        
-
         /// <summary>
         /// Process the reduce.
         /// </summary>
@@ -131,7 +147,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// <param name="valuesLength">The number of values in the values parameter.</param>
         protected override void ProcessReduce(int token, ApexSyntaxNode[] values, int valuesLength)
         {
-            Tokens tokenValue = (Tokens)token;
+            Tokens tokenValue = (token < 0) ? _nonTermTokens[-token - 1] : (Tokens)token;
             if (tokenValue == Tokens.error)
             {
                 Error(tokenValue, "Invalid syntax.");
@@ -142,17 +158,6 @@ namespace SalesForceLanguage.Apex.Parser
                 Array.Copy(values, subNodes, valuesLength);
                 CurrentSemanticValue = ParserFactory.Process(tokenValue, CurrentLocationSpan, subNodes);
             }
-        }
-
-        /// <summary>
-        /// Helper method used to generate a non terminal syntax node.
-        /// </summary>
-        /// <param name="token">The token that identifies the node.</param>
-        /// <param name="nodes">Sub nodes to this node.</param>
-        /// <returns>The newly created syntax node.</returns>
-        protected ApexSyntaxNode Node(Tokens token, params ApexSyntaxNode[] nodes)
-        {
-            return ParserFactory.Process(token, CurrentLocationSpan, nodes);
         }
 
         /// <summary>
