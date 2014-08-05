@@ -20,14 +20,13 @@ namespace Wallace.Language.Apex.Tests
         [TestMethod]
         public void ApexParser_ParseApex()
         {
-            foreach (string file in Directory.GetFiles(".\\TestInput", "apexTest*.txt"))
+            foreach (string file in Directory.GetFiles(".\\TestInput", "apexTest1.txt"))
             {
                 Console.WriteLine("File: " + file);
 
                 using (FileStream fs = File.OpenRead(file))
                 {
-                    TextSymbolDocument symbolDoc = new TextSymbolDocument();
-                    ApexLexer scanner = new ApexLexer(fs, symbolDoc);
+                    ApexLexer scanner = new ApexLexer(fs);
                     ApexParser parser = new ApexParser(scanner);
                     parser.ParseApex();
 

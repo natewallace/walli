@@ -191,6 +191,20 @@ namespace SalesForceData
             }
         }
 
+        public void GetSymbols()
+        {
+            InitClients();
+
+            SalesForceAPI.Tooling.retrieveResponse response = _toolingClient.retrieve(new SalesForceAPI.Tooling.retrieveRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                "Body, SymbolTable",
+                "ApexClass",
+                new string[] { "01pi00000063TrHAAU" }
+                ));
+
+            SalesForceAPI.Tooling.ApexClass m = response.result[0] as SalesForceAPI.Tooling.ApexClass;
+        }
+
         /// <summary>
         /// Delete the given file.
         /// </summary>

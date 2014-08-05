@@ -20,25 +20,41 @@
  * THE SOFTWARE.
  */
 
+using System;
+
 namespace SalesForceLanguage.Apex.CodeModel
 {
     /// <summary>
-    /// A field declaration.
+    /// A parameter.
     /// </summary>
-    public class FieldDeclaration : CodeElementBase
+    public class Parameter
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="fieldModifiers">FieldModifiers.</param>
+        /// <param name="type">Type.</param>
         /// <param name="name">Name.</param>
-        /// <param name="location">Location.</param>
-        internal FieldDeclaration(NameDeclaration name, TextLocation location)
-            : base(name, location)
+        public Parameter(string type, string name)
         {
+            Name = name ?? String.Empty;
+            Type = type ?? String.Empty;
         }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The type of the property.
+        /// </summary>
+        public string Type { get; private set; }
+
+        /// <summary>
+        /// The name of the property.
+        /// </summary>
+        public string Name { get; private set; }
 
         #endregion
     }

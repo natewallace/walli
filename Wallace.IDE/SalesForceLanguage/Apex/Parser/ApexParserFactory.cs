@@ -20,6 +20,9 @@
  * THE SOFTWARE.
  */
 
+using SalesForceLanguage.Apex.CodeModel;
+using System.Collections.Generic;
+
 namespace SalesForceLanguage.Apex.Parser
 {
     /// <summary>
@@ -27,15 +30,41 @@ namespace SalesForceLanguage.Apex.Parser
     /// </summary>
     public class ApexParserFactory
     {
+        #region Fields
+
+        /// <summary>
+        /// Holds properties that have been defined.
+        /// </summary>
+        private Stack<VisibilitySymbol> _properties;
+
+        /// <summary>
+        /// Holds properties that have been defined.
+        /// </summary>
+        private Stack<Constructor> _constructors;
+
+        /// <summary>
+        /// Holds methods that have been defined.
+        /// </summary>
+        private Stack<Method> _methods;
+
+        /// <summary>
+        /// Holds classes/interfaces that have been defined.
+        /// </summary>
+        private Stack<SymbolTable> _classes;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="symbolDocument">SymbolDocument.</param>
-        public ApexParserFactory(TextSymbolDocument symbolDocument)
+        public ApexParserFactory()
         {
-            SymbolDocument = symbolDocument;
+            _properties = new Stack<VisibilitySymbol>();
+            _constructors = new Stack<Constructor>();
+            _methods = new Stack<Method>();
+            _classes = new Stack<SymbolTable>();
         }
 
         #endregion
@@ -43,13 +72,61 @@ namespace SalesForceLanguage.Apex.Parser
         #region Properties
 
         /// <summary>
-        /// The document to add symbols to.
+        /// The symbols that were parsed.
         /// </summary>
-        public TextSymbolDocument SymbolDocument { get; private set; }
+        public SymbolTable SymbolTable { get; private set; }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Get the visibility based on the given syntax nodes.
+        /// </summary>
+        /// <param name="nodes">The nodes to look through.  Each one should be a single modifier node.</param>
+        /// <returns>The visibility.</returns>
+        private SymbolVisibility GetVisibility(ApexSyntaxNode[] nodes)
+        {
+            SymbolVisibility visibility = SymbolVisibility.Private;
+            foreach (ApexSyntaxNode node in nodes)
+            {
+                switch (node.Nodes[0].Token)
+                {
+                    case Tokens.KEYWORD_PRIVATE:
+                    case Tokens.KEYWORD_PROTECTED:
+                        return SymbolVisibility.Private;
+
+                    case Tokens.KEYWORD_PUBLIC:
+                        return SymbolVisibility.Public;
+
+                    case Tokens.KEYWORD_GLOBAL:
+                        return SymbolVisibility.Global;
+
+                    default:
+                        break;
+                }
+            }
+
+            return visibility;
+        }
+
+        /// <summary>
+        /// Get the parameters based on the given syntax nodes.
+        /// </summary>
+        /// <param name="nodes">The nodes to look through.  Each one should be a single parameter node.</param>
+        /// <returns>The parameters.</returns>
+        private Parameter[] GetParameters(ApexSyntaxNode[] nodes)
+        {
+            List<Parameter> list = new List<Parameter>();
+            foreach (ApexSyntaxNode node in nodes)
+            {
+                list.Add(new Parameter(
+                    node.Nodes[0].GetLeavesDisplayText(), 
+                    node.Nodes[1].Nodes[0].DisplayText));
+            }
+
+            return list.ToArray();
+        }
 
         /// <summary>
         /// Process the the given token.
@@ -62,27 +139,91 @@ namespace SalesForceLanguage.Apex.Parser
         {
             ApexSyntaxNode node = new ApexSyntaxNode(token, span, nodes);
 
-            if (SymbolDocument != null)
+            switch (node.Token)
             {
-                switch (node.Token)
-                {
-                    //// mark type references
-                    //case Tokens.ProductionReferenceType:
-                    //    foreach (ApexSyntaxNode n in node.GetNodesWithText())
-                    //        SymbolDocument.Add(new TextSymbol(TextSymbolType.TypeReference, n.TextSpan));
-                    //    break;
+                // fields
+                case Tokens.grammar_field_declaration:
+                    SymbolVisibility fieldVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
+                    string fieldType = node.GetChildNodeWithToken(Tokens.grammar_type).GetLeavesDisplayText();
+                    ApexSyntaxNode[] fieldDeclarators = node.GetNodesWithToken(Tokens.grammar_variable_declarator);
 
-                    //// mark class and interface names
-                    //case Tokens.ProductionClassDeclaration:
-                    //case Tokens.ProductionInterfaceDeclaration:
-                    //    SymbolDocument.Add(new TextSymbol(
-                    //        TextSymbolType.TypeReference,
-                    //        node.GetChildNodeWithToken(Tokens.ProductionSimpleName).TextSpan));
-                    //    break;
+                    foreach (ApexSyntaxNode declarator in fieldDeclarators)
+                    {
+                        _properties.Push(new VisibilitySymbol(
+                            new TextPosition(declarator.Nodes[0].TextSpan),
+                            declarator.Nodes[0].GetLeavesDisplayText(),
+                            fieldType,
+                            fieldVisibility));
+                    }
 
-                    default:
-                        break;
-                }
+                    return null;
+
+                // properties
+                case Tokens.grammar_property_declaration:
+                    SymbolVisibility propertyVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
+                    string propertyType = node.GetChildNodeWithToken(Tokens.grammar_type).GetLeavesDisplayText();
+                    ApexSyntaxNode propertyName = node.GetChildNodeWithToken(Tokens.grammar_member_name);
+
+                    _properties.Push(new VisibilitySymbol(
+                        new TextPosition(propertyName.TextSpan),
+                        propertyName.GetLeavesDisplayText(),
+                        propertyType,
+                        propertyVisibility));
+
+                    return null;
+
+                // constructors
+                case Tokens.grammar_constructor_declaration:
+                    SymbolVisibility constructorVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
+                    ApexSyntaxNode constructorName = node.GetNodeWithToken(Tokens.grammar_constructor_declarator).Nodes[0];
+                    Parameter[] constructorParameters = GetParameters(node.GetNodesWithToken(Tokens.grammar_fixed_parameter));
+
+                    _constructors.Push(new Constructor(
+                        new TextPosition(constructorName.TextSpan),
+                        constructorName.GetLeavesDisplayText(),
+                        null,
+                        constructorVisibility,
+                        constructorParameters));
+
+                    return null;
+
+                // methods
+                case Tokens.grammar_method_header:
+                    SymbolVisibility methodVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
+                    ApexSyntaxNode methodName = node.GetNodeWithToken(Tokens.grammar_member_name);
+                    Parameter[] methodParameters = GetParameters(node.GetNodesWithToken(Tokens.grammar_fixed_parameter));
+                    string methodReturnType = node.GetNodeWithToken(Tokens.grammar_return_type).GetLeavesDisplayText();
+
+                    _methods.Push(new Method(
+                        new TextPosition(methodName.TextSpan),
+                        methodName.GetLeavesDisplayText(),
+                        null,
+                        methodVisibility,
+                        methodParameters,
+                        methodReturnType));
+
+                    return null;
+
+                // interface methods
+                case Tokens.grammar_interface_method_declaration:
+                    ApexSyntaxNode interfaceMethodName = node.GetChildNodeWithToken(Tokens.grammar_identifier);
+                    Parameter[] interfaceMethodParameters = GetParameters(node.GetNodesWithToken(Tokens.grammar_fixed_parameter));
+                    string interfaceMethodReturnType = node.GetNodeWithToken(Tokens.grammar_return_type).GetLeavesDisplayText();
+
+                    _methods.Push(new Method(
+                        new TextPosition(interfaceMethodName.TextSpan),
+                        interfaceMethodName.GetLeavesDisplayText(),
+                        null,
+                        SymbolVisibility.Public,
+                        interfaceMethodParameters,
+                        interfaceMethodReturnType));
+
+                    return null;
+
+                // class
+
+                default:
+                    break;
             }
 
             return node;

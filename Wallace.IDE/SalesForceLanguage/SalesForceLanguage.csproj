@@ -39,19 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Apex\CodeModel\ClassDeclaration.cs" />
-    <Compile Include="Apex\CodeModel\CodeElementBase.cs" />
-    <Compile Include="Apex\CodeModel\ConstructorDeclaration.cs" />
-    <Compile Include="Apex\CodeModel\ICodeElement.cs" />
-    <Compile Include="Apex\CodeModel\InterfaceDeclaration.cs" />
-    <Compile Include="Apex\CodeModel\ParameterDeclaration.cs" />
+    <Compile Include="Apex\CodeModel\Constructor.cs" />
+    <Compile Include="Apex\CodeModel\Method.cs" />
+    <Compile Include="Apex\CodeModel\Parameter.cs" />
+    <Compile Include="TextPosition.cs" />
+    <Compile Include="Apex\CodeModel\Symbol.cs" />
+    <Compile Include="Apex\CodeModel\SymbolTable.cs" />
+    <Compile Include="Apex\CodeModel\SymbolVisibility.cs" />
+    <Compile Include="Apex\CodeModel\VisibilitySymbol.cs" />
     <Compile Include="Apex\Parser\Gppg\AbstractScanner.cs" />
     <Compile Include="Apex\Parser\Gppg\IMerge.cs" />
     <Compile Include="Apex\Parser\Gppg\LexLocation.cs" />
     <Compile Include="Apex\Parser\Gppg\PushdownPrefixState.cs" />
     <Compile Include="Apex\Parser\Gppg\Rule.cs" />
     <Compile Include="Apex\Parser\Gppg\State.cs" />
-    <Compile Include="Apex\TextSymbolDocument.cs" />
     <Compile Include="Apex\ParseResult.cs" />
     <Compile Include="Apex\Parser\ApexLexerStateInfo.cs" />
     <Compile Include="Apex\Parser\ApexLexer.cs" />
@@ -61,17 +62,11 @@
     <Compile Include="Apex\Parser\ApexSyntaxNode.cs" />
     <Compile Include="Apex\Parser\ApexTextSpan.cs" />
     <Compile Include="LanguageError.cs" />
-    <Compile Include="TextLocation.cs" />
-    <Compile Include="Apex\TextSymbol.cs" />
-    <Compile Include="Apex\TextSymbolType.cs" />
-    <Compile Include="Apex\CodeModel\MethodDeclaration.cs" />
-    <Compile Include="Apex\CodeModel\NameDeclaration.cs" />
-    <Compile Include="Apex\CodeModel\PropertyDeclaration.cs" />
-    <Compile Include="Apex\CodeModel\FieldDeclaration.cs" />
     <Compile Include="Apex\Parser\ApexParserFactory.cs" />
     <Compile Include="LanguageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Apex\Parser\Gppg\ShiftReduceParser.cs" />
+    <Compile Include="TextSpan.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Apex\Apex.lex" />

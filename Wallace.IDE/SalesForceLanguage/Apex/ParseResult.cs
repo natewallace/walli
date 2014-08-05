@@ -34,14 +34,11 @@ namespace SalesForceLanguage.Apex
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="symbolDocument">SymbolDocument.</param>
         /// <param name="errors">Errors.</param>
         /// <param name="elements">Elements.</param>
-        public ParseResult(TextSymbolDocument symbolDocument, LanguageError[] errors, ICodeElement[] elements)
+        public ParseResult(LanguageError[] errors)
         {
-            SymbolDocument = symbolDocument;
             Errors = errors ?? new LanguageError[0];
-            Elements = elements ?? new ICodeElement[0];
         }
 
         #endregion
@@ -49,19 +46,9 @@ namespace SalesForceLanguage.Apex
         #region Properties
 
         /// <summary>
-        /// The symbol document created from parsing.
-        /// </summary>
-        public TextSymbolDocument SymbolDocument { get; private set; }
-
-        /// <summary>
         /// Any language errors that occured.
         /// </summary>
         public LanguageError[] Errors { get; private set; }
-
-        /// <summary>
-        /// The elements that were parsed from the code.
-        /// </summary>
-        public ICodeElement[] Elements { get; private set; }
 
         #endregion
     }

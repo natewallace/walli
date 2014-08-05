@@ -148,8 +148,8 @@ namespace Wallace.IDE.SalesForce.UI
 
                 if (IsNavigationVisible)
                 {
-                    SetNavigationClasses(null);
-                    UpdateNavigation();
+                    //SetNavigationClasses(null);
+                    //UpdateNavigation();
                 }
             }
         }
@@ -163,6 +163,7 @@ namespace Wallace.IDE.SalesForce.UI
             set { borderNavigation.Visibility = value ? Visibility.Visible : Visibility.Collapsed; }
         }
 
+        /*
         /// <summary>
         /// The currently selected class navigation element.
         /// </summary>
@@ -260,6 +261,7 @@ namespace Wallace.IDE.SalesForce.UI
                 return elements;
             }
         }
+        */
 
         #endregion
 
@@ -272,7 +274,6 @@ namespace Wallace.IDE.SalesForce.UI
         private void ParseText(string text)
         {
             _parseData = _language.ParseApex(text);
-            _colorTransformer.SetSymbols(_parseData.SymbolDocument);
             _colorTransformer.SetErrors(_parseData.Errors);
         }
 
@@ -374,6 +375,7 @@ namespace Wallace.IDE.SalesForce.UI
             scrollViewerErrors.Visibility = (listBoxErrors.Items.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        /*
         /// <summary>
         /// Update the navigation controls based on current cursor position.
         /// </summary>
@@ -531,6 +533,7 @@ namespace Wallace.IDE.SalesForce.UI
                     });
             }
         }
+        */
 
         /// <summary>
         /// Raises the TextChanged event.
@@ -578,18 +581,18 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                SetNavigationMembers();
+                //SetNavigationMembers();
 
-                if (!_suspendNavigation)
-                {
-                    ICodeElement element = SelectedClassNavigationElement;
-                    if (element != null)
-                    {
-                        textEditor.SelectionStart = element.Name.Location.StartPosition;
-                        textEditor.SelectionLength = element.Name.Location.Length;
-                        textEditor.ScrollTo(element.Name.Location.StartLine, element.Name.Location.StartColumn);
-                    }
-                }
+                //if (!_suspendNavigation)
+                //{
+                //    ICodeElement element = SelectedClassNavigationElement;
+                //    if (element != null)
+                //    {
+                //        textEditor.SelectionStart = element.Name.Location.StartPosition;
+                //        textEditor.SelectionLength = element.Name.Location.Length;
+                //        textEditor.ScrollTo(element.Name.Location.StartLine, element.Name.Location.StartColumn);
+                //    }
+                //}
             }
             catch (Exception err)
             {
@@ -606,16 +609,16 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                if (!_suspendNavigation)
-                {
-                    ICodeElement element = SelectedMemberNavigationElement;
-                    if (element != null)
-                    {
-                        textEditor.SelectionStart = element.Name.Location.StartPosition;
-                        textEditor.SelectionLength = element.Name.Location.Length;
-                        textEditor.ScrollTo(element.Name.Location.StartLine, element.Name.Location.StartColumn);
-                    }
-                }
+                //if (!_suspendNavigation)
+                //{
+                //    ICodeElement element = SelectedMemberNavigationElement;
+                //    if (element != null)
+                //    {
+                //        textEditor.SelectionStart = element.Name.Location.StartPosition;
+                //        textEditor.SelectionLength = element.Name.Location.Length;
+                //        textEditor.ScrollTo(element.Name.Location.StartLine, element.Name.Location.StartColumn);
+                //    }
+                //}
             }
             catch (Exception err)
             {
@@ -634,7 +637,7 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 if (IsNavigationVisible)
                 {
-                    UpdateNavigation();
+                    //UpdateNavigation();
                 }
             }
             catch (Exception err)
@@ -658,11 +661,11 @@ namespace Wallace.IDE.SalesForce.UI
 
                     textEditor.TextArea.TextView.Redraw();
 
-                    if (IsNavigationVisible)
-                    {
-                        SetNavigationClasses(null);
-                        UpdateNavigation();
-                    }
+                    //if (IsNavigationVisible)
+                    //{
+                    //    SetNavigationClasses(null);
+                    //    UpdateNavigation();
+                    //}
                 });
             }
             catch (Exception err)

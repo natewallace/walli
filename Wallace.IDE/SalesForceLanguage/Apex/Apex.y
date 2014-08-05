@@ -203,179 +203,159 @@
 %token RESERVED_WHERE
 
 // Non terminals
-%token grammar_identifier
-%token grammar_literal
-%token grammar_type_name
-%token grammar_namespace_or_type_name
-%token grammar_type
-%token grammar_value_type
-%token grammar_struct_type
-%token grammar_simple_type
-%token grammar_numeric_type
-%token grammar_integral_type
-%token grammar_floating_point_type
-%token grammar_enum_type
-%token grammar_reference_type
-%token grammar_class_type
-%token grammar_interface_type
-%token grammar_array_type
-%token grammar_non_array_type
-%token grammar_rank_specifiers
-%token grammar_rank_specifier
-%token grammar_dim_separators
-%token grammar_argument_list
-%token grammar_argument
-%token grammar_primary_expression
-%token grammar_primary_no_array_creation_expression
-%token grammar_simple_name
-%token grammar_parenthesized_expression
-%token grammar_member_access
-%token grammar_predefined_type
-%token grammar_invocation_expression
-%token grammar_element_access
-%token grammar_expression_list
-%token grammar_this_access
-%token grammar_base_access
-%token grammar_post_increment_expression
-%token grammar_post_decrement_expression
-%token grammar_object_creation_expression
-%token grammar_array_creation_expression
-%token grammar_unary_expression
-%token grammar_pre_increment_expression
-%token grammar_pre_decrement_expression
-%token grammar_cast_expression
-%token grammar_multiplicative_expression
+%token grammar_accessor_body
+%token grammar_accessor_declarations
 %token grammar_additive_expression
-%token grammar_shift_expression
-%token grammar_relational_expression
-%token grammar_equality_expression
 %token grammar_and_expression
-%token grammar_exclusive_or_expression
-%token grammar_inclusive_or_expression
-%token grammar_conditional_and_expression
-%token grammar_conditional_or_expression
-%token grammar_conditional_expression
+%token grammar_argument
+%token grammar_argument_list
+%token grammar_array_creation_expression
+%token grammar_array_initializer
+%token grammar_array_type
 %token grammar_assignment
 %token grammar_assignment_operator
-%token grammar_expression
-%token grammar_constant_expression
-%token grammar_boolean_expression
-%token grammar_statement
-%token grammar_embedded_statement
+%token grammar_attribute
+%token grammar_attribute_argument_expression
+%token grammar_attribute_arguments
+%token grammar_attribute_list
+%token grammar_attribute_name
+%token grammar_attribute_section
+%token grammar_attribute_sections
+%token grammar_attributes
+%token grammar_base_access
 %token grammar_block
-%token grammar_statement_list
-%token grammar_empty_statement
-%token grammar_declaration_statement
-%token grammar_local_variable_declaration
-%token grammar_local_variable_declarators
-%token grammar_local_variable_declarator
-%token grammar_local_variable_initializer
-%token grammar_local_constant_declaration
-%token grammar_constant_declarators
-%token grammar_constant_declarator
-%token grammar_expression_statement
-%token grammar_statement_expression
-%token grammar_selection_statement
-%token grammar_if_statement
 %token grammar_boolean_expression
-%token grammar_iteration_statement
-%token grammar_while_statement
-%token grammar_do_statement
-%token grammar_for_statement
-%token grammar_for_initializer
-%token grammar_for_condition
-%token grammar_for_iterator
-%token grammar_statement_expression_list
-%token grammar_foreach_statement
-%token grammar_jump_statement
 %token grammar_break_statement
-%token grammar_continue_statement
-%token grammar_return_statement
-%token grammar_throw_statement
-%token grammar_try_statement
+%token grammar_cast_expression
 %token grammar_catch_clauses
-%token grammar_specific_catch_clauses
-%token grammar_specific_catch_clause
-%token grammar_general_catch_clause
-%token grammar_finally_clause
-%token grammar_compilation_unit
-%token grammar_type_declaration
-%token grammar_class_declaration
-%token grammar_class_modifiers
-%token grammar_class_modifier
 %token grammar_class_base
-%token grammar_interface_type_list
 %token grammar_class_body
-%token grammar_class_member_declarations
+%token grammar_class_declaration
 %token grammar_class_member_declaration
+%token grammar_class_member_declarations
+%token grammar_class_type
+%token grammar_compilation_unit
+%token grammar_conditional_and_expression
+%token grammar_conditional_expression
+%token grammar_conditional_or_expression
 %token grammar_constant_declaration
-%token grammar_constant_modifiers
-%token grammar_constant_modifier
-%token grammar_constant_declarators
 %token grammar_constant_declarator
-%token grammar_field_declaration
-%token grammar_field_modifiers
-%token grammar_field_modifier
-%token grammar_variable_declarators
-%token grammar_variable_declarator
-%token grammar_variable_initializer
-%token grammar_method_declaration
-%token grammar_method_header
-%token grammar_method_modifiers
-%token grammar_method_modifier
-%token grammar_return_type
-%token grammar_member_name
-%token grammar_method_body
-%token grammar_formal_parameter_list
-%token grammar_fixed_parameters
-%token grammar_fixed_parameter
-%token grammar_property_declaration
-%token grammar_property_modifiers
-%token grammar_property_modifier
-%token grammar_member_name
-%token grammar_accessor_declarations
-%token grammar_get_accessor_declaration
-%token grammar_set_accessor_declaration
-%token grammar_accessor_body
-%token grammar_constructor_declaration
-%token grammar_constructor_modifiers
-%token grammar_constructor_modifier
-%token grammar_constructor_declarator
+%token grammar_constant_declarators
+%token grammar_constant_expression
 %token grammar_constructor_body
-%token grammar_static_constructor_declaration
-%token grammar_static_constructor_body
-%token grammar_array_initializer
-%token grammar_variable_initializer_list
-%token grammar_variable_initializer
-%token grammar_interface_declaration
-%token grammar_interface_modifiers
-%token grammar_interface_modifier
+%token grammar_constructor_declaration
+%token grammar_constructor_declarator
+%token grammar_continue_statement
+%token grammar_declaration_statement
+%token grammar_dim_separators
+%token grammar_do_statement
+%token grammar_element_access
+%token grammar_embedded_statement
+%token grammar_empty_statement
+%token grammar_enum_body
+%token grammar_enum_declaration
+%token grammar_enum_member_declaration
+%token grammar_enum_member_declarations
+%token grammar_enum_type
+%token grammar_equality_expression
+%token grammar_exclusive_or_expression
+%token grammar_expression
+%token grammar_expression_list
+%token grammar_expression_statement
+%token grammar_field_declaration
+%token grammar_finally_clause
+%token grammar_fixed_parameter
+%token grammar_fixed_parameters
+%token grammar_floating_point_type
+%token grammar_for_condition
+%token grammar_for_initializer
+%token grammar_for_iterator
+%token grammar_for_statement
+%token grammar_foreach_statement
+%token grammar_formal_parameter_list
+%token grammar_general_catch_clause
+%token grammar_get_accessor_declaration
+%token grammar_identifier
+%token grammar_if_statement
+%token grammar_inclusive_or_expression
+%token grammar_integral_type
+%token grammar_interface_accessors
 %token grammar_interface_base
 %token grammar_interface_body
-%token grammar_interface_member_declarations
+%token grammar_interface_declaration
 %token grammar_interface_member_declaration
+%token grammar_interface_member_declarations
 %token grammar_interface_method_declaration
 %token grammar_interface_property_declaration
-%token grammar_interface_accessors
-%token grammar_enum_declaration
-%token grammar_enum_body
-%token grammar_enum_modifiers
-%token grammar_enum_modifier
-%token grammar_enum_member_declarations
-%token grammar_enum_member_declaration
-%token grammar_attributes
-%token grammar_attribute_sections
-%token grammar_attribute_section
-%token grammar_attribute_list
-%token grammar_attribute
-%token grammar_attribute_name
-%token grammar_attribute_arguments
-%token grammar_positional_argument_list
-%token grammar_positional_argument
-%token grammar_named_argument_list
+%token grammar_interface_type
+%token grammar_interface_type_list
+%token grammar_invocation_expression
+%token grammar_iteration_statement
+%token grammar_jump_statement
+%token grammar_literal
+%token grammar_local_constant_declaration
+%token grammar_local_variable_declaration
+%token grammar_local_variable_declarator
+%token grammar_local_variable_declarators
+%token grammar_local_variable_initializer
+%token grammar_member_access
+%token grammar_member_name
+%token grammar_method_body
+%token grammar_method_declaration
+%token grammar_method_header
+%token grammar_modifier
+%token grammar_modifiers
+%token grammar_multiplicative_expression
 %token grammar_named_argument
-%token grammar_attribute_argument_expression
-%token grammar_expression
+%token grammar_named_argument_list
+%token grammar_namespace_or_type_name
+%token grammar_non_array_type
+%token grammar_numeric_type
+%token grammar_object_creation_expression
+%token grammar_parenthesized_expression
+%token grammar_positional_argument
+%token grammar_positional_argument_list
+%token grammar_post_decrement_expression
+%token grammar_post_increment_expression
+%token grammar_pre_decrement_expression
+%token grammar_pre_increment_expression
+%token grammar_predefined_type
+%token grammar_primary_expression
+%token grammar_primary_no_array_creation_expression
+%token grammar_property_declaration
+%token grammar_rank_specifier
+%token grammar_rank_specifiers
+%token grammar_reference_type
+%token grammar_relational_expression
+%token grammar_return_statement
+%token grammar_return_type
+%token grammar_selection_statement
+%token grammar_set_accessor_declaration
+%token grammar_shift_expression
+%token grammar_simple_name
+%token grammar_simple_type
+%token grammar_specific_catch_clause
+%token grammar_specific_catch_clauses
+%token grammar_statement
+%token grammar_statement_expression
+%token grammar_statement_expression_list
+%token grammar_statement_list
+%token grammar_static_constructor_body
+%token grammar_static_constructor_declaration
+%token grammar_struct_type
+%token grammar_this_access
+%token grammar_throw_statement
+%token grammar_try_statement
+%token grammar_type
+%token grammar_type_declaration
+%token grammar_type_name
+%token grammar_unary_expression
+%token grammar_value_type
+%token grammar_variable_declarator
+%token grammar_variable_declarators
+%token grammar_variable_initializer
+%token grammar_variable_initializer_list
+%token grammar_while_statement
 
 /* Precedences */
 %right OPERATOR_ASSIGNMENT OPERATOR_ASSIGNMENT_MAP OPERATOR_ASSIGNMENT_ADDITION OPERATOR_ASSIGNMENT_SUBTRACTION OPERATOR_ASSIGNMENT_MULTIPLICATION OPERATOR_ASSIGNMENT_DIVISION OPERATOR_ASSIGNMENT_AND OPERATOR_ASSIGNMENT_EXCLUSIVE_OR OPERATOR_ASSIGNMENT_BITWISE_SHIFT_LEFT OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT_UNSIGNED
@@ -826,36 +806,22 @@ type_declaration:
 	enum_declaration ;
 
 class_declaration:
-	                           KEYWORD_CLASS identifier            class_body |
-	                           KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
-	                           KEYWORD_CLASS identifier class_base class_body |
-	                           KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
-	           class_modifiers KEYWORD_CLASS identifier            class_body |
-	           class_modifiers KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
-	           class_modifiers KEYWORD_CLASS identifier class_base class_body |
-	           class_modifiers KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
-	attributes                 KEYWORD_CLASS identifier            class_body |
-	attributes                 KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
-	attributes                 KEYWORD_CLASS identifier class_base class_body |
-	attributes                 KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
-	attributes class_modifiers KEYWORD_CLASS identifier            class_body |
-	attributes class_modifiers KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
-	attributes class_modifiers KEYWORD_CLASS identifier class_base class_body |
-	attributes class_modifiers KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON ;
-
-class_modifiers:
-	class_modifier |
-	class_modifiers class_modifier ;
-
-class_modifier:
-	KEYWORD_PUBLIC |
-	KEYWORD_PRIVATE |
-	KEYWORD_ABSTRACT |
-	KEYWORD_STATIC |
-	KEYWORD_GLOBAL |
-	KEYWORD_VIRTUAL |
-	KEYWORD_WITHSHARING |
-	KEYWORD_WITHOUTSHARING ;
+	                     KEYWORD_CLASS identifier            class_body |
+	                     KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
+	                     KEYWORD_CLASS identifier class_base class_body |
+	                     KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
+	           modifiers KEYWORD_CLASS identifier            class_body |
+	           modifiers KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
+	           modifiers KEYWORD_CLASS identifier class_base class_body |
+	           modifiers KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
+	attributes           KEYWORD_CLASS identifier            class_body |
+	attributes           KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
+	attributes           KEYWORD_CLASS identifier class_base class_body |
+	attributes           KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON |
+	attributes modifiers KEYWORD_CLASS identifier            class_body |
+	attributes modifiers KEYWORD_CLASS identifier            class_body SEPARATOR_SEMICOLON |
+	attributes modifiers KEYWORD_CLASS identifier class_base class_body |
+	attributes modifiers KEYWORD_CLASS identifier class_base class_body SEPARATOR_SEMICOLON ;
 
 class_base:
 	KEYWORD_EXTENDS class_type |
@@ -884,21 +850,10 @@ class_member_declaration:
 	type_declaration ;
 
 constant_declaration:
-	           constant_modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	                              KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	attributes constant_modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
+	           modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
+	                     KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
+	attributes modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
 	attributes                    KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON ;
-
-constant_modifiers:
-	constant_modifier |
-	constant_modifiers constant_modifier ;
-
-constant_modifier:
-	KEYWORD_PUBLIC |
-	KEYWORD_PRIVATE |
-	KEYWORD_STATIC |
-	KEYWORD_GLOBAL |
-	KEYWORD_PROTECTED ;
 
 constant_declarators:
 	constant_declarator |
@@ -908,22 +863,10 @@ constant_declarator:
 	identifier OPERATOR_ASSIGNMENT constant_expression ;
 
 field_declaration:
-	           field_modifiers type variable_declarators SEPARATOR_SEMICOLON |
-	                           type variable_declarators SEPARATOR_SEMICOLON |
-	attributes field_modifiers type variable_declarators SEPARATOR_SEMICOLON |
+	           modifiers type variable_declarators SEPARATOR_SEMICOLON |
+	                     type variable_declarators SEPARATOR_SEMICOLON |
+	attributes modifiers type variable_declarators SEPARATOR_SEMICOLON |
 	attributes                 type variable_declarators SEPARATOR_SEMICOLON ;
-
-field_modifiers:
-	field_modifier |
-	field_modifiers field_modifier ;
-
-field_modifier:
-	KEYWORD_PUBLIC |
-	KEYWORD_PROTECTED |
-	KEYWORD_PRIVATE |
-	KEYWORD_STATIC |
-	KEYWORD_GLOBAL |
-	KEYWORD_TRANSIENT ;
 
 variable_declarators:
 	variable_declarator |
@@ -941,38 +884,21 @@ method_declaration:
 	method_header method_body ;
 
 method_header:
-	                            return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
-	                            return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
-	           method_modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
-	           method_modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
-	attributes                  return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
-	attributes                  return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
-	attributes method_modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
-	attributes method_modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT ;
-
-method_modifiers:
-	method_modifier |
-	method_modifiers method_modifier ;
-
-method_modifier:
-	KEYWORD_PUBLIC |
-	KEYWORD_PROTECTED |
-	KEYWORD_PRIVATE |
-	KEYWORD_ABSTRACT |
-	KEYWORD_STATIC |
-	KEYWORD_GLOBAL |
-	KEYWORD_OVERRIDE |
-	KEYWORD_VIRTUAL |
-	KEYWORD_TESTMETHOD |
-	KEYWORD_WEBSERVICE ;
+	                     return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	                     return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	           modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	           modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	attributes           return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	attributes           return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	attributes modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	attributes modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT ;
 
 return_type:
 	type |
 	KEYWORD_VOID ;
 
 member_name:
-	identifier |
-	interface_type SEPARATOR_DOT identifier ;
+	identifier ;
 
 method_body:
 	block |
@@ -989,28 +915,13 @@ fixed_parameter:
 	type identifier ;
 
 property_declaration:
-	                              type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
-	           property_modifiers type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
-	attributes                    type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
-	attributes property_modifiers type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT ;
-
-property_modifiers:
-	property_modifier |
-	property_modifiers property_modifier ;
-
-property_modifier:
-	KEYWORD_PUBLIC |
-	KEYWORD_PROTECTED |
-	KEYWORD_PRIVATE |
-	KEYWORD_ABSTRACT |
-	KEYWORD_STATIC |
-	KEYWORD_GLOBAL |
-	KEYWORD_OVERRIDE |
-	KEYWORD_VIRTUAL ;
+	                     type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	           modifiers type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	attributes           type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	attributes modifiers type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT ;
 
 member_name:
-	identifier |
-	interface_type SEPARATOR_DOT identifier ;
+	identifier ;
 
 accessor_declarations:
 	get_accessor_declaration set_accessor_declaration |
@@ -1023,27 +934,18 @@ get_accessor_declaration:
 	           KEYWORD_GET accessor_body ;
 
 set_accessor_declaration:
-	attributes KEYWORD_GET accessor_body |
-	           KEYWORD_GET accessor_body ;
+	attributes KEYWORD_SET accessor_body |
+	           KEYWORD_SET accessor_body ;
 
 accessor_body:
 	block |
 	SEPARATOR_SEMICOLON ;
 
 constructor_declaration:
-	                                 constructor_declarator constructor_body |
-	           constructor_modifiers constructor_declarator constructor_body |
-	attributes                       constructor_declarator constructor_body |
-	attributes constructor_modifiers constructor_declarator constructor_body ;
-
-constructor_modifiers:
-	constructor_modifier |
-	constructor_modifiers constructor_modifier ;
-
-constructor_modifier:
-	KEYWORD_PUBLIC |
-	KEYWORD_PROTECTED |
-	KEYWORD_PRIVATE ;
+	                     constructor_declarator constructor_body |
+	           modifiers constructor_declarator constructor_body |
+	attributes           constructor_declarator constructor_body |
+	attributes modifiers constructor_declarator constructor_body ;
 
 constructor_declarator:
 	identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
@@ -1075,31 +977,22 @@ variable_initializer:
 	array_initializer ;
 
 interface_declaration:
-	                               KEYWORD_INTERFACE identifier                interface_body |
-	                               KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
-	                               KEYWORD_INTERFACE identifier interface_base interface_body |
-	                               KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
-	           interface_modifiers KEYWORD_INTERFACE identifier                interface_body |
-	           interface_modifiers KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
-	           interface_modifiers KEYWORD_INTERFACE identifier interface_base interface_body |
-	           interface_modifiers KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
-	attributes                     KEYWORD_INTERFACE identifier                interface_body |
-	attributes                     KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
-	attributes                     KEYWORD_INTERFACE identifier interface_base interface_body |
-	attributes                     KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
-	attributes interface_modifiers KEYWORD_INTERFACE identifier                interface_body |
-	attributes interface_modifiers KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
-	attributes interface_modifiers KEYWORD_INTERFACE identifier interface_base interface_body |
-	attributes interface_modifiers KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON ;
-
-interface_modifiers:
-	interface_modifier |
-	interface_modifiers interface_modifier ;
-
-interface_modifier:
-	KEYWORD_PUBLIC |
-	KEYWORD_PROTECTED |
-	KEYWORD_PRIVATE ;
+	                     KEYWORD_INTERFACE identifier                interface_body |
+	                     KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
+	                     KEYWORD_INTERFACE identifier interface_base interface_body |
+	                     KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
+	           modifiers KEYWORD_INTERFACE identifier                interface_body |
+	           modifiers KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
+	           modifiers KEYWORD_INTERFACE identifier interface_base interface_body |
+	           modifiers KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
+	attributes           KEYWORD_INTERFACE identifier                interface_body |
+	attributes           KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
+	attributes           KEYWORD_INTERFACE identifier interface_base interface_body |
+	attributes           KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON |
+	attributes modifiers KEYWORD_INTERFACE identifier                interface_body |
+	attributes modifiers KEYWORD_INTERFACE identifier                interface_body SEPARATOR_SEMICOLON |
+	attributes modifiers KEYWORD_INTERFACE identifier interface_base interface_body |
+	attributes modifiers KEYWORD_INTERFACE identifier interface_base interface_body SEPARATOR_SEMICOLON ;
  
 interface_base:
 	KEYWORD_IMPLEMENTS interface_type_list ;
@@ -1141,28 +1034,19 @@ interface_accessors:
 	attributes KEYWORD_SET SEPARATOR_SEMICOLON attributes KEYWORD_GET SEPARATOR_SEMICOLON ;
 
 enum_declaration:
-	                          KEYWORD_ENUM identifier enum_body |
-	                          KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
-	           enum_modifiers KEYWORD_ENUM identifier enum_body |
-	           enum_modifiers KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
-	attributes                KEYWORD_ENUM identifier enum_body |
-	attributes                KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
-	attributes enum_modifiers KEYWORD_ENUM identifier enum_body |
-	attributes enum_modifiers KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON ;
+	                     KEYWORD_ENUM identifier enum_body |
+	                     KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
+	           modifiers KEYWORD_ENUM identifier enum_body |
+	           modifiers KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
+	attributes           KEYWORD_ENUM identifier enum_body |
+	attributes           KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON |
+	attributes modifiers KEYWORD_ENUM identifier enum_body |
+	attributes modifiers KEYWORD_ENUM identifier enum_body SEPARATOR_SEMICOLON ;
 
 enum_body:
 	SEPARATOR_BRACE_LEFT enum_member_declarations SEPARATOR_BRACE_RIGHT |
 	SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT |
 	SEPARATOR_BRACE_LEFT enum_member_declarations SEPARATOR_COMMA SEPARATOR_BRACE_RIGHT ;
-
-enum_modifiers:
-	enum_modifier |
-	enum_modifiers enum_modifier ;
-
-enum_modifier:
-	KEYWORD_PUBLIC |
-	KEYWORD_PROTECTED |
-	KEYWORD_PRIVATE ;
 
 enum_member_declarations:
 	enum_member_declaration |
@@ -1170,6 +1054,24 @@ enum_member_declarations:
 
 enum_member_declaration:
 	identifier ;
+
+modifiers:
+	modifier |
+	modifiers modifier ;
+
+modifier:
+	KEYWORD_PUBLIC |
+	KEYWORD_PROTECTED |
+	KEYWORD_PRIVATE |
+	KEYWORD_ABSTRACT |
+	KEYWORD_STATIC |
+	KEYWORD_GLOBAL |
+	KEYWORD_OVERRIDE |
+	KEYWORD_VIRTUAL |
+	KEYWORD_TESTMETHOD |
+	KEYWORD_WITHSHARING |
+	KEYWORD_WITHOUTSHARING |
+	KEYWORD_WEBSERVICE ;
 
 attributes:
 	attribute_sections ;

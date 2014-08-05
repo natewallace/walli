@@ -26,7 +26,7 @@ namespace Wallace.Language.Apex.Tests
 
                 using (FileStream fs = File.OpenRead(file))
                 {
-                    ApexLexer scanner = new ApexLexer(fs, (TextSymbolDocument)null);
+                    ApexLexer scanner = new ApexLexer(fs);
                     int token = 0;
                     while ((token = scanner.yylex()) != (int)Tokens.EOF)
                     {

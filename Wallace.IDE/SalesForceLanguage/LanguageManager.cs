@@ -44,26 +44,16 @@ namespace SalesForceLanguage
         {
             if (String.IsNullOrWhiteSpace(text))
             {
-                return new ParseResult(
-                    new TextSymbolDocument(),
-                    new LanguageError[0],
-                    new Apex.CodeModel.ICodeElement[0]);
+                return new ParseResult(new LanguageError[0]);
             }
 
             using (MemoryStream reader = new MemoryStream(Encoding.ASCII.GetBytes(text)))
             {
-                TextSymbolDocument symbolDocument = new TextSymbolDocument();
-
-                ApexParser parser = new ApexParser(
-                    new ApexLexer(reader, (TextSymbolDocument)null),
-                    symbolDocument);
+                ApexParser parser = new ApexParser(new ApexLexer(reader));
 
                 parser.ParseApex();
 
-                return new ParseResult(
-                    symbolDocument,
-                    parser.ParserErrors,
-                    parser.Elements);
+                return new ParseResult(parser.ParserErrors);
             }
         }
 

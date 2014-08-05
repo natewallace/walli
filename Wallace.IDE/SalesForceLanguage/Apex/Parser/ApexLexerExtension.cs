@@ -35,29 +35,12 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// Used for special handling of certain tokens.
         /// </summary>
-        private Queue<ApexSyntaxNode> _pushBackQueue;
+        private Queue<ApexSyntaxNode> _pushBackQueue = new Queue<ApexSyntaxNode>();
 
         /// <summary>
         /// Stack used for state info.
         /// </summary>
-        private Stack<ApexLexerStateInfo> _stateStack;
-
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="file">The file to scan from.</param>
-        /// <param name="symbolDocument">SymbolDocument.</param>
-        public ApexLexer(Stream file, TextSymbolDocument symbolDocument)
-            : this(file)
-        {
-            SymbolDocument = symbolDocument;
-            _pushBackQueue = new Queue<ApexSyntaxNode>();
-            _stateStack = new Stack<ApexLexerStateInfo>();
-        }
+        private Stack<ApexLexerStateInfo> _stateStack = new Stack<ApexLexerStateInfo>();
 
         #endregion
 
@@ -67,11 +50,6 @@ namespace SalesForceLanguage.Apex.Parser
         /// Holds the last node that was scanned.
         /// </summary>
         public ApexSyntaxNode PreviousNode { get; private set; }
-
-        /// <summary>
-        /// The document that holds symbols that have been read in.
-        /// </summary>
-        public TextSymbolDocument SymbolDocument { get; private set; }
 
         #endregion
 
@@ -116,9 +94,6 @@ namespace SalesForceLanguage.Apex.Parser
                 tokECol + 1); 
 
             yylval = new ApexSyntaxNode(info.Token, yylloc, info.Text.ToString());
-
-            if (SymbolDocument != null)
-                SymbolDocument.AddRange(CreateSymbols(yylval));
 
             return true;
         }
@@ -180,62 +155,6 @@ namespace SalesForceLanguage.Apex.Parser
         }
 
         /// <summary>
-        /// Creates a new symbol using the given node.
-        /// </summary>
-        /// <param name="node">The node to create a symbol for.</param>
-        /// <returns>The newly created symbol.</returns>
-        private TextSymbol[] CreateSymbols(ApexSyntaxNode node)
-        {
-            TextSymbolType symbolType = TextSymbolType.None;
-            switch (node.Token)
-            {
-                case Tokens.WHITESPACE:
-                    symbolType = TextSymbolType.Whitespace;
-                    break;
-
-                case Tokens.COMMENT_BLOCK:                
-                case Tokens.COMMENT_DOCUMENTATION:
-                case Tokens.COMMENT_INLINE:
-                    symbolType = TextSymbolType.Comment;
-                    break;
-
-                case Tokens.COMMENT_DOC:
-                    symbolType = TextSymbolType.CommentDoc;
-                    break;
-
-                case Tokens.LITERAL_STRING:
-                    symbolType = TextSymbolType.String;
-                    break;
-
-                case Tokens.SOQL:
-                    symbolType = TextSymbolType.SOQL;
-                    break;
-
-                case Tokens.SOSL:
-                    symbolType = TextSymbolType.SOSL;
-                    break;
-
-                default:
-                    if ((int)node.Token > (int)Tokens.COMMENT_DOCUMENTATION && (int)node.Token < (int)Tokens.LITERAL_TRUE)
-                        symbolType = TextSymbolType.Keyword;
-                    break;
-            }
-
-            if (node.TextSpan.IsMultiline)
-            {
-                List<TextSymbol> result = new List<TextSymbol>();
-                foreach (TextLocation location in node.TextSpan.Split(node.Text))
-                    result.Add(new TextSymbol(symbolType, location));
-
-                return result.ToArray();
-            }
-            else
-            {
-                return new TextSymbol[] { new TextSymbol(symbolType, node.TextSpan) };
-            }
-        }
-
-        /// <summary>
         /// Process the given token.
         /// </summary>
         /// <param name="token">The token to process.</param>
@@ -244,9 +163,6 @@ namespace SalesForceLanguage.Apex.Parser
         {
             yylval = CreateNode(token);
             yylloc = yylval.TextSpan;
-
-            if (SymbolDocument != null)
-                SymbolDocument.AddRange(CreateSymbols(yylval));
 
             return (int)token;
         }
@@ -263,13 +179,6 @@ namespace SalesForceLanguage.Apex.Parser
             _pushBackQueue.Enqueue(new ApexSyntaxNode(
                 Tokens.OPERATOR_GREATER_THAN_B,
                 new ApexTextSpan(tokPos + 1, tokEPos, tokLin, tokCol + 2, tokELin, tokECol + 1)));
-
-            if (SymbolDocument != null)
-            {
-                SymbolDocument.AddRange(CreateSymbols(yylval));
-                foreach (ApexSyntaxNode n in _pushBackQueue)
-                    SymbolDocument.AddRange(CreateSymbols(n));
-            }
 
             return (int)Tokens.OPERATOR_GREATER_THAN_A;
         }
@@ -290,13 +199,6 @@ namespace SalesForceLanguage.Apex.Parser
             _pushBackQueue.Enqueue(new ApexSyntaxNode(
                 Tokens.OPERATOR_GREATER_THAN_C,
                 new ApexTextSpan(tokPos + 2, tokEPos, tokLin, tokCol + 3, tokELin, tokECol + 1)));
-
-            if (SymbolDocument != null)
-            {
-                SymbolDocument.AddRange(CreateSymbols(yylval));
-                foreach (ApexSyntaxNode n in _pushBackQueue)
-                    SymbolDocument.AddRange(CreateSymbols(n));
-            }
 
             return (int)Tokens.OPERATOR_GREATER_THAN_A;
         }

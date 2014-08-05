@@ -36,7 +36,7 @@ namespace SalesForceLanguage
         /// </summary>
         /// <param name="message">Message.</param>
         /// <param name="location">Location.</param>
-        public LanguageError(string message, TextLocation location)
+        public LanguageError(string message, TextSpan location)
         {
             Message = message;
             Location = location;
@@ -54,7 +54,7 @@ namespace SalesForceLanguage
         /// <summary>
         /// The location of the error.
         /// </summary>
-        public TextLocation Location { get; private set; }
+        public TextSpan Location { get; private set; }
 
         #endregion
 

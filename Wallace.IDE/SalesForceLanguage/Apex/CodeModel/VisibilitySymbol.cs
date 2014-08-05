@@ -20,23 +20,37 @@
  * THE SOFTWARE.
  */
 
-using System;
-
 namespace SalesForceLanguage.Apex.CodeModel
 {
     /// <summary>
-    /// Interface for a code element.
+    /// A symbol that has parameters.
     /// </summary>
-    public interface ICodeElement : IComparable
+    public class VisibilitySymbol : Symbol
     {
-        /// <summary>
-        /// The name for the element.
-        /// </summary>
-        NameDeclaration Name { get; }
+        #region Constructors
 
         /// <summary>
-        /// The location of the entire element.
+        /// Constructor.
         /// </summary>
-        TextLocation Location { get; }
+        /// <param name="location">Location.</param>
+        /// <param name="name">Name.</param>
+        /// <param name="type">Type.</param>
+        /// <param name="visibility">Visibility.</param>
+        public VisibilitySymbol(TextPosition location, string name, string type, SymbolVisibility visibility)
+            : base(location, name, type)
+        {
+            Visibility = visibility;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The visibility of the symbol.
+        /// </summary>
+        public SymbolVisibility Visibility { get; private set; }
+
+        #endregion
     }
 }

@@ -55,31 +55,12 @@ namespace SalesForceLanguage.Apex.Parser
             : base(scanner)
         {
             _errors = new List<LanguageError>();
-            SymbolDocument = null;
-            InitNonTermTokens();
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="scanner">Scanner passed to the parser base class.</param>
-        /// <param name="symbolDocument">SymbolDocument.</param>
-        public ApexParser(ApexLexer scanner, TextSymbolDocument symbolDocument)
-            : base(scanner)
-        {
-            _errors = new List<LanguageError>();
-            SymbolDocument = symbolDocument;
             InitNonTermTokens();
         }
 
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// The document to add symbols to.
-        /// </summary>
-        public TextSymbolDocument SymbolDocument { get; set; }
 
         /// <summary>
         /// Errors that occured during parsing.
@@ -99,11 +80,6 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         protected ApexSyntaxNode GoalNode { get; set; }
 
-        /// <summary>
-        /// When a successful parse occurs this property will be set with the resulting elements parsed from the code.
-        /// </summary>
-        public ICodeElement[] Elements { get; private set; }
-
         #endregion
 
         #region Methods
@@ -113,10 +89,13 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         private void InitNonTermTokens()
         {
-            _nonTermTokens = new Tokens[nonTerms.Length];
-            for (int i = 0; i < nonTerms.Length; i++)
-                if (!nonTerms[i].StartsWith("$"))
-                    _nonTermTokens[i] = (Tokens)Enum.Parse(typeof(Tokens), String.Format("grammar_{0}", nonTerms[i]));
+            if (_nonTermTokens == null)
+            {
+                _nonTermTokens = new Tokens[nonTerms.Length];
+                for (int i = 0; i < nonTerms.Length; i++)
+                    if (!nonTerms[i].StartsWith("$"))
+                        _nonTermTokens[i] = (Tokens)Enum.Parse(typeof(Tokens), String.Format("grammar_{0}", nonTerms[i]));
+            }
         }
 
         /// <summary>
@@ -124,19 +103,11 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         public void ParseApex()
         {
-            if (SymbolDocument != null)
-                ParserFactory = new ApexParserFactory(SymbolDocument);
-            else
-                ParserFactory = new ApexParserFactory(null);
-
+            ParserFactory = new ApexParserFactory();
             GoalNode = null;
-            Elements = new ICodeElement[0];
             _errors = new List<LanguageError>();
 
             Parse();
-
-            List<ICodeElement> elements = new List<ICodeElement>();            
-            Elements = elements.ToArray();
         }
 
         /// <summary>
@@ -154,8 +125,9 @@ namespace SalesForceLanguage.Apex.Parser
             }
             else
             {
-                ApexSyntaxNode[] subNodes = new ApexSyntaxNode[valuesLength];
-                Array.Copy(values, subNodes, valuesLength);
+                ApexSyntaxNode[] subNodes = (valuesLength == 1 && values[0] == null) ? new ApexSyntaxNode[0] : new ApexSyntaxNode[valuesLength];
+                if (subNodes.Length > 0)
+                    Array.Copy(values, subNodes, valuesLength);
                 CurrentSemanticValue = ParserFactory.Process(tokenValue, CurrentLocationSpan, subNodes);
             }
         }
@@ -166,8 +138,8 @@ namespace SalesForceLanguage.Apex.Parser
         /// <param name="token">The token that identifies the node.</param>
         /// <param name="message">The error message.</param>
         protected void Error(Tokens token, string message)
-        {            
-            TextLocation location = new TextLocation();
+        {
+            ApexTextSpan location = new ApexTextSpan();
 
             ApexLexer lexer = Scanner as ApexLexer;
             if (lexer != null && lexer.PreviousNode != null)
@@ -179,7 +151,7 @@ namespace SalesForceLanguage.Apex.Parser
                 if (location.CompareTo(err.Location) == 0)
                     YYAbort();
 
-            _errors.Add(new LanguageError(message, location));
+            _errors.Add(new LanguageError(message, new TextSpan(location)));
 
             yyclearin();
             yyerrok();

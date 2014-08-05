@@ -23,21 +23,35 @@
 namespace SalesForceLanguage.Apex.CodeModel
 {
     /// <summary>
-    /// A property declaration.
+    /// A constructor symbol.
     /// </summary>
-    public class PropertyDeclaration : CodeElementBase
+    public class Constructor : VisibilitySymbol
     {
+
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="name">Name.</param>
         /// <param name="location">Location.</param>
-        public PropertyDeclaration(NameDeclaration name, TextLocation location)
-            : base(name, location)
+        /// <param name="name">Name.</param>
+        /// <param name="type">Type.</param>
+        /// <param name="visibility">Visibility.</param>
+        /// <param name="parameters">Parameters.</param>
+        public Constructor(TextPosition location, string name, string type, SymbolVisibility visibility, Parameter[] parameters)
+            : base(location, name, type, visibility)
         {
+            Parameters = parameters ?? new Parameter[0];
         }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The parameters that belong to this symbol.
+        /// </summary>
+        public Parameter[] Parameters { get; private set; }
 
         #endregion
     }

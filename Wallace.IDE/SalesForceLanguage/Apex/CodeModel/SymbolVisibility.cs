@@ -23,26 +23,23 @@
 namespace SalesForceLanguage.Apex.CodeModel
 {
     /// <summary>
-    /// A constructor.
+    /// Possible visibility for a symbol.
     /// </summary>
-    public class ConstructorDeclaration : MethodDeclaration
+    public enum SymbolVisibility
     {
-        #region Constructors
+        /// <summary>
+        /// Global.
+        /// </summary>
+        Global,
 
         /// <summary>
-        /// Constructor.
+        /// Public.
         /// </summary>
-        /// <param name="name">Name.</param>
-        /// <param name="location">Location.</param>
-        /// <param name="parameters">Parameters.</param>
-        public ConstructorDeclaration(
-            NameDeclaration name, 
-            TextLocation location,
-            ParameterDeclaration[] parameters)
-            : base(name, location, parameters)
-        {
-        }
+        Public,
 
-        #endregion
+        /// <summary>
+        /// Private.
+        /// </summary>
+        Private
     }
 }
