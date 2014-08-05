@@ -1,0 +1,14 @@
+private class AccountMergeSplitTest {
+
+	public AccountMergeSplitTest(string t) {
+
+	}
+
+	string testField = 'hello';
+
+	string testProp { get; set; }
+
+	public void myExampleMethod(string x, integer y) {
+		
+	}
+}

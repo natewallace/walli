@@ -1,0 +1,1 @@
+﻿integer padding = (n < 56) ? (56 - n) : (120 - n); 
