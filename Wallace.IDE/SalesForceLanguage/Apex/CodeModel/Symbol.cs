@@ -64,5 +64,18 @@ namespace SalesForceLanguage.Apex.CodeModel
         public string Type { get; private set; }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Returns the Name property.
+        /// </summary>
+        /// <returns>The Name property.</returns>
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        #endregion
     }
 }

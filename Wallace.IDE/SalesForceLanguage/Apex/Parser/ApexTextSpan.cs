@@ -137,6 +137,34 @@ namespace SalesForceLanguage.Apex.Parser
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Check to see if the given position is contained within this text span.
+        /// </summary>
+        /// <param name="position">The position to check.</param>
+        /// <returns>true if the given position is within this text span, false if it isn't.</returns>
+        internal bool Contains(TextPosition position)
+        {
+            if (StartLine > position.Line)
+                return false;
+
+            if (StartLine == position.Line)
+                return (StartColumn <= position.Column && EndColumn >= position.Column);
+
+            if (StartLine < position.Line)
+            {
+                if (EndLine == position.Line)
+                    return (EndColumn >= position.Column);
+                else
+                    return (EndLine > position.Line);
+            }
+
+            return false;
+        }
+
+        #endregion
+
         #region IComparable Members
 
         /// <summary>

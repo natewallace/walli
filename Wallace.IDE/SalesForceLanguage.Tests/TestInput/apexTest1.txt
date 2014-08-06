@@ -11,4 +11,10 @@ private class AccountMergeSplitTest {
 	public void myExampleMethod(string x, integer y) {
 		
 	}
+
+	private class MyInnerClass {
+	
+		public void someFunc() { 
+		}
+	}
 }

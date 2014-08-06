@@ -129,6 +129,27 @@ namespace SalesForceLanguage.Apex.Parser
         }
 
         /// <summary>
+        /// Gets the symbols on the given stack that are within the node.
+        /// </summary>
+        /// <typeparam name="TType">The symbol type.</typeparam>
+        /// <param name="node">The node to get the collected symbols for.</param>
+        /// <param name="stack">The stack to get the symbols from.</param>
+        /// <returns>The symbols that belong to the node.</returns>
+        private TType[] GetSymbols<TType>(ApexSyntaxNode node, Stack<TType> stack) where TType : Symbol
+        {
+            List<TType> result = new List<TType>();
+            while (true)
+            {
+                if (stack.Count == 0 || !node.TextSpan.Contains(stack.Peek().Location))
+                    break;
+
+                result.Insert(0, stack.Pop());
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
         /// Process the the given token.
         /// </summary>
         /// <param name="token">The token to process.</param>
@@ -221,6 +242,30 @@ namespace SalesForceLanguage.Apex.Parser
                     return null;
 
                 // class
+                case Tokens.grammar_class_declaration:
+                    ApexSyntaxNode classModifiers = node.GetChildNodeWithToken(Tokens.grammar_modifiers);
+                    SymbolVisibility classVisibility = SymbolVisibility.Private;
+                    if (classModifiers != null)
+                        classVisibility = GetVisibility(classModifiers.GetNodesWithToken(Tokens.grammar_modifier));
+
+                    ApexSyntaxNode className = node.GetChildNodeWithToken(Tokens.grammar_identifier);
+
+                    ApexSyntaxNode classBase = node.GetChildNodeWithToken(Tokens.grammar_class_base);
+                    List<string> classInterfaces = new List<string>();
+                    if (classBase != null)
+                        foreach (ApexSyntaxNode classInterface in classBase.GetNodesWithToken(Tokens.grammar_interface_type))
+                            classInterfaces.Add(classInterface.GetLeavesDisplayText());
+
+                    _classes.Push(new SymbolTable(
+                        new TextPosition(className.TextSpan),
+                        className.GetLeavesDisplayText(),
+                        GetSymbols<Constructor>(node, _constructors),
+                        GetSymbols<VisibilitySymbol>(node, _properties),
+                        GetSymbols<Method>(node, _methods),
+                        classInterfaces.ToArray(),
+                        GetSymbols<SymbolTable>(node, _classes)));
+
+                    return null;
 
                 default:
                     break;

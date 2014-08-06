@@ -415,11 +415,14 @@ namespace SalesForceLanguage.Apex.Parser
         /// <param name="nodes">The list to add matching nodes to.</param>
         public void GetAllNodesWithToken(Tokens token, ApexSyntaxNode node, IList<ApexSyntaxNode> nodes)
         {
-            if (node.Token == token)
-                nodes.Add(node);
+            if (node != null)
+            {
+                if (node.Token == token)
+                    nodes.Add(node);
 
-            foreach (ApexSyntaxNode n in node.Nodes)
-                GetAllNodesWithToken(token, n, nodes);
+                foreach (ApexSyntaxNode n in node.Nodes)
+                    GetAllNodesWithToken(token, n, nodes);
+            }
         }
 
         /// <summary>
@@ -442,14 +445,17 @@ namespace SalesForceLanguage.Apex.Parser
         /// <param name="nodes">The list to add matching nodes to.</param>
         public void GetNodesWithToken(Tokens token, ApexSyntaxNode node, IList<ApexSyntaxNode> nodes)
         {
-            if (node.Token == token)
+            if (node != null)
             {
-                nodes.Add(node);
-            }
-            else
-            {
-                foreach (ApexSyntaxNode n in node.Nodes)
-                    GetNodesWithToken(token, n, nodes);
+                if (node.Token == token)
+                {
+                    nodes.Add(node);
+                }
+                else
+                {
+                    foreach (ApexSyntaxNode n in node.Nodes)
+                        GetNodesWithToken(token, n, nodes);
+                }
             }
         }
 
@@ -471,18 +477,21 @@ namespace SalesForceLanguage.Apex.Parser
         /// <returns>The node within this branch that has the given token.</returns>
         public ApexSyntaxNode GetNodeWithToken(Tokens token, ApexSyntaxNode node)
         {
-            if (node.Token == token)
+            if (node != null)
             {
-                return node;
-            }
-            else
-            {
-                ApexSyntaxNode result = null;
-                foreach (ApexSyntaxNode n in node.Nodes)
+                if (node.Token == token)
                 {
-                    result = GetNodeWithToken(token, n);
-                    if (result != null)
-                        return result;
+                    return node;
+                }
+                else
+                {
+                    ApexSyntaxNode result = null;
+                    foreach (ApexSyntaxNode n in node.Nodes)
+                    {
+                        result = GetNodeWithToken(token, n);
+                        if (result != null)
+                            return result;
+                    }
                 }
             }
 
@@ -497,7 +506,7 @@ namespace SalesForceLanguage.Apex.Parser
         public ApexSyntaxNode GetChildNodeWithToken(Tokens token)
         {
             foreach (ApexSyntaxNode child in Nodes)
-                if (child.Token == token)
+                if (child != null && child.Token == token)
                     return child;
 
             return null;
@@ -531,11 +540,14 @@ namespace SalesForceLanguage.Apex.Parser
         /// <param name="nodes">The list to added nodes to.</param>
         private void GetNodesWithText(ApexSyntaxNode node, IList<ApexSyntaxNode> nodes)
         {
-            if (node.Text != null)
-                nodes.Add(node);
+            if (node != null)
+            {
+                if (node.Text != null)
+                    nodes.Add(node);
 
-            foreach (ApexSyntaxNode n in node.Nodes)
-                GetNodesWithText(n, nodes);
+                foreach (ApexSyntaxNode n in node.Nodes)
+                    GetNodesWithText(n, nodes);
+            }
         }
 
         /// <summary>
@@ -555,14 +567,17 @@ namespace SalesForceLanguage.Apex.Parser
         /// <param name="leaves">The list to add the leaves to.</param>
         private void GetLeaves(ApexSyntaxNode node, IList<Tokens> leaves)
         {
-            if (node.Nodes.Count == 0)
+            if (node != null)
             {
-                leaves.Add(node.Token);
-            }
-            else
-            {
-                foreach (ApexSyntaxNode n in node.Nodes)
-                    GetLeaves(n, leaves);
+                if (node.Nodes.Count == 0)
+                {
+                    leaves.Add(node.Token);
+                }
+                else
+                {
+                    foreach (ApexSyntaxNode n in node.Nodes)
+                        GetLeaves(n, leaves);
+                }
             }
         }
 
@@ -583,14 +598,17 @@ namespace SalesForceLanguage.Apex.Parser
         /// <param name="sb">The string builder to add the display text to.</param>
         private void GetLeavesDisplayText(ApexSyntaxNode node, StringBuilder sb)
         {
-            if (node.Nodes.Count == 0)
+            if (node != null)
             {
-                sb.Append(node.DisplayText);
-            }
-            else
-            {
-                foreach (ApexSyntaxNode n in node.Nodes)
-                    GetLeavesDisplayText(n, sb);
+                if (node.Nodes.Count == 0)
+                {
+                    sb.Append(node.DisplayText);
+                }
+                else
+                {
+                    foreach (ApexSyntaxNode n in node.Nodes)
+                        GetLeavesDisplayText(n, sb);
+                }
             }
         }
 

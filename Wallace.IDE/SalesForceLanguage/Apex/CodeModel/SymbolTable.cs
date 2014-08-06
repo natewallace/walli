@@ -25,28 +25,30 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// <summary>
     /// A class or interface.
     /// </summary>
-    public class SymbolTable
+    public class SymbolTable : Symbol
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="tableDeclaration">TableDeclaration</param>
+        /// <param name="location">Location.</param>
+        /// <param name="name">Name.</param>
         /// <param name="constructors">Constructors</param>
         /// <param name="properties">Properties</param>
         /// <param name="methods">Methods</param>
         /// <param name="interfaces">Interfaces</param>
         /// <param name="innerClasses">InnerClasses</param>
         public SymbolTable(
-            Symbol tableDeclaration,
+            TextPosition location,
+            string name,
             Constructor[] constructors,
             VisibilitySymbol[] properties,
             Method[] methods,
             string[] interfaces,
             SymbolTable[] innerClasses)
+            : base(location, name, name)
         {
-            TableDeclaration = tableDeclaration;
             Constructors = constructors ?? new Constructor[0];
             Properties = properties ?? new VisibilitySymbol[0];
             Methods = methods ?? new Method[0];
@@ -57,11 +59,6 @@ namespace SalesForceLanguage.Apex.CodeModel
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// The symbol for the table.
-        /// </summary>
-        public Symbol TableDeclaration { get; set; }
 
         /// <summary>
         /// Constructors for the table.
