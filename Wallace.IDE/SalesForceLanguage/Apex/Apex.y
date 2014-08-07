@@ -299,7 +299,6 @@
 %token grammar_local_variable_declarators
 %token grammar_local_variable_initializer
 %token grammar_member_access
-%token grammar_member_name
 %token grammar_method_body
 %token grammar_method_declaration
 %token grammar_method_header
@@ -328,7 +327,6 @@
 %token grammar_reference_type
 %token grammar_relational_expression
 %token grammar_return_statement
-%token grammar_return_type
 %token grammar_selection_statement
 %token grammar_set_accessor_declaration
 %token grammar_shift_expression
@@ -692,7 +690,9 @@ constant_declarator:
 	identifier OPERATOR_ASSIGNMENT constant_expression ;
 
 expression_statement:
-	statement_expression SEPARATOR_SEMICOLON ;
+	statement_expression SEPARATOR_SEMICOLON |
+	error SEPARATOR_SEMICOLON { Error(Tokens.grammar_expression_statement, "Invalid expression."); } |
+    error { Error(Tokens.grammar_expression_statement, "';' expected."); } ;
 
 statement_expression:
 	invocation_expression |
@@ -866,7 +866,8 @@ field_declaration:
 	           modifiers type variable_declarators SEPARATOR_SEMICOLON |
 	                     type variable_declarators SEPARATOR_SEMICOLON |
 	attributes modifiers type variable_declarators SEPARATOR_SEMICOLON |
-	attributes                 type variable_declarators SEPARATOR_SEMICOLON ;
+	attributes                 type variable_declarators SEPARATOR_SEMICOLON |
+	error { Error(Tokens.grammar_field_declaration, "Invalid field declaration."); } ;
 
 variable_declarators:
 	variable_declarator |
@@ -884,21 +885,22 @@ method_declaration:
 	method_header method_body ;
 
 method_header:
-	                     return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
-	                     return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
-	           modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
-	           modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
-	attributes           return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
-	attributes           return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
-	attributes modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
-	attributes modifiers return_type member_name SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT ;
-
-return_type:
-	type |
-	KEYWORD_VOID ;
-
-member_name:
-	identifier ;
+	                     type         identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	                     type         identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	           modifiers type         identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	           modifiers type         identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	attributes           type         identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	attributes           type         identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	attributes modifiers type         identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	attributes modifiers type         identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	                     KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	                     KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	           modifiers KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	           modifiers KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	attributes           KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	attributes           KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT |
+	attributes modifiers KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT |
+	attributes modifiers KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT ;
 
 method_body:
 	block |
@@ -915,13 +917,10 @@ fixed_parameter:
 	type identifier ;
 
 property_declaration:
-	                     type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
-	           modifiers type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
-	attributes           type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
-	attributes modifiers type member_name SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT ;
-
-member_name:
-	identifier ;
+	                     type identifier SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	           modifiers type identifier SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	attributes           type identifier SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT |
+	attributes modifiers type identifier SEPARATOR_BRACE_LEFT accessor_declarations SEPARATOR_BRACE_RIGHT ;
 
 accessor_declarations:
 	get_accessor_declaration set_accessor_declaration |
@@ -1010,10 +1009,14 @@ interface_member_declaration:
 	interface_property_declaration ;
 
 interface_method_declaration:
-	           return_type identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
-	           return_type identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
-	attributes return_type identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
-	attributes return_type identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON ;
+	           type         identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	           type         identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	attributes type         identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	attributes type         identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	           KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	           KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	attributes KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT                       SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON |
+	attributes KEYWORD_VOID identifier SEPARATOR_PARENTHESES_LEFT formal_parameter_list SEPARATOR_PARENTHESES_RIGHT SEPARATOR_SEMICOLON ;
 
 interface_property_declaration:
 	attributes type identifier SEPARATOR_BRACE_LEFT interface_accessors SEPARATOR_BRACE_RIGHT |

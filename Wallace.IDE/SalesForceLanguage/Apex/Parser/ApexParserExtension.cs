@@ -155,6 +155,8 @@ namespace SalesForceLanguage.Apex.Parser
 
             yyclearin();
             yyerrok();
+
+            _errorOccured = true;
         }
 
         #endregion

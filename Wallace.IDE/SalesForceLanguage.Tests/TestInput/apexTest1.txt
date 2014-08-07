@@ -1,20 +1,7 @@
 private class AccountMergeSplitTest {
 
-	public AccountMergeSplitTest(string t) {
+	integer field = null
 
-	}
+	fakeclass myMethodTwo(){}
 
-	string testField = 'hello';
-
-	string testProp { get; set; }
-
-	public void myExampleMethod(string x, integer y) {
-		
-	}
-
-	private class MyInnerClass {
-	
-		public void someFunc() { 
-		}
-	}
 }

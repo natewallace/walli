@@ -89,6 +89,11 @@ namespace QUT.Gppg
         /// </summary>
         private Rule[] rules;
 
+        /// <summary>
+        /// Set to true after an error has occured and is reset after the next reduce.
+        /// </summary>
+        protected bool _errorOccured;
+
         #endregion
 
         #region Constructors
@@ -244,6 +249,7 @@ namespace QUT.Gppg
         public bool Parse()
         {
             _valueParameterList = new TValue[15]; // added Nate Wallace
+            _errorOccured = false;
 
             Initialize();	// allow derived classes to instantiate rules, states and nonTerminals
 
@@ -371,8 +377,7 @@ namespace QUT.Gppg
                 }
             }
 
-            // removed in favor of new ProcessReduce method - Nate Wallace
-            //DoAction(ruleNumber);  
+            DoAction(ruleNumber);  
 
             for (int i = rule.RightHandSide.Length - 1; i >=0; i--)
             {
@@ -381,7 +386,10 @@ namespace QUT.Gppg
                 LocationStack.Pop();
             }
 
-            ProcessReduce(rule.LeftHandSide, _valueParameterList, rule.RightHandSide.Length); // process the reduce action - added by Nate Wallace
+            if (!_errorOccured)
+                ProcessReduce(rule.LeftHandSide, _valueParameterList, rule.RightHandSide.Length); // process the reduce action - added by Nate Wallace
+            else
+                _errorOccured = false;
 
             FsaState = StateStack.TopElement();
 
