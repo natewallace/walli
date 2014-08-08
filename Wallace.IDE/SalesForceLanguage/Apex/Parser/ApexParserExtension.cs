@@ -118,13 +118,9 @@ namespace SalesForceLanguage.Apex.Parser
         /// <param name="valuesLength">The number of values in the values parameter.</param>
         protected override void ProcessReduce(int token, ApexSyntaxNode[] values, int valuesLength)
         {
-            Tokens tokenValue = (token < 0) ? _nonTermTokens[-token - 1] : (Tokens)token;
-            if (tokenValue == Tokens.error)
+            if (token < 0)
             {
-                Error(tokenValue, "Invalid syntax.");
-            }
-            else
-            {
+                Tokens tokenValue = _nonTermTokens[-token - 1];
                 ApexSyntaxNode[] subNodes = (valuesLength == 1 && values[0] == null) ? new ApexSyntaxNode[0] : new ApexSyntaxNode[valuesLength];
                 if (subNodes.Length > 0)
                     Array.Copy(values, subNodes, valuesLength);
@@ -151,12 +147,9 @@ namespace SalesForceLanguage.Apex.Parser
                 if (location.CompareTo(err.Location) == 0)
                     YYAbort();
 
-            _errors.Add(new LanguageError(message, new TextSpan(location)));
-
-            yyclearin();
-            yyerrok();
-
+            _errors.Add(new LanguageError(message, new TextSpan(location)));            
             _errorOccured = true;
+            yyerrok();
         }
 
         #endregion

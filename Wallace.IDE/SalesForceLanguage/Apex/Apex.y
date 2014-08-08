@@ -217,8 +217,6 @@
 %token grammar_attribute
 %token grammar_attribute_argument_expression
 %token grammar_attribute_arguments
-%token grammar_attribute_list
-%token grammar_attribute_name
 %token grammar_attribute_section
 %token grammar_attribute_sections
 %token grammar_attributes
@@ -312,8 +310,6 @@
 %token grammar_numeric_type
 %token grammar_object_creation_expression
 %token grammar_parenthesized_expression
-%token grammar_positional_argument
-%token grammar_positional_argument_list
 %token grammar_post_decrement_expression
 %token grammar_post_increment_expression
 %token grammar_pre_decrement_expression
@@ -638,7 +634,8 @@ boolean_expression:
 
 statement:
 	declaration_statement |
-	embedded_statement ;
+	embedded_statement |
+	error SEPARATOR_SEMICOLON { Error(Tokens.grammar_expression_statement, "Invalid statement."); } ;
 
 embedded_statement:
 	block |
@@ -690,9 +687,7 @@ constant_declarator:
 	identifier OPERATOR_ASSIGNMENT constant_expression ;
 
 expression_statement:
-	statement_expression SEPARATOR_SEMICOLON |
-	error SEPARATOR_SEMICOLON { Error(Tokens.grammar_expression_statement, "Invalid expression."); } |
-    error { Error(Tokens.grammar_expression_statement, "';' expected."); } ;
+	statement_expression SEPARATOR_SEMICOLON ;
 
 statement_expression:
 	invocation_expression |
@@ -847,13 +842,15 @@ class_member_declaration:
 	property_declaration |
 	constructor_declaration |
 	static_constructor_declaration |
-	type_declaration ;
+	type_declaration |
+	error SEPARATOR_SEMICOLON { Error(Tokens.grammar_expression_statement, "Invalid class member."); } |
+	error SEPARATOR_BRACE_RIGHT { Error(Tokens.grammar_expression_statement, "Invalid class member."); } ;
 
 constant_declaration:
 	           modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
 	                     KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
 	attributes modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	attributes                    KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON ;
+	attributes           KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON ;
 
 constant_declarators:
 	constant_declarator |
@@ -866,8 +863,7 @@ field_declaration:
 	           modifiers type variable_declarators SEPARATOR_SEMICOLON |
 	                     type variable_declarators SEPARATOR_SEMICOLON |
 	attributes modifiers type variable_declarators SEPARATOR_SEMICOLON |
-	attributes                 type variable_declarators SEPARATOR_SEMICOLON |
-	error { Error(Tokens.grammar_field_declaration, "Invalid field declaration."); } ;
+	attributes           type variable_declarators SEPARATOR_SEMICOLON ;
 
 variable_declarators:
 	variable_declarator |
@@ -1084,32 +1080,12 @@ attribute_sections:
 	attribute_sections attribute_section ;
 
 attribute_section:
-	SEPARATOR_BRACKET_LEFT attribute_list SEPARATOR_BRACKET_RIGHT |
-	SEPARATOR_BRACKET_LEFT attribute_list SEPARATOR_COMMA SEPARATOR_BRACKET_RIGHT ;
-
-attribute_list:
-	attribute |
-	attribute_list SEPARATOR_COMMA attribute ;
-
-attribute:
-	attribute_name attribute_arguments |
-	attribute_name ;
-
-attribute_name:
-	type_name ;
+	KEYWORD_ANNOTATE identifier |
+	KEYWORD_ANNOTATE identifier attribute_arguments ;
 
 attribute_arguments:
-	SEPARATOR_PARENTHESES_LEFT positional_argument_list SEPARATOR_PARENTHESES_RIGHT |
 	SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT |
-	SEPARATOR_PARENTHESES_LEFT positional_argument_list SEPARATOR_COMMA named_argument_list SEPARATOR_PARENTHESES_RIGHT |
 	SEPARATOR_PARENTHESES_LEFT named_argument_list SEPARATOR_PARENTHESES_RIGHT ;
-
-positional_argument_list:
-	positional_argument |
-	positional_argument_list SEPARATOR_COMMA positional_argument ;
-
-positional_argument:
-	attribute_argument_expression ;
 
 named_argument_list:
 	named_argument |
