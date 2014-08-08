@@ -44,8 +44,6 @@ WithoutSharing 			WITHOUT{WhiteSpace}*SHARING
 
 %{	
 	// Prolog code
-	PreviousNode = yylval;
-
 	if (_pushBackQueue.Count > 0)
 	{
 		yylval = _pushBackQueue.Dequeue();

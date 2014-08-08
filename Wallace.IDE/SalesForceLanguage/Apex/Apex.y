@@ -635,7 +635,7 @@ boolean_expression:
 statement:
 	declaration_statement |
 	embedded_statement |
-	error SEPARATOR_SEMICOLON { Error(Tokens.grammar_expression_statement, "Invalid statement."); } ;
+	error SEPARATOR_SEMICOLON { Error(); } ;
 
 embedded_statement:
 	block |
@@ -843,8 +843,8 @@ class_member_declaration:
 	constructor_declaration |
 	static_constructor_declaration |
 	type_declaration |
-	error SEPARATOR_SEMICOLON { Error(Tokens.grammar_expression_statement, "Invalid class member."); } |
-	error SEPARATOR_BRACE_RIGHT { Error(Tokens.grammar_expression_statement, "Invalid class member."); } ;
+	error SEPARATOR_SEMICOLON { Error(); } |
+	error SEPARATOR_BRACE_RIGHT { Error(); } ;
 
 constant_declaration:
 	           modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |

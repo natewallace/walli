@@ -94,6 +94,16 @@ namespace QUT.Gppg
         /// </summary>
         protected bool _errorOccured;
 
+        /// <summary>
+        /// When an error occurs the token that caused the error is held here.
+        /// </summary>
+        protected int _tokenOnError;
+
+        /// <summary>
+        /// When an error occurs the location that caused the error is held here.
+        /// </summary>
+        protected TSpan _locationOnError;
+
         #endregion
 
         #region Constructors
@@ -305,8 +315,12 @@ namespace QUT.Gppg
                     }
                 }
                 else if (action == 0)   // error
+                {
+                    _tokenOnError = NextToken;
+                    _locationOnError = Scanner.yylloc;
                     if (!ErrorRecovery())
                         return false;
+                }
             }
         }
 
@@ -653,7 +667,7 @@ namespace QUT.Gppg
         /// </summary>
         /// <param name="symbol">The symbol to convert.</param>
         /// <returns>The string for the symbol.</returns>
-        private string SymbolToString(int symbol)
+        protected string SymbolToString(int symbol)
         {
             if (symbol < 0)
                 return nonTerminals[-symbol-1];

@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  OFFICEDESKTOP
-// DateTime: 8/7/2014 8:48:48 PM
+// DateTime: 8/7/2014 9:08:46 PM
 // UserName: Nate
-// Input file <C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 8/7/2014 8:48:10 PM>
+// Input file <C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 8/7/2014 9:08:37 PM>
 
 // options: lines gplex
 
@@ -1346,15 +1346,15 @@ public partial class ApexParser: ShiftReduceParser<ApexSyntaxNode, ApexTextSpan>
     {
       case 154: // statement -> error, SEPARATOR_SEMICOLON
 #line 638 "C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
-{ Error(Tokens.grammar_expression_statement, "Invalid statement."); }
+{ Error(); }
         break;
       case 272: // class_member_declaration -> error, SEPARATOR_SEMICOLON
 #line 846 "C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
-{ Error(Tokens.grammar_expression_statement, "Invalid class member."); }
+{ Error(); }
         break;
       case 273: // class_member_declaration -> error, SEPARATOR_BRACE_RIGHT
 #line 847 "C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
-{ Error(Tokens.grammar_expression_statement, "Invalid class member."); }
+{ Error(); }
         break;
     }
 #pragma warning restore 162, 1522

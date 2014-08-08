@@ -44,15 +44,6 @@ namespace SalesForceLanguage.Apex.Parser
 
         #endregion
 
-        #region Properties
-
-        /// <summary>
-        /// Holds the last node that was scanned.
-        /// </summary>
-        public ApexSyntaxNode PreviousNode { get; private set; }
-
-        #endregion
-
         #region Methods
 
         /// <summary>

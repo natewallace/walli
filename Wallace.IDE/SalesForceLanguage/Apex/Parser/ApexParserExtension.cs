@@ -131,23 +131,14 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// Helper method used to generate a syntax node on an error condition.
         /// </summary>
-        /// <param name="token">The token that identifies the node.</param>
-        /// <param name="message">The error message.</param>
-        protected void Error(Tokens token, string message)
+        protected void Error()
         {
-            ApexTextSpan location = new ApexTextSpan();
-
-            ApexLexer lexer = Scanner as ApexLexer;
-            if (lexer != null && lexer.PreviousNode != null)
-                location = lexer.PreviousNode.TextSpan;
-            else if (CurrentLocationSpan != null)
-                location = CurrentLocationSpan;
-
+            TextSpan location = new TextSpan(_locationOnError);
             foreach (LanguageError err in ParserErrors)
                 if (location.CompareTo(err.Location) == 0)
                     YYAbort();
 
-            _errors.Add(new LanguageError(message, new TextSpan(location)));            
+            _errors.Add(new LanguageError(String.Format("Unexpected token: {0}", SymbolToString(_tokenOnError)), location));            
             _errorOccured = true;
             yyerrok();
         }
