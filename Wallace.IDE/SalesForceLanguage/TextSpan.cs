@@ -50,6 +50,19 @@ namespace SalesForceLanguage
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Returns a human readible string for this object.
+        /// </summary>
+        /// <returns>A human readible string for this object.</returns>
+        public override string ToString()
+        {
+            return String.Format("{0} -> {1}", StartPosition, EndPosition);
+        }
+
+        #endregion
+
         #region IComparable Members
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SalesForceLanguage.Apex.Parser;
 using SalesForceLanguage.Apex;
+using SalesForceLanguage;
 
 namespace Wallace.Language.Apex.Tests
 {
@@ -20,7 +21,7 @@ namespace Wallace.Language.Apex.Tests
         [TestMethod]
         public void ApexParser_ParseApex()
         {
-            foreach (string file in Directory.GetFiles(".\\TestInput", "apexTest1.txt"))
+            foreach (string file in Directory.GetFiles(".\\TestInput", "apexTest*.txt"))
             {
                 Console.WriteLine("File: " + file);
 
@@ -29,6 +30,9 @@ namespace Wallace.Language.Apex.Tests
                     ApexLexer scanner = new ApexLexer(fs);
                     ApexParser parser = new ApexParser(scanner);
                     parser.ParseApex();
+
+                    foreach (LanguageError err in parser.ParserErrors)
+                        Console.WriteLine(err.ToString());
 
                     Assert.AreEqual(0, parser.ParserErrors.Length, "Errors occured parsing: " + file);
                 }

@@ -337,6 +337,8 @@
 %token grammar_static_constructor_body
 %token grammar_static_constructor_declaration
 %token grammar_struct_type
+%token grammar_template_parameter_list
+%token grammar_template_parameters
 %token grammar_this_access
 %token grammar_throw_statement
 %token grammar_try_statement
@@ -386,7 +388,9 @@ type_name:
 
 namespace_or_type_name:
 	identifier |
-	namespace_or_type_name SEPARATOR_DOT identifier ;
+	identifier template_parameter_list |
+	namespace_or_type_name SEPARATOR_DOT identifier |
+	namespace_or_type_name SEPARATOR_DOT identifier template_parameter_list ;
 
 type:
 	value_type |
@@ -431,6 +435,16 @@ class_type:
 
 interface_type:
 	type_name ;
+
+template_parameter_list:
+	OPERATOR_LESS_THAN template_parameters OPERATOR_GREATER_THAN   |
+    OPERATOR_LESS_THAN template_parameters OPERATOR_GREATER_THAN_A |
+    OPERATOR_LESS_THAN template_parameters OPERATOR_GREATER_THAN_B |
+    OPERATOR_LESS_THAN template_parameters OPERATOR_GREATER_THAN_C ;
+
+template_parameters:
+	type |
+	template_parameters SEPARATOR_COMMA type ;
 
 array_type:
 	non_array_type rank_specifiers ;

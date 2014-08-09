@@ -1,9 +1,5 @@
 private class AccountMergeSplitTest {
 
-	integer field = null
-
-	integer field2 = null;
-
-	fakeclass myMethodTwo(){}
+	private list<integer> testField;
 
 }
