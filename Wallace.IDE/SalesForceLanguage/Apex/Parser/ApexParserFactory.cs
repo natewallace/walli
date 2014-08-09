@@ -177,7 +177,7 @@ namespace SalesForceLanguage.Apex.Parser
                             fieldVisibility));
                     }
 
-                    return null;
+                    break;
 
                 // property
                 case Tokens.grammar_property_declaration:
@@ -191,7 +191,7 @@ namespace SalesForceLanguage.Apex.Parser
                         propertyType,
                         propertyVisibility));
 
-                    return null;
+                    break;
 
                 // constructor
                 case Tokens.grammar_constructor_declaration:
@@ -206,7 +206,7 @@ namespace SalesForceLanguage.Apex.Parser
                         constructorVisibility,
                         constructorParameters));
 
-                    return null;
+                    break;
 
                 // method
                 case Tokens.grammar_method_header:
@@ -225,7 +225,7 @@ namespace SalesForceLanguage.Apex.Parser
                         methodParameters,
                         methodReturnType));
 
-                    return null;
+                    break;
 
                 // interface method
                 case Tokens.grammar_interface_method_declaration:
@@ -243,7 +243,7 @@ namespace SalesForceLanguage.Apex.Parser
                         interfaceMethodParameters,
                         interfaceMethodReturnType));
 
-                    return null;
+                    break;
 
                 // class
                 case Tokens.grammar_class_declaration:
@@ -269,7 +269,7 @@ namespace SalesForceLanguage.Apex.Parser
                         classInterfaces.ToArray(),
                         GetSymbols<SymbolTable>(node, _classes)));
 
-                    return null;
+                    break;
 
                 // interface
                 case Tokens.grammar_interface_declaration:
@@ -295,7 +295,7 @@ namespace SalesForceLanguage.Apex.Parser
                         interfaceBases.ToArray(),
                         GetSymbols<SymbolTable>(node, _classes)));
 
-                    return null;
+                    break;
 
                 default:
                     break;

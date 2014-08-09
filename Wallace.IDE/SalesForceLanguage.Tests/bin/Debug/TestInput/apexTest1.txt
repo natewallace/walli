@@ -1,5 +1,9 @@
 private class AccountMergeSplitTest {
 
-	private list<integer> testField;
+	void myfunc() {
+	
+		x = (true) ? 0 : 1;
+
+	}
 
 }

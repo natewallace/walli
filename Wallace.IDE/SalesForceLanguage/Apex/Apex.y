@@ -307,6 +307,7 @@
 %token grammar_named_argument_list
 %token grammar_namespace_or_type_name
 %token grammar_non_array_type
+%token grammar_non_reserved_identifier
 %token grammar_numeric_type
 %token grammar_object_creation_expression
 %token grammar_parenthesized_expression
@@ -318,6 +319,7 @@
 %token grammar_primary_expression
 %token grammar_primary_no_array_creation_expression
 %token grammar_property_declaration
+%token grammar_qualified_name
 %token grammar_rank_specifier
 %token grammar_rank_specifiers
 %token grammar_reference_type
@@ -372,7 +374,22 @@
  
 identifier:
 	KEYWORD_ANNOTATE IDENTIFIER |
+	non_reserved_identifier |
 	IDENTIFIER ;
+
+non_reserved_identifier:
+    KEYWORD_AFTER |
+    KEYWORD_BEFORE |
+    RESERVED_JOIN |
+    RESERVED_SORT |
+    KEYWORD_GET |
+    KEYWORD_ID |
+    KEYWORD_SET |
+    KEYWORD_TRIGGER |
+    KEYWORD_INSERT |
+    KEYWORD_UNDELETE |
+    KEYWORD_UPDATE |
+    KEYWORD_UPSERT ;
 
 literal:
 	LITERAL_TRUE |
@@ -387,10 +404,14 @@ type_name:
 	namespace_or_type_name ;
 
 namespace_or_type_name:
-	identifier |
-	identifier template_parameter_list |
+	qualified_name |
+	qualified_name template_parameter_list |
 	namespace_or_type_name SEPARATOR_DOT identifier |
 	namespace_or_type_name SEPARATOR_DOT identifier template_parameter_list ;
+
+qualified_name:
+	identifier |
+	qualified_name SEPARATOR_DOT identifier ;
 
 type:
 	value_type |
@@ -407,6 +428,9 @@ struct_type:
 simple_type:
 	numeric_type |
 	KEYWORD_ID |
+	KEYWORD_BLOB |
+	KEYWORD_DATE |
+	KEYWORD_DATETIME |
 	KEYWORD_BOOLEAN ;
 
 numeric_type:
@@ -495,11 +519,15 @@ parenthesized_expression:
 	SEPARATOR_PARENTHESES_LEFT expression SEPARATOR_PARENTHESES_RIGHT ;
 
 member_access:
+	qualified_name |
 	primary_expression SEPARATOR_DOT identifier |
 	predefined_type SEPARATOR_DOT identifier ;
 
 predefined_type:
+	KEYWORD_DATE |
+	KEYWORD_DATETIME |
 	KEYWORD_BOOLEAN |
+	KEYWORD_BLOB |
 	KEYWORD_DECIMAL |
 	KEYWORD_DOUBLE |
 	KEYWORD_INTEGER |
@@ -512,6 +540,7 @@ invocation_expression:
 	primary_expression SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT ;
 
 element_access:
+	identifier SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT |
 	primary_no_array_creation_expression SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT ;
 
 expression_list:
@@ -533,7 +562,9 @@ post_decrement_expression:
 
 object_creation_expression:
 	KEYWORD_NEW type SEPARATOR_PARENTHESES_LEFT argument_list SEPARATOR_PARENTHESES_RIGHT |
-	KEYWORD_NEW type SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT ;
+	KEYWORD_NEW type SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT |
+	KEYWORD_NEW type SEPARATOR_BRACE_LEFT SEPARATOR_BRACE_RIGHT |
+	KEYWORD_NEW type SEPARATOR_BRACE_LEFT argument_list SEPARATOR_BRACE_RIGHT ;
 
 array_creation_expression:
 	KEYWORD_NEW non_array_type SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT rank_specifiers array_initializer |
@@ -559,7 +590,8 @@ pre_decrement_expression:
 	OPERATOR_DECREMENT unary_expression ;
 
 cast_expression:
-	SEPARATOR_PARENTHESES_LEFT type SEPARATOR_PARENTHESES_RIGHT unary_expression ;
+	SEPARATOR_PARENTHESES_LEFT type SEPARATOR_PARENTHESES_RIGHT unary_expression |
+	SEPARATOR_PARENTHESES_LEFT type SEPARATOR_PARENTHESES_RIGHT SEPARATOR_PARENTHESES_LEFT identifier SEPARATOR_PARENTHESES_RIGHT ;
 
 multiplicative_expression:
 	unary_expression |
