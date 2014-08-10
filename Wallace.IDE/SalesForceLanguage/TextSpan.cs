@@ -53,6 +53,32 @@ namespace SalesForceLanguage
         #region Methods
 
         /// <summary>
+        /// Check to see if the given position is contained within this span.
+        /// </summary>
+        /// <param name="position">The position to check.</param>
+        /// <returns>true if the given position is contained within this span.</returns>
+        public bool Contains(TextPosition position)
+        {
+            if (StartPosition.Line == position.Line)
+            {
+                if (StartPosition.Line == EndPosition.Line)
+                    return StartPosition.Column <= position.Column && EndPosition.Column >= position.Column;
+                else
+                    return StartPosition.Column <= position.Column;
+            }
+
+            if (EndPosition.Line == position.Line)
+            {
+                if (StartPosition.Line == EndPosition.Line)
+                    return StartPosition.Column <= position.Column && EndPosition.Column >= position.Column;
+                else
+                    return EndPosition.Column >= position.Column;
+            }
+
+            return (StartPosition.Line < position.Line && EndPosition.Line > position.Line);
+        }
+
+        /// <summary>
         /// Returns a human readible string for this object.
         /// </summary>
         /// <returns>A human readible string for this object.</returns>

@@ -34,10 +34,10 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
+        /// <param name="span">Span.</param>
         /// <param name="visibility">Visibility.</param>
-        public VisibilitySymbol(TextPosition location, string name, string type, SymbolVisibility visibility)
-            : base(location, name, type)
+        public VisibilitySymbol(TextPosition location, string name, TextSpan span, SymbolVisibility visibility)
+            : base(location, name, span)
         {
             Visibility = visibility;
         }

@@ -27,7 +27,7 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// <summary>
     /// A generic symbol.
     /// </summary>
-    public class Symbol
+    public class Symbol : IComparable
     {
         #region Constructors
 
@@ -36,12 +36,12 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
-        public Symbol(TextPosition location, string name, string type)
+        /// <param name="span">Span.</param>
+        public Symbol(TextPosition location, string name, TextSpan span)
         {
             Location = location;
             Name = name ?? String.Empty;
-            Type = type ?? string.Empty;
+            Span = span ?? new TextSpan(Location, new TextPosition(Location.Line, Location.Column + Name.Length));
         }
 
         #endregion
@@ -59,13 +59,23 @@ namespace SalesForceLanguage.Apex.CodeModel
         public string Name { get; private set; }
 
         /// <summary>
-        /// The type for the symbol.
+        /// The entire span for the symbol.
         /// </summary>
-        public string Type { get; private set; }
+        public TextSpan Span { get; private set; }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Check to see if the given position is contained within this symbol.
+        /// </summary>
+        /// <param name="position">The position to check.</param>
+        /// <returns>true if the given position is contained within this symbol.</returns>
+        public bool Contains(TextPosition position)
+        {
+            return Span.Contains(position);
+        }
 
         /// <summary>
         /// Returns the Name property.
@@ -74,6 +84,36 @@ namespace SalesForceLanguage.Apex.CodeModel
         public override string ToString()
         {
             return Name;
+        }
+
+        #endregion
+
+        #region IComparable Members
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns
+        /// an integer that indicates whether the current instance precedes, follows,
+        /// or occurs in the same position in the sort order as the other object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>
+        /// A value that indicates the relative order of the objects being compared.
+        /// The return value has these meanings: 
+        /// Less than zero - This instance precedes obj in the sort order. 
+        /// Zero - This instance occurs in the same position in the sort order as obj. 
+        /// Greater than zero - This instance follows obj in the sort order.
+        /// </returns>
+        public int CompareTo(object obj)
+        {
+            Symbol other = obj as Symbol;
+            if (other == null)
+                return -1;
+
+            int result = this.GetType().Name.CompareTo(other.GetType().Name);
+            if (result != 0)
+                return result;
+
+            return this.Name.CompareTo(other.Name);
         }
 
         #endregion

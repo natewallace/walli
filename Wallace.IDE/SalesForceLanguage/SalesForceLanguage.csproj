@@ -42,6 +42,8 @@
     <Compile Include="Apex\CodeModel\Constructor.cs" />
     <Compile Include="Apex\CodeModel\Method.cs" />
     <Compile Include="Apex\CodeModel\Parameter.cs" />
+    <Compile Include="Apex\CodeModel\Property.cs" />
+    <Compile Include="Apex\CodeModel\TypedSymbol.cs" />
     <Compile Include="TextPosition.cs" />
     <Compile Include="Apex\CodeModel\Symbol.cs" />
     <Compile Include="Apex\CodeModel\SymbolTable.cs" />

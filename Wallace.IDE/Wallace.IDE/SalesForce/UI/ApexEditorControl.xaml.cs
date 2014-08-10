@@ -148,8 +148,8 @@ namespace Wallace.IDE.SalesForce.UI
 
                 if (IsNavigationVisible)
                 {
-                    //SetNavigationClasses(null);
-                    //UpdateNavigation();
+                    SetNavigationClasses(null);
+                    UpdateNavigation();
                 }
             }
         }
@@ -163,11 +163,10 @@ namespace Wallace.IDE.SalesForce.UI
             set { borderNavigation.Visibility = value ? Visibility.Visible : Visibility.Collapsed; }
         }
 
-        /*
         /// <summary>
         /// The currently selected class navigation element.
         /// </summary>
-        public ICodeElement SelectedClassNavigationElement
+        public Symbol SelectedClassNavigationElement
         {
             get
             {
@@ -175,7 +174,7 @@ namespace Wallace.IDE.SalesForce.UI
                 if (item == null)
                     return null;
 
-                return item.Tag as ICodeElement;
+                return item.Tag as Symbol;
             }
             set
             {
@@ -200,14 +199,14 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The current class elements that can be navigated to.
         /// </summary>
-        public IEnumerable<ICodeElement> ClassNavigationElements
+        public IEnumerable<Symbol> ClassNavigationElements
         {
             get
             {
-                List<ICodeElement> elements = new List<ICodeElement>();
+                List<Symbol> elements = new List<Symbol>();
                 foreach (ComboBoxItem item in comboBoxNavigationClass.Items)
-                    if (item != null && item.Tag is ICodeElement)
-                        elements.Add(item.Tag as ICodeElement);
+                    if (item != null && item.Tag is Symbol)
+                        elements.Add(item.Tag as Symbol);
 
                 return elements;
             }
@@ -216,7 +215,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The currently selected member navigation element.
         /// </summary>
-        public ICodeElement SelectedMemberNavigationElement
+        public Symbol SelectedMemberNavigationElement
         {
             get
             {
@@ -224,7 +223,7 @@ namespace Wallace.IDE.SalesForce.UI
                 if (item == null)
                     return null;
 
-                return item.Tag as ICodeElement;
+                return item.Tag as Symbol;
             }
             set
             {
@@ -249,19 +248,18 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The current member elements that can be navigated to.
         /// </summary>
-        public IEnumerable<ICodeElement> MemberNavigationElements
+        public IEnumerable<Symbol> MemberNavigationElements
         {
             get
             {
-                List<ICodeElement> elements = new List<ICodeElement>();
+                List<Symbol> elements = new List<Symbol>();
                 foreach (ComboBoxItem item in comboBoxNavigationMember.Items)
-                    if (item != null && item.Tag is ICodeElement)
-                        elements.Add(item.Tag as ICodeElement);
+                    if (item != null && item.Tag is Symbol)
+                        elements.Add(item.Tag as Symbol);
 
                 return elements;
             }
         }
-        */
 
         #endregion
 
@@ -376,7 +374,6 @@ namespace Wallace.IDE.SalesForce.UI
             scrollViewerErrors.Visibility = (listBoxErrors.Items.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        /*
         /// <summary>
         /// Update the navigation controls based on current cursor position.
         /// </summary>
@@ -386,20 +383,20 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 _suspendNavigation = true;
 
-                int offset = textEditor.TextArea.Caret.Offset;
+                TextPosition position = new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column);
 
                 // get the current class that is selected based on cursor position
-                ICodeElement mostInnerClass = null;
-                ICodeElement mostOuterClass = null;
-                foreach (ICodeElement element in ClassNavigationElements)
+                Symbol mostInnerClass = null;
+                Symbol mostOuterClass = null;
+                foreach (Symbol element in ClassNavigationElements)
                 {
-                    if (element.Location.ContainsOffset(offset))
+                    if (element.Contains(position))
                     {
-                        if (mostInnerClass == null || mostInnerClass.Location.ContainsLocation(element.Location))
+                        if (mostInnerClass == null || mostInnerClass.Contains(element.Location))
                             mostInnerClass = element;
                     }
 
-                    if (mostOuterClass == null || element.Location.ContainsLocation(mostOuterClass.Location))
+                    if (mostOuterClass == null || element.Contains(mostOuterClass.Location))
                         mostOuterClass = element;
                 }
 
@@ -410,10 +407,10 @@ namespace Wallace.IDE.SalesForce.UI
                     SelectedClassNavigationElement = mostOuterClass;
 
                 // update the member
-                ICodeElement memeberElement = null;
-                foreach (ICodeElement element in MemberNavigationElements)
+                Symbol memeberElement = null;
+                foreach (Symbol element in MemberNavigationElements)
                 {
-                    if (element.Location.ContainsOffset(offset))
+                    if (element.Contains(position))
                     {
                         memeberElement = element;
                         break;
@@ -432,16 +429,13 @@ namespace Wallace.IDE.SalesForce.UI
         /// Set available classes that can be selected.
         /// </summary>
         /// <param name="apexClass">The class to generate selections from.</param>
-        private void SetNavigationClasses(ClassDeclaration apexClass)
+        private void SetNavigationClasses(SymbolTable apexClass)
         {
             if (apexClass == null)
             {
                 comboBoxNavigationClass.Items.Clear();
-                if (_parseData != null && _parseData.Elements.Length > 0)
-                    apexClass = _parseData.Elements[0] as ClassDeclaration;
-
-                if (apexClass == null)
-                    SetNavigationInterfaces(null);
+                if (_parseData != null)
+                    apexClass = _parseData.Symbols;
             }
 
             if (apexClass != null)
@@ -452,34 +446,8 @@ namespace Wallace.IDE.SalesForce.UI
                     Content = VisualHelper.CreateIconHeader(apexClass.ToString(), "Class.png", new Thickness(0))
                 });
 
-                foreach (ClassDeclaration innerClass in apexClass.InnerClasses)
+                foreach (SymbolTable innerClass in apexClass.InnerClasses)
                     SetNavigationClasses(innerClass);
-
-                foreach (InterfaceDeclaration innerInterface in apexClass.InnerInterfaces)
-                    SetNavigationInterfaces(innerInterface);
-            }
-        }
-
-        /// <summary>
-        /// Set available interfaces that can be selected.
-        /// </summary>
-        /// <param name="apexInterface">The interface to generate selections from.</param>
-        private void SetNavigationInterfaces(InterfaceDeclaration apexInterface)
-        {
-            if (apexInterface == null)
-            {
-                comboBoxNavigationClass.Items.Clear();
-                if (_parseData != null && _parseData.Elements.Length > 0)
-                    apexInterface = _parseData.Elements[0] as InterfaceDeclaration;
-            }
-
-            if (apexInterface != null)
-            {
-                comboBoxNavigationClass.Items.Add(new ComboBoxItem()
-                {
-                    Tag = apexInterface,
-                    Content = VisualHelper.CreateIconHeader(apexInterface.ToString(), "Interface.png", new Thickness(0))
-                });
             }
         }
 
@@ -490,43 +458,25 @@ namespace Wallace.IDE.SalesForce.UI
         {
             comboBoxNavigationMember.Items.Clear();
 
-            if (SelectedClassNavigationElement is ClassDeclaration)
+            if (SelectedClassNavigationElement is SymbolTable)
             {
-                ClassDeclaration apexClass = SelectedClassNavigationElement as ClassDeclaration;
+                SymbolTable apexClass = SelectedClassNavigationElement as SymbolTable;
 
-                foreach (FieldDeclaration field in apexClass.Fields.OrderBy(f => f.Name.Text))
-                    comboBoxNavigationMember.Items.Add(new ComboBoxItem()
-                    {
-                        Tag = field,
-                        Content = VisualHelper.CreateIconHeader(field.ToString(), "Field.png", new Thickness(0))
-                    });
-
-                foreach (ConstructorDeclaration constructor in apexClass.Constructors.OrderBy(c => c.Name.Text))
-                    comboBoxNavigationMember.Items.Add(new ComboBoxItem()
-                    {
-                        Tag = constructor,
-                        Content = VisualHelper.CreateIconHeader(constructor.ToString(), "Method.png", new Thickness(0))
-                    });
-
-                foreach (PropertyDeclaration prop in apexClass.Properties.OrderBy(p => p.Name.Text))
+                foreach (VisibilitySymbol prop in apexClass.Properties.OrderBy(p => p.Name))
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
                         Tag = prop,
                         Content = VisualHelper.CreateIconHeader(prop.ToString(), "Property.png", new Thickness(0))
                     });
 
-                foreach (MethodDeclaration method in apexClass.Methods.OrderBy(m => m.Name.Text))
+                foreach (Constructor constructor in apexClass.Constructors.OrderBy(c => c.Name))
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
-                        Tag = method,
-                        Content = VisualHelper.CreateIconHeader(method.ToString(), "Method.png", new Thickness(0))
+                        Tag = constructor,
+                        Content = VisualHelper.CreateIconHeader(constructor.ToString(), "Method.png", new Thickness(0))
                     });
-            }
-            else if (SelectedClassNavigationElement is InterfaceDeclaration)
-            {
-                InterfaceDeclaration apexInterface = SelectedClassNavigationElement as InterfaceDeclaration;
 
-                foreach (MethodDeclaration method in apexInterface.Methods.OrderBy(m => m.Name.Text))
+                foreach (Method method in apexClass.Methods.OrderBy(m => m.Name))
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
                         Tag = method,
@@ -534,7 +484,6 @@ namespace Wallace.IDE.SalesForce.UI
                     });
             }
         }
-        */
 
         /// <summary>
         /// Raises the TextChanged event.
@@ -582,18 +531,18 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                //SetNavigationMembers();
+                SetNavigationMembers();
 
-                //if (!_suspendNavigation)
-                //{
-                //    ICodeElement element = SelectedClassNavigationElement;
-                //    if (element != null)
-                //    {
-                //        textEditor.SelectionStart = element.Name.Location.StartPosition;
-                //        textEditor.SelectionLength = element.Name.Location.Length;
-                //        textEditor.ScrollTo(element.Name.Location.StartLine, element.Name.Location.StartColumn);
-                //    }
-                //}
+                if (!_suspendNavigation)
+                {
+                    Symbol element = SelectedClassNavigationElement;
+                    if (element != null)
+                    {
+                        textEditor.SelectionStart = textEditor.Document.GetOffset(element.Location.Line, element.Location.Column);
+                        textEditor.SelectionLength = element.Name.Length;
+                        textEditor.ScrollTo(element.Location.Line, element.Location.Column);
+                    }
+                }
             }
             catch (Exception err)
             {
@@ -610,16 +559,16 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                //if (!_suspendNavigation)
-                //{
-                //    ICodeElement element = SelectedMemberNavigationElement;
-                //    if (element != null)
-                //    {
-                //        textEditor.SelectionStart = element.Name.Location.StartPosition;
-                //        textEditor.SelectionLength = element.Name.Location.Length;
-                //        textEditor.ScrollTo(element.Name.Location.StartLine, element.Name.Location.StartColumn);
-                //    }
-                //}
+                if (!_suspendNavigation)
+                {
+                    Symbol element = SelectedMemberNavigationElement;
+                    if (element != null)
+                    {
+                        textEditor.SelectionStart = textEditor.Document.GetOffset(element.Location.Line, element.Location.Column);
+                        textEditor.SelectionLength = element.Name.Length;
+                        textEditor.ScrollTo(element.Location.Line, element.Location.Column);
+                    }
+                }
             }
             catch (Exception err)
             {
@@ -638,7 +587,7 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 if (IsNavigationVisible)
                 {
-                    //UpdateNavigation();
+                    UpdateNavigation();
                 }
             }
             catch (Exception err)
@@ -662,11 +611,11 @@ namespace Wallace.IDE.SalesForce.UI
 
                     textEditor.TextArea.TextView.Redraw();
 
-                    //if (IsNavigationVisible)
-                    //{
-                    //    SetNavigationClasses(null);
-                    //    UpdateNavigation();
-                    //}
+                    if (IsNavigationVisible)
+                    {
+                        SetNavigationClasses(null);
+                        UpdateNavigation();
+                    }
                 });
             }
             catch (Exception err)

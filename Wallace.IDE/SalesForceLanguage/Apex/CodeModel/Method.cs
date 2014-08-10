@@ -27,7 +27,7 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// <summary>
     /// A method symbol.
     /// </summary>
-    public class Method : Constructor
+    public class Method : TypedSymbol
     {
         #region Constructors
 
@@ -36,20 +36,20 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
+        /// <param name="span">Span.</param>
         /// <param name="visibility">Visibility.</param>
+        /// <param name="type">Type.</param>
         /// <param name="parameters">Parameters.</param>
-        /// <param name="returnType">ReturnType.</param>
         public Method(
             TextPosition location, 
             string name, 
-            string type,
+            TextSpan span,
             SymbolVisibility visibility, 
-            Parameter[] parameters,
-            string returnType)
-            : base(location, name, type, visibility, parameters)
+            string type,
+            Parameter[] parameters)
+            : base(location, name, span, visibility, type)
         {
-            ReturnType = returnType ?? String.Empty;
+            Parameters = parameters ?? new Parameter[0];
         }
 
         #endregion
@@ -57,9 +57,9 @@ namespace SalesForceLanguage.Apex.CodeModel
         #region Properties
 
         /// <summary>
-        /// The return type for the method.
+        /// The parameters that belong to this symbol.
         /// </summary>
-        public string ReturnType { get; private set; }
+        public Parameter[] Parameters { get; private set; }
 
         #endregion
     }

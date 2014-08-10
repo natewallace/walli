@@ -27,7 +27,6 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// </summary>
     public class Constructor : VisibilitySymbol
     {
-
         #region Constructors
 
         /// <summary>
@@ -35,11 +34,11 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
-        /// <param name="type">Type.</param>
+        /// <param name="span">Span.</param>
         /// <param name="visibility">Visibility.</param>
         /// <param name="parameters">Parameters.</param>
-        public Constructor(TextPosition location, string name, string type, SymbolVisibility visibility, Parameter[] parameters)
-            : base(location, name, type, visibility)
+        public Constructor(TextPosition location, string name, TextSpan span, SymbolVisibility visibility, Parameter[] parameters)
+            : base(location, name, span, visibility)
         {
             Parameters = parameters ?? new Parameter[0];
         }

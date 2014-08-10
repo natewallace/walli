@@ -343,6 +343,10 @@
 %token grammar_template_parameters
 %token grammar_this_access
 %token grammar_throw_statement
+%token grammar_trigger_declaration
+%token grammar_trigger_event
+%token grammar_trigger_events
+%token grammar_trigger_header
 %token grammar_try_statement
 %token grammar_type
 %token grammar_type_declaration
@@ -389,7 +393,8 @@ non_reserved_identifier:
     KEYWORD_INSERT |
     KEYWORD_UNDELETE |
     KEYWORD_UPDATE |
-    KEYWORD_UPSERT ;
+    KEYWORD_UPSERT |
+	KEYWORD_NEW ;
 
 literal:
 	LITERAL_TRUE |
@@ -839,7 +844,8 @@ finally_clause:
 
 compilation_unit:
 	|
-	type_declaration ;
+	type_declaration |
+	trigger_declaration ;
 
 type_declaration:
 	class_declaration |
@@ -1142,5 +1148,24 @@ named_argument:
 
 attribute_argument_expression:
 	expression ;
+
+trigger_declaration:
+	trigger_header method_body ;
+
+trigger_header:
+	KEYWORD_TRIGGER simple_name KEYWORD_ON simple_name SEPARATOR_PARENTHESES_LEFT trigger_events SEPARATOR_PARENTHESES_RIGHT ;
+
+trigger_events:
+	trigger_event |
+	trigger_events SEPARATOR_COMMA trigger_event ;
+
+trigger_event:
+	KEYWORD_BEFORE KEYWORD_INSERT |                                            
+    KEYWORD_BEFORE KEYWORD_UPDATE |    
+    KEYWORD_BEFORE KEYWORD_DELETE |    
+    KEYWORD_AFTER KEYWORD_INSERT |                                            
+    KEYWORD_AFTER KEYWORD_UPDATE |    
+    KEYWORD_AFTER KEYWORD_DELETE |    
+    KEYWORD_AFTER KEYWORD_UNDELETE ;
 
 %%

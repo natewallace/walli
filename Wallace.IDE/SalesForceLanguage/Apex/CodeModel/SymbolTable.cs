@@ -34,6 +34,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
+        /// <param name="span">Span.</param>
         /// <param name="constructors">Constructors</param>
         /// <param name="properties">Properties</param>
         /// <param name="methods">Methods</param>
@@ -42,12 +43,13 @@ namespace SalesForceLanguage.Apex.CodeModel
         public SymbolTable(
             TextPosition location,
             string name,
+            TextSpan span,
             Constructor[] constructors,
             VisibilitySymbol[] properties,
             Method[] methods,
             string[] interfaces,
             SymbolTable[] innerClasses)
-            : base(location, name, name)
+            : base(location, name, span)
         {
             Constructors = constructors ?? new Constructor[0];
             Properties = properties ?? new VisibilitySymbol[0];

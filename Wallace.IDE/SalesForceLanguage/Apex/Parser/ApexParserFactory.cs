@@ -35,7 +35,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// Holds properties that have been defined.
         /// </summary>
-        private Stack<VisibilitySymbol> _properties;
+        private Stack<Property> _properties;
 
         /// <summary>
         /// Holds properties that have been defined.
@@ -66,7 +66,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         public ApexParserFactory()
         {
-            _properties = new Stack<VisibilitySymbol>();
+            _properties = new Stack<Property>();
             _constructors = new Stack<Constructor>();
             _methods = new Stack<Method>();
             _classes = new Stack<SymbolTable>();
@@ -80,7 +80,16 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// The symbols that were parsed.
         /// </summary>
-        public SymbolTable Symbols { get; private set; }
+        public SymbolTable Symbols
+        {
+            get
+            {
+                if (_classes.Count > 0)
+                    return _classes.Peek();
+                else
+                    return null;
+            }
+        }
 
         /// <summary>
         /// The type references that were parsed.
@@ -195,11 +204,12 @@ namespace SalesForceLanguage.Apex.Parser
 
                     foreach (ApexSyntaxNode declarator in fieldDeclarators)
                     {
-                        _properties.Push(new VisibilitySymbol(
+                        _properties.Push(new Property(
                             new TextPosition(declarator.Nodes[0].TextSpan),
                             declarator.Nodes[0].GetLeavesDisplayText(),
-                            fieldType,
-                            fieldVisibility));
+                            null,
+                            fieldVisibility,
+                            fieldType));
                     }
 
                     break;
@@ -210,11 +220,12 @@ namespace SalesForceLanguage.Apex.Parser
                     string propertyType = node.GetChildNodeWithToken(Tokens.grammar_type).GetLeavesDisplayText();
                     ApexSyntaxNode propertyName = node.GetChildNodeWithToken(Tokens.grammar_identifier);
 
-                    _properties.Push(new VisibilitySymbol(
+                    _properties.Push(new Property(
                         new TextPosition(propertyName.TextSpan),
                         propertyName.GetLeavesDisplayText(),
-                        propertyType,
-                        propertyVisibility));
+                        new TextSpan(node.TextSpan),
+                        propertyVisibility,
+                        propertyType));
 
                     break;
 
@@ -227,28 +238,29 @@ namespace SalesForceLanguage.Apex.Parser
                     _constructors.Push(new Constructor(
                         new TextPosition(constructorName.TextSpan),
                         constructorName.GetLeavesDisplayText(),
-                        null,
+                        new TextSpan(node.TextSpan),
                         constructorVisibility,
                         constructorParameters));
 
                     break;
 
                 // method
-                case Tokens.grammar_method_header:
-                    SymbolVisibility methodVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
-                    ApexSyntaxNode methodName = node.GetChildNodeWithToken(Tokens.grammar_identifier);
-                    Parameter[] methodParameters = GetParameters(node.GetNodesWithToken(Tokens.grammar_fixed_parameter));
-                    string methodReturnType = (node.GetChildNodeWithToken(Tokens.KEYWORD_VOID) != null) ?
+                case Tokens.grammar_method_declaration:
+                    ApexSyntaxNode methodHeader = node.GetNodeWithToken(Tokens.grammar_method_header);
+                    SymbolVisibility methodVisibility = GetVisibility(methodHeader.GetNodesWithToken(Tokens.grammar_modifier));
+                    ApexSyntaxNode methodName = methodHeader.GetChildNodeWithToken(Tokens.grammar_identifier);
+                    Parameter[] methodParameters = GetParameters(methodHeader.GetNodesWithToken(Tokens.grammar_fixed_parameter));
+                    string methodReturnType = (methodHeader.GetChildNodeWithToken(Tokens.KEYWORD_VOID) != null) ?
                         "void" :
-                        node.GetChildNodeWithToken(Tokens.grammar_type).GetLeavesDisplayText();
+                        methodHeader.GetChildNodeWithToken(Tokens.grammar_type).GetLeavesDisplayText();
 
                     _methods.Push(new Method(
                         new TextPosition(methodName.TextSpan),
                         methodName.GetLeavesDisplayText(),
-                        null,
+                        new TextSpan(node.TextSpan),
                         methodVisibility,
-                        methodParameters,
-                        methodReturnType));
+                        methodReturnType,
+                        methodParameters));
 
                     break;
 
@@ -263,10 +275,10 @@ namespace SalesForceLanguage.Apex.Parser
                     _methods.Push(new Method(
                         new TextPosition(interfaceMethodName.TextSpan),
                         interfaceMethodName.GetLeavesDisplayText(),
-                        null,
+                        new TextSpan(node.TextSpan),
                         SymbolVisibility.Public,
-                        interfaceMethodParameters,
-                        interfaceMethodReturnType));
+                        interfaceMethodReturnType,
+                        interfaceMethodParameters));
 
                     break;
 
@@ -278,18 +290,30 @@ namespace SalesForceLanguage.Apex.Parser
                         classVisibility = GetVisibility(classModifiers.GetNodesWithToken(Tokens.grammar_modifier));
 
                     ApexSyntaxNode className = node.GetChildNodeWithToken(Tokens.grammar_identifier);
+                    _typeReferences.Add(new Symbol(new TextPosition(className.TextSpan), className.GetLeavesDisplayText(), null));
 
                     ApexSyntaxNode classBase = node.GetChildNodeWithToken(Tokens.grammar_class_base);
                     List<string> classInterfaces = new List<string>();
                     if (classBase != null)
+                    {
                         foreach (ApexSyntaxNode classInterface in classBase.GetNodesWithToken(Tokens.grammar_interface_type))
-                            classInterfaces.Add(classInterface.GetLeavesDisplayText());
+                        {
+                            string name = classInterface.GetLeavesDisplayText();
+                            classInterfaces.Add(name);
+                            _typeReferences.Add(new Symbol(new TextPosition(classInterface.TextSpan), name, null));
+                        }
+
+                        ApexSyntaxNode extends = node.GetChildNodeWithToken(Tokens.grammar_class_type);
+                        if (extends != null)
+                            _typeReferences.Add(new Symbol(new TextPosition(extends.TextSpan), extends.GetLeavesDisplayText(), null));
+                    }
 
                     _classes.Push(new SymbolTable(
                         new TextPosition(className.TextSpan),
                         className.GetLeavesDisplayText(),
+                        new TextSpan(node.TextSpan),
                         GetSymbols<Constructor>(node, _constructors),
-                        GetSymbols<VisibilitySymbol>(node, _properties),
+                        GetSymbols<Property>(node, _properties),
                         GetSymbols<Method>(node, _methods),
                         classInterfaces.ToArray(),
                         GetSymbols<SymbolTable>(node, _classes)));
@@ -304,16 +328,24 @@ namespace SalesForceLanguage.Apex.Parser
                         interfaceVisibility = GetVisibility(interfaceModifiers.GetNodesWithToken(Tokens.grammar_modifier));
 
                     ApexSyntaxNode interfaceName = node.GetChildNodeWithToken(Tokens.grammar_identifier);
+                    _typeReferences.Add(new Symbol(new TextPosition(interfaceName.TextSpan), interfaceName.GetLeavesDisplayText(), null));
 
                     ApexSyntaxNode interfaceBase = node.GetChildNodeWithToken(Tokens.grammar_interface_base);
                     List<string> interfaceBases = new List<string>();
                     if (interfaceBase != null)
+                    {
                         foreach (ApexSyntaxNode interfaceInterface in interfaceBase.GetNodesWithToken(Tokens.grammar_interface_type))
+                        {
+                            string name = interfaceInterface.GetLeavesDisplayText();
                             interfaceBases.Add(interfaceInterface.GetLeavesDisplayText());
+                            _typeReferences.Add(new Symbol(new TextPosition(interfaceInterface.TextSpan), name, null));
+                        }
+                    }
 
                     _classes.Push(new SymbolTable(
                         new TextPosition(interfaceName.TextSpan),
                         interfaceName.GetLeavesDisplayText(),
+                        new TextSpan(node.TextSpan),
                         null,
                         null,
                         GetSymbols<Method>(node, _methods),
