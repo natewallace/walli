@@ -2,7 +2,8 @@ private class AccountMergeSplitTest {
 
 	void myfunc() {
 	
-		x = (true) ? 0 : 1;
+		if (a < b)
+			x();
 
 	}
 
