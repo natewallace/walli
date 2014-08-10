@@ -73,7 +73,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// Type references that were parsed.
         /// </summary>
-        public Symbol[] TypeReferences
+        public ReferenceTypeSymbol[] TypeReferences
         {
             get { return ParserFactory.TypeReferences; }
         }

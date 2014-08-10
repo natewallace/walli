@@ -55,7 +55,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// Holds type references that have been found.
         /// </summary>
-        private List<Symbol> _typeReferences;
+        private List<ReferenceTypeSymbol> _typeReferences;
 
         #endregion
 
@@ -70,7 +70,7 @@ namespace SalesForceLanguage.Apex.Parser
             _constructors = new Stack<Constructor>();
             _methods = new Stack<Method>();
             _classes = new Stack<SymbolTable>();
-            _typeReferences = new List<Symbol>();
+            _typeReferences = new List<ReferenceTypeSymbol>();
         }
 
         #endregion
@@ -94,7 +94,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// The type references that were parsed.
         /// </summary>
-        public Symbol[] TypeReferences
+        public ReferenceTypeSymbol[] TypeReferences
         {
             get { return _typeReferences.ToArray(); }
         }
@@ -187,12 +187,19 @@ namespace SalesForceLanguage.Apex.Parser
             {
                 // type reference
                 case Tokens.grammar_type:
-                    ApexSyntaxNode typeNode = node.GetNodeWithToken(Tokens.IDENTIFIER);
-                    if (typeNode != null)
-                        _typeReferences.Add(new Symbol(
-                            new TextPosition(typeNode.TextSpan),
-                            typeNode.GetLeavesDisplayText(),
-                            null));
+                    ApexSyntaxNode[] identifierNodes = node.GetNodesWithToken(Tokens.grammar_identifier);
+                    if (identifierNodes.Length > 0)
+                    {
+                        List<TextSpan> parts = new List<TextSpan>();
+                        foreach (ApexSyntaxNode part in identifierNodes)
+                            parts.Add(new TextSpan(part.TextSpan));
+
+                        _typeReferences.Add(new ReferenceTypeSymbol(
+                            new TextPosition(node.TextSpan),
+                            node.GetLeavesDisplayText(),
+                            new TextSpan(node.TextSpan),
+                            parts.ToArray()));
+                    }
 
                     break;
 
@@ -290,7 +297,11 @@ namespace SalesForceLanguage.Apex.Parser
                         classVisibility = GetVisibility(classModifiers.GetNodesWithToken(Tokens.grammar_modifier));
 
                     ApexSyntaxNode className = node.GetChildNodeWithToken(Tokens.grammar_identifier);
-                    _typeReferences.Add(new Symbol(new TextPosition(className.TextSpan), className.GetLeavesDisplayText(), null));
+                    _typeReferences.Add(new ReferenceTypeSymbol(
+                        new TextPosition(className.TextSpan), 
+                        className.GetLeavesDisplayText(), 
+                        null,
+                        new TextSpan[] { new TextSpan(className.TextSpan) }));
 
                     ApexSyntaxNode classBase = node.GetChildNodeWithToken(Tokens.grammar_class_base);
                     List<string> classInterfaces = new List<string>();
@@ -300,12 +311,20 @@ namespace SalesForceLanguage.Apex.Parser
                         {
                             string name = classInterface.GetLeavesDisplayText();
                             classInterfaces.Add(name);
-                            _typeReferences.Add(new Symbol(new TextPosition(classInterface.TextSpan), name, null));
+                            _typeReferences.Add(new ReferenceTypeSymbol(
+                                new TextPosition(classInterface.TextSpan), 
+                                name, 
+                                null, 
+                                new TextSpan[] { new TextSpan(classInterface.TextSpan) }));
                         }
 
-                        ApexSyntaxNode extends = node.GetChildNodeWithToken(Tokens.grammar_class_type);
+                        ApexSyntaxNode extends = classBase.GetChildNodeWithToken(Tokens.grammar_class_type);
                         if (extends != null)
-                            _typeReferences.Add(new Symbol(new TextPosition(extends.TextSpan), extends.GetLeavesDisplayText(), null));
+                            _typeReferences.Add(new ReferenceTypeSymbol(
+                                new TextPosition(extends.TextSpan), 
+                                extends.GetLeavesDisplayText(), 
+                                null,
+                                new TextSpan[] { new TextSpan(extends.TextSpan) }));
                     }
 
                     _classes.Push(new SymbolTable(
@@ -328,7 +347,7 @@ namespace SalesForceLanguage.Apex.Parser
                         interfaceVisibility = GetVisibility(interfaceModifiers.GetNodesWithToken(Tokens.grammar_modifier));
 
                     ApexSyntaxNode interfaceName = node.GetChildNodeWithToken(Tokens.grammar_identifier);
-                    _typeReferences.Add(new Symbol(new TextPosition(interfaceName.TextSpan), interfaceName.GetLeavesDisplayText(), null));
+                    _typeReferences.Add(new ReferenceTypeSymbol(new TextPosition(interfaceName.TextSpan), interfaceName.GetLeavesDisplayText(), null, null));
 
                     ApexSyntaxNode interfaceBase = node.GetChildNodeWithToken(Tokens.grammar_interface_base);
                     List<string> interfaceBases = new List<string>();
@@ -338,7 +357,11 @@ namespace SalesForceLanguage.Apex.Parser
                         {
                             string name = interfaceInterface.GetLeavesDisplayText();
                             interfaceBases.Add(interfaceInterface.GetLeavesDisplayText());
-                            _typeReferences.Add(new Symbol(new TextPosition(interfaceInterface.TextSpan), name, null));
+                            _typeReferences.Add(new ReferenceTypeSymbol(
+                                new TextPosition(interfaceInterface.TextSpan), 
+                                name, 
+                                null, 
+                                new TextSpan[] { new TextSpan(interfaceInterface.TextSpan) }));
                         }
                     }
 

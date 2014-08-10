@@ -41,7 +41,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// Type references marked in the text.
         /// </summary>
-        private Dictionary<int, List<Symbol>> _typeReferences = new Dictionary<int, List<Symbol>>();
+        private Dictionary<int, List<TextSpan>> _typeReferences = new Dictionary<int, List<TextSpan>>();
 
         /// <summary>
         /// Errors marked in the text.
@@ -92,23 +92,26 @@ namespace Wallace.IDE.SalesForce.UI
         /// Sets the errors that are marked in the text.
         /// </summary>
         /// <param name="typeReferences">The type references to mark.</param>
-        public void SetTypeReferences(IEnumerable<Symbol> typeReferences)
+        public void SetTypeReferences(IEnumerable<ReferenceTypeSymbol> typeReferences)
         {
             _typeReferences.Clear();
             if (typeReferences != null)
             {
-                foreach (Symbol s in typeReferences)
+                foreach (ReferenceTypeSymbol s in typeReferences)
                 {
+                    List<TextSpan> spans = null;
                     if (_typeReferences.ContainsKey(s.Location.Line))
                     {
-                        _typeReferences[s.Location.Line].Add(s);
+                        spans = _typeReferences[s.Location.Line];
                     }
                     else
                     {
-                        List<Symbol> list = new List<Symbol>();
-                        list.Add(s);
-                        _typeReferences.Add(s.Location.Line, list);
+                        spans = new List<TextSpan>();
+                        _typeReferences.Add(s.Location.Line, spans);
                     }
+
+                    foreach (TextSpan span in s.Parts)
+                        spans.Add(span);
                 }
             }
         }
@@ -147,15 +150,19 @@ namespace Wallace.IDE.SalesForce.UI
             // type reference markings
             if (_typeReferences.ContainsKey(line.LineNumber))
             {
-                foreach (Symbol symbol in _typeReferences[line.LineNumber])
+                foreach (TextSpan span in _typeReferences[line.LineNumber])
                 {
-                    ChangeLinePart(
-                        line.Offset + symbol.Location.Column - 1,
-                        line.Offset + symbol.Location.Column + symbol.Name.Length - 1,
-                        (element) =>
-                        {
-                            element.TextRunProperties.SetForegroundBrush(Brushes.Teal);
-                        });
+                    int startOffset = line.Offset + span.StartPosition.Column - 1;
+                    int endOffset = line.Offset + span.EndPosition.Column - 1;
+
+                    if (endOffset <= line.EndOffset)
+                        ChangeLinePart(
+                            startOffset,
+                            endOffset,
+                            (element) =>
+                            {
+                                element.TextRunProperties.SetForegroundBrush(Brushes.Teal);
+                            });
                 }
             }
 

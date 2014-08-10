@@ -436,7 +436,8 @@ simple_type:
 	KEYWORD_BLOB |
 	KEYWORD_DATE |
 	KEYWORD_DATETIME |
-	KEYWORD_BOOLEAN ;
+	KEYWORD_BOOLEAN | 
+	KEYWORD_STRING ;
 
 numeric_type:
 	integral_type |
@@ -459,8 +460,7 @@ reference_type:
 	array_type ;
 
 class_type:
-	type_name |
-	KEYWORD_STRING ;
+	type_name ;
 
 interface_type:
 	type_name ;
@@ -1120,6 +1120,7 @@ modifier:
 	KEYWORD_OVERRIDE |
 	KEYWORD_VIRTUAL |
 	KEYWORD_TESTMETHOD |
+	KEYWORD_TRANSIENT |
 	KEYWORD_WITHSHARING |
 	KEYWORD_WITHOUTSHARING |
 	KEYWORD_WEBSERVICE ;

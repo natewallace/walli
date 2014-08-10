@@ -36,10 +36,10 @@ namespace SalesForceLanguage.Apex
         /// </summary>
         /// <param name="symbols">Symbols.</param>
         /// <param name="errors">Errors.</param>
-        public ParseResult(SymbolTable symbols, Symbol[] typeReferences, LanguageError[] errors)
+        public ParseResult(SymbolTable symbols, ReferenceTypeSymbol[] typeReferences, LanguageError[] errors)
         {
             Symbols = symbols;
-            TypeReferences = typeReferences ?? new Symbol[0];
+            TypeReferences = typeReferences ?? new ReferenceTypeSymbol[0];
             Errors = errors ?? new LanguageError[0];
         }
 
@@ -55,7 +55,7 @@ namespace SalesForceLanguage.Apex
         /// <summary>
         /// The type references in the document.
         /// </summary>
-        public Symbol[] TypeReferences { get; private set; }
+        public ReferenceTypeSymbol[] TypeReferences { get; private set; }
 
         /// <summary>
         /// Any language errors that occured.
