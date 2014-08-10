@@ -52,6 +52,11 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         private Stack<SymbolTable> _classes;
 
+        /// <summary>
+        /// Holds type references that have been found.
+        /// </summary>
+        private List<Symbol> _typeReferences;
+
         #endregion
 
         #region Constructors
@@ -65,6 +70,7 @@ namespace SalesForceLanguage.Apex.Parser
             _constructors = new Stack<Constructor>();
             _methods = new Stack<Method>();
             _classes = new Stack<SymbolTable>();
+            _typeReferences = new List<Symbol>();
         }
 
         #endregion
@@ -74,7 +80,15 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// The symbols that were parsed.
         /// </summary>
-        public SymbolTable SymbolTable { get; private set; }
+        public SymbolTable Symbols { get; private set; }
+
+        /// <summary>
+        /// The type references that were parsed.
+        /// </summary>
+        public Symbol[] TypeReferences
+        {
+            get { return _typeReferences.ToArray(); }
+        }
 
         #endregion
 
@@ -162,6 +176,17 @@ namespace SalesForceLanguage.Apex.Parser
 
             switch (node.Token)
             {
+                // type reference
+                case Tokens.grammar_type:
+                    ApexSyntaxNode typeNode = node.GetNodeWithToken(Tokens.IDENTIFIER);
+                    if (typeNode != null)
+                        _typeReferences.Add(new Symbol(
+                            new TextPosition(typeNode.TextSpan),
+                            typeNode.GetLeavesDisplayText(),
+                            null));
+
+                    break;
+
                 // field
                 case Tokens.grammar_field_declaration:
                     SymbolVisibility fieldVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));

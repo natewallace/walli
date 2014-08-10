@@ -27,6 +27,7 @@ using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 using SalesForceLanguage;
 using SalesForceLanguage.Apex;
+using SalesForceLanguage.Apex.CodeModel;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -36,6 +37,11 @@ namespace Wallace.IDE.SalesForce.UI
     public class ApexDocumentColorizingTransformer : DocumentColorizingTransformer
     {
         #region Fields
+
+        /// <summary>
+        /// Type references marked in the text.
+        /// </summary>
+        private Dictionary<int, List<Symbol>> _typeReferences = new Dictionary<int, List<Symbol>>();
 
         /// <summary>
         /// Errors marked in the text.
@@ -85,6 +91,31 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// Sets the errors that are marked in the text.
         /// </summary>
+        /// <param name="typeReferences">The type references to mark.</param>
+        public void SetTypeReferences(IEnumerable<Symbol> typeReferences)
+        {
+            _typeReferences.Clear();
+            if (typeReferences != null)
+            {
+                foreach (Symbol s in typeReferences)
+                {
+                    if (_typeReferences.ContainsKey(s.Location.Line))
+                    {
+                        _typeReferences[s.Location.Line].Add(s);
+                    }
+                    else
+                    {
+                        List<Symbol> list = new List<Symbol>();
+                        list.Add(s);
+                        _typeReferences.Add(s.Location.Line, list);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the errors that are marked in the text.
+        /// </summary>
         /// <param name="errors">The errors to mark.</param>
         public void SetErrors(IEnumerable<LanguageError> errors)
         {
@@ -93,12 +124,15 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 foreach (LanguageError e in errors)
                 {
-                    for (int i = e.Location.StartPosition.Line; i <= e.Location.EndPosition.Line; i++)
+                    if (_errors.ContainsKey(e.Location.StartPosition.Line))
                     {
-                        if (_errors.ContainsKey(i))
-                            _errors[i].Add(e);
-                        else
-                            _errors.Add(i, new List<LanguageError>(new LanguageError[] { e }));
+                        _errors[e.Location.StartPosition.Line].Add(e);
+                    }
+                    else
+                    {
+                        List<LanguageError> list = new List<LanguageError>();
+                        list.Add(e);
+                        _errors.Add(e.Location.StartPosition.Line, list);
                     }
                 }
             }
@@ -110,22 +144,33 @@ namespace Wallace.IDE.SalesForce.UI
         /// <param name="line">The line to color.</param>
         protected override void ColorizeLine(DocumentLine line)
         {
+            // type reference markings
+            if (_typeReferences.ContainsKey(line.LineNumber))
+            {
+                foreach (Symbol symbol in _typeReferences[line.LineNumber])
+                {
+                    ChangeLinePart(
+                        line.Offset + symbol.Location.Column - 1,
+                        line.Offset + symbol.Location.Column + symbol.Name.Length - 1,
+                        (element) =>
+                        {
+                            element.TextRunProperties.SetForegroundBrush(Brushes.Teal);
+                        });
+                }
+            }
+
             // error markings
             if (_errors.ContainsKey(line.LineNumber))
             {
                 foreach (LanguageError error in _errors[line.LineNumber])
                 {
-                    //SalesForceLanguage.TextLocation segment = error.Location.CreateSegment(line.Offset, line.EndOffset);
-                    //if (segment != null)
-                    //{
-                    //    ChangeLinePart(
-                    //        segment.StartPosition,
-                    //        segment.EndPosition,
-                    //        (element) =>
-                    //        {
-                    //            element.TextRunProperties.SetTextDecorations(ERROR_DECORATIONS);
-                    //        });
-                    //}
+                    ChangeLinePart(
+                        line.Offset + error.Location.StartPosition.Column - 1,
+                        line.Offset + error.Location.EndPosition.Column - 1,
+                        (element) =>
+                        {
+                            element.TextRunProperties.SetTextDecorations(ERROR_DECORATIONS);
+                        });
                 }
             }
         }

@@ -44,7 +44,7 @@ namespace SalesForceLanguage
         {
             if (String.IsNullOrWhiteSpace(text))
             {
-                return new ParseResult(new LanguageError[0]);
+                return new ParseResult(null, null, new LanguageError[0]);
             }
 
             using (MemoryStream reader = new MemoryStream(Encoding.ASCII.GetBytes(text)))
@@ -53,7 +53,10 @@ namespace SalesForceLanguage
 
                 parser.ParseApex();
 
-                return new ParseResult(parser.ParserErrors);
+                return new ParseResult(
+                    parser.Symbols,
+                    parser.TypeReferences,
+                    parser.ParserErrors);
             }
         }
 

@@ -274,6 +274,7 @@ namespace Wallace.IDE.SalesForce.UI
         private void ParseText(string text)
         {
             _parseData = _language.ParseApex(text);
+            _colorTransformer.SetTypeReferences(_parseData.TypeReferences);
             _colorTransformer.SetErrors(_parseData.Errors);
         }
 

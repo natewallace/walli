@@ -63,6 +63,22 @@ namespace SalesForceLanguage.Apex.Parser
         #region Properties
 
         /// <summary>
+        /// Symbols that were parsed.
+        /// </summary>
+        public SymbolTable Symbols
+        {
+            get { return ParserFactory.Symbols; }
+        }
+
+        /// <summary>
+        /// Type references that were parsed.
+        /// </summary>
+        public Symbol[] TypeReferences
+        {
+            get { return ParserFactory.TypeReferences; }
+        }
+
+        /// <summary>
         /// Errors that occured during parsing.
         /// </summary>
         public LanguageError[] ParserErrors
@@ -74,11 +90,6 @@ namespace SalesForceLanguage.Apex.Parser
         /// Factory used to parse code.
         /// </summary>
         protected ApexParserFactory ParserFactory { get; set; }
-
-        /// <summary>
-        /// When a successful parse occurs this property will be set with the resulting root node of the syntax tree.
-        /// </summary>
-        protected ApexSyntaxNode GoalNode { get; set; }
 
         #endregion
 
@@ -104,7 +115,6 @@ namespace SalesForceLanguage.Apex.Parser
         public void ParseApex()
         {
             ParserFactory = new ApexParserFactory();
-            GoalNode = null;
             _errors = new List<LanguageError>();
 
             Parse();

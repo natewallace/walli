@@ -34,16 +34,28 @@ namespace SalesForceLanguage.Apex
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="symbols">Symbols.</param>
         /// <param name="errors">Errors.</param>
-        /// <param name="elements">Elements.</param>
-        public ParseResult(LanguageError[] errors)
+        public ParseResult(SymbolTable symbols, Symbol[] typeReferences, LanguageError[] errors)
         {
+            Symbols = symbols;
+            TypeReferences = typeReferences ?? new Symbol[0];
             Errors = errors ?? new LanguageError[0];
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The resulting symbols.
+        /// </summary>
+        public SymbolTable Symbols { get; private set; }
+
+        /// <summary>
+        /// The type references in the document.
+        /// </summary>
+        public Symbol[] TypeReferences { get; private set; }
 
         /// <summary>
         /// Any language errors that occured.
