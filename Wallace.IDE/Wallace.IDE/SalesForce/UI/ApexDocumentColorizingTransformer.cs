@@ -20,14 +20,12 @@
  * THE SOFTWARE.
  */
 
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 using SalesForceLanguage;
 using SalesForceLanguage.Apex;
-using SalesForceLanguage.Apex.CodeModel;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -37,16 +35,6 @@ namespace Wallace.IDE.SalesForce.UI
     public class ApexDocumentColorizingTransformer : DocumentColorizingTransformer
     {
         #region Fields
-
-        /// <summary>
-        /// Type references marked in the text.
-        /// </summary>
-        private Dictionary<int, List<TextSpan>> _typeReferences = new Dictionary<int, List<TextSpan>>();
-
-        /// <summary>
-        /// Errors marked in the text.
-        /// </summary>
-        private Dictionary<int, List<LanguageError>> _errors = new Dictionary<int, List<LanguageError>>();
 
         /// <summary>
         /// Used to mark errors.
@@ -86,60 +74,17 @@ namespace Wallace.IDE.SalesForce.UI
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// The parse result data to color for.
+        /// </summary>
+        public ParseResult ParseData { get; set; }
+
+        #endregion
+
         #region Methods
 
-        /// <summary>
-        /// Sets the errors that are marked in the text.
-        /// </summary>
-        /// <param name="typeReferences">The type references to mark.</param>
-        public void SetTypeReferences(IEnumerable<ReferenceTypeSymbol> typeReferences)
-        {
-            _typeReferences.Clear();
-            if (typeReferences != null)
-            {
-                foreach (ReferenceTypeSymbol s in typeReferences)
-                {
-                    List<TextSpan> spans = null;
-                    if (_typeReferences.ContainsKey(s.Location.Line))
-                    {
-                        spans = _typeReferences[s.Location.Line];
-                    }
-                    else
-                    {
-                        spans = new List<TextSpan>();
-                        _typeReferences.Add(s.Location.Line, spans);
-                    }
-
-                    foreach (TextSpan span in s.Parts)
-                        spans.Add(span);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Sets the errors that are marked in the text.
-        /// </summary>
-        /// <param name="errors">The errors to mark.</param>
-        public void SetErrors(IEnumerable<LanguageError> errors)
-        {
-            _errors.Clear();
-            if (errors != null)
-            {
-                foreach (LanguageError e in errors)
-                {
-                    if (_errors.ContainsKey(e.Location.StartPosition.Line))
-                    {
-                        _errors[e.Location.StartPosition.Line].Add(e);
-                    }
-                    else
-                    {
-                        List<LanguageError> list = new List<LanguageError>();
-                        list.Add(e);
-                        _errors.Add(e.Location.StartPosition.Line, list);
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// Color the given line.
@@ -147,53 +92,56 @@ namespace Wallace.IDE.SalesForce.UI
         /// <param name="line">The line to color.</param>
         protected override void ColorizeLine(DocumentLine line)
         {
-            // type reference markings
-            if (_typeReferences.ContainsKey(line.LineNumber))
+            if (ParseData != null)
             {
-                foreach (TextSpan span in _typeReferences[line.LineNumber])
+                // type reference markings
+                if (ParseData.TypeReferencesByLine.ContainsKey(line.LineNumber))
                 {
-                    int startOffset = line.Offset + span.StartPosition.Column - 1;
-                    int endOffset = line.Offset + span.EndPosition.Column - 1;
-                    if (startOffset == endOffset)
-                        endOffset++;
+                    foreach (TextSpan span in ParseData.TypeReferencesByLine[line.LineNumber])
+                    {
+                        int startOffset = line.Offset + span.StartPosition.Column - 1;
+                        int endOffset = line.Offset + span.EndPosition.Column - 1;
+                        if (startOffset == endOffset)
+                            endOffset++;
 
-                    if (endOffset > startOffset &&
-                        startOffset >= line.Offset &&
-                        startOffset <= line.EndOffset &&
-                        endOffset >= line.Offset &&
-                        endOffset <= line.EndOffset)
-                        ChangeLinePart(
-                            startOffset,
-                            endOffset,
-                            (element) =>
-                            {
-                                element.TextRunProperties.SetForegroundBrush(Brushes.Teal);
-                            });
+                        if (endOffset > startOffset &&
+                            startOffset >= line.Offset &&
+                            startOffset <= line.EndOffset &&
+                            endOffset >= line.Offset &&
+                            endOffset <= line.EndOffset)
+                            ChangeLinePart(
+                                startOffset,
+                                endOffset,
+                                (element) =>
+                                {
+                                    element.TextRunProperties.SetForegroundBrush(Brushes.Teal);
+                                });
+                    }
                 }
-            }
 
-            // error markings
-            if (_errors.ContainsKey(line.LineNumber))
-            {
-                foreach (LanguageError error in _errors[line.LineNumber])
+                // error markings
+                if (ParseData.ErrorsByLine.ContainsKey(line.LineNumber))
                 {
-                    int startOffset = line.Offset + error.Location.StartPosition.Column - 1;
-                    int endOffset = line.Offset + error.Location.EndPosition.Column - 1;
-                    if (startOffset == endOffset)
-                        endOffset++;
+                    foreach (LanguageError error in ParseData.ErrorsByLine[line.LineNumber])
+                    {
+                        int startOffset = line.Offset + error.Location.StartPosition.Column - 1;
+                        int endOffset = line.Offset + error.Location.EndPosition.Column - 1;
+                        if (startOffset == endOffset)
+                            endOffset++;
 
-                    if (endOffset > startOffset &&
-                        startOffset >= line.Offset &&
-                        startOffset <= line.EndOffset &&
-                        endOffset >= line.Offset &&
-                        endOffset <= line.EndOffset)
-                        ChangeLinePart(
-                            startOffset,
-                            endOffset,
-                            (element) =>
-                            {
-                                element.TextRunProperties.SetTextDecorations(ERROR_DECORATIONS);
-                            });
+                        if (endOffset > startOffset &&
+                            startOffset >= line.Offset &&
+                            startOffset <= line.EndOffset &&
+                            endOffset >= line.Offset &&
+                            endOffset <= line.EndOffset)
+                            ChangeLinePart(
+                                startOffset,
+                                endOffset,
+                                (element) =>
+                                {
+                                    element.TextRunProperties.SetTextDecorations(ERROR_DECORATIONS);
+                                });
+                    }
                 }
             }
         }

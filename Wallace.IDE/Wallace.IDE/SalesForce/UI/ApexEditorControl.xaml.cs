@@ -30,6 +30,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Resources;
+using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
@@ -83,6 +84,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private LanguageManager _languageManager;
 
+        /// <summary>
+        /// Dispalyed when a user hovers the mouse in the document.
+        /// </summary>
+        private ToolTip _toolTip;
+
         #endregion
 
         #region Constructors
@@ -104,6 +110,8 @@ namespace Wallace.IDE.SalesForce.UI
             _colorTransformer = new ApexDocumentColorizingTransformer();
             textEditor.TextArea.TextView.LineTransformers.Add(_colorTransformer);
             textEditor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
+            textEditor.MouseHover += textEditor_MouseHover;
+            textEditor.MouseHoverStopped += textEditor_MouseHoverStopped;
             textEditor.TextArea.SelectionCornerRadius = 0;
             textEditor.TextArea.SelectionBrush = Brushes.LightBlue;
             textEditor.TextArea.SelectionBorder = null;
@@ -113,6 +121,7 @@ namespace Wallace.IDE.SalesForce.UI
 
             _searchPanel = SearchPanel.Install(textEditor.TextArea);
             _searchPanel.MarkerBrush = Brushes.DarkOrange;
+            _toolTip = new ToolTip();
 
             _suspendNavigation = false;
             _suspendParse = false;
@@ -305,8 +314,7 @@ namespace Wallace.IDE.SalesForce.UI
             if (LanguageManager != null)
             {
                 _parseData = LanguageManager.ParseApex(text);
-                _colorTransformer.SetTypeReferences(_parseData.TypeReferences);
-                _colorTransformer.SetErrors(_parseData.Errors);
+                _colorTransformer.ParseData = _parseData;
             }
         }
 
@@ -672,6 +680,60 @@ namespace Wallace.IDE.SalesForce.UI
                             break;
                     }
                 }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Close tooltip.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void textEditor_MouseHoverStopped(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                _toolTip.IsOpen = false;
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Open tooltip.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void textEditor_MouseHover(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (_parseData != null)
+                {
+                    TextViewPosition? position = textEditor.GetPositionFromPoint(e.GetPosition(textEditor));
+                    if (position != null)
+                    {
+                        if (_parseData.ErrorsByLine.ContainsKey(position.Value.Line))
+                        {
+                            foreach (LanguageError err in _parseData.ErrorsByLine[position.Value.Line])
+                            {
+                                if (err.Location.Contains(position.Value.Line, position.Value.Column))
+                                {
+                                    _toolTip.PlacementTarget = this;
+                                    _toolTip.Content = err.Message;
+                                    _toolTip.IsOpen = true;
+                                    e.Handled = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                
             }
             catch (Exception err)
             {

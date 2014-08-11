@@ -70,27 +70,38 @@ namespace SalesForceLanguage
         /// <summary>
         /// Check to see if the given position is contained within this span.
         /// </summary>
+        /// <param name="line">The line number of the position to check.</param>
+        /// <param name="column">The column number of the position to check.</param>
+        /// <returns>true if the given position is contained within this span.</returns>
+        public bool Contains(int line, int column)
+        {
+            if (StartPosition.Line == line)
+            {
+                if (StartPosition.Line == EndPosition.Line)
+                    return StartPosition.Column <= column && EndPosition.Column >= column;
+                else
+                    return StartPosition.Column <= column;
+            }
+
+            if (EndPosition.Line == line)
+            {
+                if (StartPosition.Line == EndPosition.Line)
+                    return StartPosition.Column <= column && EndPosition.Column >= column;
+                else
+                    return EndPosition.Column >= column;
+            }
+
+            return (StartPosition.Line < line && EndPosition.Line > line);
+        }
+
+        /// <summary>
+        /// Check to see if the given position is contained within this span.
+        /// </summary>
         /// <param name="position">The position to check.</param>
         /// <returns>true if the given position is contained within this span.</returns>
         public bool Contains(TextPosition position)
         {
-            if (StartPosition.Line == position.Line)
-            {
-                if (StartPosition.Line == EndPosition.Line)
-                    return StartPosition.Column <= position.Column && EndPosition.Column >= position.Column;
-                else
-                    return StartPosition.Column <= position.Column;
-            }
-
-            if (EndPosition.Line == position.Line)
-            {
-                if (StartPosition.Line == EndPosition.Line)
-                    return StartPosition.Column <= position.Column && EndPosition.Column >= position.Column;
-                else
-                    return EndPosition.Column >= position.Column;
-            }
-
-            return (StartPosition.Line < position.Line && EndPosition.Line > position.Line);
+            return Contains(position.Line, position.Column);
         }
 
         /// <summary>

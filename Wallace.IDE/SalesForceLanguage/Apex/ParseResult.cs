@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using System.Collections.Generic;
 using SalesForceLanguage.Apex.CodeModel;
 
 namespace SalesForceLanguage.Apex
@@ -29,6 +30,20 @@ namespace SalesForceLanguage.Apex
     /// </summary>
     public class ParseResult
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the ErrorsByLine property.
+        /// </summary>
+        private Dictionary<int, List<LanguageError>> _errorsByLine;
+
+        /// <summary>
+        /// Supports the TypeReferencesByLine property.
+        /// </summary>
+        private Dictionary<int, List<TextSpan>> _typeReferencesByLine;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -41,6 +56,9 @@ namespace SalesForceLanguage.Apex
             Symbols = symbols;
             TypeReferences = typeReferences ?? new ReferenceTypeSymbol[0];
             Errors = errors ?? new LanguageError[0];
+
+            _errorsByLine = null;
+            _typeReferencesByLine = null;
         }
 
         #endregion
@@ -58,9 +76,76 @@ namespace SalesForceLanguage.Apex
         public ReferenceTypeSymbol[] TypeReferences { get; private set; }
 
         /// <summary>
+        /// Get the type references organzied by line number.
+        /// </summary>
+        public Dictionary<int, List<TextSpan>> TypeReferencesByLine
+        {
+            get
+            {
+                if (_typeReferencesByLine == null)
+                {
+                    _typeReferencesByLine = new Dictionary<int, List<TextSpan>>();
+                    if (TypeReferences != null)
+                    {
+                        foreach (ReferenceTypeSymbol s in TypeReferences)
+                        {
+                            List<TextSpan> spans = null;
+                            if (_typeReferencesByLine.ContainsKey(s.Location.Line))
+                            {
+                                spans = _typeReferencesByLine[s.Location.Line];
+                            }
+                            else
+                            {
+                                spans = new List<TextSpan>();
+                                _typeReferencesByLine.Add(s.Location.Line, spans);
+                            }
+
+                            foreach (TextSpan span in s.Parts)
+                                spans.Add(span);
+                        }
+                    }
+                }
+
+                return _typeReferencesByLine;
+            }
+        }
+
+        /// <summary>
         /// Any language errors that occured.
         /// </summary>
         public LanguageError[] Errors { get; private set; }
+
+        /// <summary>
+        /// Get the errors organized by line number.
+        /// </summary>
+        public Dictionary<int, List<LanguageError>> ErrorsByLine
+        {
+            get
+            {
+                if (_errorsByLine == null)
+                {
+                    _errorsByLine = new Dictionary<int, List<LanguageError>>();
+                    if (Errors != null)
+                    {
+                        foreach (LanguageError e in Errors)
+                        {
+                            if (_errorsByLine.ContainsKey(e.Location.StartPosition.Line))
+                            {
+                                _errorsByLine[e.Location.StartPosition.Line].Add(e);
+                            }
+                            else
+                            {
+                                List<LanguageError> list = new List<LanguageError>();
+                                list.Add(e);
+                                _errorsByLine.Add(e.Location.StartPosition.Line, list);
+                            }
+                        }
+                    }
+                }
+
+                return _errorsByLine;
+            }
+        }
 
         #endregion
     }
