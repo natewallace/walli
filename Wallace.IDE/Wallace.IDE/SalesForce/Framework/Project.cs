@@ -236,8 +236,6 @@ namespace Wallace.IDE.SalesForce.Framework
                 stream.Close();
             }
 
-            //System.Threading.ThreadPool.QueueUserWorkItem(project.LoadSymbols);
-
             return project;
         }
 
@@ -282,17 +280,29 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
-        /// Called by another thread to load symbols in the background.
+        /// Loads symbols for the project in the background.
         /// </summary>
-        /// <param name="state">Not used.</param>
-        private void LoadSymbols(object state)
+        public void LoadSymbolsAsync()
         {
-            if (Client != null)
-            {
-                SalesForceLanguage.Apex.CodeModel.SymbolTable[] symbols = Client.GetSymbols();
-                if (Language != null)
-                    Language.UpdateSymbols(symbols, false);
-            }
+            System.Threading.ThreadPool.QueueUserWorkItem(
+                (state) =>
+                {
+                    object[] parameters = state as object[];
+                    SalesForceClient client = parameters[0] as SalesForceClient;
+                    LanguageManager language = parameters[1] as LanguageManager;
+
+                    if (client != null)
+                    {
+                        SalesForceLanguage.Apex.CodeModel.SymbolTable[] symbols = client.GetSymbols();
+                        if (language != null)
+                            language.UpdateSymbols(symbols, false);
+                    }
+                },
+                new object[]
+                {
+                    Client,
+                    Language
+                });
         }
 
         /// <summary>

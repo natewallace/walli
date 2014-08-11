@@ -200,6 +200,7 @@ namespace SalesForceData
         {
             InitClients();
 
+            // get class ids
             DataSelectResult classData = DataSelectAll("SELECT Id FROM ApexClass");
             List<string> classIds = new List<string>();
             foreach (DataRow row in classData.Data.Rows)
