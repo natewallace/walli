@@ -1,11 +1,11 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 8/10/2014 7:17:48 AM>
+//  GPPG error listing for yacc source file <C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 8/11/2014 10:55:37 AM>
 // ==========================================================================
 //  Version:  1.5.0
-//  Machine:  OFFICEDESKTOP
-//  DateTime: 8/10/2014 7:17:51 AM
-//  UserName: Nate
+//  Machine:  PTLLDVC0ZN1
+//  DateTime: 8/11/2014 10:55:49 AM
+//  UserName: DUX07
 // ==========================================================================
 
 
@@ -247,7 +247,6 @@
 %token grammar_conditional_and_expression
 %token grammar_conditional_expression
 %token grammar_conditional_or_expression
-%token grammar_constant_declaration
 %token grammar_constant_declarator
 %token grammar_constant_declarators
 %token grammar_constant_expression
@@ -257,6 +256,7 @@
 %token grammar_continue_statement
 %token grammar_declaration_statement
 %token grammar_dim_separators
+%token grammar_dml_expression
 %token grammar_do_statement
 %token grammar_element_access
 %token grammar_embedded_statement
@@ -302,7 +302,6 @@
 %token grammar_iteration_statement
 %token grammar_jump_statement
 %token grammar_literal
-%token grammar_local_constant_declaration
 %token grammar_local_variable_declaration
 %token grammar_local_variable_declarator
 %token grammar_local_variable_declarators
@@ -357,6 +356,7 @@
 %token grammar_trigger_declaration
 %token grammar_trigger_event
 %token grammar_trigger_events
+%token grammar_trigger_header
 %token grammar_try_statement
 %token grammar_type
 %token grammar_type_declaration
@@ -385,10 +385,10 @@
 %right OPERATOR_INCREMENT OPERATOR_DECREMENT OPERATOR_LOGICAL_COMPLEMENT
 
 %%
-// Warning: NonTerminal symbol "trigger_event" is unreachable
-// Warning: NonTerminal symbol "trigger_events" is unreachable
-// Warning: NonTerminal symbol "trigger_declaration" is unreachable
-// ----------------------------------------------------------------
+// Warning: NonTerminal symbol "constant_declarator" is unreachable
+// Warning: NonTerminal symbol "constant_declarators" is unreachable
+// Warning: NonTerminal symbol "constant_expression" is unreachable
+// -----------------------------------------------------------------
  
 identifier:
 	KEYWORD_ANNOTATE IDENTIFIER |
@@ -407,7 +407,8 @@ non_reserved_identifier:
     KEYWORD_INSERT |
     KEYWORD_UNDELETE |
     KEYWORD_UPDATE |
-    KEYWORD_UPSERT ;
+    KEYWORD_UPSERT |
+	KEYWORD_NEW ;
 
 literal:
 	LITERAL_TRUE |
@@ -449,7 +450,8 @@ simple_type:
 	KEYWORD_BLOB |
 	KEYWORD_DATE |
 	KEYWORD_DATETIME |
-	KEYWORD_BOOLEAN ;
+	KEYWORD_BOOLEAN | 
+	KEYWORD_STRING ;
 
 numeric_type:
 	integral_type |
@@ -472,8 +474,7 @@ reference_type:
 	array_type ;
 
 class_type:
-	type_name |
-	KEYWORD_STRING ;
+	type_name ;
 
 interface_type:
 	type_name ;
@@ -528,7 +529,9 @@ primary_no_array_creation_expression:
 	base_access |
 	post_increment_expression |
 	post_decrement_expression |
-	object_creation_expression ;
+	object_creation_expression |
+	SOQL |
+	SOSL ;
 
 simple_name:
 	identifier ;
@@ -686,9 +689,7 @@ assignment_operator:
 
 expression:
 	conditional_expression |
-	assignment |
-	SOQL |
-	SOSL ;
+	assignment ;
 
 constant_expression:
 	expression ;
@@ -722,8 +723,7 @@ empty_statement:
 	SEPARATOR_SEMICOLON ;
 
 declaration_statement:
-	local_variable_declaration SEPARATOR_SEMICOLON |
-	local_constant_declaration SEPARATOR_SEMICOLON ;
+	local_variable_declaration SEPARATOR_SEMICOLON ;
 
 local_variable_declaration:
 	type local_variable_declarators ;
@@ -739,9 +739,6 @@ local_variable_declarator:
 local_variable_initializer:
 	expression |
 	array_initializer ;
-
-local_constant_declaration:
-	KEYWORD_FINAL type constant_declarators ;
 
 constant_declarators:
 	constant_declarator |
@@ -760,7 +757,16 @@ statement_expression:
 	post_increment_expression |
 	post_decrement_expression |
 	pre_increment_expression |
-	pre_decrement_expression ;
+	pre_decrement_expression |
+	dml_expression ;
+
+dml_expression:
+	KEYWORD_INSERT expression |
+    KEYWORD_UPDATE expression |
+    KEYWORD_UPSERT expression |
+    KEYWORD_DELETE expression |
+    KEYWORD_UNDELETE expression |
+    KEYWORD_MERGE expression ;
 
 selection_statement:
 	if_statement ;
@@ -857,7 +863,8 @@ finally_clause:
 
 compilation_unit:
 	|
-	type_declaration ;
+	type_declaration |
+	trigger_declaration ;
 
 type_declaration:
 	class_declaration |
@@ -900,7 +907,6 @@ class_member_declarations:
 	class_member_declarations class_member_declaration ;
 
 class_member_declaration:
-	constant_declaration |
 	field_declaration |
 	method_declaration |
 	property_declaration |
@@ -909,12 +915,6 @@ class_member_declaration:
 	type_declaration |
 	error SEPARATOR_SEMICOLON { Error(); } |
 	error SEPARATOR_BRACE_RIGHT { Error(); } ;
-
-constant_declaration:
-	           modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	                     KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	attributes modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	attributes           KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON ;
 
 constant_declarators:
 	constant_declarator |
@@ -1132,9 +1132,11 @@ modifier:
 	KEYWORD_OVERRIDE |
 	KEYWORD_VIRTUAL |
 	KEYWORD_TESTMETHOD |
+	KEYWORD_TRANSIENT |
 	KEYWORD_WITHSHARING |
 	KEYWORD_WITHOUTSHARING |
-	KEYWORD_WEBSERVICE ;
+	KEYWORD_WEBSERVICE |
+	KEYWORD_FINAL ;
 
 attributes:
 	attribute_sections ;
@@ -1162,6 +1164,9 @@ attribute_argument_expression:
 	expression ;
 
 trigger_declaration:
+	trigger_header method_body ;
+
+trigger_header:
 	KEYWORD_TRIGGER simple_name KEYWORD_ON simple_name SEPARATOR_PARENTHESES_LEFT trigger_events SEPARATOR_PARENTHESES_RIGHT ;
 
 trigger_events:

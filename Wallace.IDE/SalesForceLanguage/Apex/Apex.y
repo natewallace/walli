@@ -236,7 +236,6 @@
 %token grammar_conditional_and_expression
 %token grammar_conditional_expression
 %token grammar_conditional_or_expression
-%token grammar_constant_declaration
 %token grammar_constant_declarator
 %token grammar_constant_declarators
 %token grammar_constant_expression
@@ -246,6 +245,7 @@
 %token grammar_continue_statement
 %token grammar_declaration_statement
 %token grammar_dim_separators
+%token grammar_dml_expression
 %token grammar_do_statement
 %token grammar_element_access
 %token grammar_embedded_statement
@@ -291,7 +291,6 @@
 %token grammar_iteration_statement
 %token grammar_jump_statement
 %token grammar_literal
-%token grammar_local_constant_declaration
 %token grammar_local_variable_declaration
 %token grammar_local_variable_declarator
 %token grammar_local_variable_declarators
@@ -515,7 +514,9 @@ primary_no_array_creation_expression:
 	base_access |
 	post_increment_expression |
 	post_decrement_expression |
-	object_creation_expression ;
+	object_creation_expression |
+	SOQL |
+	SOSL ;
 
 simple_name:
 	identifier ;
@@ -673,9 +674,7 @@ assignment_operator:
 
 expression:
 	conditional_expression |
-	assignment |
-	SOQL |
-	SOSL ;
+	assignment ;
 
 constant_expression:
 	expression ;
@@ -709,8 +708,7 @@ empty_statement:
 	SEPARATOR_SEMICOLON ;
 
 declaration_statement:
-	local_variable_declaration SEPARATOR_SEMICOLON |
-	local_constant_declaration SEPARATOR_SEMICOLON ;
+	local_variable_declaration SEPARATOR_SEMICOLON ;
 
 local_variable_declaration:
 	type local_variable_declarators ;
@@ -726,9 +724,6 @@ local_variable_declarator:
 local_variable_initializer:
 	expression |
 	array_initializer ;
-
-local_constant_declaration:
-	KEYWORD_FINAL type constant_declarators ;
 
 constant_declarators:
 	constant_declarator |
@@ -747,7 +742,16 @@ statement_expression:
 	post_increment_expression |
 	post_decrement_expression |
 	pre_increment_expression |
-	pre_decrement_expression ;
+	pre_decrement_expression |
+	dml_expression ;
+
+dml_expression:
+	KEYWORD_INSERT expression |
+    KEYWORD_UPDATE expression |
+    KEYWORD_UPSERT expression |
+    KEYWORD_DELETE expression |
+    KEYWORD_UNDELETE expression |
+    KEYWORD_MERGE expression ;
 
 selection_statement:
 	if_statement ;
@@ -888,7 +892,6 @@ class_member_declarations:
 	class_member_declarations class_member_declaration ;
 
 class_member_declaration:
-	constant_declaration |
 	field_declaration |
 	method_declaration |
 	property_declaration |
@@ -897,12 +900,6 @@ class_member_declaration:
 	type_declaration |
 	error SEPARATOR_SEMICOLON { Error(); } |
 	error SEPARATOR_BRACE_RIGHT { Error(); } ;
-
-constant_declaration:
-	           modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	                     KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	attributes modifiers KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON |
-	attributes           KEYWORD_FINAL type constant_declarators SEPARATOR_SEMICOLON ;
 
 constant_declarators:
 	constant_declarator |
@@ -1123,7 +1120,8 @@ modifier:
 	KEYWORD_TRANSIENT |
 	KEYWORD_WITHSHARING |
 	KEYWORD_WITHOUTSHARING |
-	KEYWORD_WEBSERVICE ;
+	KEYWORD_WEBSERVICE |
+	KEYWORD_FINAL ;
 
 attributes:
 	attribute_sections ;

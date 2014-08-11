@@ -153,9 +153,12 @@ namespace Wallace.IDE.SalesForce.UI
                 foreach (TextSpan span in _typeReferences[line.LineNumber])
                 {
                     int startOffset = line.Offset + span.StartPosition.Column - 1;
-                    int endOffset = line.Offset + span.EndPosition.Column;
+                    int endOffset = line.Offset + span.EndPosition.Column - 1;
+                    if (startOffset == endOffset)
+                        endOffset++;
 
-                    if (startOffset >= line.Offset &&
+                    if (endOffset > startOffset &&
+                        startOffset >= line.Offset &&
                         startOffset <= line.EndOffset &&
                         endOffset >= line.Offset &&
                         endOffset <= line.EndOffset)
@@ -175,9 +178,12 @@ namespace Wallace.IDE.SalesForce.UI
                 foreach (LanguageError error in _errors[line.LineNumber])
                 {
                     int startOffset = line.Offset + error.Location.StartPosition.Column - 1;
-                    int endOffset = line.Offset + error.Location.EndPosition.Column;
+                    int endOffset = line.Offset + error.Location.EndPosition.Column - 1;
+                    if (startOffset == endOffset)
+                        endOffset++;
 
-                     if (startOffset >= line.Offset &&
+                    if (endOffset > startOffset &&
+                        startOffset >= line.Offset &&
                         startOffset <= line.EndOffset &&
                         endOffset >= line.Offset &&
                         endOffset <= line.EndOffset)
