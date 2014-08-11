@@ -16,7 +16,6 @@
                 <ResourceDictionary Source="Framework/Styles/ChromeToolbarStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/TreeViewMultiSelectItemStyle.xaml" />
                 <ResourceDictionary Source="SalesForce/UI/SearchPanelStyle.xaml" />
-                <ResourceDictionary Source="SalesForce/UI/CompletionWindowStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Style TargetType="FrameworkElement">
