@@ -70,6 +70,20 @@ namespace SalesForceLanguage
         #region Methods
 
         /// <summary>
+        /// Parse the text and give possible symbols that can be added to the end of the text.
+        /// </summary>
+        /// <param name="text">The text to get code completions for.</param>
+        /// <returns>Valid symbols that can be used for the code completion.</returns>
+        public Symbol[] GetCodeCompletions(string text)
+        {
+            List<Symbol> result = new List<Symbol>();
+            result.Add(new Property(new TextPosition(0, 0), "MyTest", null, SymbolVisibility.Public, "string"));
+            result.Add(new Property(new TextPosition(0, 0), "Apple", null, SymbolVisibility.Public, "string"));
+
+            return result.ToArray();
+        }
+
+        /// <summary>
         /// Update the symbols in the manager.
         /// </summary>
         /// <param name="symbols">The symbols to update.</param>
@@ -95,6 +109,7 @@ namespace SalesForceLanguage
             {
                 foreach (SymbolTable st in symbols)
                 {
+                    // update symbols in memory
                     string key = st.Name.ToLower();
                     if (replace)
                     {
@@ -109,6 +124,7 @@ namespace SalesForceLanguage
                             save = false;
                     }
 
+                    // save to local cache
                     if (save && !String.IsNullOrWhiteSpace(SymbolsFolder))
                     {
                         string fileName = Path.Combine(SymbolsFolder, st.Name.ToLower());
@@ -120,6 +136,12 @@ namespace SalesForceLanguage
                             fs.Flush();
                             fs.Close();
                         }
+                    }
+
+                    // process inner classes
+                    foreach (SymbolTable innerClass in st.InnerClasses)
+                    {
+                        UpdateSymbols(innerClass, replace, save);
                     }
                 }
             }

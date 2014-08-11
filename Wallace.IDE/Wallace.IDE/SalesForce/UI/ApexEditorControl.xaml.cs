@@ -31,6 +31,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Resources;
 using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
@@ -84,6 +85,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private ToolTip _toolTip;
 
+        /// <summary>
+        /// Window used for code completions.
+        /// </summary>
+        private CompletionWindow _completionWindow;
+
         #endregion
 
         #region Constructors
@@ -107,6 +113,8 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
             textEditor.MouseHover += textEditor_MouseHover;
             textEditor.MouseHoverStopped += textEditor_MouseHoverStopped;
+            textEditor.TextArea.TextEntered += TextArea_TextEntered;
+            textEditor.TextArea.TextEntering += TextArea_TextEntering;
             textEditor.TextArea.SelectionCornerRadius = 0;
             textEditor.TextArea.SelectionBrush = Brushes.LightBlue;
             textEditor.TextArea.SelectionBorder = null;
@@ -117,6 +125,7 @@ namespace Wallace.IDE.SalesForce.UI
             _searchPanel = SearchPanel.Install(textEditor.TextArea);
             _searchPanel.MarkerBrush = Brushes.DarkOrange;
             _toolTip = new ToolTip();
+            _completionWindow = null;
 
             _suspendNavigation = false;
             _suspendParse = false;
@@ -734,6 +743,62 @@ namespace Wallace.IDE.SalesForce.UI
                     }
                 }
                 
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Show completion window.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void TextArea_TextEntered(object sender, TextCompositionEventArgs e)
+        {
+            try
+            {
+                if (Language != null)
+                {
+                    if (e.Text == ".")
+                    {
+                        _completionWindow = new CompletionWindow(textEditor.TextArea);
+                        _completionWindow.Style = null;
+                        _completionWindow.Foreground = Brushes.Black;
+                        _completionWindow.Background = Brushes.White;
+                        _completionWindow.BorderThickness = new Thickness(1);
+                        _completionWindow.BorderBrush = Brushes.Gray;
+
+                        foreach (Symbol symbol in LanguageManager.GetCodeCompletions(null))
+                            _completionWindow.CompletionList.CompletionData.Add(new ApexCodeCompletionData(symbol));
+                        _completionWindow.Show();
+                        _completionWindow.Closed += delegate { _completionWindow = null; };
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Process text input while completion window is open.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void TextArea_TextEntering(object sender, TextCompositionEventArgs e)
+        {
+            try
+            {
+                if (_completionWindow != null && e.Text.Length > 0)
+                {
+                    if (!char.IsLetterOrDigit(e.Text[0]))
+                    {
+                        _completionWindow.CompletionList.RequestInsertion(e);
+                    }
+                }
             }
             catch (Exception err)
             {

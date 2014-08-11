@@ -119,6 +119,7 @@
     <Compile Include="SalesForce\Node\DeployFolderNode.cs" />
     <Compile Include="SalesForce\Node\PackageNode.cs" />
     <Compile Include="SalesForce\Node\SourceFolderNode.cs" />
+    <Compile Include="SalesForce\UI\ApexCodeCompletionData.cs" />
     <Compile Include="SalesForce\UI\ApexDocumentColorizingTransformer.cs" />
     <Compile Include="SalesForce\UI\ApexEditorControl.xaml.cs">
       <DependentUpon>ApexEditorControl.xaml</DependentUpon>

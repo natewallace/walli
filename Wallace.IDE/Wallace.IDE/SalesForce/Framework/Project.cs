@@ -271,8 +271,6 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public void LoadSymbolsAsync()
         {
-            _symbolsDownloaded.Reset();
-
             if (Directory.GetFiles(SymbolsFolder).Length == 0)
             {
                 ThreadPool.QueueUserWorkItem(
@@ -285,6 +283,8 @@ namespace Wallace.IDE.SalesForce.Framework
 
                         try
                         {
+                            project._symbolsDownloaded.Reset();
+
                             // get class ids
                             DataSelectResult data = client.DataSelect("SELECT Id FROM ApexClass");
                             Queue<string> classIds = new Queue<string>();
