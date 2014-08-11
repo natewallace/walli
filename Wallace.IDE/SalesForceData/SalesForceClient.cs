@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using SalesForceLanguage.Apex.CodeModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -191,18 +192,38 @@ namespace SalesForceData
             }
         }
 
-        public void GetSymbols()
+        /// <summary>
+        /// Get the symbols for the entire system.
+        /// </summary>
+        /// <returns>All symbols.</returns>
+        public SymbolTable[] GetSymbols()
         {
             InitClients();
 
+            DataSelectResult classData = DataSelectAll("SELECT Id FROM ApexClass");
+            List<string> classIds = new List<string>();
+            foreach (DataRow row in classData.Data.Rows)
+                classIds.Add(row["Id"] as string);
+
             SalesForceAPI.Tooling.retrieveResponse response = _toolingClient.retrieve(new SalesForceAPI.Tooling.retrieveRequest(
                 new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                "Body, SymbolTable",
+                "SymbolTable",
                 "ApexClass",
-                new string[] { "01pi00000063TrHAAU" }
+                classIds.ToArray()
                 ));
 
-            SalesForceAPI.Tooling.ApexClass m = response.result[0] as SalesForceAPI.Tooling.ApexClass;
+            List<SymbolTable> result = new List<SymbolTable>();
+            if (response.result != null)
+            {
+                foreach (SalesForceAPI.Tooling.sObject obj in response.result)
+                {
+                    SalesForceAPI.Tooling.ApexClass apexClass = obj as SalesForceAPI.Tooling.ApexClass;
+                    if (apexClass != null && apexClass.SymbolTable != null)
+                        result.Add(CodeModelConversion.Convert(apexClass.SymbolTable));
+                }
+            }
+
+            return result.ToArray();
         }
 
         /// <summary>

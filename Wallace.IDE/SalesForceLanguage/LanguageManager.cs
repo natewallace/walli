@@ -25,6 +25,8 @@ using System.IO;
 using System.Text;
 using SalesForceLanguage.Apex;
 using SalesForceLanguage.Apex.Parser;
+using System.Collections.Generic;
+using SalesForceLanguage.Apex.CodeModel;
 
 namespace SalesForceLanguage
 {
@@ -33,7 +35,69 @@ namespace SalesForceLanguage
     /// </summary>
     public class LanguageManager
     {
+        #region Fields
+
+        /// <summary>
+        /// Holds all classes that have been parsed.
+        /// </summary>
+        private Dictionary<string, SymbolTable> _classes;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public LanguageManager()
+        {
+            _classes = new Dictionary<string, SymbolTable>();
+        }
+
+        #endregion
+
         #region Methods
+
+        /// <summary>
+        /// Update the symbols in the manager.
+        /// </summary>
+        /// <param name="symbols">The symbols to update.</param>
+        /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
+        public void UpdateSymbols(IEnumerable<SymbolTable> symbols, bool replace)
+        {
+            if (symbols == null)
+                throw new ArgumentNullException("symbols");
+
+            lock (_classes)
+            {
+                foreach (SymbolTable st in symbols)
+                {
+                    string key = st.Name.ToLower();
+                    if (replace)
+                    {
+                        _classes.Remove(key);
+                        _classes.Add(key, st);
+                    }
+                    else
+                    {
+                        if (!_classes.ContainsKey(key))
+                            _classes.Add(key, st);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove the given symbols.
+        /// </summary>
+        /// <param name="name">The class name of the symbols to remove.</param>
+        public void RemoveSymbols(string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException("name");
+
+            _classes.Remove(name.ToLower());
+        }
 
         /// <summary>
         /// Parse the given text for an apex document.
@@ -43,15 +107,16 @@ namespace SalesForceLanguage
         public ParseResult ParseApex(string text)
         {
             if (String.IsNullOrWhiteSpace(text))
-            {
                 return new ParseResult(null, null, new LanguageError[0]);
-            }
 
             using (MemoryStream reader = new MemoryStream(Encoding.ASCII.GetBytes(text)))
             {
                 ApexParser parser = new ApexParser(new ApexLexer(reader));
 
                 parser.ParseApex();
+
+                if (parser.Symbols != null)
+                    UpdateSymbols(new SymbolTable[] { parser.Symbols }, true);
 
                 return new ParseResult(
                     parser.Symbols,

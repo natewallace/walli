@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using SalesForceData;
+using SalesForceLanguage;
 
 namespace Wallace.IDE.SalesForce.Framework
 {
@@ -82,7 +83,9 @@ namespace Wallace.IDE.SalesForce.Framework
             Credential = credential;
             ProjectFolder = Path.Combine(ROOT_FOLDER, credential.Username);
             ProjectFile = Path.Combine(ProjectFolder, String.Format("{0}.sfdcProject", credential.Username));
-            DeployFolder = Path.Combine(ProjectFolder, "Deploy");            
+            DeployFolder = Path.Combine(ProjectFolder, "Deploy");
+
+            Language = new LanguageManager();
         }
 
         #endregion
@@ -113,6 +116,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// The client to use with this project.
         /// </summary>
         public SalesForceClient Client { get; private set; }
+
+        /// <summary>
+        /// The language manager to use with this project.
+        /// </summary>
+        public LanguageManager Language { get; private set; }
 
         /// <summary>
         /// The name of the project.
@@ -228,6 +236,8 @@ namespace Wallace.IDE.SalesForce.Framework
                 stream.Close();
             }
 
+            //System.Threading.ThreadPool.QueueUserWorkItem(project.LoadSymbols);
+
             return project;
         }
 
@@ -268,6 +278,20 @@ namespace Wallace.IDE.SalesForce.Framework
                 }
 
                 stream.Close();
+            }
+        }
+
+        /// <summary>
+        /// Called by another thread to load symbols in the background.
+        /// </summary>
+        /// <param name="state">Not used.</param>
+        private void LoadSymbols(object state)
+        {
+            if (Client != null)
+            {
+                SalesForceLanguage.Apex.CodeModel.SymbolTable[] symbols = Client.GetSymbols();
+                if (Language != null)
+                    Language.UpdateSymbols(symbols, false);
             }
         }
 

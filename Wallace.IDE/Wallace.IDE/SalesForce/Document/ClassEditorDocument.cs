@@ -43,6 +43,7 @@ namespace Wallace.IDE.SalesForce.Document
         public ClassEditorDocument(Project project, SourceFile classFile)
             : base(project, classFile)
         {
+            View.LanguageManager = project.Language;
         }
 
         #endregion

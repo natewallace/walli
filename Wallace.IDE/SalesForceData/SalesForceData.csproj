@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeModelConversion.cs" />
     <Compile Include="DataSelectResult.cs" />
     <Compile Include="FieldType.cs" />
     <Compile Include="Package.cs" />
@@ -151,6 +152,12 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SalesForceLanguage\SalesForceLanguage.csproj">
+      <Project>{de715101-f43e-4f55-9957-310f36534f28}</Project>
+      <Name>SalesForceLanguage</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

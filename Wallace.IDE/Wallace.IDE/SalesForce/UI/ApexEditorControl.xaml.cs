@@ -54,11 +54,6 @@ namespace Wallace.IDE.SalesForce.UI
         private ApexDocumentColorizingTransformer _colorTransformer;
 
         /// <summary>
-        /// Used to parse the apex.
-        /// </summary>
-        private LanguageManager _language;
-
-        /// <summary>
         /// When set to true, navigation is suspended.
         /// </summary>
         private bool _suspendNavigation;
@@ -82,6 +77,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// The text search panel.
         /// </summary>
         private SearchPanel _searchPanel;
+
+        /// <summary>
+        /// Supports the LanguageManager property.
+        /// </summary>
+        private LanguageManager _languageManager;
 
         #endregion
 
@@ -114,7 +114,6 @@ namespace Wallace.IDE.SalesForce.UI
             _searchPanel = SearchPanel.Install(textEditor.TextArea);
             _searchPanel.MarkerBrush = Brushes.DarkOrange;
 
-            _language = new LanguageManager();
             _suspendNavigation = false;
             _suspendParse = false;
 
@@ -129,6 +128,22 @@ namespace Wallace.IDE.SalesForce.UI
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The language manager to use.
+        /// </summary>
+        public LanguageManager LanguageManager
+        {
+            get
+            {
+                return _languageManager;
+            }
+            set
+            {
+                _languageManager = value;
+                ParseText(Text);
+            }
+        }
 
         /// <summary>
         /// The Text displayed.
@@ -271,9 +286,12 @@ namespace Wallace.IDE.SalesForce.UI
         /// <param name="text">The text to parse.</param>
         private void ParseText(string text)
         {
-            _parseData = _language.ParseApex(text);
-            _colorTransformer.SetTypeReferences(_parseData.TypeReferences);
-            _colorTransformer.SetErrors(_parseData.Errors);
+            if (LanguageManager != null)
+            {
+                _parseData = LanguageManager.ParseApex(text);
+                _colorTransformer.SetTypeReferences(_parseData.TypeReferences);
+                _colorTransformer.SetErrors(_parseData.Errors);
+            }
         }
 
         /// <summary>
