@@ -22,7 +22,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Text;
+using System.Threading;
 using System.Xml;
 using SalesForceData;
 using SalesForceLanguage;
@@ -55,6 +58,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// Supports the Credential property.
         /// </summary>
         private SalesForceCredential _credential;
+
+        /// <summary>
+        /// Signaled after symbols have been downloaded.
+        /// </summary>
+        private EventWaitHandle _symbolsDownloaded;
 
         #endregion
 
@@ -93,6 +101,8 @@ namespace Wallace.IDE.SalesForce.Framework
                 Directory.CreateDirectory(SymbolsFolder);
 
             Language = new LanguageManager(SymbolsFolder);
+
+            _symbolsDownloaded = new EventWaitHandle(true, EventResetMode.ManualReset);
         }
 
         #endregion
@@ -256,6 +266,56 @@ namespace Wallace.IDE.SalesForce.Framework
         #region Methods
 
         /// <summary>
+        /// Checks to see if symbols have already been downloaded.  If they haven't, they are loaded from the server
+        /// in the background.
+        /// </summary>
+        public void LoadSymbolsAsync()
+        {
+            _symbolsDownloaded.Reset();
+
+            if (Directory.GetFiles(SymbolsFolder).Length == 0)
+            {
+                ThreadPool.QueueUserWorkItem(
+                    (state) =>
+                    {
+                        object[] parameters = state as object[];
+                        Project project = parameters[0] as Project;
+                        SalesForceClient client = parameters[1] as SalesForceClient;
+                        LanguageManager language = parameters[2] as LanguageManager;
+
+                        try
+                        {
+                            // get class ids
+                            DataSelectResult data = client.DataSelect("SELECT Id FROM ApexClass");
+                            Queue<string> classIds = new Queue<string>();
+                            foreach (DataRow row in data.Data.Rows)
+                                classIds.Enqueue(row["Id"] as string);
+
+                            // download symbols in groups of 10
+                            while (classIds.Count > 0)
+                            {
+                                StringBuilder query = new StringBuilder("SELECT Id, Body FROM ApexClass WHERE Id IN (");
+                                for (int i = 0; i < 10 && classIds.Count > 0; i++)
+                                    query.AppendFormat("'{0}',", classIds.Dequeue());
+
+                                query.Length = query.Length - 1;
+                                query.Append(")");
+
+                                DataSelectResult classData = client.DataSelect(query.ToString());
+                                foreach (DataRow row in classData.Data.Rows)
+                                    language.ParseApex(row["Body"] as string, false, true);
+                            }
+                        }
+                        finally
+                        {
+                            project._symbolsDownloaded.Set();
+                        }
+                    },
+                    new object[] { this, Client, Language });
+            }
+        }
+
+        /// <summary>
         /// Saves the project to disk.
         /// </summary>
         public void Save()
@@ -309,6 +369,8 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public void Dispose()
         {
+            _symbolsDownloaded.WaitOne();
+
             if (Client != null)
                 Client.Dispose();
         }

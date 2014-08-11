@@ -148,8 +148,10 @@ namespace SalesForceLanguage
         /// Parse the given text for an apex document.
         /// </summary>
         /// <param name="text">The text to parse.</param>
+        /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
+        /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
         /// <returns>The result of the parse.</returns>
-        public ParseResult ParseApex(string text)
+        public ParseResult ParseApex(string text, bool replace, bool save)
         {
             if (String.IsNullOrWhiteSpace(text))
                 return new ParseResult(null, null, new LanguageError[0]);
@@ -161,7 +163,7 @@ namespace SalesForceLanguage
                 parser.ParseApex();
 
                 if (parser.Symbols != null)
-                    UpdateSymbols(new SymbolTable[] { parser.Symbols }, true, false);
+                    UpdateSymbols(new SymbolTable[] { parser.Symbols }, replace, save);
 
                 return new ParseResult(
                     parser.Symbols,

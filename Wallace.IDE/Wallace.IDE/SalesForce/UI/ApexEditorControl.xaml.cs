@@ -313,7 +313,7 @@ namespace Wallace.IDE.SalesForce.UI
         {
             if (LanguageManager != null)
             {
-                ParseData = LanguageManager.ParseApex(text);
+                ParseData = LanguageManager.ParseApex(text, true, false);
                 _colorTransformer.ParseData = ParseData;
             }
         }
