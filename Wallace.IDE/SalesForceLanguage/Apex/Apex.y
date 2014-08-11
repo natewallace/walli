@@ -236,9 +236,6 @@
 %token grammar_conditional_and_expression
 %token grammar_conditional_expression
 %token grammar_conditional_or_expression
-%token grammar_constant_declarator
-%token grammar_constant_declarators
-%token grammar_constant_expression
 %token grammar_constructor_body
 %token grammar_constructor_declaration
 %token grammar_constructor_declarator
@@ -676,9 +673,6 @@ expression:
 	conditional_expression |
 	assignment ;
 
-constant_expression:
-	expression ;
-
 boolean_expression:
 	expression ;
 
@@ -724,13 +718,6 @@ local_variable_declarator:
 local_variable_initializer:
 	expression |
 	array_initializer ;
-
-constant_declarators:
-	constant_declarator |
-	constant_declarators SEPARATOR_COMMA constant_declarator ;
-
-constant_declarator:
-	identifier OPERATOR_ASSIGNMENT constant_expression ;
 
 expression_statement:
 	statement_expression SEPARATOR_SEMICOLON ;
@@ -900,13 +887,6 @@ class_member_declaration:
 	type_declaration |
 	error SEPARATOR_SEMICOLON { Error(); } |
 	error SEPARATOR_BRACE_RIGHT { Error(); } ;
-
-constant_declarators:
-	constant_declarator |
-	constant_declarators SEPARATOR_COMMA constant_declarator ;
-
-constant_declarator:
-	identifier OPERATOR_ASSIGNMENT constant_expression ;
 
 field_declaration:
 	           modifiers type variable_declarators SEPARATOR_SEMICOLON |

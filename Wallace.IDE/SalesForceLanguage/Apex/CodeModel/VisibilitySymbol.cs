@@ -20,6 +20,8 @@
  * THE SOFTWARE.
  */
 
+using System.Xml;
+
 namespace SalesForceLanguage.Apex.CodeModel
 {
     /// <summary>
@@ -28,6 +30,14 @@ namespace SalesForceLanguage.Apex.CodeModel
     public class VisibilitySymbol : Symbol
     {
         #region Constructors
+
+        /// <summary>
+        /// Used by xml serializer.
+        /// </summary>
+        public VisibilitySymbol()
+        {
+            Visibility = SymbolVisibility.Private;
+        }
 
         /// <summary>
         /// Constructor.
@@ -50,6 +60,30 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// The visibility of the symbol.
         /// </summary>
         public SymbolVisibility Visibility { get; private set; }
+
+        #endregion
+
+        #region IXmlSerializable Members
+
+        /// <summary>
+        /// Read in this object from the xml stream.
+        /// </summary>
+        /// <param name="reader">The xml stream to read from.</param>
+        public override void ReadXml(XmlReader reader)
+        {
+            base.ReadXml(reader);
+            Visibility = (SymbolVisibility)System.Enum.Parse(typeof(SymbolVisibility), reader["visibility"]);
+        }
+
+        /// <summary>
+        /// Write this object out to an xml stream.
+        /// </summary>
+        /// <param name="writer">The xml stream to write to.</param>
+        public override void WriteXml(XmlWriter writer)
+        {
+            base.WriteXml(writer);
+            writer.WriteAttributeString("visibility", Visibility.ToString());
+        }
 
         #endregion
     }

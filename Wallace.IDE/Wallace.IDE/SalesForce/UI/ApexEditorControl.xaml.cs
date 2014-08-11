@@ -70,11 +70,6 @@ namespace Wallace.IDE.SalesForce.UI
         private Timer _redrawTimer;
 
         /// <summary>
-        /// The most recent parse data.
-        /// </summary>
-        private ParseResult _parseData;
-
-        /// <summary>
         /// The text search panel.
         /// </summary>
         private SearchPanel _searchPanel;
@@ -131,12 +126,17 @@ namespace Wallace.IDE.SalesForce.UI
             _redrawTimer.AutoReset = false;
             _redrawTimer.Elapsed += redrawTimer_Elapsed;
 
-            _parseData = null;
+            ParseData = null;
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The parsed code.
+        /// </summary>
+        public ParseResult ParseData { get; private set; }
 
         /// <summary>
         /// The language manager to use.
@@ -313,8 +313,8 @@ namespace Wallace.IDE.SalesForce.UI
         {
             if (LanguageManager != null)
             {
-                _parseData = LanguageManager.ParseApex(text);
-                _colorTransformer.ParseData = _parseData;
+                ParseData = LanguageManager.ParseApex(text);
+                _colorTransformer.ParseData = ParseData;
             }
         }
 
@@ -476,8 +476,8 @@ namespace Wallace.IDE.SalesForce.UI
             if (apexClass == null)
             {
                 comboBoxNavigationClass.Items.Clear();
-                if (_parseData != null)
-                    apexClass = _parseData.Symbols;
+                if (ParseData != null)
+                    apexClass = ParseData.Symbols;
             }
 
             if (apexClass != null)
@@ -713,14 +713,14 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                if (_parseData != null)
+                if (ParseData != null)
                 {
                     TextViewPosition? position = textEditor.GetPositionFromPoint(e.GetPosition(textEditor));
                     if (position != null)
                     {
-                        if (_parseData.ErrorsByLine.ContainsKey(position.Value.Line))
+                        if (ParseData.ErrorsByLine.ContainsKey(position.Value.Line))
                         {
-                            foreach (LanguageError err in _parseData.ErrorsByLine[position.Value.Line])
+                            foreach (LanguageError err in ParseData.ErrorsByLine[position.Value.Line])
                             {
                                 if (err.Location.Contains(position.Value.Line, position.Value.Column))
                                 {

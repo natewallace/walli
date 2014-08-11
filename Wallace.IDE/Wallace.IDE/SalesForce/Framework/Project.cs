@@ -83,9 +83,16 @@ namespace Wallace.IDE.SalesForce.Framework
             Credential = credential;
             ProjectFolder = Path.Combine(ROOT_FOLDER, credential.Username);
             ProjectFile = Path.Combine(ProjectFolder, String.Format("{0}.sfdcProject", credential.Username));
-            DeployFolder = Path.Combine(ProjectFolder, "Deploy");
 
-            Language = new LanguageManager();
+            DeployFolder = Path.Combine(ProjectFolder, "Deploy");
+            if (!Directory.Exists(DeployFolder))
+                Directory.CreateDirectory(DeployFolder);
+
+            SymbolsFolder = Path.Combine(ProjectFolder, "Symbols");
+            if (!Directory.Exists(SymbolsFolder))
+                Directory.CreateDirectory(SymbolsFolder);
+
+            Language = new LanguageManager(SymbolsFolder);
         }
 
         #endregion
@@ -147,6 +154,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// The file path for the deploy folder of this project.
         /// </summary>
         public string DeployFolder { get; private set; }
+
+        /// <summary>
+        /// The file path for the symbols folder of this project.
+        /// </summary>
+        public string SymbolsFolder { get; private set; }
 
         /// <summary>
         /// All of the project names of projects that have been saved.
@@ -277,32 +289,6 @@ namespace Wallace.IDE.SalesForce.Framework
 
                 stream.Close();
             }
-        }
-
-        /// <summary>
-        /// Loads symbols for the project in the background.
-        /// </summary>
-        public void LoadSymbolsAsync()
-        {
-            System.Threading.ThreadPool.QueueUserWorkItem(
-                (state) =>
-                {
-                    object[] parameters = state as object[];
-                    SalesForceClient client = parameters[0] as SalesForceClient;
-                    LanguageManager language = parameters[1] as LanguageManager;
-
-                    if (client != null)
-                    {
-                        SalesForceLanguage.Apex.CodeModel.SymbolTable[] symbols = client.GetSymbols();
-                        if (language != null)
-                            language.UpdateSymbols(symbols, false);
-                    }
-                },
-                new object[]
-                {
-                    Client,
-                    Language
-                });
         }
 
         /// <summary>

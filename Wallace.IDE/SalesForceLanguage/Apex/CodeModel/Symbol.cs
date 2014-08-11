@@ -21,15 +21,27 @@
  */
 
 using System;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace SalesForceLanguage.Apex.CodeModel
 {
     /// <summary>
     /// A generic symbol.
     /// </summary>
-    public class Symbol : IComparable
+    public class Symbol : IComparable, IXmlSerializable
     {
         #region Constructors
+
+        /// <summary>
+        /// Used by xml serializer.
+        /// </summary>
+        public Symbol()
+        {
+            Name = String.Empty;
+            Location = new TextPosition(0, 0);
+            Span = new TextSpan(Location, Location);
+        }
 
         /// <summary>
         /// Constructor.
@@ -114,6 +126,37 @@ namespace SalesForceLanguage.Apex.CodeModel
                 return result;
 
             return this.Name.CompareTo(other.Name);
+        }
+
+        #endregion
+
+        #region IXmlSerializable Members
+
+        /// <summary>
+        /// Not used.
+        /// </summary>
+        /// <returns>null.</returns>
+        public System.Xml.Schema.XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Read in this object from the xml stream.
+        /// </summary>
+        /// <param name="reader">The xml stream to read from.</param>
+        public virtual void ReadXml(XmlReader reader)
+        {
+            Name = reader["name"];
+        }
+
+        /// <summary>
+        /// Write this object out to an xml stream.
+        /// </summary>
+        /// <param name="writer">The xml stream to write to.</param>
+        public virtual void WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttributeString("name", Name);
         }
 
         #endregion

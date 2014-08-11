@@ -76,12 +76,20 @@ namespace Wallace.IDE.SalesForce.Document
                 }
             }
 
+            string oldName = File.Name;
+
             // save
             base.Save();
+
+            // cache the symbols
+            if (View.ParseData != null && View.ParseData.Symbols != null)
+                Project.Language.UpdateSymbols(View.ParseData.Symbols, true, true);
 
             // process name change
             if (File.IsNameUpdated)
             {
+                Project.Language.RemoveSymbols(oldName);
+
                 node.Presenter.Remove();
                 App.Instance.Navigation.GetNode<ApexClassFolderNode>().AddApexClass(File);
             }

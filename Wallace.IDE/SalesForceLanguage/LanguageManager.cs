@@ -27,6 +27,7 @@ using SalesForceLanguage.Apex;
 using SalesForceLanguage.Apex.Parser;
 using System.Collections.Generic;
 using SalesForceLanguage.Apex.CodeModel;
+using System.Xml.Serialization;
 
 namespace SalesForceLanguage
 {
@@ -49,10 +50,20 @@ namespace SalesForceLanguage
         /// <summary>
         /// Constructor.
         /// </summary>
-        public LanguageManager()
+        public LanguageManager(string symbolsFolder)
         {
+            SymbolsFolder = symbolsFolder;
             _classes = new Dictionary<string, SymbolTable>();
         }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The folder where symbols are saved to if set.
+        /// </summary>
+        public string SymbolsFolder { get; private set; }
 
         #endregion
 
@@ -63,7 +74,19 @@ namespace SalesForceLanguage
         /// </summary>
         /// <param name="symbols">The symbols to update.</param>
         /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
-        public void UpdateSymbols(IEnumerable<SymbolTable> symbols, bool replace)
+        /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
+        public void UpdateSymbols(SymbolTable symbols, bool replace, bool save)
+        {
+            UpdateSymbols(new SymbolTable[] { symbols }, replace, save);
+        }
+
+        /// <summary>
+        /// Update the symbols in the manager.
+        /// </summary>
+        /// <param name="symbols">The symbols to update.</param>
+        /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
+        /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
+        public void UpdateSymbols(IEnumerable<SymbolTable> symbols, bool replace, bool save)
         {
             if (symbols == null)
                 throw new ArgumentNullException("symbols");
@@ -82,6 +105,21 @@ namespace SalesForceLanguage
                     {
                         if (!_classes.ContainsKey(key))
                             _classes.Add(key, st);
+                        else
+                            save = false;
+                    }
+
+                    if (save && !String.IsNullOrWhiteSpace(SymbolsFolder))
+                    {
+                        string fileName = Path.Combine(SymbolsFolder, st.Name.ToLower());
+                        using (FileStream fs = File.Open(fileName, FileMode.Create))
+                        {
+                            XmlSerializer ser = new XmlSerializer(typeof(SymbolTable));
+                            ser.Serialize(fs, st);
+
+                            fs.Flush();
+                            fs.Close();
+                        }
                     }
                 }
             }
@@ -96,7 +134,14 @@ namespace SalesForceLanguage
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            _classes.Remove(name.ToLower());
+            lock (_classes)
+            {
+                _classes.Remove(name.ToLower());
+
+                string fileName = Path.Combine(SymbolsFolder, name.ToLower());
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
+            }
         }
 
         /// <summary>
@@ -116,7 +161,7 @@ namespace SalesForceLanguage
                 parser.ParseApex();
 
                 if (parser.Symbols != null)
-                    UpdateSymbols(new SymbolTable[] { parser.Symbols }, true);
+                    UpdateSymbols(new SymbolTable[] { parser.Symbols }, true, false);
 
                 return new ParseResult(
                     parser.Symbols,
