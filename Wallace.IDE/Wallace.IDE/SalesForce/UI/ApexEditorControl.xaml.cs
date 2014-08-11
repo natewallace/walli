@@ -141,7 +141,7 @@ namespace Wallace.IDE.SalesForce.UI
             set
             {
                 _languageManager = value;
-                ParseText(Text);
+                UpdateView();
             }
         }
 
@@ -279,6 +279,22 @@ namespace Wallace.IDE.SalesForce.UI
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Parse the current text and update navigation.
+        /// </summary>
+        private void UpdateView()
+        {
+            ParseText(Text);
+
+            textEditor.TextArea.TextView.Redraw();
+
+            if (IsNavigationVisible)
+            {
+                SetNavigationClasses(null);
+                UpdateNavigation();
+            }
+        }
 
         /// <summary>
         /// Parse the given text.
@@ -625,15 +641,7 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 Dispatcher.Invoke(() =>
                 {
-                    ParseText(Text);
-
-                    textEditor.TextArea.TextView.Redraw();
-
-                    if (IsNavigationVisible)
-                    {
-                        SetNavigationClasses(null);
-                        UpdateNavigation();
-                    }
+                    UpdateView();
                 });
             }
             catch (Exception err)

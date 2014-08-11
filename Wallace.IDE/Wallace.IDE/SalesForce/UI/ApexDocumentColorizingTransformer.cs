@@ -153,9 +153,12 @@ namespace Wallace.IDE.SalesForce.UI
                 foreach (TextSpan span in _typeReferences[line.LineNumber])
                 {
                     int startOffset = line.Offset + span.StartPosition.Column - 1;
-                    int endOffset = line.Offset + span.EndPosition.Column - 1;
+                    int endOffset = line.Offset + span.EndPosition.Column;
 
-                    if (endOffset <= line.EndOffset)
+                    if (startOffset >= line.Offset &&
+                        startOffset <= line.EndOffset &&
+                        endOffset >= line.Offset &&
+                        endOffset <= line.EndOffset)
                         ChangeLinePart(
                             startOffset,
                             endOffset,
@@ -171,13 +174,20 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 foreach (LanguageError error in _errors[line.LineNumber])
                 {
-                    ChangeLinePart(
-                        line.Offset + error.Location.StartPosition.Column - 1,
-                        line.Offset + error.Location.EndPosition.Column - 1,
-                        (element) =>
-                        {
-                            element.TextRunProperties.SetTextDecorations(ERROR_DECORATIONS);
-                        });
+                    int startOffset = line.Offset + error.Location.StartPosition.Column - 1;
+                    int endOffset = line.Offset + error.Location.EndPosition.Column;
+
+                     if (startOffset >= line.Offset &&
+                        startOffset <= line.EndOffset &&
+                        endOffset >= line.Offset &&
+                        endOffset <= line.EndOffset)
+                        ChangeLinePart(
+                            startOffset,
+                            endOffset,
+                            (element) =>
+                            {
+                                element.TextRunProperties.SetTextDecorations(ERROR_DECORATIONS);
+                            });
                 }
             }
         }

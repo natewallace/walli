@@ -181,7 +181,7 @@ namespace Wallace.IDE.SalesForce.Framework
                     using (App.Wait("Verifying credentials..."))
                         SalesForceClient.TestLogin(credential);
 
-                    project.LoadSymbolsAsync();
+                    //project.LoadSymbolsAsync();
 
                     break;
                 }

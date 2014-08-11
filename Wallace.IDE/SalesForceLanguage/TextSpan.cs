@@ -30,8 +30,23 @@ namespace SalesForceLanguage
         /// <param name="textSpan">The text span to convert.</param>
         internal TextSpan(SalesForceLanguage.Apex.Parser.ApexTextSpan textSpan)
         {
-            StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
-            EndPosition = new TextPosition(textSpan.EndLine, textSpan.EndColumn);
+            if (textSpan.StartLine == textSpan.EndLine)
+            {
+                StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
+                EndPosition = new TextPosition(textSpan.EndLine, textSpan.EndColumn);
+            }
+            else if (textSpan.StartLine == textSpan.EndLine - 1)
+            {
+                StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
+                EndPosition = new TextPosition(
+                    textSpan.StartLine,
+                    textSpan.StartColumn + textSpan.EndPosition - textSpan.StartPosition - textSpan.EndColumn - 1);
+            }
+            else
+            {
+                StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
+                EndPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn + 1);
+            }
         }
 
         #endregion
