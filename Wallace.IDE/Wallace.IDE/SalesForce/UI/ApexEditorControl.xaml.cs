@@ -40,6 +40,7 @@ using SalesForceLanguage.Apex;
 using SalesForceLanguage.Apex.CodeModel;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Function;
+using System.Text;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -89,6 +90,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Window used for code completions.
         /// </summary>
         private CompletionWindow _completionWindow;
+
+        /// <summary>
+        /// Holds the class name from the last successful parse.
+        /// </summary>
+        private string _className;
 
         #endregion
 
@@ -304,6 +310,8 @@ namespace Wallace.IDE.SalesForce.UI
         private void UpdateView()
         {
             ParseText(Text);
+            if (ParseData != null && ParseData.Symbols != null)
+                _className = ParseData.Symbols.Name;
 
             textEditor.TextArea.TextView.Redraw();
 
@@ -772,15 +780,76 @@ namespace Wallace.IDE.SalesForce.UI
                     {
                         _completionWindow = new CompletionWindow(textEditor.TextArea);
                         _completionWindow.Style = null;
+                        _completionWindow.CompletionList.Style = null;
                         _completionWindow.Foreground = Brushes.Black;
                         _completionWindow.Background = Brushes.White;
                         _completionWindow.BorderThickness = new Thickness(1);
                         _completionWindow.BorderBrush = Brushes.Gray;
 
-                        foreach (Symbol symbol in LanguageManager.GetCodeCompletions(null))
+                        // get line to calculate completions for
+                        StringBuilder line = new StringBuilder();
+                        int openDelimiterCount = 0;
+                        bool stop = false;
+                        for (int offset = textEditor.TextArea.Caret.Offset - 2; offset >= 0; offset--)
+                        {
+                            char c = textEditor.Document.GetCharAt(offset);
+                            switch (c)
+                            {
+                                case ')':
+                                case ']':
+                                    if (openDelimiterCount == 0)
+                                        line.Insert(0, c);
+                                    openDelimiterCount++;
+                                    break;
+
+                                case '{':                                
+                                case '(':
+                                case '[':
+                                    if (openDelimiterCount == 0)
+                                    {
+                                        stop = true;
+                                    }
+                                    else
+                                    {
+                                        openDelimiterCount--;
+                                        if (openDelimiterCount == 0)
+                                            line.Insert(0, c);
+                                    }
+                                    break;
+
+                                case ';':
+                                case ',':
+                                    if (openDelimiterCount == 0)
+                                        stop = true;
+                                    break;
+
+                                case '\n':
+                                case '\r':
+                                case '\t':
+                                    break;
+
+                                default:
+                                    if (openDelimiterCount == 0)
+                                        line.Insert(0, c);
+                                    break;
+                            }
+
+                            if (stop)
+                                break;
+                        }
+
+                        // calculate completions and show them
+                        foreach (Symbol symbol in LanguageManager.GetCodeCompletions(
+                            line.ToString(),
+                            _className,
+                            new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)))
                             _completionWindow.CompletionList.CompletionData.Add(new ApexCodeCompletionData(symbol));
-                        _completionWindow.Show();
-                        _completionWindow.Closed += delegate { _completionWindow = null; };
+
+                        if (_completionWindow.CompletionList.CompletionData.Count > 0)
+                        {
+                            _completionWindow.Show();
+                            _completionWindow.Closed += delegate { _completionWindow = null; };
+                        }
                     }
                 }
             }

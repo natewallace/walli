@@ -73,12 +73,16 @@ namespace SalesForceLanguage
         /// Parse the text and give possible symbols that can be added to the end of the text.
         /// </summary>
         /// <param name="text">The text to get code completions for.</param>
+        /// <param name="className">The name of the class.</param>
+        /// <param name="position">The position in the class text for the code completion.</param>
         /// <returns>Valid symbols that can be used for the code completion.</returns>
-        public Symbol[] GetCodeCompletions(string text)
+        public Symbol[] GetCodeCompletions(string text, string className, TextPosition position)
         {
             List<Symbol> result = new List<Symbol>();
-            result.Add(new Property(new TextPosition(0, 0), "MyTest", null, SymbolVisibility.Public, "string"));
-            result.Add(new Property(new TextPosition(0, 0), "Apple", null, SymbolVisibility.Public, "string"));
+
+            
+
+            result.Add(new Symbol(new TextPosition(0, 0), text, null));
 
             return result.ToArray();
         }
