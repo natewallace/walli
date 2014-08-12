@@ -95,6 +95,8 @@ namespace Wallace.Language.Apex.Tests
                 new TextPosition(1, 1),
                 "MyTestClass",
                 new TextSpan(new TextPosition(1, 1), new TextPosition(20, 20)),
+                null,
+                null,
                 new Constructor[] { constructorOne, constructorTwo },
                 new Property[] { propertyOne, propertyTwo },
                 new Method[] { methodOne, methodTwo },

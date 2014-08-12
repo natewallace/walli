@@ -51,12 +51,12 @@ namespace Wallace.Language.Apex.Tests
                 {
                     ApexLexer scanner = new ApexLexer(fs);
                     ApexParser parser = new ApexParser(scanner);
-                    parser.ParseApex();
+                    ParseResult result = parser.ParseApex();
 
-                    foreach (LanguageError err in parser.ParserErrors)
+                    foreach (LanguageError err in result.Errors)
                         Console.WriteLine(err.ToString());
 
-                    Assert.AreEqual(0, parser.ParserErrors.Length, "Errors occured parsing: " + file);
+                    Assert.AreEqual(0, result.Errors.Length, "Errors occured parsing: " + file);
                 }
 
                 Console.WriteLine();

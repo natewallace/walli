@@ -36,12 +36,17 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// Holds parser errors that have occured.
         /// </summary>
-        private List<LanguageError> _errors;
+        private List<LanguageError> _errors = new List<LanguageError>();
 
         /// <summary>
         /// Holds the non terminal tokens.
         /// </summary>
         private static Tokens[] _nonTermTokens = null;
+
+        /// <summary>
+        /// Used to process tokens.
+        /// </summary>
+        private ApexParserFactory _parserFactory = new ApexParserFactory();
 
         #endregion
 
@@ -57,39 +62,6 @@ namespace SalesForceLanguage.Apex.Parser
             _errors = new List<LanguageError>();
             InitNonTermTokens();
         }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Symbols that were parsed.
-        /// </summary>
-        public SymbolTable Symbols
-        {
-            get { return ParserFactory.Symbols; }
-        }
-
-        /// <summary>
-        /// Type references that were parsed.
-        /// </summary>
-        public ReferenceTypeSymbol[] TypeReferences
-        {
-            get { return ParserFactory.TypeReferences; }
-        }
-
-        /// <summary>
-        /// Errors that occured during parsing.
-        /// </summary>
-        public LanguageError[] ParserErrors
-        {
-            get { return _errors.ToArray(); }
-        }
-
-        /// <summary>
-        /// Factory used to parse code.
-        /// </summary>
-        protected ApexParserFactory ParserFactory { get; set; }
 
         #endregion
 
@@ -112,12 +84,19 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// Parse the apex code.
         /// </summary>
-        public void ParseApex()
+        public ParseResult ParseApex()
         {
-            ParserFactory = new ApexParserFactory();
-            _errors = new List<LanguageError>();
-
             Parse();
+
+            ParseResult result = new ParseResult(
+                _parserFactory.Symbols,
+                _parserFactory.TypeReferences,
+                _errors.ToArray());
+
+            _errors.Clear();
+            _parserFactory.Clear();
+
+            return result;
         }
 
         /// <summary>
@@ -134,7 +113,7 @@ namespace SalesForceLanguage.Apex.Parser
                 ApexSyntaxNode[] subNodes = (valuesLength == 1 && values[0] == null) ? new ApexSyntaxNode[0] : new ApexSyntaxNode[valuesLength];
                 if (subNodes.Length > 0)
                     Array.Copy(values, subNodes, valuesLength);
-                CurrentSemanticValue = ParserFactory.Process(tokenValue, CurrentLocationSpan, subNodes);
+                CurrentSemanticValue = _parserFactory.Process(tokenValue, CurrentLocationSpan, subNodes);
             }
         }
 
@@ -144,7 +123,7 @@ namespace SalesForceLanguage.Apex.Parser
         protected void Error()
         {
             TextSpan location = new TextSpan(_locationOnError, true);
-            foreach (LanguageError err in ParserErrors)
+            foreach (LanguageError err in _errors)
                 if (location.CompareTo(err.Location) == 0)
                     YYAbort();
 

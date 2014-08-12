@@ -182,15 +182,12 @@ namespace SalesForceLanguage
             {
                 ApexParser parser = new ApexParser(new ApexLexer(reader));
 
-                parser.ParseApex();
+                ParseResult result = parser.ParseApex();
 
-                if (parser.Symbols != null)
-                    UpdateSymbols(new SymbolTable[] { parser.Symbols }, replace, save);
+                if (result.Symbols != null)
+                    UpdateSymbols(new SymbolTable[] { result.Symbols }, replace, save);
 
-                return new ParseResult(
-                    parser.Symbols,
-                    parser.TypeReferences,
-                    parser.ParserErrors);
+                return result;
             }
         }
 

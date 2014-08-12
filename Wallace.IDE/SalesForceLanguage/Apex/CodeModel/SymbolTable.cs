@@ -37,6 +37,8 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         public SymbolTable()
         {
+            VariableScopes = new VariableScope[0];
+            Fields = new Field[0];
             Constructors = new Constructor[0];
             Properties = new VisibilitySymbol[0];
             Methods = new Method[0];
@@ -50,6 +52,8 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
         /// <param name="span">Span.</param>
+        /// <param name="variableScopes">VariableScopes.</param>
+        /// <param name="fields">Fields.</param>
         /// <param name="constructors">Constructors</param>
         /// <param name="properties">Properties</param>
         /// <param name="methods">Methods</param>
@@ -59,6 +63,8 @@ namespace SalesForceLanguage.Apex.CodeModel
             TextPosition location,
             string name,
             TextSpan span,
+            VariableScope[] variableScopes,
+            Field[] fields,
             Constructor[] constructors,
             VisibilitySymbol[] properties,
             Method[] methods,
@@ -66,6 +72,8 @@ namespace SalesForceLanguage.Apex.CodeModel
             SymbolTable[] innerClasses)
             : base(location, name, span)
         {
+            VariableScopes = variableScopes ?? new VariableScope[0];
+            Fields = fields ?? new Field[0];
             Constructors = constructors ?? new Constructor[0];
             Properties = properties ?? new VisibilitySymbol[0];
             Methods = methods ?? new Method[0];
@@ -78,9 +86,19 @@ namespace SalesForceLanguage.Apex.CodeModel
         #region Properties
 
         /// <summary>
+        /// Local variables organzied by the scope they are defined in.
+        /// </summary>
+        public VariableScope[] VariableScopes { get; private set; }
+
+        /// <summary>
+        /// Fields for the table.
+        /// </summary>
+        public Field[] Fields { get; private set; }
+
+        /// <summary>
         /// Constructors for the table.
         /// </summary>
-        public Constructor[] Constructors { get; set; }
+        public Constructor[] Constructors { get; private set; }
 
         /// <summary>
         /// Properties for the table.
@@ -90,17 +108,17 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <summary>
         /// Methods for the table.
         /// </summary>
-        public Method[] Methods { get; set; }
+        public Method[] Methods { get; private set; }
 
         /// <summary>
         /// Interfaces or the table.
         /// </summary>
-        public string[] Interfaces { get; set; }
+        public string[] Interfaces { get; private set; }
 
         /// <summary>
         /// Inner classes or interfaces for the table.
         /// </summary>
-        public SymbolTable[] InnerClasses { get; set; }
+        public SymbolTable[] InnerClasses { get; private set; }
 
         #endregion
 
@@ -114,6 +132,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         {
             base.ReadXml(reader);
 
+            List<Field> fields = new List<Field>();
             List<Constructor> constructors = new List<Constructor>();
             List<Property> properties = new List<Property>();
             List<Method> methods = new List<Method>();
@@ -128,6 +147,18 @@ namespace SalesForceLanguage.Apex.CodeModel
                 {
                     switch (reader.LocalName)
                     {
+                        case "fields":
+                            reader.Read();
+                            while (reader.IsStartElement("field"))
+                            {
+                                Field f = new Field();
+                                f.ReadXml(reader);
+                                fields.Add(f);
+                                reader.Read();
+                            }
+                            reader.Read();
+                            break;
+
                         case "constructors":
                             reader.Read();
                             while (reader.IsStartElement("constructor"))
@@ -191,6 +222,7 @@ namespace SalesForceLanguage.Apex.CodeModel
                 }
             }
 
+            Fields = fields.ToArray();
             Constructors = constructors.ToArray();
             Properties = properties.ToArray();
             Methods = methods.ToArray();
@@ -205,6 +237,18 @@ namespace SalesForceLanguage.Apex.CodeModel
         public override void WriteXml(XmlWriter writer)
         {
             base.WriteXml(writer);
+
+            if (Fields.Length > 0)
+            {
+                writer.WriteStartElement("fields");
+                foreach (Field f in Fields)
+                {
+                    writer.WriteStartElement("field");
+                    f.WriteXml(writer);
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+            }
 
             if (Constructors.Length > 0)
             {

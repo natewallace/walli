@@ -33,6 +33,21 @@ namespace SalesForceLanguage.Apex.Parser
         #region Fields
 
         /// <summary>
+        /// Holds local variables that have been defined.
+        /// </summary>
+        private Stack<Field> _variables;
+
+        /// <summary>
+        /// Holds the local variable scopes that have been defined.
+        /// </summary>
+        private List<VariableScope> _variableScopes;
+
+        /// <summary>
+        /// Holds fields that have been defined.
+        /// </summary>
+        private Stack<Field> _fields;
+
+        /// <summary>
         /// Holds properties that have been defined.
         /// </summary>
         private Stack<Property> _properties;
@@ -66,11 +81,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         public ApexParserFactory()
         {
-            _properties = new Stack<Property>();
-            _constructors = new Stack<Constructor>();
-            _methods = new Stack<Method>();
-            _classes = new Stack<SymbolTable>();
-            _typeReferences = new List<ReferenceTypeSymbol>();
+            Clear();
         }
 
         #endregion
@@ -173,6 +184,21 @@ namespace SalesForceLanguage.Apex.Parser
         }
 
         /// <summary>
+        /// Clear out all previously collected data.
+        /// </summary>
+        public void Clear()
+        {
+            _variableScopes = new List<VariableScope>();
+            _variables = new Stack<Field>();
+            _fields = new Stack<Field>();
+            _properties = new Stack<Property>();
+            _constructors = new Stack<Constructor>();
+            _methods = new Stack<Method>();
+            _classes = new Stack<SymbolTable>();
+            _typeReferences = new List<ReferenceTypeSymbol>();
+        }
+
+        /// <summary>
         /// Process the the given token.
         /// </summary>
         /// <param name="token">The token to process.</param>
@@ -203,6 +229,32 @@ namespace SalesForceLanguage.Apex.Parser
 
                     break;
 
+                // local variable
+                case Tokens.grammar_local_variable_declaration:
+                    string variableType = node.GetChildNodeWithToken(Tokens.grammar_type).GetLeavesDisplayText();
+                    ApexSyntaxNode[] variableDeclarators = node.GetNodesWithToken(Tokens.grammar_local_variable_declarator);
+
+                    foreach (ApexSyntaxNode declarator in variableDeclarators)
+                    {
+                        _variables.Push(new Field(
+                            new TextPosition(declarator.Nodes[0].TextSpan),
+                            declarator.Nodes[0].GetLeavesDisplayText(),
+                            null,
+                            SymbolVisibility.Private,
+                            variableType));
+                    }
+
+                    break;
+
+                // variable scope
+                case Tokens.grammar_block:
+                case Tokens.grammar_embedded_statement:
+                    _variableScopes.Add(new VariableScope(
+                        new TextSpan(node.TextSpan),
+                        GetSymbols<Field>(node, _variables)));
+
+                    break;
+
                 // field
                 case Tokens.grammar_field_declaration:
                     SymbolVisibility fieldVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
@@ -211,7 +263,7 @@ namespace SalesForceLanguage.Apex.Parser
 
                     foreach (ApexSyntaxNode declarator in fieldDeclarators)
                     {
-                        _properties.Push(new Property(
+                        _fields.Push(new Field(
                             new TextPosition(declarator.Nodes[0].TextSpan),
                             declarator.Nodes[0].GetLeavesDisplayText(),
                             null,
@@ -331,6 +383,8 @@ namespace SalesForceLanguage.Apex.Parser
                         new TextPosition(className.TextSpan),
                         className.GetLeavesDisplayText(),
                         new TextSpan(node.TextSpan),
+                        _variableScopes.ToArray(),
+                        GetSymbols<Field>(node, _fields),
                         GetSymbols<Constructor>(node, _constructors),
                         GetSymbols<Property>(node, _properties),
                         GetSymbols<Method>(node, _methods),
@@ -369,6 +423,8 @@ namespace SalesForceLanguage.Apex.Parser
                         new TextPosition(interfaceName.TextSpan),
                         interfaceName.GetLeavesDisplayText(),
                         new TextSpan(node.TextSpan),
+                        null,
+                        null,
                         null,
                         null,
                         GetSymbols<Method>(node, _methods),

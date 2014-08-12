@@ -513,6 +513,13 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 SymbolTable apexClass = SelectedClassNavigationElement as SymbolTable;
 
+                foreach (Field field in apexClass.Fields.OrderBy(f => f.Name))
+                    comboBoxNavigationMember.Items.Add(new ComboBoxItem()
+                    {
+                        Tag = field,
+                        Content = VisualHelper.CreateIconHeader(field.ToString(), "Field.png", new Thickness(0))
+                    });
+
                 foreach (VisibilitySymbol prop in apexClass.Properties.OrderBy(p => p.Name))
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
