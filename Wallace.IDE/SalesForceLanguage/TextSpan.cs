@@ -29,23 +29,41 @@ namespace SalesForceLanguage
         /// </summary>
         /// <param name="textSpan">The text span to convert.</param>
         internal TextSpan(SalesForceLanguage.Apex.Parser.ApexTextSpan textSpan)
+            : this(textSpan, false)
         {
-            if (textSpan.StartLine == textSpan.EndLine)
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="textSpan">The text span to convert.</param>
+        /// <param name="singleLine">If true, the text span will be forced onto a single line.</param>
+        internal TextSpan(SalesForceLanguage.Apex.Parser.ApexTextSpan textSpan, bool singleLine)
+        {
+            if (singleLine)
             {
-                StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
-                EndPosition = new TextPosition(textSpan.EndLine, textSpan.EndColumn);
-            }
-            else if (textSpan.StartLine == textSpan.EndLine - 1)
-            {
-                StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
-                EndPosition = new TextPosition(
-                    textSpan.StartLine,
-                    textSpan.StartColumn + textSpan.EndPosition - textSpan.StartPosition - textSpan.EndColumn - 1);
+                if (textSpan.StartLine == textSpan.EndLine)
+                {
+                    StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
+                    EndPosition = new TextPosition(textSpan.EndLine, textSpan.EndColumn);
+                }
+                else if (textSpan.StartLine == textSpan.EndLine - 1)
+                {
+                    StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
+                    EndPosition = new TextPosition(
+                        textSpan.StartLine,
+                        textSpan.StartColumn + textSpan.EndPosition - textSpan.StartPosition - textSpan.EndColumn - 1);
+                }
+                else
+                {
+                    StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
+                    EndPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn + 1);
+                }
             }
             else
             {
                 StartPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn);
-                EndPosition = new TextPosition(textSpan.StartLine, textSpan.StartColumn + 1);
+                EndPosition = new TextPosition(textSpan.EndLine, textSpan.EndColumn);
             }
         }
 

@@ -143,7 +143,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         protected void Error()
         {
-            TextSpan location = new TextSpan(_locationOnError);
+            TextSpan location = new TextSpan(_locationOnError, true);
             foreach (LanguageError err in ParserErrors)
                 if (location.CompareTo(err.Location) == 0)
                     YYAbort();
