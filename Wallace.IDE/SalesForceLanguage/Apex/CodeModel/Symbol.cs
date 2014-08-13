@@ -39,6 +39,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         public Symbol()
         {
             Name = String.Empty;
+            Id = String.Empty;
             Location = new TextPosition(0, 0);
             Span = new TextSpan(Location, Location);
         }
@@ -53,12 +54,18 @@ namespace SalesForceLanguage.Apex.CodeModel
         {
             Location = location;
             Name = name ?? String.Empty;
+            Id = Name.ToLower();
             Span = span ?? new TextSpan(Location, new TextPosition(Location.Line, Location.Column + Name.Length));
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The name in all lowercase.
+        /// </summary>
+        public string Id { get; private set; }
 
         /// <summary>
         /// The location of the symbol.
@@ -147,7 +154,8 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="reader">The xml stream to read from.</param>
         public virtual void ReadXml(XmlReader reader)
         {
-            Name = reader["name"];
+            Name = reader["name"] ?? String.Empty;
+            Id = Name.ToLower();
         }
 
         /// <summary>

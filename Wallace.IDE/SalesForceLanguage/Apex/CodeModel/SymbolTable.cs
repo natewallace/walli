@@ -28,7 +28,7 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// <summary>
     /// A class or interface.
     /// </summary>
-    public class SymbolTable : Symbol
+    public class SymbolTable : TypedSymbol
     {
         #region Constructors
 
@@ -63,6 +63,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             TextPosition location,
             string name,
             TextSpan span,
+            SymbolVisibility visibility,
             VariableScope[] variableScopes,
             Field[] fields,
             Constructor[] constructors,
@@ -70,7 +71,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             Method[] methods,
             string[] interfaces,
             SymbolTable[] innerClasses)
-            : base(location, name, span)
+            : base(location, name, span, visibility, name)
         {
             VariableScopes = variableScopes ?? new VariableScope[0];
             Fields = fields ?? new Field[0];

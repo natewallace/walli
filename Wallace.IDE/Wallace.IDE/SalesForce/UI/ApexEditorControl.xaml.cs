@@ -781,10 +781,6 @@ namespace Wallace.IDE.SalesForce.UI
                         _completionWindow = new CompletionWindow(textEditor.TextArea);
                         _completionWindow.Style = null;
                         _completionWindow.CompletionList.Style = null;
-                        _completionWindow.Foreground = Brushes.Black;
-                        _completionWindow.Background = Brushes.White;
-                        _completionWindow.BorderThickness = new Thickness(1);
-                        _completionWindow.BorderBrush = Brushes.Gray;
 
                         // get line to calculate completions for
                         StringBuilder line = new StringBuilder();
@@ -802,7 +798,8 @@ namespace Wallace.IDE.SalesForce.UI
                                     openDelimiterCount++;
                                     break;
 
-                                case '{':                                
+                                case '{':
+                                case '}':
                                 case '(':
                                 case '[':
                                     if (openDelimiterCount == 0)
@@ -821,11 +818,6 @@ namespace Wallace.IDE.SalesForce.UI
                                 case ',':
                                     if (openDelimiterCount == 0)
                                         stop = true;
-                                    break;
-
-                                case '\n':
-                                case '\r':
-                                case '\t':
                                     break;
 
                                 default:

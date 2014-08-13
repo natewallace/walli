@@ -22,6 +22,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using SalesForceLanguage.Apex;
 using SalesForceLanguage.Apex.Parser;
@@ -70,6 +71,24 @@ namespace SalesForceLanguage
         #region Methods
 
         /// <summary>
+        /// Get the symbols for the class with the given name.
+        /// </summary>
+        /// <param name="name">The name of the class to get symbols for.</param>
+        /// <returns>The requested symbols or null if they aren't found.</returns>
+        public SymbolTable GetSymbols(string name)
+        {
+            if (String.IsNullOrWhiteSpace(name))
+                return null;
+
+            name = name.ToLower();
+
+            if (!_classes.ContainsKey(name))
+                return null;
+            else
+                return _classes[name];
+        }
+
+        /// <summary>
         /// Parse the text and give possible symbols that can be added to the end of the text.
         /// </summary>
         /// <param name="text">The text to get code completions for.</param>
@@ -80,11 +99,119 @@ namespace SalesForceLanguage
         {
             List<Symbol> result = new List<Symbol>();
 
-            
+            // empty string
+            if (String.IsNullOrWhiteSpace(text))
+                return result.ToArray();
 
-            result.Add(new Symbol(new TextPosition(0, 0), text, null));
+            text = text.ToLower();
 
-            return result.ToArray();
+            // filter lines
+            string[] lines = text.Split('\n');
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i] == null)
+                    continue;
+
+                lines[i] = lines[i].Trim();
+                if (lines[i].StartsWith("//") || lines[i].StartsWith("/*"))
+                    lines[i] = null;
+            }
+
+            // create parts
+            List<string> parts = new List<string>();
+            foreach (string line in lines)
+                if (line != null)
+                    parts.AddRange(line.Split(new char[] { ' ', '.', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+
+            // combine and filter out parts
+            for (int i = 0; i < parts.Count; i++)
+            {
+                if (i + 1 < parts.Count && (parts[i + 1] == "()" || parts[i + 1] == "[]"))
+                {
+                    parts[i] = parts[i] + parts[i + 1];
+                    parts.RemoveAt(i + 1);
+                }
+
+                if (parts[i] == "if()")
+                {
+                    parts.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            // match parts to types
+            SymbolTable classSymbol = GetSymbols(className);
+            TypedSymbol matchedSymbol = null;
+
+            if (classSymbol != null)
+            {
+                bool partFound = false;
+
+                for (int i = 0; i < parts.Count; i++)
+                {
+                    partFound = false;
+
+                    // method
+                    if (parts[i].EndsWith("()"))
+                    {
+                        string methodName = parts[i].Substring(0, parts[i].IndexOf('('));
+                        SymbolTable externalClass = (i == 0) ? classSymbol : GetSymbols(matchedSymbol.Type);
+                        if (externalClass != null)
+                        {
+                            foreach (Method m in externalClass.Methods)
+                            {
+                                if (m.Id == methodName)
+                                {
+                                    if (m.Type != "void")
+                                    {
+                                        matchedSymbol = m;
+                                        partFound = true;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    // list
+                    else if (parts[i].EndsWith("[]"))
+                    {
+                        //TODO:
+                    }
+                    // variables
+                    else
+                    {
+                        if (i == 0 && parts[i] == "this")
+                        {
+                            matchedSymbol = classSymbol;
+                            partFound = true;
+                        }
+                    }
+
+                    // check that the part was found
+                    if (!partFound)
+                    {
+                        matchedSymbol = null;
+                        break;
+                    }
+                }
+
+                // build completions from matched symbol
+                if (matchedSymbol != null)
+                {
+                    SymbolTable symbols = GetSymbols(matchedSymbol.Type);
+                    if (symbols != null)
+                    {
+                        result.AddRange(symbols.Fields.GroupBy(s => s.Name).Select(g => g.First()).ToList());
+                        result.AddRange(symbols.Constructors.GroupBy(s => s.Name).Select(g => g.First()).ToList());
+                        result.AddRange(symbols.Properties.GroupBy(s => s.Name).Select(g => g.First()).ToList());
+                        result.AddRange(symbols.Methods.GroupBy(s => s.Name).Select(g => g.First()).ToList());
+
+                        //TODO: extends
+                    }
+                }
+            }
+
+            return result.OrderBy(s => s.Name).ToArray();
         }
 
         /// <summary>

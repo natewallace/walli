@@ -96,14 +96,18 @@ namespace Wallace.IDE.SalesForce.UI
         {
             get 
             {
-                if (_symbol is Property)
-                {
+                if (_symbol is Field)
+                    return VisualHelper.LoadBitmap("Field.png");
+                else if (_symbol is Constructor)
+                    return VisualHelper.LoadBitmap("Method.png");
+                else if (_symbol is Property)
                     return VisualHelper.LoadBitmap("Property.png");
-                }
+                else if (_symbol is Method)
+                    return VisualHelper.LoadBitmap("Method.png");
+                else if (_symbol is SymbolTable)
+                    return VisualHelper.LoadBitmap("Class.png");
                 else
-                {
                     return null;
-                }
             }
         }
 
