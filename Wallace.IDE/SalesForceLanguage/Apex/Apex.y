@@ -954,12 +954,16 @@ accessor_declarations:
 	set_accessor_declaration ;
 
 get_accessor_declaration:
-	attributes KEYWORD_GET accessor_body |
-	           KEYWORD_GET accessor_body ;
+	attributes modifiers KEYWORD_GET accessor_body |
+	attributes           KEYWORD_GET accessor_body |
+	           modifiers KEYWORD_GET accessor_body |
+				         KEYWORD_GET accessor_body ;
 
 set_accessor_declaration:
-	attributes KEYWORD_SET accessor_body |
-	           KEYWORD_SET accessor_body ;
+	attributes modifiers KEYWORD_SET accessor_body |
+	attributes           KEYWORD_SET accessor_body |
+	           modifiers KEYWORD_SET accessor_body |
+			             KEYWORD_SET accessor_body ;
 
 accessor_body:
 	block |
