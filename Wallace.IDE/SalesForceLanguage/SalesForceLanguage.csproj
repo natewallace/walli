@@ -50,8 +50,8 @@
     <Compile Include="TextPosition.cs" />
     <Compile Include="Apex\CodeModel\Symbol.cs" />
     <Compile Include="Apex\CodeModel\SymbolTable.cs" />
-    <Compile Include="Apex\CodeModel\SymbolVisibility.cs" />
-    <Compile Include="Apex\CodeModel\VisibilitySymbol.cs" />
+    <Compile Include="Apex\CodeModel\SymbolModifier.cs" />
+    <Compile Include="Apex\CodeModel\ModifiedSymbol.cs" />
     <Compile Include="Apex\Parser\Gppg\AbstractScanner.cs" />
     <Compile Include="Apex\Parser\Gppg\IMerge.cs" />
     <Compile Include="Apex\Parser\Gppg\LexLocation.cs" />
@@ -81,6 +81,7 @@
     <Content Include="lib\Gplex.exe" />
     <Content Include="lib\gppg.exe" />
     <Content Include="lib\QUT.ShiftReduceParser.dll" />
+    <EmbeddedResource Include="Resources\SystemSymbols.xml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -47,17 +47,17 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
         /// <param name="span">Span.</param>
-        /// <param name="visibility">Visibility.</param>
+        /// <param name="modifier">Modifier.</param>
         /// <param name="type">Type.</param>
         /// <param name="parameters">Parameters.</param>
         public Method(
             TextPosition location, 
             string name, 
             TextSpan span,
-            SymbolVisibility visibility, 
+            SymbolModifier modifier, 
             string type,
             Parameter[] parameters)
-            : base(location, name, span, visibility, type)
+            : base(location, name, span, modifier, type)
         {
             Parameters = parameters ?? new Parameter[0];
         }
@@ -97,9 +97,9 @@ namespace SalesForceLanguage.Apex.CodeModel
                         parameters.Add(p);
                         reader.Read();
                     }
-                }
 
-                reader.Read();
+                    reader.Read();
+                }                
             }
 
             Parameters = parameters.ToArray();

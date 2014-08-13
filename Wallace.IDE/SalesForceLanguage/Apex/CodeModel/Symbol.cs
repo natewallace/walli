@@ -65,7 +65,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <summary>
         /// The name in all lowercase.
         /// </summary>
-        public string Id { get; private set; }
+        public string Id { get; protected set; }
 
         /// <summary>
         /// The location of the symbol.

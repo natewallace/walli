@@ -40,7 +40,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             VariableScopes = new VariableScope[0];
             Fields = new Field[0];
             Constructors = new Constructor[0];
-            Properties = new VisibilitySymbol[0];
+            Properties = new ModifiedSymbol[0];
             Methods = new Method[0];
             Interfaces = new string[0];
             InnerClasses = new SymbolTable[0];
@@ -52,6 +52,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
         /// <param name="span">Span.</param>
+        /// <param name="modifier">Modifier.</param>
         /// <param name="variableScopes">VariableScopes.</param>
         /// <param name="fields">Fields.</param>
         /// <param name="constructors">Constructors</param>
@@ -63,20 +64,20 @@ namespace SalesForceLanguage.Apex.CodeModel
             TextPosition location,
             string name,
             TextSpan span,
-            SymbolVisibility visibility,
+            SymbolModifier modifier,
             VariableScope[] variableScopes,
             Field[] fields,
             Constructor[] constructors,
-            VisibilitySymbol[] properties,
+            ModifiedSymbol[] properties,
             Method[] methods,
             string[] interfaces,
             SymbolTable[] innerClasses)
-            : base(location, name, span, visibility, name)
+            : base(location, name, span, modifier, name)
         {
             VariableScopes = variableScopes ?? new VariableScope[0];
             Fields = fields ?? new Field[0];
             Constructors = constructors ?? new Constructor[0];
-            Properties = properties ?? new VisibilitySymbol[0];
+            Properties = properties ?? new ModifiedSymbol[0];
             Methods = methods ?? new Method[0];
             Interfaces = interfaces ?? new string[0];
             InnerClasses = innerClasses ?? new SymbolTable[0];
@@ -104,7 +105,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <summary>
         /// Properties for the table.
         /// </summary>
-        public VisibilitySymbol[] Properties { get; private set; }
+        public ModifiedSymbol[] Properties { get; private set; }
 
         /// <summary>
         /// Methods for the table.
@@ -203,6 +204,7 @@ namespace SalesForceLanguage.Apex.CodeModel
                                 interfaces.Add(reader["name"]);
                                 reader.Read();
                             }
+                            reader.Read();
                             break;
 
                         case "innerClasses":
@@ -218,10 +220,13 @@ namespace SalesForceLanguage.Apex.CodeModel
                             break;
 
                         default:
+                            reader.Read();
                             break;
                     }
                 }
             }
+
+            reader.Read();
 
             Fields = fields.ToArray();
             Constructors = constructors.ToArray();
@@ -229,6 +234,8 @@ namespace SalesForceLanguage.Apex.CodeModel
             Methods = methods.ToArray();
             Interfaces = interfaces.ToArray();
             InnerClasses = innerClasses.ToArray();
+
+            Id = Type.ToLower();
         }
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// <summary>
     /// A symbol that has a type.
     /// </summary>
-    public class TypedSymbol : VisibilitySymbol
+    public class TypedSymbol : ModifiedSymbol
     {
         #region Constructors
 
@@ -46,10 +46,10 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
         /// <param name="span">Span.</param>
-        /// <param name="visibility">Visibility.</param>
+        /// <param name="modifier">Modifier.</param>
         /// <param name="type">Type.</param>
-        public TypedSymbol(TextPosition location, string name, TextSpan span, SymbolVisibility visibility, string type)
-            : base(location, name, span, visibility)
+        public TypedSymbol(TextPosition location, string name, TextSpan span, SymbolModifier modifier, string type)
+            : base(location, name, span, modifier)
         {
             Type = type ?? String.Empty;
         }

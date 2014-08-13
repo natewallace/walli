@@ -20,26 +20,89 @@
  * THE SOFTWARE.
  */
 
+using System;
+
 namespace SalesForceLanguage.Apex.CodeModel
 {
     /// <summary>
     /// Possible visibility for a symbol.
     /// </summary>
-    public enum SymbolVisibility
+    [Flags]
+    public enum SymbolModifier
     {
         /// <summary>
-        /// Global.
+        /// No modifiers.
         /// </summary>
-        Global,
+        None = 0,
 
         /// <summary>
         /// Public.
         /// </summary>
-        Public,
+        Public = 1,
 
         /// <summary>
-        /// Private.
+        /// Protected.
         /// </summary>
-        Private
+	    Protected = 2,
+
+        /// <summary>
+        /// Privatey.
+        /// </summary>
+	    Private = 4,
+
+        /// <summary>
+        /// Static.
+        /// </summary>
+	    Static = 8,
+
+        /// <summary>
+        /// Global.
+        /// </summary>
+	    Global = 16,
+
+        /// <summary>
+        /// Override.
+        /// </summary>
+	    Override = 32,
+
+        /// <summary>
+        /// Virtual.
+        /// </summary>
+	    Virtual = 64,
+
+        /// <summary>
+        /// TestMethod.
+        /// </summary>
+	    TestMethod = 128,
+
+        /// <summary>
+        /// Transient.
+        /// </summary>
+	    Transient = 256,
+
+        /// <summary>
+        /// WithSharing.
+        /// </summary>
+	    WithSharing = 512,
+
+        /// <summary>
+        /// WithoutSharing.
+        /// </summary>
+	    WithoutSharing = 1024,
+
+        /// <summary>
+        /// WebService.
+        /// </summary>
+	    WebService = 2048,
+
+        /// <summary>
+        /// Final.
+        /// </summary>
+	    Final = 4096,
+
+        /// <summary>
+        /// Abstract.
+        /// </summary>
+        Abstract = 8192
     }
 }

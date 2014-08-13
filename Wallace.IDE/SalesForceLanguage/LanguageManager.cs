@@ -21,14 +21,15 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using SalesForceLanguage.Apex;
-using SalesForceLanguage.Apex.Parser;
-using System.Collections.Generic;
-using SalesForceLanguage.Apex.CodeModel;
+using System.Xml;
 using System.Xml.Serialization;
+using SalesForceLanguage.Apex;
+using SalesForceLanguage.Apex.CodeModel;
+using SalesForceLanguage.Apex.Parser;
 
 namespace SalesForceLanguage
 {
@@ -40,6 +41,11 @@ namespace SalesForceLanguage
         #region Fields
 
         /// <summary>
+        /// Holds predefined classes.
+        /// </summary>
+        private static Dictionary<string, SymbolTable> _predefinedClasses;
+
+        /// <summary>
         /// Holds all classes that have been parsed.
         /// </summary>
         private Dictionary<string, SymbolTable> _classes;
@@ -47,6 +53,27 @@ namespace SalesForceLanguage
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Static constructor.
+        /// </summary>
+        static LanguageManager()
+        {
+            _predefinedClasses = new Dictionary<string, SymbolTable>();
+            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("SalesForceLanguage.Resources.SystemSymbols.xml"))
+            {
+                XmlReaderSettings xmlSettings = new XmlReaderSettings();
+                xmlSettings.IgnoreComments = true;
+                xmlSettings.IgnoreWhitespace = true;
+                using (XmlReader reader = XmlReader.Create(stream, xmlSettings))
+                {
+                    XmlSerializer ser = new XmlSerializer(typeof(SymbolTable[]));
+                    SymbolTable[] symbols = ser.Deserialize(reader) as SymbolTable[];
+                    foreach (SymbolTable symbol in symbols)
+                        _predefinedClasses.Add(symbol.Id, symbol);
+                }
+            }
+        }
 
         /// <summary>
         /// Constructor.
@@ -73,19 +100,30 @@ namespace SalesForceLanguage
         /// <summary>
         /// Get the symbols for the class with the given name.
         /// </summary>
-        /// <param name="name">The name of the class to get symbols for.</param>
+        /// <param name="type">The name of the type to get symbols for.</param>
         /// <returns>The requested symbols or null if they aren't found.</returns>
-        public SymbolTable GetSymbols(string name)
+        public SymbolTable GetSymbols(string type)
         {
-            if (String.IsNullOrWhiteSpace(name))
+            if (String.IsNullOrWhiteSpace(type))
                 return null;
 
-            name = name.ToLower();
+            type = type.ToLower();
 
-            if (!_classes.ContainsKey(name))
-                return null;
-            else
-                return _classes[name];
+            if (_classes.ContainsKey(type))
+                return _classes[type];
+            if (_predefinedClasses.ContainsKey(type))
+                return _predefinedClasses[type];
+
+            if (!type.Contains('.'))
+            {
+                type = "system." + type;
+                if (_classes.ContainsKey(type))
+                    return _classes[type];
+                if (_predefinedClasses.ContainsKey(type))
+                    return _predefinedClasses[type];
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -323,16 +361,15 @@ namespace SalesForceLanguage
                 foreach (SymbolTable st in symbols)
                 {
                     // update symbols in memory
-                    string key = st.Name.ToLower();
                     if (replace)
                     {
-                        _classes.Remove(key);
-                        _classes.Add(key, st);
+                        _classes.Remove(st.Id);
+                        _classes.Add(st.Id, st);
                     }
                     else
                     {
-                        if (!_classes.ContainsKey(key))
-                            _classes.Add(key, st);
+                        if (!_classes.ContainsKey(st.Id))
+                            _classes.Add(st.Id, st);
                         else
                             save = false;
                     }

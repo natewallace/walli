@@ -119,29 +119,75 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         /// <param name="nodes">The nodes to look through.  Each one should be a single modifier node.</param>
         /// <returns>The visibility.</returns>
-        private SymbolVisibility GetVisibility(ApexSyntaxNode[] nodes)
+        private SymbolModifier GetModifiers(ApexSyntaxNode[] nodes)
         {
-            SymbolVisibility visibility = SymbolVisibility.Private;
+            int modifier = 0;
             foreach (ApexSyntaxNode node in nodes)
             {
                 switch (node.Nodes[0].Token)
                 {
-                    case Tokens.KEYWORD_PRIVATE:
-                    case Tokens.KEYWORD_PROTECTED:
-                        return SymbolVisibility.Private;
-
                     case Tokens.KEYWORD_PUBLIC:
-                        return SymbolVisibility.Public;
+                        modifier |= (int)SymbolModifier.Public;
+                        break;
 
-                    case Tokens.KEYWORD_GLOBAL:
-                        return SymbolVisibility.Global;
+	                case Tokens.KEYWORD_PROTECTED:
+                        modifier |= (int)SymbolModifier.Protected;
+                        break;
+
+	                case Tokens.KEYWORD_PRIVATE:
+                        modifier |= (int)SymbolModifier.Private;
+                        break;
+
+	                case Tokens.KEYWORD_ABSTRACT:
+                        modifier |= (int)SymbolModifier.Abstract;
+                        break;
+
+	                case Tokens.KEYWORD_STATIC:
+                        modifier |= (int)SymbolModifier.Static;
+                        break;
+
+	                case Tokens.KEYWORD_GLOBAL:
+                        modifier |= (int)SymbolModifier.Global;
+                        break;
+
+	                case Tokens.KEYWORD_OVERRIDE:
+                        modifier |= (int)SymbolModifier.Override;
+                        break;
+
+	                case Tokens.KEYWORD_VIRTUAL:
+                        modifier |= (int)SymbolModifier.Virtual;
+                        break;
+
+	                case Tokens.KEYWORD_TESTMETHOD:
+                        modifier |= (int)SymbolModifier.TestMethod;
+                        break;
+
+	                case Tokens.KEYWORD_TRANSIENT:
+                        modifier |= (int)SymbolModifier.Transient;
+                        break;
+
+	                case Tokens.KEYWORD_WITHSHARING:
+                        modifier |= (int)SymbolModifier.WithSharing;
+                        break;
+
+	                case Tokens.KEYWORD_WITHOUTSHARING:
+                        modifier |= (int)SymbolModifier.WithoutSharing;
+                        break;
+
+	                case Tokens.KEYWORD_WEBSERVICE:
+                        modifier |= (int)SymbolModifier.WebService;
+                        break;
+
+                    case Tokens.KEYWORD_FINAL:
+                        modifier |= (int)SymbolModifier.Final;
+                        break;
 
                     default:
                         break;
                 }
             }
 
-            return visibility;
+            return (SymbolModifier)modifier;
         }
 
         /// <summary>
@@ -158,7 +204,7 @@ namespace SalesForceLanguage.Apex.Parser
                     new TextPosition(node.TextSpan),
                     node.Nodes[1].Nodes[0].GetLeavesDisplayText(),
                     null,
-                    SymbolVisibility.Private,
+                    SymbolModifier.Private,
                     node.Nodes[0].GetLeavesDisplayText()));
             }
 
@@ -243,7 +289,7 @@ namespace SalesForceLanguage.Apex.Parser
                             new TextPosition(declarator.Nodes[0].TextSpan),
                             declarator.Nodes[0].GetLeavesDisplayText(),
                             null,
-                            SymbolVisibility.Private,
+                            SymbolModifier.Private,
                             variableType));
                     }
 
@@ -260,7 +306,7 @@ namespace SalesForceLanguage.Apex.Parser
 
                 // field
                 case Tokens.grammar_field_declaration:
-                    SymbolVisibility fieldVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
+                    SymbolModifier fieldVisibility = GetModifiers(node.GetNodesWithToken(Tokens.grammar_modifier));
                     string fieldType = node.GetChildNodeWithToken(Tokens.grammar_type).GetLeavesDisplayText();
                     ApexSyntaxNode[] fieldDeclarators = node.GetNodesWithToken(Tokens.grammar_variable_declarator);
 
@@ -278,7 +324,7 @@ namespace SalesForceLanguage.Apex.Parser
 
                 // property
                 case Tokens.grammar_property_declaration:
-                    SymbolVisibility propertyVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
+                    SymbolModifier propertyVisibility = GetModifiers(node.GetNodesWithToken(Tokens.grammar_modifier));
                     string propertyType = node.GetChildNodeWithToken(Tokens.grammar_type).GetLeavesDisplayText();
                     ApexSyntaxNode propertyName = node.GetChildNodeWithToken(Tokens.grammar_identifier);
 
@@ -293,7 +339,7 @@ namespace SalesForceLanguage.Apex.Parser
 
                 // constructor
                 case Tokens.grammar_constructor_declaration:
-                    SymbolVisibility constructorVisibility = GetVisibility(node.GetNodesWithToken(Tokens.grammar_modifier));
+                    SymbolModifier constructorVisibility = GetModifiers(node.GetNodesWithToken(Tokens.grammar_modifier));
                     ApexSyntaxNode constructorName = node.GetNodeWithToken(Tokens.grammar_constructor_declarator).Nodes[0];
                     Parameter[] constructorParameters = GetParameters(node.GetNodesWithToken(Tokens.grammar_fixed_parameter));
 
@@ -309,7 +355,7 @@ namespace SalesForceLanguage.Apex.Parser
                 // method
                 case Tokens.grammar_method_declaration:
                     ApexSyntaxNode methodHeader = node.GetNodeWithToken(Tokens.grammar_method_header);
-                    SymbolVisibility methodVisibility = GetVisibility(methodHeader.GetNodesWithToken(Tokens.grammar_modifier));
+                    SymbolModifier methodVisibility = GetModifiers(methodHeader.GetNodesWithToken(Tokens.grammar_modifier));
                     ApexSyntaxNode methodName = methodHeader.GetChildNodeWithToken(Tokens.grammar_identifier);
                     Parameter[] methodParameters = GetParameters(methodHeader.GetNodesWithToken(Tokens.grammar_fixed_parameter));
                     string methodReturnType = (methodHeader.GetChildNodeWithToken(Tokens.KEYWORD_VOID) != null) ?
@@ -338,7 +384,7 @@ namespace SalesForceLanguage.Apex.Parser
                         new TextPosition(interfaceMethodName.TextSpan),
                         interfaceMethodName.GetLeavesDisplayText(),
                         new TextSpan(node.TextSpan),
-                        SymbolVisibility.Public,
+                        SymbolModifier.Public,
                         interfaceMethodReturnType,
                         interfaceMethodParameters));
 
@@ -347,9 +393,9 @@ namespace SalesForceLanguage.Apex.Parser
                 // class
                 case Tokens.grammar_class_declaration:
                     ApexSyntaxNode classModifiers = node.GetChildNodeWithToken(Tokens.grammar_modifiers);
-                    SymbolVisibility classVisibility = SymbolVisibility.Private;
+                    SymbolModifier classVisibility = SymbolModifier.Private;
                     if (classModifiers != null)
-                        classVisibility = GetVisibility(classModifiers.GetNodesWithToken(Tokens.grammar_modifier));
+                        classVisibility = GetModifiers(classModifiers.GetNodesWithToken(Tokens.grammar_modifier));
 
                     ApexSyntaxNode className = node.GetChildNodeWithToken(Tokens.grammar_identifier);
                     _typeReferences.Add(new ReferenceTypeSymbol(
@@ -400,9 +446,9 @@ namespace SalesForceLanguage.Apex.Parser
                 // interface
                 case Tokens.grammar_interface_declaration:
                     ApexSyntaxNode interfaceModifiers = node.GetChildNodeWithToken(Tokens.grammar_modifiers);
-                    SymbolVisibility interfaceVisibility = SymbolVisibility.Private;
+                    SymbolModifier interfaceVisibility = SymbolModifier.Private;
                     if (interfaceModifiers != null)
-                        interfaceVisibility = GetVisibility(interfaceModifiers.GetNodesWithToken(Tokens.grammar_modifier));
+                        interfaceVisibility = GetModifiers(interfaceModifiers.GetNodesWithToken(Tokens.grammar_modifier));
 
                     ApexSyntaxNode interfaceName = node.GetChildNodeWithToken(Tokens.grammar_identifier);
                     _typeReferences.Add(new ReferenceTypeSymbol(new TextPosition(interfaceName.TextSpan), interfaceName.GetLeavesDisplayText(), null, null));

@@ -27,16 +27,16 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// <summary>
     /// A symbol that has parameters.
     /// </summary>
-    public class VisibilitySymbol : Symbol
+    public class ModifiedSymbol : Symbol
     {
         #region Constructors
 
         /// <summary>
         /// Used by xml serializer.
         /// </summary>
-        public VisibilitySymbol()
+        public ModifiedSymbol()
         {
-            Visibility = SymbolVisibility.Private;
+            Modifier = SymbolModifier.None;
         }
 
         /// <summary>
@@ -45,11 +45,11 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
         /// <param name="span">Span.</param>
-        /// <param name="visibility">Visibility.</param>
-        public VisibilitySymbol(TextPosition location, string name, TextSpan span, SymbolVisibility visibility)
+        /// <param name="modifier">Modifier.</param>
+        public ModifiedSymbol(TextPosition location, string name, TextSpan span, SymbolModifier modifier)
             : base(location, name, span)
         {
-            Visibility = visibility;
+            Modifier = modifier;
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <summary>
         /// The visibility of the symbol.
         /// </summary>
-        public SymbolVisibility Visibility { get; private set; }
+        public SymbolModifier Modifier { get; private set; }
 
         #endregion
 
@@ -72,7 +72,12 @@ namespace SalesForceLanguage.Apex.CodeModel
         public override void ReadXml(XmlReader reader)
         {
             base.ReadXml(reader);
-            Visibility = (SymbolVisibility)System.Enum.Parse(typeof(SymbolVisibility), reader["visibility"]);
+
+            string modifier = reader["modifier"];
+            if (modifier == null)
+                Modifier = SymbolModifier.None;
+            else
+                Modifier = (SymbolModifier)int.Parse(modifier);
         }
 
         /// <summary>
@@ -82,7 +87,8 @@ namespace SalesForceLanguage.Apex.CodeModel
         public override void WriteXml(XmlWriter writer)
         {
             base.WriteXml(writer);
-            writer.WriteAttributeString("visibility", Visibility.ToString());
+            if (Modifier != SymbolModifier.None)
+                writer.WriteAttributeString("modifier", ((int)Modifier).ToString());
         }
 
         #endregion

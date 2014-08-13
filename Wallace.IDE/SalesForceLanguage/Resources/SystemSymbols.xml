@@ -1,0 +1,151 @@
+﻿<?xml version="1.0"?>
+<ArrayOfSymbolTable xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Answers -->
+  <SymbolTable name="Answers" modifier="1" type="System.Answers ">
+    <methods>
+      <method name="findSimilar" modifier="9" type="id[]">
+        <parameters>
+          <parameter name="q" type="System.Question" />
+        </parameters>
+      </method>
+      <method name="setBestReply" modifier="9" type="void">
+        <parameters>
+          <parameter name="questionId" type="System.String" />
+          <parameter name="replyId" type="System.String" />
+        </parameters>
+      </method>
+    </methods>
+  </SymbolTable>
+  
+  <!-- ApexPages -->
+  <SymbolTable name="ApexPages" modifier="1" type="System.ApexPages">
+    <methods>
+      <method name="addMessage" modifier="1" type="void">
+        <parameters>
+          <parameter name="msg" type="ApexPages.Message" />
+        </parameters>
+      </method>
+      <method name="addMessages" modifier="1" type="void">
+        <parameters>
+          <parameter name="ex" type="System.Exception" />
+        </parameters>
+      </method>
+      <method name="currentPage" modifier="9" type="System.PageReference">
+      </method>
+      <method name="getMessages" modifier="1" type="ApexPages.Message[]">
+      </method>
+      <method name="hasMessages" modifier="1" type="System.Boolean">
+      </method>
+      <method name="hasMessages" modifier="1" type="System.Boolean">
+        <parameters>
+          <parameter name="sev" type="ApexPages.Severity" />
+        </parameters>
+      </method>      
+    </methods>
+  </SymbolTable>
+  
+  <!-- Approval -->
+  <SymbolTable name="Approval" modifier="1" type="System.Approval">
+    <methods>
+      <method name="process" modifier="9" type="Approval.ProcessResult">
+        <parameters>
+          <parameter name="processRequest" type="Approval.ProcessRequest" />
+        </parameters>
+      </method>
+      <method name="process" modifier="9" type="Approval.ProcessResult">
+        <parameters>
+          <parameter name="processRequests" type="Approval.ProcessRequest " />
+          <parameter name="opt_allOrNone" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="process" modifier="9" type="Approval.ProcessResult[]">
+        <parameters>
+          <parameter name="processRequests" type="Approval.ProcessRequest[]" />
+        </parameters>
+      </method>
+      <method name="process" modifier="9" type="Approval.ProcessResult[]">
+        <parameters>
+          <parameter name="processRequests" type="Approval.ProcessRequest[]" />
+          <parameter name="opt_allOrNone" type="System.Boolean" />
+        </parameters>
+      </method>      
+    </methods>
+  </SymbolTable>
+  
+  <!-- Blob -->
+  <SymbolTable name="Blob" modifier="1" type="System.Blob">
+    <methods>
+      <method name="size" modifier="1" type="System.Integer">
+      </method>
+      <method name="toPdf" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="stringToConvert" type="System.String" />
+        </parameters>
+      </method>
+      <method name="toString" modifier="1" type="System.String">
+      </method>
+      <method name="valueOf" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="toBlob" type="System.String" />
+        </parameters>
+      </method>     
+    </methods>
+  </SymbolTable>  
+  
+  <!-- Boolean -->
+  <SymbolTable name="Boolean" modifier="1" type="System.Boolean">
+    <methods>
+      <method name="valueOf" modifier="9" type="System.Boolean">
+        <parameters>
+          <parameter name="toBoolean" type="System.String" />
+        </parameters>
+      </method>
+      <method name="valueOf" modifier="9" type="System.Boolean">
+        <parameters>
+          <parameter name="fieldValue" type="System.Object" />
+        </parameters>
+      </method>      
+    </methods>
+  </SymbolTable>  
+  
+  <!-- BusinessHours -->
+  <SymbolTable name="BusinessHours" modifier="1" type="System.BusinessHours">
+    <methods>
+      <method name="add" modifier="9" type="System.Datetime">
+        <parameters>
+          <parameter name="businessHoursId" type="System.String" />
+          <parameter name="startDate" type="System.Datetime" />
+          <parameter name="interval" type="System.Long" />
+        </parameters>
+      </method>
+      <method name="addGmt" modifier="9" type="System.Datetime">
+        <parameters>
+          <parameter name="businessHoursId" type="System.String" />
+          <parameter name="startDate" type="System.Datetime" />
+          <parameter name="interval" type="System.Long" />
+        </parameters>
+      </method>
+      <method name="diff" modifier="9" type="System.Long">
+        <parameters>
+          <parameter name="businessHoursId" type="System.String" />
+          <parameter name="startDate" type="System.Datetime" />
+          <parameter name="endDate" type="System.Datetime" />
+        </parameters>
+      </method>
+      <method name="isWithin" modifier="9" type="System.Boolean">
+        <parameters>
+          <parameter name="businessHoursId" type="System.String" />
+          <parameter name="targetDate" type="System.Datetime" />
+        </parameters>
+      </method>
+      <method name="nextStartDate" modifier="9" type="System.Datetime">
+        <parameters>
+          <parameter name="" type="businessHoursId" />
+          <parameter name="" type="targetDate" />
+        </parameters>
+      </method>      
+    </methods>
+  </SymbolTable>  
+
+</ArrayOfSymbolTable>

@@ -42,15 +42,15 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
         /// <param name="span">Span.</param>
-        /// <param name="visibility">Visibility.</param>
+        /// <param name="modifier">Modifier.</param>
         /// <param name="type">Type.</param>
         public Property(
             TextPosition location, 
             string name, 
             TextSpan span,
-            SymbolVisibility visibility, 
+            SymbolModifier modifier, 
             string type)
-            : base(location, name, span, visibility, type)
+            : base(location, name, span, modifier, type)
         {
         }
 

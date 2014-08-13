@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,7 +41,6 @@ using SalesForceLanguage.Apex;
 using SalesForceLanguage.Apex.CodeModel;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Function;
-using System.Text;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -528,7 +528,7 @@ namespace Wallace.IDE.SalesForce.UI
                         Content = VisualHelper.CreateIconHeader(field.ToString(), "Field.png", new Thickness(0))
                     });
 
-                foreach (VisibilitySymbol prop in apexClass.Properties.OrderBy(p => p.Name))
+                foreach (ModifiedSymbol prop in apexClass.Properties.OrderBy(p => p.Name))
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
                         Tag = prop,
