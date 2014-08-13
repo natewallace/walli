@@ -155,8 +155,11 @@ namespace SalesForceLanguage.Apex.Parser
             foreach (ApexSyntaxNode node in nodes)
             {
                 list.Add(new Parameter(
-                    node.Nodes[0].GetLeavesDisplayText(), 
-                    node.Nodes[1].Nodes[0].DisplayText));
+                    new TextPosition(node.TextSpan),
+                    node.Nodes[1].Nodes[0].GetLeavesDisplayText(),
+                    null,
+                    SymbolVisibility.Private,
+                    node.Nodes[0].GetLeavesDisplayText()));
             }
 
             return list.ToArray();

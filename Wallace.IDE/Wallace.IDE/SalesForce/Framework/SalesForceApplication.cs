@@ -149,6 +149,9 @@ namespace Wallace.IDE.SalesForce.Framework
 
             TextSearchFunction searchTextFunction = new TextSearchFunction();
             App.Instance.Menu.AddFunction(searchTextFunction, "DOCUMENT");
+
+            ApexDocumentationFunction apexDocFunction = new ApexDocumentationFunction();
+            App.Instance.Menu.AddFunction(apexDocFunction, "HELP");
         }
 
         /// <summary>

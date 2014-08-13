@@ -27,8 +27,10 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using System.Xml.Serialization;
 using SalesForceData;
 using SalesForceLanguage;
+using SalesForceLanguage.Apex.CodeModel;
 
 namespace Wallace.IDE.SalesForce.Framework
 {
@@ -271,48 +273,79 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public void LoadSymbolsAsync()
         {
-            if (Directory.GetFiles(SymbolsFolder).Length == 0)
-            {
-                ThreadPool.QueueUserWorkItem(
-                    (state) =>
+            ThreadPool.QueueUserWorkItem(
+                (state) =>
+                {
+                    try
                     {
-                        object[] parameters = state as object[];
-                        Project project = parameters[0] as Project;
-                        SalesForceClient client = parameters[1] as SalesForceClient;
-                        LanguageManager language = parameters[2] as LanguageManager;
-
-                        try
+                        // download apex, parse it and then save to cache
+                        if (Directory.GetFiles(SymbolsFolder).Length == 0)
                         {
-                            project._symbolsDownloaded.Reset();
+                            App.Instance.Dispatcher.Invoke(() => App.SetStatus("Downloading symbols..."));
 
-                            // get class ids
-                            DataSelectResult data = client.DataSelect("SELECT Id FROM ApexClass");
-                            Queue<string> classIds = new Queue<string>();
-                            foreach (DataRow row in data.Data.Rows)
-                                classIds.Enqueue(row["Id"] as string);
+                            object[] parameters = state as object[];
+                            Project project = parameters[0] as Project;
+                            SalesForceClient client = parameters[1] as SalesForceClient;
+                            LanguageManager language = parameters[2] as LanguageManager;
 
-                            // download symbols in groups of 10
-                            while (classIds.Count > 0)
+                            try
                             {
-                                StringBuilder query = new StringBuilder("SELECT Id, Body FROM ApexClass WHERE Id IN (");
-                                for (int i = 0; i < 10 && classIds.Count > 0; i++)
-                                    query.AppendFormat("'{0}',", classIds.Dequeue());
+                                project._symbolsDownloaded.Reset();
 
-                                query.Length = query.Length - 1;
-                                query.Append(")");
+                                // get class ids
+                                DataSelectResult data = client.DataSelect("SELECT Id FROM ApexClass");
+                                Queue<string> classIds = new Queue<string>();
+                                foreach (DataRow row in data.Data.Rows)
+                                    classIds.Enqueue(row["Id"] as string);
 
-                                DataSelectResult classData = client.DataSelect(query.ToString());
-                                foreach (DataRow row in classData.Data.Rows)
-                                    language.ParseApex(row["Body"] as string, false, true);
+                                // download symbols in groups of 10
+                                while (classIds.Count > 0)
+                                {
+                                    StringBuilder query = new StringBuilder("SELECT Id, Body FROM ApexClass WHERE Id IN (");
+                                    for (int i = 0; i < 10 && classIds.Count > 0; i++)
+                                        query.AppendFormat("'{0}',", classIds.Dequeue());
+
+                                    query.Length = query.Length - 1;
+                                    query.Append(")");
+
+                                    DataSelectResult classData = client.DataSelect(query.ToString());
+                                    foreach (DataRow row in classData.Data.Rows)
+                                        language.ParseApex(row["Body"] as string, false, true);
+                                }
+                            }
+                            finally
+                            {
+                                project._symbolsDownloaded.Set();
                             }
                         }
-                        finally
+                        // load cached symbols
+                        else
                         {
-                            project._symbolsDownloaded.Set();
+                            App.Instance.Dispatcher.Invoke(() => App.SetStatus("Loading symbols..."));
+
+                            XmlSerializer ser = new XmlSerializer(typeof(SymbolTable));
+
+                            foreach (string file in Directory.GetFiles(SymbolsFolder))
+                            {
+                                using (FileStream fs = File.OpenRead(file))
+                                {
+                                    SymbolTable st = ser.Deserialize(fs) as SymbolTable;
+                                    Language.UpdateSymbols(st, false, false);
+                                    fs.Close();
+                                }
+                            }
                         }
-                    },
-                    new object[] { this, Client, Language });
-            }
+                    }
+                    catch (Exception err)
+                    {
+                        App.Instance.Dispatcher.Invoke(() => App.HandleException(err));
+                    }
+                    finally
+                    {
+                        App.Instance.Dispatcher.Invoke(() => App.SetStatus(null));
+                    }
+                },
+                new object[] { this, Client, Language });
         }
 
         /// <summary>

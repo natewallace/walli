@@ -43,11 +43,11 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="location"></param>
-        /// <param name="name"></param>
-        /// <param name="span"></param>
-        /// <param name="visibility"></param>
-        /// <param name="type"></param>
+        /// <param name="location">Location.</param>
+        /// <param name="name">Name.</param>
+        /// <param name="span">Span.</param>
+        /// <param name="visibility">Visibility.</param>
+        /// <param name="type">Type.</param>
         public TypedSymbol(TextPosition location, string name, TextSpan span, SymbolVisibility visibility, string type)
             : base(location, name, span, visibility)
         {

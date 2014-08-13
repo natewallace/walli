@@ -60,6 +60,18 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Cache symbols when the document is opened.
+        /// </summary>
+        protected override void OnViewReady()
+        {
+            base.OnViewReady();
+
+            // cache symbols
+            if (View.ParseData != null)
+                Project.Language.UpdateSymbols(View.ParseData.Symbols, true, true);
+        }
+
+        /// <summary>
         /// Handle name changes.
         /// </summary>
         public override void Save()

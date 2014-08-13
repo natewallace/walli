@@ -52,14 +52,22 @@ namespace Wallace.Language.Apex.Tests
                 "MyFirstConstructor",
                 new TextSpan(new TextPosition(1, 10), new TextPosition(1, 20)),
                 SymbolVisibility.Public,
-                new Parameter[] { new Parameter("string", "one"), new Parameter("integer", "two") });
+                new Parameter[] 
+                { 
+                    new Parameter(new TextPosition(0,0), "one", null, SymbolVisibility.Private, "string"), 
+                    new Parameter(new TextPosition(0,0), "two", null, SymbolVisibility.Private, "integer")
+                });
 
             Constructor constructorTwo = new Constructor(
                 new TextPosition(5, 10),
                 "MySecondConstructor",
                 new TextSpan(new TextPosition(5, 20), new TextPosition(5, 25)),
                 SymbolVisibility.Public,
-                new Parameter[] { new Parameter("integer", "num"), new Parameter("mytype", "input") });
+                new Parameter[] 
+                { 
+                    new Parameter(new TextPosition(0,0), "num", null, SymbolVisibility.Private, "integer"), 
+                    new Parameter(new TextPosition(0,0), "input", null, SymbolVisibility.Private, "mytype")
+                });
 
             Property propertyOne = new Property(
                 new TextPosition(7, 1),
@@ -81,7 +89,11 @@ namespace Wallace.Language.Apex.Tests
                 new TextSpan(new TextPosition(1, 10), new TextPosition(1, 20)),
                 SymbolVisibility.Public,
                 "mytype",
-                new Parameter[] { new Parameter("string", "onex"), new Parameter("integer", "twox") });
+                new Parameter[] 
+                { 
+                    new Parameter(new TextPosition(0,0), "onex", null, SymbolVisibility.Private, "string"), 
+                    new Parameter(new TextPosition(0,0), "twox", null, SymbolVisibility.Private, "integer")
+                });
 
             Method methodTwo = new Method(
                 new TextPosition(1, 10),
@@ -89,7 +101,11 @@ namespace Wallace.Language.Apex.Tests
                 new TextSpan(new TextPosition(1, 10), new TextPosition(1, 20)),
                 SymbolVisibility.Public,
                 "string",
-                new Parameter[] { new Parameter("string", "onex"), new Parameter("integer", "twox") });
+                new Parameter[] 
+                { 
+                    new Parameter(new TextPosition(0,0), "onex", null, SymbolVisibility.Private, "string"), 
+                    new Parameter(new TextPosition(0,0), "twox", null, SymbolVisibility.Private, "integer")
+                });
 
             SymbolTable symbolTable = new SymbolTable(
                 new TextPosition(1, 1),

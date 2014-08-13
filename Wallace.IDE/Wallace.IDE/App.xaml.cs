@@ -33,6 +33,7 @@ using Wallace.IDE.SalesForce.UI;
 using Wallace.IDE.Framework;
 using Wallace.IDE.Framework.Function;
 using Wallace.IDE.Framework.UI;
+using System.Windows.Threading;
 
 namespace Wallace.IDE
 {
@@ -101,6 +102,17 @@ namespace Wallace.IDE
         /// The salesforce application.
         /// </summary>
         public SalesForceApplication SalesForceApp { get; private set; }
+
+        /// <summary>
+        /// Dispatcher for this application instance.
+        /// </summary>
+        public Dispatcher Dispatcher
+        {
+            get
+            {
+                return _window.Dispatcher;
+            }
+        }
 
         #endregion
 

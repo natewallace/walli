@@ -149,12 +149,13 @@ namespace SalesForceLanguage
 
                 for (int i = 0; i < parts.Count; i++)
                 {
+                    string part = parts[i];
                     partFound = false;
 
                     // method
                     if (parts[i].EndsWith("()"))
                     {
-                        string methodName = parts[i].Substring(0, parts[i].IndexOf('('));
+                        string methodName = part.Substring(0, part.IndexOf('('));
                         SymbolTable externalClass = (i == 0) ? classSymbol : GetSymbols(matchedSymbol.Type);
                         if (externalClass != null)
                         {
@@ -173,17 +174,98 @@ namespace SalesForceLanguage
                         }
                     }
                     // list
-                    else if (parts[i].EndsWith("[]"))
+                    else if (part.EndsWith("[]"))
                     {
                         //TODO:
                     }
                     // variables
                     else
                     {
-                        if (i == 0 && parts[i] == "this")
+                        SymbolTable externalClass = (i == 0) ? classSymbol : GetSymbols(matchedSymbol.Type);
+
+                        if (i == 0)
                         {
-                            matchedSymbol = classSymbol;
-                            partFound = true;
+                            // this keyword
+                            if (part == "this")
+                            {
+                                matchedSymbol = classSymbol;
+                                partFound = true;
+                            }
+                            else
+                            {
+                                // look for method parameters
+                                foreach (Method method in classSymbol.Methods)
+                                {
+                                    if (method.Contains(position))
+                                    {
+                                        foreach (Parameter parameter in method.Parameters)
+                                        {
+                                            if (parameter.Id == part)
+                                            {
+                                                matchedSymbol = parameter;
+                                                partFound = true;
+                                                break;
+                                            }
+                                        }
+
+                                        break;
+                                    }
+                                }
+
+                                // look for local variable
+                                if (!partFound)
+                                {
+                                    foreach (VariableScope scope in classSymbol.VariableScopes)
+                                    {
+                                        if (scope.Span.Contains(position))
+                                        {
+                                            foreach (Field variable in scope.Variables)
+                                            {
+                                                if (variable.Id == part && variable.Location.CompareTo(position) < 0)
+                                                {
+                                                    matchedSymbol = variable;
+                                                    partFound = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (partFound)
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (externalClass != null)
+                        {
+                            // look for fields
+                            if (!partFound)
+                            {
+                                foreach (Field field in externalClass.Fields)
+                                {
+                                    if (field.Id == part)
+                                    {
+                                        matchedSymbol = field;
+                                        partFound = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // look for properties
+                            if (!partFound)
+                            {
+                                foreach (Property property in externalClass.Properties)
+                                {
+                                    if (property.Id == part)
+                                    {
+                                        matchedSymbol = property;
+                                        partFound = true;
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -300,6 +382,28 @@ namespace SalesForceLanguage
         /// <summary>
         /// Parse the given text for an apex document.
         /// </summary>
+        /// <param name="stream">The stream to read text from to parse.</param>
+        /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
+        /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
+        /// <returns>The result of the parse.</returns>
+        public ParseResult ParseApex(Stream stream, bool replace, bool save)
+        {
+            if (stream == null)
+                return new ParseResult(null, null, new LanguageError[0]);
+
+            ApexParser parser = new ApexParser(new ApexLexer(stream));
+
+            ParseResult result = parser.ParseApex();
+
+            if (result.Symbols != null)
+                UpdateSymbols(new SymbolTable[] { result.Symbols }, replace, save);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Parse the given text for an apex document.
+        /// </summary>
         /// <param name="text">The text to parse.</param>
         /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
         /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
@@ -311,14 +415,7 @@ namespace SalesForceLanguage
 
             using (MemoryStream reader = new MemoryStream(Encoding.ASCII.GetBytes(text)))
             {
-                ApexParser parser = new ApexParser(new ApexLexer(reader));
-
-                ParseResult result = parser.ParseApex();
-
-                if (result.Symbols != null)
-                    UpdateSymbols(new SymbolTable[] { result.Symbols }, replace, save);
-
-                return result;
+                return ParseApex(reader, replace, save);
             }
         }
 

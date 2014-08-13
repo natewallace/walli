@@ -86,6 +86,7 @@
     <Compile Include="SalesForce\Framework\Project.cs" />
     <Compile Include="SalesForce\Framework\SalesForceApplication.cs" />
     <Compile Include="SalesForce\Framework\SecureStringUtility.cs" />
+    <Compile Include="SalesForce\Function\ApexDocumentationFunction.cs" />
     <Compile Include="SalesForce\Function\CloseProjectFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
     <Compile Include="SalesForce\Function\NewComponentFunction.cs" />
