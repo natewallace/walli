@@ -60,6 +60,69 @@ namespace Wallace.IDE.SalesForce.UI
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Get the name of the icon file to use for the given symbol.
+        /// </summary>
+        /// <param name="symbol">The symbol to get the icon file name for.</param>
+        /// <returns>The file name for the given symbol or null if it is not defined.</returns>
+        public static string GetIconFileName(Symbol symbol)
+        {
+            ModifiedSymbol modifiedSymbol = symbol as ModifiedSymbol;
+
+            if (symbol is Field)
+            {
+                if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Final))
+                {
+                    if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
+                        return "ConstantPrivate.png";
+                    else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
+                        return "ConstantProtected.png";
+                    else
+                        return "Constant.png";
+                }
+                else
+                {
+                    if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
+                        return "FieldPrivate.png";
+                    else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
+                        return "FieldProtected.png";
+                    else
+                        return "Field.png";
+                }
+            }
+            else if (symbol is Property)
+            {
+                if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
+                    return "PropertyPrivate.png";
+                else
+                    return "Property.png";
+            }
+            else if (symbol is Method || symbol is Constructor)
+            {
+                if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
+                    return "MethodProtected.png";
+                else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
+                    return "MethodPrivate.png";
+                else
+                    return "Method.png";
+            }
+            else if (symbol is SymbolTable)
+            {
+                if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
+                    return "ClassPrivate.png";
+                else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
+                    return "ClassProtected.png";
+                else
+                    return "Class.png";
+            }
+            else
+                return null;
+        }
+
+        #endregion
+
         #region ICompletionData Members
 
         /// <summary>
@@ -96,18 +159,7 @@ namespace Wallace.IDE.SalesForce.UI
         {
             get 
             {
-                if (_symbol is Field)
-                    return VisualHelper.LoadBitmap("Field.png");
-                else if (_symbol is Constructor)
-                    return VisualHelper.LoadBitmap("Method.png");
-                else if (_symbol is Property)
-                    return VisualHelper.LoadBitmap("Property.png");
-                else if (_symbol is Method)
-                    return VisualHelper.LoadBitmap("Method.png");
-                else if (_symbol is SymbolTable)
-                    return VisualHelper.LoadBitmap("Class.png");
-                else
-                    return null;
+                return VisualHelper.LoadBitmap(GetIconFileName(_symbol));
             }
         }
 

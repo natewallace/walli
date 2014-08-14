@@ -525,28 +525,28 @@ namespace Wallace.IDE.SalesForce.UI
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
                         Tag = field,
-                        Content = VisualHelper.CreateIconHeader(field.ToString(), "Field.png", new Thickness(0))
+                        Content = VisualHelper.CreateIconHeader(field.ToString(), ApexCodeCompletionData.GetIconFileName(field), new Thickness(0))
                     });
 
                 foreach (ModifiedSymbol prop in apexClass.Properties.OrderBy(p => p.Name))
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
                         Tag = prop,
-                        Content = VisualHelper.CreateIconHeader(prop.ToString(), "Property.png", new Thickness(0))
+                        Content = VisualHelper.CreateIconHeader(prop.ToString(), ApexCodeCompletionData.GetIconFileName(prop), new Thickness(0))
                     });
 
                 foreach (Constructor constructor in apexClass.Constructors.OrderBy(c => c.Name))
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
                         Tag = constructor,
-                        Content = VisualHelper.CreateIconHeader(constructor.ToString(), "Method.png", new Thickness(0))
+                        Content = VisualHelper.CreateIconHeader(constructor.ToString(), ApexCodeCompletionData.GetIconFileName(constructor), new Thickness(0))
                     });
 
                 foreach (Method method in apexClass.Methods.OrderBy(m => m.Name))
                     comboBoxNavigationMember.Items.Add(new ComboBoxItem()
                     {
                         Tag = method,
-                        Content = VisualHelper.CreateIconHeader(method.ToString(), "Method.png", new Thickness(0))
+                        Content = VisualHelper.CreateIconHeader(method.ToString(), ApexCodeCompletionData.GetIconFileName(method), new Thickness(0))
                     });
             }
         }

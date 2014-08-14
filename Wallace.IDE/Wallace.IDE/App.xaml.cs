@@ -103,17 +103,6 @@ namespace Wallace.IDE
         /// </summary>
         public SalesForceApplication SalesForceApp { get; private set; }
 
-        /// <summary>
-        /// Dispatcher for this application instance.
-        /// </summary>
-        public Dispatcher Dispatcher
-        {
-            get
-            {
-                return _window.Dispatcher;
-            }
-        }
-
         #endregion
 
         #region Methods

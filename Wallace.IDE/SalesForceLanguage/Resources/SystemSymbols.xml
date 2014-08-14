@@ -147,5 +147,136 @@
       </method>      
     </methods>
   </SymbolTable>  
+  
+  <!-- Cases -->
+  <SymbolTable name="Cases" modifier="1" type="System.Cases">
+    <methods>
+      <method name="getCaseIdFromEmailThreadId" modifier="9" type="System.Id">
+        <parameters>
+          <parameter name="emailThreadId" type="System.String" />
+        </parameters>
+      </method>
+    </methods>
+  </SymbolTable>  
+  
+  <!-- Comparable -->
+  <SymbolTable name="Comparable" modifier="1" type="System.Comparable">
+    <methods>
+      <method name="compareTo" modifier="1" type="System.Integer">
+        <parameters>
+          <parameter name="objectToCompareTo" type="System.Object" />
+        </parameters>
+      </method>
+    </methods>
+  </SymbolTable> 
+  
+  <!-- Cookie -->
+  <SymbolTable name="Cookie" modifier="1" type="System.Cookie">
+    <constructors>
+      <constructor name="Cookie" modifier="1">
+        <parameters>
+          <parameter name="name" type="System.String" />
+          <parameter name="value" type="System.String" />
+          <parameter name="path" type="System.String" />
+          <parameter name="maxAge" type="System.Integer" />
+          <parameter name="isSecure" type="System.Boolean" />
+        </parameters>
+      </constructor>
+    </constructors>
+    <methods>
+      <method name="getDomain" modifier="1" type="System.String">
+      </method>
+      <method name="getMaxAge" modifier="1" type="System.Integer">
+      </method>
+      <method name="getName" modifier="1" type="System.String">
+      </method>
+      <method name="getPath" modifier="1" type="System.String">
+      </method>
+      <method name="getValue" modifier="1" type="System.String">
+      </method>
+      <method name="isSecure" modifier="1" type="System.Boolean">
+      </method>      
+    </methods>
+  </SymbolTable>
+  
+  <!-- Crypto -->
+  <SymbolTable name="Crypto" modifier="1" type="System.Crypto">
+    <methods>
+      <method name="decrypt" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="privateKey" type="System.Blob" />
+          <parameter name="initializationVector" type="System.Blob" />
+          <parameter name="cipherText" type="System.Blob" />
+        </parameters>
+      </method>
+      <method name="decryptWithManagedIV" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="privateKey" type="System.Blob" />
+          <parameter name="IVAndCipherText" type="System.Blob" />
+        </parameters>
+      </method>
+      <method name="encrypt" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="privateKey" type="System.Blob" />
+          <parameter name="initializationVector" type="System.Blob" />
+          <parameter name="clearText" type="System.Blob" />
+        </parameters>
+      </method>
+      <method name="encryptWithManagedIV" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="privateKey" type="System.Blob" />
+          <parameter name="clearText" type="System.Blob" />
+        </parameters>
+      </method>
+      <method name="generateAesKey" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="size" type="System.Integer" />
+        </parameters>
+      </method>
+      <method name="generateDigest" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="input" type="System.Blob" />
+        </parameters>
+      </method>
+      <method name="generateMac" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="input" type="System.Blob" />
+          <parameter name="privateKey" type="System.Blob" />
+        </parameters>
+      </method>
+      <method name="getRandomInteger" modifier="9" type="System.Integer">
+      </method>
+      <method name="getRandomLong" modifier="9" type="System.Long">
+      </method>
+      <method name="sign" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="input" type="System.Blob" />
+          <parameter name="privateKey" type="System.Blob" />
+        </parameters>
+      </method>
+      <method name="signWithCertificate" modifier="9" type="System.Blob">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="input" type="System.Blob" />
+          <parameter name="certDevName" type="System.String" />
+        </parameters>
+      </method>
+      <method name="signXML" modifier="9" type="void">
+        <parameters>
+          <parameter name="algorithmName" type="System.String" />
+          <parameter name="node" type="Dom.XmlNode" />
+          <parameter name="idAttributeName" type="System.String" />
+          <parameter name="certDevName" type="System.String" />
+        </parameters>
+      </method>
+    </methods>
+  </SymbolTable>    
 
 </ArrayOfSymbolTable>

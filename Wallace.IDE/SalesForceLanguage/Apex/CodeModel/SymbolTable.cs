@@ -40,7 +40,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             VariableScopes = new VariableScope[0];
             Fields = new Field[0];
             Constructors = new Constructor[0];
-            Properties = new ModifiedSymbol[0];
+            Properties = new Property[0];
             Methods = new Method[0];
             Interfaces = new string[0];
             InnerClasses = new SymbolTable[0];
@@ -68,7 +68,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             VariableScope[] variableScopes,
             Field[] fields,
             Constructor[] constructors,
-            ModifiedSymbol[] properties,
+            Property[] properties,
             Method[] methods,
             string[] interfaces,
             SymbolTable[] innerClasses)
@@ -77,7 +77,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             VariableScopes = variableScopes ?? new VariableScope[0];
             Fields = fields ?? new Field[0];
             Constructors = constructors ?? new Constructor[0];
-            Properties = properties ?? new ModifiedSymbol[0];
+            Properties = properties ?? new Property[0];
             Methods = methods ?? new Method[0];
             Interfaces = interfaces ?? new string[0];
             InnerClasses = innerClasses ?? new SymbolTable[0];
@@ -105,7 +105,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <summary>
         /// Properties for the table.
         /// </summary>
-        public ModifiedSymbol[] Properties { get; private set; }
+        public Property[] Properties { get; private set; }
 
         /// <summary>
         /// Methods for the table.

@@ -472,6 +472,26 @@
   <ItemGroup>
     <Resource Include="Resources\Add.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MethodPrivate.png" />
+    <Resource Include="Resources\MethodProtected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PropertyPrivate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\FieldPrivate.png" />
+    <Resource Include="Resources\FieldProtected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ClassPrivate.png" />
+    <Resource Include="Resources\ClassProtected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Constant.png" />
+    <Resource Include="Resources\ConstantPrivate.png" />
+    <Resource Include="Resources\ConstantProtected.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
