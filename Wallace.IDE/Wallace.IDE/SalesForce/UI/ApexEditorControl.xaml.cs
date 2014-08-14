@@ -781,7 +781,8 @@ namespace Wallace.IDE.SalesForce.UI
                         _completionWindow = new CompletionWindow(textEditor.TextArea);
                         _completionWindow.Style = null;
                         _completionWindow.CompletionList.Style = null;
-                        _completionWindow.CompletionList.Margin = new Thickness(8);
+                        _completionWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                        _completionWindow.MaxWidth = 300;
 
                         // get line to calculate completions for
                         StringBuilder line = new StringBuilder();
