@@ -448,6 +448,8 @@ namespace Wallace.IDE.SalesForce.UI
                 _completionWindow.MaxWidth = 300;
                 _completionWindow.AllowsTransparency = true;
                 _completionWindow.Background = Brushes.Transparent;
+                _completionWindow.SnapsToDevicePixels = true;
+                _completionWindow.UseLayoutRounding = true;
 
                 foreach (Symbol symbol in symbols)
                     _completionWindow.CompletionList.CompletionData.Add(new ApexCodeCompletionData(symbol));

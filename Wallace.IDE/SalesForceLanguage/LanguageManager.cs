@@ -140,8 +140,6 @@ namespace SalesForceLanguage
             _genericCompletions.Add(new Keyword("with"));
             _genericCompletions.Add(new Keyword("without"));
             _genericCompletions.Add(new Keyword("sharing"));
-            _genericCompletions.Add(new Keyword("true"));
-            _genericCompletions.Add(new Keyword("false"));
 
             _genericCompletions = _genericCompletions.OrderBy(s => s.Name).ToList();
         }
