@@ -492,6 +492,15 @@
     <Resource Include="Resources\ConstantPrivate.png" />
     <Resource Include="Resources\ConstantProtected.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Structure.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Keyword.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Literal.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

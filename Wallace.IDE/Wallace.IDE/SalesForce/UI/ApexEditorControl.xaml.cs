@@ -434,6 +434,33 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Show the code completions window.
+        /// </summary>
+        /// <param name="symbols">The symbols to show completions for.</param>
+        private void ShowCodeCompletions(Symbol[] symbols)
+        {
+            if (_completionWindow == null && symbols != null && symbols.Length > 0)
+            {
+                _completionWindow = new CompletionWindow(textEditor.TextArea);
+                _completionWindow.Style = null;
+                _completionWindow.CompletionList.Style = null;
+                _completionWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                _completionWindow.MaxWidth = 300;
+                _completionWindow.AllowsTransparency = true;
+                _completionWindow.Background = Brushes.Transparent;
+
+                foreach (Symbol symbol in symbols)
+                    _completionWindow.CompletionList.CompletionData.Add(new ApexCodeCompletionData(symbol));
+
+                if (_completionWindow.CompletionList.CompletionData.Count > 0)
+                {
+                    _completionWindow.Show();
+                    _completionWindow.Closed += delegate { _completionWindow = null; };
+                }
+            }
+        }
+
+        /// <summary>
         /// Update the navigation controls based on current cursor position.
         /// </summary>
         private void UpdateNavigation()
@@ -774,16 +801,12 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                if (Language != null)
+                if (Language != null && _completionWindow == null)
                 {
+                    Symbol[] symbols = null;
+
                     if (e.Text == ".")
                     {
-                        _completionWindow = new CompletionWindow(textEditor.TextArea);
-                        _completionWindow.Style = null;
-                        _completionWindow.CompletionList.Style = null;
-                        _completionWindow.SizeToContent = SizeToContent.WidthAndHeight;
-                        _completionWindow.MaxWidth = 300;
-
                         // get line to calculate completions for
                         StringBuilder line = new StringBuilder();
                         int openDelimiterCount = 0;
@@ -832,19 +855,15 @@ namespace Wallace.IDE.SalesForce.UI
                                 break;
                         }
 
-                        // calculate completions and show them
-                        foreach (Symbol symbol in LanguageManager.GetCodeCompletions(
+                        // calculate completions
+                        symbols = LanguageManager.GetCodeCompletionsDot(
                             line.ToString(),
                             _className,
-                            new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)))
-                            _completionWindow.CompletionList.CompletionData.Add(new ApexCodeCompletionData(symbol));
-
-                        if (_completionWindow.CompletionList.CompletionData.Count > 0)
-                        {
-                            _completionWindow.Show();
-                            _completionWindow.Closed += delegate { _completionWindow = null; };
-                        }
+                            new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column));
                     }
+
+                    // show completions
+                    ShowCodeCompletions(symbols);
                 }
             }
             catch (Exception err)
@@ -868,6 +887,10 @@ namespace Wallace.IDE.SalesForce.UI
                     {
                         _completionWindow.CompletionList.RequestInsertion(e);
                     }
+                }
+                else if (_completionWindow == null && e.Text.Length == 1 && Char.IsLetter(e.Text[0]))
+                {
+                    ShowCodeCompletions(LanguageManager.GetCodeCompletionsLetter());
                 }
             }
             catch (Exception err)

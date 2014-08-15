@@ -110,15 +110,45 @@ namespace Wallace.IDE.SalesForce.UI
             }
             else if (symbol is SymbolTable)
             {
-                if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
-                    return "ClassPrivate.png";
-                else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
-                    return "ClassProtected.png";
-                else
-                    return "Class.png";
+                switch ((symbol as SymbolTable).Type.ToLower())
+                {
+                    case "system.integer":
+                    case "system.bob":
+                    case "system.date":
+                    case "system.datetime":
+                    case "system.long":
+                    case "system.id":
+                    case "system.boolean":
+                    case "system.decimal":
+                    case "system.double":
+                        return "Structure.png";
+
+                    default:
+                        if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
+                            return "ClassPrivate.png";
+                        else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
+                            return "ClassProtected.png";
+                        else
+                            return "Class.png";
+                }
+            }
+            else if (symbol is Keyword)
+            {
+                switch (symbol.Name.ToLower())
+                {
+                    case "true":
+                    case "false":
+                    case "null":
+                        return "Literal.png";
+
+                    default:
+                        return "Keyword.png";
+                }
             }
             else
                 return null;
+
+            
         }
 
         #endregion
@@ -149,7 +179,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         public object Description
         {
-            get { return _symbol.GetType().Name; }
+            get { return null; }
         }
 
         /// <summary>

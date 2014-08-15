@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Apex\CodeModel\Constructor.cs" />
     <Compile Include="Apex\CodeModel\Field.cs" />
+    <Compile Include="Apex\CodeModel\Keyword.cs" />
     <Compile Include="Apex\CodeModel\Method.cs" />
     <Compile Include="Apex\CodeModel\Parameter.cs" />
     <Compile Include="Apex\CodeModel\Property.cs" />
