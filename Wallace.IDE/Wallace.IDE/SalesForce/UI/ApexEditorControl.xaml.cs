@@ -858,7 +858,7 @@ namespace Wallace.IDE.SalesForce.UI
                         }
 
                         // calculate completions
-                        symbols = LanguageManager.GetCodeCompletionsDot(
+                        symbols = LanguageManager.Completion.GetCodeCompletionsDot(
                             line.ToString(),
                             _className,
                             new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column));
@@ -918,7 +918,7 @@ namespace Wallace.IDE.SalesForce.UI
                     }
 
                     // show completions
-                    ShowCodeCompletions(LanguageManager.GetCodeCompletionsLetter(
+                    ShowCodeCompletions(LanguageManager.Completion.GetCodeCompletionsLetter(
                         word.ToString(),
                         _className,
                         new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)));
