@@ -160,7 +160,7 @@
   </SymbolTable>  
   
   <!-- Comparable -->
-  <SymbolTable name="Comparable" modifier="1" type="System.Comparable">
+  <SymbolTable name="Comparable" modifier="1" type="System.Comparable" tableType="Interface">
     <methods>
       <method name="compareTo" modifier="1" type="System.Integer">
         <parameters>

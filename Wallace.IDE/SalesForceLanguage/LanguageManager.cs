@@ -234,9 +234,9 @@ namespace SalesForceLanguage
                 }
 
                 // add local members
-                result.AddRange(classSymbol.Fields);
-                result.AddRange(classSymbol.Properties);
-                result.AddRange(classSymbol.Methods);
+                result.AddRange(classSymbol.GetFieldsWithModifiers(SymbolModifier.Public));
+                result.AddRange(classSymbol.GetPropertiesWithModifiers(SymbolModifier.Public));
+                result.AddRange(classSymbol.GetMethodsWithModifiers(SymbolModifier.Public));
             }
 
             return result.OrderBy(s => s.Name).ToArray();
@@ -437,10 +437,10 @@ namespace SalesForceLanguage
                     SymbolTable symbols = GetSymbols(matchedSymbol.Type);
                     if (symbols != null)
                     {
-                        result.AddRange(symbols.Fields.GroupBy(s => s.Name).Select(g => g.First()).ToList());
-                        result.AddRange(symbols.Constructors.GroupBy(s => s.Name).Select(g => g.First()).ToList());
-                        result.AddRange(symbols.Properties.GroupBy(s => s.Name).Select(g => g.First()).ToList());
-                        result.AddRange(symbols.Methods.GroupBy(s => s.Name).Select(g => g.First()).ToList());
+                        result.AddRange(symbols.GetFieldsWithModifiers(SymbolModifier.Public).GroupBy(s => s.Name).Select(g => g.First()).ToList());
+                        result.AddRange(symbols.GetConstructorsWithModifiers(SymbolModifier.Public).GroupBy(s => s.Name).Select(g => g.First()).ToList());
+                        result.AddRange(symbols.GetPropertiesWithModifiers(SymbolModifier.Public).GroupBy(s => s.Name).Select(g => g.First()).ToList());
+                        result.AddRange(symbols.GetMethodsWithModifiers(SymbolModifier.Public).GroupBy(s => s.Name).Select(g => g.First()).ToList());
 
                         //TODO: extends
                     }

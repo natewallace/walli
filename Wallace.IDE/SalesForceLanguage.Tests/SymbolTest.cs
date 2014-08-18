@@ -112,11 +112,13 @@ namespace Wallace.Language.Apex.Tests
                 "MyTestClass",
                 new TextSpan(new TextPosition(1, 1), new TextPosition(20, 20)),
                 SymbolModifier.Public,
+                SymbolTableType.Class,
                 null,
                 null,
                 new Constructor[] { constructorOne, constructorTwo },
                 new Property[] { propertyOne, propertyTwo },
                 new Method[] { methodOne, methodTwo },
+                null,
                 new string[] { "interfaceOne", "interfaceTwo", "interfaceThree" },
                 null);
 

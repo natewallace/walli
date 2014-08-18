@@ -406,6 +406,7 @@ namespace SalesForceLanguage.Apex.Parser
 
                     ApexSyntaxNode classBase = node.GetChildNodeWithToken(Tokens.grammar_class_base);
                     List<string> classInterfaces = new List<string>();
+                    string classExtends = null;
                     if (classBase != null)
                     {
                         foreach (ApexSyntaxNode classInterface in classBase.GetNodesWithToken(Tokens.grammar_interface_type))
@@ -421,11 +422,14 @@ namespace SalesForceLanguage.Apex.Parser
 
                         ApexSyntaxNode extends = classBase.GetChildNodeWithToken(Tokens.grammar_class_type);
                         if (extends != null)
+                        {
+                            classExtends = extends.GetLeavesDisplayText();
                             _typeReferences.Add(new ReferenceTypeSymbol(
-                                new TextPosition(extends.TextSpan), 
-                                extends.GetLeavesDisplayText(), 
+                                new TextPosition(extends.TextSpan),
+                                classExtends,
                                 null,
                                 new TextSpan[] { new TextSpan(extends.TextSpan) }));
+                        }
                     }
 
                     _classes.Push(new SymbolTable(
@@ -433,11 +437,13 @@ namespace SalesForceLanguage.Apex.Parser
                         className.GetLeavesDisplayText(),
                         new TextSpan(node.TextSpan),
                         classVisibility,
+                        SymbolTableType.Class,
                         _variableScopes.ToArray(),
                         GetSymbols<Field>(node, _fields),
                         GetSymbols<Constructor>(node, _constructors),
                         GetSymbols<Property>(node, _properties),
                         GetSymbols<Method>(node, _methods),
+                        "",
                         classInterfaces.ToArray(),
                         GetSymbols<SymbolTable>(node, _classes)));
 
@@ -455,6 +461,7 @@ namespace SalesForceLanguage.Apex.Parser
 
                     ApexSyntaxNode interfaceBase = node.GetChildNodeWithToken(Tokens.grammar_interface_base);
                     List<string> interfaceBases = new List<string>();
+                    string interfaceExtends = null;
                     if (interfaceBase != null)
                     {
                         foreach (ApexSyntaxNode interfaceInterface in interfaceBase.GetNodesWithToken(Tokens.grammar_interface_type))
@@ -467,6 +474,17 @@ namespace SalesForceLanguage.Apex.Parser
                                 null, 
                                 new TextSpan[] { new TextSpan(interfaceInterface.TextSpan) }));
                         }
+
+                        ApexSyntaxNode extends = interfaceBase.GetChildNodeWithToken(Tokens.grammar_class_type);
+                        if (extends != null)
+                        {
+                            interfaceExtends = extends.GetLeavesDisplayText();
+                            _typeReferences.Add(new ReferenceTypeSymbol(
+                                new TextPosition(extends.TextSpan),
+                                interfaceExtends,
+                                null,
+                                new TextSpan[] { new TextSpan(extends.TextSpan) }));
+                        }
                     }
 
                     _classes.Push(new SymbolTable(
@@ -474,11 +492,13 @@ namespace SalesForceLanguage.Apex.Parser
                         interfaceName.GetLeavesDisplayText(),
                         new TextSpan(node.TextSpan),
                         interfaceVisibility,
+                        SymbolTableType.Interface,
                         null,
                         null,
                         null,
                         null,
                         GetSymbols<Method>(node, _methods),
+                        interfaceExtends,
                         interfaceBases.ToArray(),
                         GetSymbols<SymbolTable>(node, _classes)));
 

@@ -20,7 +20,9 @@
  * THE SOFTWARE.
  */
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 
 namespace SalesForceLanguage.Apex.CodeModel
@@ -37,11 +39,13 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         public SymbolTable()
         {
+            TableType = SymbolTableType.Class;
             VariableScopes = new VariableScope[0];
             Fields = new Field[0];
             Constructors = new Constructor[0];
             Properties = new Property[0];
             Methods = new Method[0];
+            Extends = null;
             Interfaces = new string[0];
             InnerClasses = new SymbolTable[0];
         }
@@ -53,11 +57,13 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="name">Name.</param>
         /// <param name="span">Span.</param>
         /// <param name="modifier">Modifier.</param>
+        /// <param name="tableType">TableType.</param>
         /// <param name="variableScopes">VariableScopes.</param>
         /// <param name="fields">Fields.</param>
         /// <param name="constructors">Constructors</param>
         /// <param name="properties">Properties</param>
         /// <param name="methods">Methods</param>
+        /// <param name="extends">Extends.</param>
         /// <param name="interfaces">Interfaces</param>
         /// <param name="innerClasses">InnerClasses</param>
         public SymbolTable(
@@ -65,20 +71,24 @@ namespace SalesForceLanguage.Apex.CodeModel
             string name,
             TextSpan span,
             SymbolModifier modifier,
+            SymbolTableType tableType,
             VariableScope[] variableScopes,
             Field[] fields,
             Constructor[] constructors,
             Property[] properties,
             Method[] methods,
+            string extends,
             string[] interfaces,
             SymbolTable[] innerClasses)
             : base(location, name, span, modifier, name)
         {
+            TableType = tableType;
             VariableScopes = variableScopes ?? new VariableScope[0];
             Fields = fields ?? new Field[0];
             Constructors = constructors ?? new Constructor[0];
             Properties = properties ?? new Property[0];
             Methods = methods ?? new Method[0];
+            Extends = extends;
             Interfaces = interfaces ?? new string[0];
             InnerClasses = innerClasses ?? new SymbolTable[0];
         }
@@ -86,6 +96,11 @@ namespace SalesForceLanguage.Apex.CodeModel
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The type of table this is.
+        /// </summary>
+        public SymbolTableType TableType { get; private set; }
 
         /// <summary>
         /// Local variables organzied by the scope they are defined in.
@@ -118,9 +133,58 @@ namespace SalesForceLanguage.Apex.CodeModel
         public string[] Interfaces { get; private set; }
 
         /// <summary>
+        /// The class this class extends if any.  If the class doesn't extend another class it will be null.
+        /// </summary>
+        public string Extends { get; private set; }
+
+        /// <summary>
         /// Inner classes or interfaces for the table.
         /// </summary>
         public SymbolTable[] InnerClasses { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Get Fields that have the given modifiers.
+        /// </summary>
+        /// <param name="modifiers">The modifiers to filter by.</param>
+        /// <returns>Fields that have the given modifier.</returns>
+        public Field[] GetFieldsWithModifiers(SymbolModifier modifiers)
+        {
+            return Fields.Where(m => m.Modifier.HasFlag(modifiers)).ToArray();
+        }
+
+        /// <summary>
+        /// Get Constructors that have the given modifiers.
+        /// </summary>
+        /// <param name="modifiers">The modifiers to filter by.</param>
+        /// <returns>Constructors that have the given modifier.</returns>
+        public Constructor[] GetConstructorsWithModifiers(SymbolModifier modifiers)
+        {
+            return Constructors.Where(m => m.Modifier.HasFlag(modifiers)).ToArray();
+        }
+
+        /// <summary>
+        /// Get Properties that have the given modifiers.
+        /// </summary>
+        /// <param name="modifiers">The modifiers to filter by.</param>
+        /// <returns>Properties that have the given modifier.</returns>
+        public Property[] GetPropertiesWithModifiers(SymbolModifier modifiers)
+        {
+            return Properties.Where(m => m.Modifier.HasFlag(modifiers)).ToArray();
+        }
+
+        /// <summary>
+        /// Get Methods that have the given modifiers.
+        /// </summary>
+        /// <param name="modifiers">The modifiers to filter by.</param>
+        /// <returns>Methods that have the given modifier.</returns>
+        public Method[] GetMethodsWithModifiers(SymbolModifier modifiers)
+        {
+            return Methods.Where(m => m.Modifier.HasFlag(modifiers)).ToArray();
+        }
 
         #endregion
 
@@ -133,6 +197,14 @@ namespace SalesForceLanguage.Apex.CodeModel
         public override void ReadXml(XmlReader reader)
         {
             base.ReadXml(reader);
+
+            string tableType = reader["tableType"] as string;
+            if (tableType != null)
+                TableType = (SymbolTableType)Enum.Parse(typeof(SymbolTableType), tableType);
+            else
+                TableType = SymbolTableType.Class;
+
+            Extends = reader["extends"] as string;
 
             List<Field> fields = new List<Field>();
             List<Constructor> constructors = new List<Constructor>();
@@ -245,6 +317,10 @@ namespace SalesForceLanguage.Apex.CodeModel
         public override void WriteXml(XmlWriter writer)
         {
             base.WriteXml(writer);
+
+            writer.WriteAttributeString("tableType", TableType.ToString());
+            if (!String.IsNullOrWhiteSpace(Extends))
+                writer.WriteAttributeString("extends", Extends);
 
             if (Fields.Length > 0)
             {

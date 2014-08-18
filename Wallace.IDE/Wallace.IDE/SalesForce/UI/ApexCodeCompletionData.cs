@@ -110,26 +110,41 @@ namespace Wallace.IDE.SalesForce.UI
             }
             else if (symbol is SymbolTable)
             {
-                switch ((symbol as SymbolTable).Type.ToLower())
+                SymbolTable st = symbol as SymbolTable;
+
+                switch (st.TableType)
                 {
-                    case "system.integer":
-                    case "system.bob":
-                    case "system.date":
-                    case "system.datetime":
-                    case "system.long":
-                    case "system.id":
-                    case "system.boolean":
-                    case "system.decimal":
-                    case "system.double":
-                        return "Structure.png";
+                    case SymbolTableType.Interface:
+                        return "interface.png";
+
+                    case SymbolTableType.Class:
+                        switch (st.Type.ToLower())
+                        {
+                            case "system.integer":
+                            case "system.blob":
+                            case "system.date":
+                            case "system.datetime":
+                            case "system.long":
+                            case "system.id":
+                            case "system.boolean":
+                            case "system.decimal":
+                            case "system.double":
+                                return "Structure.png";
+
+                            default:
+                                if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
+                                    return "ClassPrivate.png";
+                                else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
+                                    return "ClassProtected.png";
+                                else
+                                    return "Class.png";
+                        }
+
+                    case SymbolTableType.SObject:
+                        return "Object.png";
 
                     default:
-                        if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
-                            return "ClassPrivate.png";
-                        else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
-                            return "ClassProtected.png";
-                        else
-                            return "Class.png";
+                        return null;
                 }
             }
             else if (symbol is Keyword)

@@ -38,7 +38,7 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">Presenter to use.</param>
         public override void Init(FunctionHost host, IFunctionPresenter presenter)
         {
-            presenter.Header = VisualHelper.CreateIconHeader("Apex documentation...", null);
+            presenter.Header = VisualHelper.CreateIconHeader("Apex reference...", null);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Wallace.IDE.SalesForce.Function
         {
             try
             {
-                using (App.Wait("Opening apex documentation..."))
+                using (App.Wait("Opening apex reference..."))
                     System.Diagnostics.Process.Start("http://www.salesforce.com/us/developer/docs/apexcode/index_Left.htm");
             }
             catch

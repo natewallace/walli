@@ -902,7 +902,7 @@ namespace Wallace.IDE.SalesForce.UI
                     for (; offset >= 0; offset--)
                     {
                         char c = textEditor.Document.GetCharAt(offset);
-                        if (Char.IsLetterOrDigit(c))
+                        if (Char.IsLetterOrDigit(c) || c == '_')
                         {
                             word.Insert(0, c);
                         }
