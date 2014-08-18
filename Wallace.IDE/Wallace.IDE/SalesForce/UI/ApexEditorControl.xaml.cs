@@ -445,7 +445,7 @@ namespace Wallace.IDE.SalesForce.UI
                 _completionWindow.Style = null;
                 _completionWindow.CompletionList.Style = null;
                 _completionWindow.SizeToContent = SizeToContent.WidthAndHeight;
-                _completionWindow.MaxWidth = 300;
+                _completionWindow.MaxWidth = 400;
                 _completionWindow.AllowsTransparency = true;
                 _completionWindow.Background = Brushes.Transparent;
                 _completionWindow.SnapsToDevicePixels = true;
