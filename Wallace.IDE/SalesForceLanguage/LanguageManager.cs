@@ -79,8 +79,6 @@ namespace SalesForceLanguage
                     {
                         _predefinedClasses.Add(symbol.Id, symbol);
                         _genericCompletions.Add(symbol);
-
-                        
                     }
                 }
             }
@@ -198,10 +196,50 @@ namespace SalesForceLanguage
         /// <summary>
         /// Get generic code completions.
         /// </summary>
+        /// <param name="text">The text that appears before the position where the completion would be inserted.</param>
+        /// <param name="className">The name of the class.</param>
+        /// <param name="position">The position in the class text for the code completion.</param>
         /// <returns>Generic code completions.</returns>
-        public Symbol[] GetCodeCompletionsLetter()
+        public Symbol[] GetCodeCompletionsLetter(string text, string className, TextPosition position)
         {
-            return _genericCompletions.ToArray();
+            // don't do code completions for text that immediately follows a type or a word
+            // that isn't a keyword.
+            if (text != null && text.Length > 0)
+            {
+                if (GetSymbols(text) != null)
+                    return new Symbol[0];
+
+                text = text.Trim().ToLower();
+                if (!_genericCompletions.Any(s => s.Id == text))
+                    return new Symbol[0];
+            }
+            
+            List<Symbol> result = new List<Symbol>();
+            result.AddRange(_genericCompletions);
+            result.AddRange(_predefinedClasses.Values);
+            result.AddRange(_classes.Values);
+
+            SymbolTable classSymbol = GetSymbols(className);
+            if (classSymbol != null)
+            {
+                // add variables from the current scope
+                foreach (VariableScope scope in classSymbol.VariableScopes)
+                {
+                    if (scope.Span.Contains(position))
+                    {
+                        foreach (Field field in scope.Variables)
+                            if (field.Location.CompareTo(position) < 0)
+                                result.Add(field);
+                    }
+                }
+
+                // add local members
+                result.AddRange(classSymbol.Fields);
+                result.AddRange(classSymbol.Properties);
+                result.AddRange(classSymbol.Methods);
+            }
+
+            return result.OrderBy(s => s.Name).ToArray();
         }
         
         /// <summary>
