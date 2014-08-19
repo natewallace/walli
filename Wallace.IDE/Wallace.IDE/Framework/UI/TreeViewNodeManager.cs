@@ -148,6 +148,7 @@ namespace Wallace.IDE.Framework.UI
                 Host.PreviewMouseMove -= Host_PreviewMouseMove;
                 Host.PreviewMouseUp -= Host_PreviewMouseUp;
                 Host.SelectedItemChanged -= Host_SelectedItemChanged;
+                Host.KeyDown -= Host_KeyDown;
 
                 if (Nodes != null)
                     (Nodes as ObservableCollection<INode>).CollectionChanged -= TreeViewNodeManager_NodesChanged;
@@ -173,7 +174,7 @@ namespace Wallace.IDE.Framework.UI
                 Host.PreviewMouseMove += Host_PreviewMouseMove;
                 Host.PreviewMouseUp += Host_PreviewMouseUp;
                 Host.SelectedItemChanged += Host_SelectedItemChanged;
-                Host.SelectedValuePath = "Name";
+                Host.KeyDown += Host_KeyDown;
 
                 Nodes = new ObservableCollection<INode>();
                 (Nodes as ObservableCollection<INode>).CollectionChanged += TreeViewNodeManager_NodesChanged;
@@ -198,7 +199,6 @@ namespace Wallace.IDE.Framework.UI
 
             TreeViewMultiSelectItem item = new TreeViewMultiSelectItem();
             item.Tag = node;
-            item.Name = node.Text;
             node.Presenter = (parent == null) ?
                 new TreeViewItemNodePresenter(item, this, null) :
                 new TreeViewItemNodePresenter(item, this, (parent.Tag as INode).Presenter);
@@ -1094,7 +1094,7 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
-        public void Host_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Host_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             try
             {
@@ -1112,6 +1112,16 @@ namespace Wallace.IDE.Framework.UI
             {
                 App.HandleException(err);
             }
+        }
+
+        /// <summary>
+        /// Perform search using text entered by user.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void Host_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            // TODO: implement search
         }
 
         #endregion
