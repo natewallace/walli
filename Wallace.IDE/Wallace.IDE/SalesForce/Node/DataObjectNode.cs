@@ -68,6 +68,17 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public SObjectTypePartial DataObject { get; private set; }
 
+        /// <summary>
+        /// The text that represents this node.
+        /// </summary>
+        public override string Text
+        {
+            get
+            {
+                return (DataObject == null) ? String.Empty : DataObject.Name;
+            }
+        }
+
         #endregion
 
         #region Methods

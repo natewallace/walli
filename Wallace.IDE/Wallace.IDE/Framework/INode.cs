@@ -33,6 +33,11 @@ namespace Wallace.IDE.Framework
         INodePresenter Presenter { get; set; }
 
         /// <summary>
+        /// The text that represents this node.
+        /// </summary>
+        string Text { get; }
+
+        /// <summary>
         /// Called by the UI when the node is ready for display.
         /// </summary>
         void Init();

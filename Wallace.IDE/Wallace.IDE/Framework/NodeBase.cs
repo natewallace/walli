@@ -60,7 +60,12 @@ namespace Wallace.IDE.Framework
         /// <summary>
         /// The presenter that will be used for this node.
         /// </summary>
-        public INodePresenter Presenter { get; set; }
+        public virtual INodePresenter Presenter { get; set; }
+
+        /// <summary>
+        /// The text that represents this node.
+        /// </summary>
+        public virtual string Text { get; protected set; }
 
         /// <summary>
         /// Called by the UI when the node is ready for display.

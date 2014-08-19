@@ -89,6 +89,17 @@ namespace Wallace.IDE.SalesForce.Node
             }
         }
 
+        /// <summary>
+        /// The text that represents this node.
+        /// </summary>
+        public override string Text
+        {
+            get
+            {
+                return (SourceFile == null) ? String.Empty : SourceFile.Name;
+            }
+        }
+
         #endregion
 
         #region Methods

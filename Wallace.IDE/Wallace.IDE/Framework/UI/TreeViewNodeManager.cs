@@ -173,6 +173,7 @@ namespace Wallace.IDE.Framework.UI
                 Host.PreviewMouseMove += Host_PreviewMouseMove;
                 Host.PreviewMouseUp += Host_PreviewMouseUp;
                 Host.SelectedItemChanged += Host_SelectedItemChanged;
+                Host.SelectedValuePath = "Name";
 
                 Nodes = new ObservableCollection<INode>();
                 (Nodes as ObservableCollection<INode>).CollectionChanged += TreeViewNodeManager_NodesChanged;
@@ -197,6 +198,7 @@ namespace Wallace.IDE.Framework.UI
 
             TreeViewMultiSelectItem item = new TreeViewMultiSelectItem();
             item.Tag = node;
+            item.Name = node.Text;
             node.Presenter = (parent == null) ?
                 new TreeViewItemNodePresenter(item, this, null) :
                 new TreeViewItemNodePresenter(item, this, (parent.Tag as INode).Presenter);

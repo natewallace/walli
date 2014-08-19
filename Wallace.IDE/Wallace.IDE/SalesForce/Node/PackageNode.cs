@@ -65,6 +65,17 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public Package Package { get; private set; }
 
+        /// <summary>
+        /// The text that represents this node.
+        /// </summary>
+        public override string Text
+        {
+            get
+            {
+                return (Package == null) ? String.Empty : Package.Name;
+            }
+        }
+
         #endregion
 
         #region Methods

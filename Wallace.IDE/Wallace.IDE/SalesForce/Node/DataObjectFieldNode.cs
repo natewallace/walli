@@ -67,6 +67,17 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public SObjectFieldType DataObjectField { get; private set; }
 
+        /// <summary>
+        /// The text that represents this node.
+        /// </summary>
+        public override string Text
+        {
+            get
+            {
+                return (DataObjectField == null) ? String.Empty : DataObjectField.Name;
+            }
+        }
+
         #endregion
 
         #region Methods

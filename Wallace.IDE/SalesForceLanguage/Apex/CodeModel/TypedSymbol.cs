@@ -37,7 +37,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         public TypedSymbol()
         {
-
+            Type = String.Empty;
         }
 
         /// <summary>

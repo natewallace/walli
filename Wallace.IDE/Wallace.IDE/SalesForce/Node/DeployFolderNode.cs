@@ -55,6 +55,17 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public Project Project { get; private set; }
 
+        /// <summary>
+        /// The text that represents this node.
+        /// </summary>
+        public override string Text
+        {
+            get
+            {
+                return "Deploy";
+            }
+        }
+
         #endregion
 
         #region Methods
