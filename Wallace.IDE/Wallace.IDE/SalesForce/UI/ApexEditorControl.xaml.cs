@@ -33,6 +33,7 @@ using System.Windows.Media;
 using System.Windows.Resources;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.CodeCompletion;
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
@@ -865,6 +866,16 @@ namespace Wallace.IDE.SalesForce.UI
                             line.ToString(),
                             _className,
                             new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column));
+                    }
+                    // modify indentation when closing bracket is entered.
+                    else if (e.Text == "}")
+                    {
+                        DocumentLine currentLine = textEditor.Document.GetLineByOffset(textEditor.TextArea.Caret.Offset);
+                        string currentLineText = textEditor.Document.GetText(currentLine.Offset, currentLine.Length);
+                        if (currentLineText != null && currentLineText.TrimEnd().Length > 1 && currentLineText.Trim() == "}")
+                        {
+                            textEditor.Document.Remove(textEditor.TextArea.Caret.Offset - 2, 1);
+                        }
                     }
 
                     // show completions

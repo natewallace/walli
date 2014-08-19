@@ -52,10 +52,10 @@ namespace Wallace.IDE.SalesForce.UI
             DocumentLine previousLine = line.PreviousLine;
             if (previousLine != null)
             {
-                // check for opening block comment
                 string previousLineText = document.GetText(previousLine.Offset, previousLine.Length);
                 if (previousLineText != null)
                 {
+                    // check for opening block comment
                     Match match = Regex.Match(previousLineText, @"^[ \t]*/?\*(?!/)");
                     if (match != null && match.Success)
                     {
@@ -80,6 +80,33 @@ namespace Wallace.IDE.SalesForce.UI
                         }
 
                         sb.Append(' ');
+                        document.Insert(line.Offset, sb.ToString());
+                    }
+                    // check for opening block of code
+                    else if (previousLineText.Trim().EndsWith("{"))
+                    {
+                        customIndent = true;
+                        StringBuilder sb = new StringBuilder();
+                        bool done = false;
+                        foreach (char c in previousLineText)
+                        {
+                            switch (c)
+                            {
+                                case ' ':
+                                case '\t':
+                                    sb.Append(c);
+                                    break;
+
+                                default:
+                                    done = true;
+                                    break;
+                            }
+
+                            if (done)
+                                break;
+                        }
+
+                        sb.Append('\t');
                         document.Insert(line.Offset, sb.ToString());
                     }
                 }
