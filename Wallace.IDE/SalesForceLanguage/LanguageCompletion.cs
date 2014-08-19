@@ -87,9 +87,8 @@ namespace SalesForceLanguage
             _genericCompletions.Add(new Keyword("void"));
             _genericCompletions.Add(new Keyword("webservice"));
             _genericCompletions.Add(new Keyword("while"));
-            _genericCompletions.Add(new Keyword("with"));
-            _genericCompletions.Add(new Keyword("without"));
-            _genericCompletions.Add(new Keyword("sharing"));
+            _genericCompletions.Add(new Keyword("with sharing"));
+            _genericCompletions.Add(new Keyword("without sharing"));
 
             _genericCompletions = _genericCompletions.OrderBy(s => s.Name).ToList();
         }
@@ -119,16 +118,50 @@ namespace SalesForceLanguage
         /// <returns>Generic code completions.</returns>
         public Symbol[] GetCodeCompletionsLetter(string text, string className, TextPosition position)
         {
-            // don't do code completions for text that immediately follows a type or a word
-            // that isn't a keyword.
+            // don't do code completions for text that:
+            // immediately follows a type,
+            // immediately follows certain keywords.
             if (text != null && text.Length > 0)
             {
                 if (_language.GetSymbols(text) != null)
                     return new Symbol[0];
 
                 text = text.Trim().ToLower();
-                if (!_genericCompletions.Any(s => s.Id == text))
-                    return new Symbol[0];
+
+                switch (text)
+                {
+                    case "abstract":
+                    case "delete":
+                    case "extends":
+                    case "final":
+                    case "global":
+                    case "implements":
+                    case "insert":
+                    case "merge":
+                    case "new":
+                    case "override":
+                    case "private":
+                    case "protected":
+                    case "public":
+                    case "return":
+                    case "static":
+                    case "testmethod":
+                    case "throw":
+                    case "transient":
+                    case "undelete":
+                    case "update":
+                    case "upsert":
+                    case "virtual":
+                    case "webservice":
+                    case "with sharing":
+                    case "without sharing":
+                        break;
+
+                    default:
+                        if (_genericCompletions.Any(s => s.Id == text))
+                            return new Symbol[0];
+                        break;
+                }
             }
 
             List<Symbol> result = new List<Symbol>();
@@ -196,13 +229,15 @@ namespace SalesForceLanguage
             // combine and filter out parts
             for (int i = 0; i < parts.Count; i++)
             {
-                if (i + 1 < parts.Count && (parts[i + 1] == "()" || parts[i + 1] == "[]"))
+                if (i + 1 < parts.Count && parts[i + 1] == "()")
                 {
                     parts[i] = parts[i] + parts[i + 1];
                     parts.RemoveAt(i + 1);
                 }
 
-                if (parts[i] == "if()")
+                if (parts[i] == "if()" ||
+                    parts[i] == "[]" ||
+                    parts[i] == "<>")
                 {
                     parts.RemoveAt(i);
                     i--;
@@ -242,11 +277,6 @@ namespace SalesForceLanguage
                                 }
                             }
                         }
-                    }
-                    // list
-                    else if (part.EndsWith("[]"))
-                    {
-                        //TODO:
                     }
                     // variables
                     else
@@ -487,7 +517,7 @@ namespace SalesForceLanguage
 
             foreach (Method method in symbolTable.Methods)
             {
-                if (method.Modifier.HasFlag(modifiers))
+                if (((int)method.Modifier & (int)modifiers) > 0)
                     result.Add(method);
             }
 

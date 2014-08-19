@@ -43,7 +43,6 @@ namespace Wallace.IDE.SalesForce.Document
         public ClassEditorDocument(Project project, SourceFile classFile)
             : base(project, classFile)
         {
-            View.LanguageManager = project.Language;
         }
 
         #endregion
@@ -60,15 +59,26 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
-        /// Cache symbols when the document is opened.
+        /// Set the language manager on the view.
         /// </summary>
-        protected override void OnViewReady()
+        protected override void OnViewCreated()
         {
-            base.OnViewReady();
+            View.LanguageManager = Project.Language;
+        }
 
-            // cache symbols
-            if (View.ParseData != null)
+        /// <summary>
+        /// Cache symbols when the document gets loaded from the server.
+        /// </summary>
+        /// <returns>The result of the reload.</returns>
+        public override bool Reload()
+        {
+            bool result = base.Reload();
+            if (result && View.ParseData != null)
+            {
                 Project.Language.UpdateSymbols(View.ParseData.Symbols, true, true);
+            }
+
+            return result;
         }
 
         /// <summary>

@@ -310,8 +310,6 @@ namespace Wallace.IDE.SalesForce.UI
         private void UpdateView()
         {
             ParseText(Text);
-            if (ParseData != null && ParseData.Symbols != null)
-                _className = ParseData.Symbols.Name;
 
             textEditor.TextArea.TextView.Redraw();
 
@@ -333,6 +331,9 @@ namespace Wallace.IDE.SalesForce.UI
                 ParseData = LanguageManager.ParseApex(text, true, false);
                 _colorTransformer.ParseData = ParseData;
             }
+
+            if (ParseData != null && ParseData.Symbols != null)
+                _className = ParseData.Symbols.Name;
         }
 
         /// <summary>
@@ -820,6 +821,7 @@ namespace Wallace.IDE.SalesForce.UI
                             {
                                 case ')':
                                 case ']':
+                                case '>':
                                     if (openDelimiterCount == 0)
                                         line.Insert(0, c);
                                     openDelimiterCount++;
@@ -829,6 +831,7 @@ namespace Wallace.IDE.SalesForce.UI
                                 case '}':
                                 case '(':
                                 case '[':
+                                case '<':
                                     if (openDelimiterCount == 0)
                                     {
                                         stop = true;

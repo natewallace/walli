@@ -71,6 +71,7 @@ namespace Wallace.IDE.SalesForce.Document
             _isDirty = false;
 
             View = Activator.CreateInstance<TView>();
+            OnViewCreated();
 
             Reload();
 
@@ -124,6 +125,14 @@ namespace Wallace.IDE.SalesForce.Document
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Called right after the view has been created.
+        /// </summary>
+        protected virtual void OnViewCreated()
+        {
+
+        }
 
         /// <summary>
         /// Called when the view is ready.

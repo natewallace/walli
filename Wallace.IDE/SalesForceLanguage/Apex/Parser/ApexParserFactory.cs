@@ -443,7 +443,7 @@ namespace SalesForceLanguage.Apex.Parser
                         GetSymbols<Constructor>(node, _constructors),
                         GetSymbols<Property>(node, _properties),
                         GetSymbols<Method>(node, _methods),
-                        "",
+                        classExtends,
                         classInterfaces.ToArray(),
                         GetSymbols<SymbolTable>(node, _classes)));
 
