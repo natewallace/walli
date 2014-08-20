@@ -870,11 +870,59 @@ namespace Wallace.IDE.SalesForce.UI
                     // modify indentation when closing bracket is entered.
                     else if (e.Text == "}")
                     {
-                        DocumentLine currentLine = textEditor.Document.GetLineByOffset(textEditor.TextArea.Caret.Offset);
-                        string currentLineText = textEditor.Document.GetText(currentLine.Offset, currentLine.Length);
-                        if (currentLineText != null && currentLineText.TrimEnd().Length > 1 && currentLineText.Trim() == "}")
+                        DocumentLine endLine = textEditor.Document.GetLineByOffset(textEditor.TextArea.Caret.Offset);
+                        string endLineText = textEditor.Document.GetText(endLine.Offset, endLine.Length);
+                        if (endLineText.Trim() == "}")
                         {
-                            textEditor.Document.Remove(textEditor.TextArea.Caret.Offset - 2, 1);
+                            int openCount = 1;
+                            for (int offset = textEditor.TextArea.Caret.Offset - 2; offset >= 0; offset--)
+                            {
+                                char c = textEditor.Document.GetCharAt(offset);
+                                switch (c)
+                                {
+                                    case '{':
+                                        openCount--;
+                                        break;
+
+                                    case '}':
+                                        openCount++;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+                                if (openCount == 0)
+                                {
+                                    DocumentLine startLine = textEditor.Document.GetLineByOffset(offset);
+                                    string startLineText = textEditor.Document.GetText(startLine.Offset, startLine.Length);
+
+                                    // get the padding at the start of the end line
+                                    int paddingCount = 0;
+                                    foreach (char endLineChar in endLineText)
+                                    {
+                                        if (endLineChar == ' ' || endLineChar == '\t')
+                                            paddingCount++;
+                                        else
+                                            break;
+                                    }
+
+                                    // get the padding at the start of the start line
+                                    StringBuilder sb = new StringBuilder();
+                                    foreach (char lineChar in startLineText)
+                                    {
+                                        if (lineChar == ' ' || lineChar == '\t')
+                                            sb.Append(lineChar);
+                                        else
+                                            break;
+                                    }
+
+                                    // replace padding at the start of the end line with padding at the start of the start line
+                                    textEditor.Document.Remove(endLine.Offset, paddingCount);
+                                    textEditor.Document.Insert(endLine.Offset, sb.ToString());
+                                    break;
+                                }
+                            }
                         }
                     }
 
