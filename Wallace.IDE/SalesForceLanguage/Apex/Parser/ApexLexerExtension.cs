@@ -42,6 +42,26 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         private Stack<ApexLexerStateInfo> _stateStack = new Stack<ApexLexerStateInfo>();
 
+        /// <summary>
+        /// When set to true, comments and whitespace tokens are returned.
+        /// </summary>
+        private bool _includeCommentsAndWhitespace = false;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="text">The text to parse.</param>
+        /// <param name="includeCommentsAndWhitespace">When set to true, comments and whitespace tokens are returned.</param>
+        public ApexLexer(Stream text, bool includeCommentsAndWhitespace)
+            : this(text)
+        {
+            _includeCommentsAndWhitespace = includeCommentsAndWhitespace;
+        }
+
         #endregion
 
         #region Methods

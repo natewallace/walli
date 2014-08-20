@@ -229,13 +229,33 @@ WithoutSharing 			WITHOUT{WhiteSpace}*SHARING
 	{RealLiteral}       { return Symbol(Tokens.LITERAL_DOUBLE); }
 	{DoubleLiteral}     { return Symbol(Tokens.LITERAL_DOUBLE); }
 
-	{WhiteSpace}+		{ Symbol(Tokens.WHITESPACE); }
+	{WhiteSpace}+		{ 
+							if (_includeCommentsAndWhitespace) 
+								return Symbol(Tokens.WHITESPACE);  
+							else
+								Symbol(Tokens.WHITESPACE);
+						}
 
 	{Identifier}		{ return Symbol(Tokens.IDENTIFIER); } 
 
-	{CommentDoc}		{ Symbol(Tokens.COMMENT_DOC); }
-	{CommentBlock}		{ Symbol(Tokens.COMMENT_BLOCK); }
-	{CommentLine}		{ Symbol(Tokens.COMMENT_INLINE); }
+	{CommentDoc}		{ 
+							if (_includeCommentsAndWhitespace)
+								return Symbol(Tokens.COMMENT_DOC);
+							else
+								Symbol(Tokens.COMMENT_DOC); 
+						}
+	{CommentBlock}		{ 
+							if (_includeCommentsAndWhitespace)
+								return Symbol(Tokens.COMMENT_BLOCK);
+							else
+								Symbol(Tokens.COMMENT_BLOCK); 
+						}
+	{CommentLine}		{ 
+							if (_includeCommentsAndWhitespace)
+								return Symbol(Tokens.COMMENT_INLINE);
+							else
+								Symbol(Tokens.COMMENT_INLINE); 
+						}
 
 	{StringDelimiter}   { PushState(STRING, Tokens.LITERAL_STRING, false); }
 	{SOQLStart}			{ PushState(SOQL, Tokens.SOQL, false); }

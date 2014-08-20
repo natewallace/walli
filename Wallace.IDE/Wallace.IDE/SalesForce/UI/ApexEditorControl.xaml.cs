@@ -954,34 +954,9 @@ namespace Wallace.IDE.SalesForce.UI
                 }
                 else if (_completionWindow == null && e.Text.Length == 1 && Char.IsLetter(e.Text[0]))
                 {
-                    // don't do a completion if a character has already been typed and the completion window wasn't opened
-                    int offset = textEditor.TextArea.Caret.Offset;
-                    if (offset > 1 && Char.IsLetterOrDigit(textEditor.Document.GetCharAt(offset - 1)))
-                        return;
-
-                    // get the word that immediately proceeds the insertion point
-                    StringBuilder word = new StringBuilder();
-                    for (; offset >= 0; offset--)
-                    {
-                        char c = textEditor.Document.GetCharAt(offset);
-                        if (Char.IsLetterOrDigit(c) || c == '_')
-                        {
-                            word.Insert(0, c);
-                        }
-                        else if (c == ' ' || c == '\t' || c == '\r' || c == '\n')
-                        {
-                            if (word.Length > 0)
-                                break;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
                     // show completions
                     ShowCodeCompletions(LanguageManager.Completion.GetCodeCompletionsLetter(
-                        word.ToString(),
+                        new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset),
                         _className,
                         new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)));
                 }

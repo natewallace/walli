@@ -148,6 +148,7 @@
     <Compile Include="SalesForce\UI\PackageEditorControl.xaml.cs">
       <DependentUpon>PackageEditorControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\UI\DocumentCharStream.cs" />
     <Compile Include="SalesForce\UI\SelectProjectWindow.xaml.cs">
       <DependentUpon>SelectProjectWindow.xaml</DependentUpon>
     </Compile>

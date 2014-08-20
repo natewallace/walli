@@ -1,9 +1,32 @@
-﻿using System;
+﻿/*
+ * Copyright (c) 2014 Nathaniel Wallace
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+using SalesForceLanguage.Apex.CodeModel;
+using SalesForceLanguage.Apex.Parser;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using SalesForceLanguage.Apex.CodeModel;
 
 namespace SalesForceLanguage
 {
@@ -112,23 +135,101 @@ namespace SalesForceLanguage
         /// <summary>
         /// Get generic code completions.
         /// </summary>
-        /// <param name="text">The text that appears before the position where the completion would be inserted.</param>
+        /// <param name="text">The text stream to process.</param>
         /// <param name="className">The name of the class.</param>
         /// <param name="position">The position in the class text for the code completion.</param>
         /// <returns>Generic code completions.</returns>
-        public Symbol[] GetCodeCompletionsLetter(string text, string className, TextPosition position)
+        public Symbol[] GetCodeCompletionsLetter(Stream text, string className, TextPosition position)
         {
+            string word = null;
+
+            if (text.Position > 0)
+            {
+                // get the char directly before the insertion point
+                text.Position = text.Position - 1;
+                char prevChar = (char)text.ReadByte();
+                if (Char.IsLetterOrDigit(prevChar) || prevChar == '_' || prevChar == '\'')
+                    return new Symbol[0];
+
+                // get the word directly before the insertion point
+                StringBuilder wordBuilder = new StringBuilder();
+                bool isPastWhitespace = false;
+                while (text.Position > 0)
+                {
+                    text.Position = text.Position - 1;
+                    char c = (char)text.ReadByte();
+
+                    if (wordBuilder != null)
+                    {
+                        if (c == ' ' || c == '\t' || c == '\n')
+                        {
+                            if (isPastWhitespace)
+                                break;
+                        }
+                        else if (Char.IsLetterOrDigit(c) || c == '_')
+                        {
+                            isPastWhitespace = true;
+                            wordBuilder.Insert(0, c);
+                        }
+                        else if (c == '\'')
+                        {
+                            return new Symbol[0];
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    text.Position = text.Position - 1;
+                }
+                word = wordBuilder.ToString().Trim().ToLower();
+            }
+
+            // lex the current text to see if it's in a comment
+            bool ignore = false;
+            text.Position = 0;
+            ApexLexer lexer = new ApexLexer(text, true);
+            while (lexer.yylex() > 2)
+            {
+                if (lexer.yylval != null)
+                {
+                    if (lexer.yylval.TextSpan.Contains(position))
+                    {
+                        switch (lexer.yylval.Token)
+                        {
+                            case Tokens.COMMENT_BLOCK:
+                            case Tokens.COMMENT_DOC:
+                            case Tokens.COMMENT_DOCUMENTATION:
+                            case Tokens.COMMENT_INLINE:
+                                ignore = true;
+                                break;
+
+                            default:
+                                break;
+                        }
+                        
+                        break;
+                    }
+                    else if (lexer.yylval.TextSpan.CompareTo(position) > 0)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (ignore)
+                return new Symbol[0];
+
             // don't do code completions for text that:
             // immediately follows a type,
             // immediately follows certain keywords.
-            if (text != null && text.Length > 0)
+            if (!String.IsNullOrWhiteSpace(word))
             {
-                if (_language.GetSymbols(text) != null)
+                if (_language.GetSymbols(word) != null)
                     return new Symbol[0];
 
-                text = text.Trim().ToLower();
-
-                switch (text)
+                switch (word)
                 {
                     case "abstract":
                     case "delete":
@@ -158,12 +259,13 @@ namespace SalesForceLanguage
                         break;
 
                     default:
-                        if (_genericCompletions.Any(s => s.Id == text))
+                        if (_genericCompletions.Any(s => s.Id == word))
                             return new Symbol[0];
                         break;
                 }
             }
 
+            // if we get to this point then return symbols for completions
             List<Symbol> result = new List<Symbol>();
             result.AddRange(_genericCompletions);
             result.AddRange(_language.GetAllSymbols());
