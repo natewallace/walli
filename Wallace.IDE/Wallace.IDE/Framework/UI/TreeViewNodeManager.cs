@@ -42,6 +42,11 @@ namespace Wallace.IDE.Framework.UI
         private RoutedEventHandler _treeViewItemExpandedHandler;
 
         /// <summary>
+        /// Handler for tree view item collapse events.
+        /// </summary>
+        private RoutedEventHandler _treeViewItemCollapsedHandler;
+
+        /// <summary>
         /// Used as a place holder for expandeding nodes.
         /// </summary>
         private object _nodePlaceHolder;
@@ -91,6 +96,7 @@ namespace Wallace.IDE.Framework.UI
         public TreeViewNodeManager()
         {
             _treeViewItemExpandedHandler = new RoutedEventHandler(TreeViewItem_Expanded);
+            _treeViewItemCollapsedHandler = new RoutedEventHandler(TreeViewItem_Collapsed);
             _nodePlaceHolder = new object();
             _contextMenu = new ContextMenu();
             _contextMenu.Style = Application.Current.FindResource("ChromeContextMenuStyle") as Style;
@@ -143,6 +149,7 @@ namespace Wallace.IDE.Framework.UI
             if (Host != null)
             {
                 Host.RemoveHandler(TreeViewItem.ExpandedEvent, _treeViewItemExpandedHandler);
+                Host.RemoveHandler(TreeViewItem.CollapsedEvent, _treeViewItemCollapsedHandler);
                 Host.MouseRightButtonDown -= Host_MouseRightButtonDown;
                 Host.PreviewMouseLeftButtonDown -= Host_PreviewMouseLeftButtonDown;
                 Host.PreviewMouseMove -= Host_PreviewMouseMove;
@@ -168,6 +175,7 @@ namespace Wallace.IDE.Framework.UI
             if (Host != null)
             {
                 Host.AddHandler(TreeViewItem.ExpandedEvent, _treeViewItemExpandedHandler);
+                Host.AddHandler(TreeViewItem.CollapsedEvent, _treeViewItemCollapsedHandler);
                 Host.MouseDoubleClick += Host_MouseDoubleClick;
                 Host.MouseRightButtonDown += Host_MouseRightButtonDown;
                 Host.PreviewMouseLeftButtonDown += Host_PreviewMouseLeftButtonDown;
@@ -576,9 +584,6 @@ namespace Wallace.IDE.Framework.UI
                         }
                     }
                 }
-
-                if (node.Presenter is TreeViewItemNodePresenter)
-                    (node.Presenter as TreeViewItemNodePresenter).UpdateHeader();
             }
         }
 
@@ -868,6 +873,37 @@ namespace Wallace.IDE.Framework.UI
             try
             {
                 ProcessNode(e.Source as TreeViewItem);
+
+                TreeViewItem item = e.Source as TreeViewItem;
+                if (item != null && item.Tag is INode)
+                {
+                    INode node = item.Tag as INode;
+                    if (node.Presenter is TreeViewItemNodePresenter)
+                        (node.Presenter as TreeViewItemNodePresenter).UpdateHeader();
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Process a node that has been expanded.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event args.</param>
+        private void TreeViewItem_Collapsed(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TreeViewItem item = e.Source as TreeViewItem;
+                if (item != null && item.Tag is INode)
+                {
+                    INode node = item.Tag as INode;
+                    if (node.Presenter is TreeViewItemNodePresenter)
+                        (node.Presenter as TreeViewItemNodePresenter).UpdateHeader();
+                }
             }
             catch (Exception err)
             {
