@@ -576,6 +576,9 @@ namespace Wallace.IDE.Framework.UI
                         }
                     }
                 }
+
+                if (node.Presenter is TreeViewItemNodePresenter)
+                    (node.Presenter as TreeViewItemNodePresenter).UpdateHeader();
             }
         }
 

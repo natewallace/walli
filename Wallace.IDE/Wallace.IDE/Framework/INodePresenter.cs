@@ -41,6 +41,11 @@ namespace Wallace.IDE.Framework
         object Header { get; set; }
 
         /// <summary>
+        /// The header to display when the node is expanded.  When null the Header is displayed.
+        /// </summary>
+        object ExpandedHeader { get; set; }
+
+        /// <summary>
         /// Expand the node so the children are displayed.
         /// </summary>
         void Expand();

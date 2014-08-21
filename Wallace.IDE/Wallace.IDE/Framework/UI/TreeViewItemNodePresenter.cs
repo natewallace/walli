@@ -32,6 +32,20 @@ namespace Wallace.IDE.Framework.UI
     /// </summary>
     public class TreeViewItemNodePresenter : HostBase<TreeViewItem>, INodePresenter
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the Header property.
+        /// </summary>
+        private object _header;
+
+        /// <summary>
+        /// Supports the ExpandedHeader property.
+        /// </summary>
+        private object _expandedHeader;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -47,6 +61,9 @@ namespace Wallace.IDE.Framework.UI
             Host = host;
             NodeManager = nodeManager;
             Parent = parent;
+
+            _header = null;
+            _expandedHeader = null;
         }
 
         #endregion
@@ -90,6 +107,18 @@ namespace Wallace.IDE.Framework.UI
             }
         }
 
+        /// <summary>
+        /// Updates the header displayed.
+        /// </summary>
+        public void UpdateHeader()
+        {
+            EnsureHost();
+            if (Host.IsExpanded && ExpandedHeader != null)
+                Host.Header = ExpandedHeader;
+            else
+                Host.Header = Header;
+        }
+
         #endregion
 
         #region INodePresenter Members
@@ -106,13 +135,28 @@ namespace Wallace.IDE.Framework.UI
         {
             get
             {
-                EnsureHost();
-                return Host.Header;
+                return _header;
             }
             set
             {
-                EnsureHost();
-                Host.Header = value;
+                _header = value;
+                UpdateHeader();
+            }
+        }
+
+        /// <summary>
+        /// The header to display when the node is expanded.  When null the Header is displayed.
+        /// </summary>
+        public object ExpandedHeader
+        {
+            get
+            {
+                return _expandedHeader;
+            }
+            set
+            {
+                _expandedHeader = value;
+                UpdateHeader();
             }
         }
 

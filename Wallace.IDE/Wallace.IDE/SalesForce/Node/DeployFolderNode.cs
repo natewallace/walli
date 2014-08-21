@@ -76,6 +76,7 @@ namespace Wallace.IDE.SalesForce.Node
         public override void Init()
         {
             Presenter.Header = VisualHelper.CreateIconHeader("Deploy", "FolderClosed.png");
+            Presenter.ExpandedHeader = VisualHelper.CreateIconHeader("Deploy", "FolderOpen.png");
         }
 
         /// <summary>
