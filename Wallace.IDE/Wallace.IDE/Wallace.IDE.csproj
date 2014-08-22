@@ -340,6 +340,7 @@
     </None>
     <AppDesigner Include="Properties\" />
     <Resource Include="Resources\Apex.xshd" />
+    <Resource Include="Resources\VisualForce.xshd" />
     <None Include="SalesForceData.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -25,6 +25,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Resources;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 using Wallace.IDE.Framework;
 
@@ -53,6 +56,12 @@ namespace Wallace.IDE.SalesForce.UI
         {
             InitializeComponent();
             SetErrors(null);
+
+            StreamResourceInfo info = Application.GetResourceStream(new Uri("Resources/VisualForce.xshd", UriKind.Relative));
+            using (System.Xml.XmlTextReader reader = new System.Xml.XmlTextReader(info.Stream))
+            {
+                textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            }
 
             textEditor.TextArea.SelectionCornerRadius = 0;
             textEditor.TextArea.SelectionBrush = Brushes.LightBlue;

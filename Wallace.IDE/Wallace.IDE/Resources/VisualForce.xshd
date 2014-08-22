@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!-- syntaxdefinition for HTML 2000 by Mike Krueger -->
+<!-- converted to AvalonEdit format by Siegfried Pammer in 2010 -->
+<SyntaxDefinition name="HTML" extensions=".htm;.html" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Comment" foreground="Green" exampleText="&lt;!-- comment --&gt;" />
+	<Color name="Digits" foreground="DarkBlue" exampleText="&lt;digits&gt;0123456789&lt;/digits&gt;" />
+	<Color name="JavaScriptTag" foreground="Black" exampleText="&lt;script lang=&quot;JavaScript&quot;&gt;alert('Hello World!');&lt;/script&gt;" />
+	<Color name="HtmlTag" foreground="Blue" exampleText="&lt;html&gt;Hello World!/html&gt;" />
+	<Color name="Tags" foreground="DarkRed" exampleText="&lt;html&gt;Hello World! &lt;test /&gt;&lt;/html&gt;" />
+	<Color name="Attributes" foreground="Red" exampleText="&lt;html background='green'&gt;Hello World! &lt;test /&gt;&lt;/html&gt;" />
+	<Color name="Slash" foreground="Blue" exampleText="&lt;html background='green'&gt;Hello World! &lt;test /&gt;&lt;/html&gt;" />
+	<Color name="Assignment" foreground="Blue" exampleText="&lt;html background='green'&gt;Hello World! &lt;test /&gt;&lt;/html&gt;" />
+	<Color name="String" foreground="Blue" exampleText="&lt;html background='green'&gt;Hello World! &lt;test /&gt;&lt;/html&gt;" />
+	<Color name="EntityReference" foreground="Red" exampleText="&lt;html background='green'&gt;Hello&amp;nbsp;World! &lt;test /&gt;&lt;/html&gt;" />
+	<Color name="Entities" foreground="Red" exampleText="&lt;html background='green'&gt;Hello&amp;nbsp;World! &lt;test /&gt;&lt;/html&gt;" />
+	<RuleSet ignoreCase="true">
+		<Span color="Comment" multiline="true">
+			<Begin>&lt;!--</Begin>
+			<End>--&gt;</End>
+		</Span>
+		<Span ruleSet="JavaScriptSet" multiline="true">
+			<Begin color="JavaScriptTag">&lt;script[^\w\d_]</Begin>
+			<End color="JavaScriptTag">&lt;/script&gt;</End>
+		</Span>
+		<Span color="HtmlTag" ruleSet="HtmlTagSet" multiline="true">
+			<Begin>&lt;</Begin>
+			<End>&gt;</End>
+		</Span>
+		<Span color="EntityReference" ruleSet="EntityReferenceSet">
+			<Begin>&amp;</Begin>
+			<End>;</End>
+		</Span>
+		<Rule color="Digits">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
+	</RuleSet>
+	<RuleSet name="JavaScriptSet">
+		<Import ruleSet="JavaScript/" />
+		<Rule color="Digits">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
+	</RuleSet>
+	<RuleSet name="EntityReferenceSet" ignoreCase="true">
+		<Keywords color="Entities">
+			<Word>aacute</Word>
+			<Word>agrave</Word>
+			<Word>acirc</Word>
+			<Word>amp</Word>
+			<Word>atilde</Word>
+			<Word>aring</Word>
+			<Word>auml</Word>
+			<Word>aelig</Word>
+			<Word>ccedil</Word>
+			<Word>copy</Word>
+			<Word>eacute</Word>
+			<Word>egrave</Word>
+			<Word>ecirc</Word>
+			<Word>euml</Word>
+			<Word>iacute</Word>
+			<Word>igrave</Word>
+			<Word>icirc</Word>
+			<Word>iuml</Word>
+			<Word>eth</Word>
+			<Word>gt</Word>
+			<Word>lt</Word>
+			<Word>nbsp</Word>
+			<Word>ntilde</Word>
+			<Word>oacute</Word>
+			<Word>ograve</Word>
+			<Word>ocirc</Word>
+			<Word>otilde</Word>
+			<Word>ouml</Word>
+			<Word>oslash</Word>
+			<Word>quot</Word>
+			<Word>reg</Word>
+			<Word>szlig</Word>
+			<Word>uacute</Word>
+			<Word>ugrave</Word>
+			<Word>ucirc</Word>
+			<Word>uuml</Word>
+			<Word>yacute</Word>
+			<Word>thorn</Word>
+			<Word>trade</Word>
+			<Word>yuml</Word>
+		</Keywords>
+		<Rule color="Digits">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
+	</RuleSet>
+	<RuleSet name="HtmlTagSet" ignoreCase="true">
+		<Keywords color="Slash">
+			<Word>/</Word>
+		</Keywords>
+		<Keywords color="Assignment">
+			<Word>=</Word>
+		</Keywords>
+		<Span color="String">
+			<Begin>"</Begin>
+			<End>"</End>
+		</Span>
+		<Span color="String">
+			<Begin>'</Begin>
+			<End>'</End>
+		</Span>
+    <Rule color="Tags">^/?[\d\w_:]+</Rule>
+		<Rule color="Attributes">[\d\w_-]+(?=(\s*=))</Rule>
+		<Rule color="Digits">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
+	</RuleSet>
+</SyntaxDefinition>

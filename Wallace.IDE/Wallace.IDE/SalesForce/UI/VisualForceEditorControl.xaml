@@ -21,8 +21,7 @@
                                VerticalScrollBarVisibility="Visible"
                                ShowLineNumbers="True" 
                                TextChanged="textEditor_TextChanged"
-                               UseLayoutRounding="True"
-                               SyntaxHighlighting="XML">
+                               UseLayoutRounding="True">
             <avalonEdit:TextEditor.Options>
                 <avalonEdit:TextEditorOptions EnableHyperlinks="False" 
                                               EnableEmailHyperlinks="False"/>
