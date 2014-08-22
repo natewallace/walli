@@ -21,6 +21,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 
 namespace SalesForceLanguage.Apex.CodeModel
@@ -30,6 +32,15 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// </summary>
     public class TypedSymbol : ModifiedSymbol
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the Type property.
+        /// </summary>
+        private string _type;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -61,7 +72,88 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <summary>
         /// The type for the symbol.
         /// </summary>
-        public string Type { get; private set; }
+        public string Type
+        {
+            get
+            {
+                return _type;
+            }
+            set
+            {
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    _type = String.Empty;
+                    TemplateParameters = new string[0];
+                }
+                else if (value.EndsWith("]"))
+                {
+                    int index = value.LastIndexOf('[');
+                    if (index == -1)
+                        throw new Exception("Invalid type: " + value);
+
+                    _type = "List";
+                    TemplateParameters = new string[] { value.Substring(0, index) };
+                }
+                else
+                {
+                    int index = value.IndexOf('<');
+                    if (index == -1)
+                    {
+                        _type = value;
+                        TemplateParameters = new string[0];
+                    }
+                    else
+                    {
+                        _type = value.Substring(0, index);
+                        List<string> templateParameters = new List<string>();
+
+                        int openDelimiter = 0;
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = index + 1; i < value.Length - 1; i++)
+                        {
+                            switch (value[i])
+                            {
+                                case '<':
+                                    sb.Append(value[i]);
+                                    openDelimiter++;
+                                    break;
+
+                                case '>':
+                                    sb.Append(value[i]);
+                                    openDelimiter--;
+                                    break;
+
+                                case ',':
+                                    if (openDelimiter == 0)
+                                    {
+                                        templateParameters.Add(sb.ToString());
+                                        sb.Length = 0;
+                                    }
+                                    else
+                                    {
+                                        sb.Append(value[i]);
+                                    }
+                                    break;
+
+                                default:
+                                    sb.Append(value[i]);
+                                    break;
+                            }
+                        }
+
+                        if (sb.Length > 0)
+                            templateParameters.Add(sb.ToString());
+
+                        TemplateParameters = templateParameters.ToArray();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Template parameters if there are any.
+        /// </summary>
+        public string[] TemplateParameters { get; private set; }
 
         #endregion
 

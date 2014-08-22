@@ -112,7 +112,10 @@ namespace SalesForceLanguage
         /// <returns>All symbols</returns>
         public SymbolTable[] GetAllSymbols()
         {
-            return _classes.Values.ToArray();
+            List<SymbolTable> result = new List<SymbolTable>();
+            result.AddRange(_classes.Values);
+            result.AddRange(_predefinedClasses.Values);
+            return result.ToArray();
         }
 
         /// <summary>

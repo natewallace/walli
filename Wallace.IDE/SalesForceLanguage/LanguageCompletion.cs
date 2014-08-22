@@ -422,13 +422,20 @@ namespace SalesForceLanguage
             // combine and filter out parts
             for (int i = 0; i < parts.Count; i++)
             {
-                if (i + 1 < parts.Count && parts[i + 1] == "()")
+                if (i + 1 < parts.Count)
                 {
-                    parts[i] = parts[i] + parts[i + 1];
-                    parts.RemoveAt(i + 1);
+                    if (parts[i + 1] == "()")
+                    {
+                        parts[i] = parts[i] + parts[i + 1];
+                    }
+                    if (parts[i + 1] == "[]")
+                    {
+                        parts[i] = "list";
+                    }
                 }
 
                 if (parts[i] == "if()" ||
+                    parts[i] == "()" ||
                     parts[i] == "[]" ||
                     parts[i] == "<>")
                 {
@@ -581,6 +588,39 @@ namespace SalesForceLanguage
                         result.AddRange(GetFields(symbols, isExternal));
                         result.AddRange(GetProperties(symbols, isExternal));
                         result.AddRange(GetMethods(symbols, isExternal));
+
+                        // filter out static values
+                        for (int i = 0; i < result.Count; i++)
+                        {
+                            if (result[i] is ModifiedSymbol &&
+                                (result[i] as ModifiedSymbol).Modifier.HasFlag(SymbolModifier.Static))
+                            {
+                                result.RemoveAt(i);
+                                i--;
+                            }
+                        }
+                    }
+                }
+                // look for static references on a type
+                else if (parts.Count == 1)
+                {
+                    SymbolTable symbols = _language.GetSymbols(parts[0]);
+                    if (symbols != null)
+                    {
+                        result.AddRange(GetFields(symbols, true));
+                        result.AddRange(GetProperties(symbols, true));
+                        result.AddRange(GetMethods(symbols, true));
+
+                        // filter out non static values
+                        for (int i = 0; i < result.Count; i++)
+                        {
+                            if (result[i] is ModifiedSymbol &&
+                                !(result[i] as ModifiedSymbol).Modifier.HasFlag(SymbolModifier.Static))
+                            {
+                                result.RemoveAt(i);
+                                i--;
+                            }
+                        }
                     }
                 }
             }
@@ -694,6 +734,10 @@ namespace SalesForceLanguage
                 GetInheritedMethods(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Protected, result);
             }
 
+            if (symbolTable.TableType == SymbolTableType.Interface)
+                foreach (string interfaceName in symbolTable.Interfaces)
+                    GetInterfaceMethods(_language.GetSymbols(interfaceName), result);
+
             return result.GroupBy(s => s.Name).Select(g => g.First()).ToList();
         }
 
@@ -715,6 +759,23 @@ namespace SalesForceLanguage
             }
 
             GetInheritedMethods(_language.GetSymbols(symbolTable.Extends), modifiers, result);
+        }
+
+        /// <summary>
+        /// Recursive call that gets the methods for the given interface and all interfaces that it implements. 
+        /// </summary>
+        /// <param name="symbolTable">The symbol table to get the methods for.</param>
+        /// <param name="result">The resulting methods are added to this list.</param>
+        private void GetInterfaceMethods(SymbolTable symbolTable, List<Method> result)
+        {
+            if (symbolTable == null)
+                return;
+
+            foreach (Method method in symbolTable.Methods)
+                result.Add(method);
+
+            foreach (string interfaceName in symbolTable.Interfaces)
+                GetInterfaceMethods(_language.GetSymbols(interfaceName), result);
         }
 
         #endregion
