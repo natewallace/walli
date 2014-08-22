@@ -43,6 +43,25 @@ namespace Wallace.IDE.SalesForce.Document
         public ClassEditorDocument(Project project, SourceFile classFile)
             : base(project, classFile)
         {
+            View.ParseDataChanged += View_ParseDataChanged;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Returns true if this document is for a test class.
+        /// </summary>
+        public bool IsTest
+        {
+            get
+            {
+                if (View.ParseData == null || View.ParseData.Symbols == null)
+                    return false;
+
+                return View.ParseData.Symbols.IsTest;
+            }
         }
 
         #endregion
@@ -115,6 +134,20 @@ namespace Wallace.IDE.SalesForce.Document
                 node.Presenter.Remove();
                 App.Instance.Navigation.GetNode<ApexClassFolderNode>().AddApexClass(File);
             }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Update the workspace view when the parse data has been changed.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_ParseDataChanged(object sender, System.EventArgs e)
+        {
+            App.Instance.UpdateWorkspaces();
         }
 
         #endregion

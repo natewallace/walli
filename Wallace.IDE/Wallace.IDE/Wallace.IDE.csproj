@@ -97,6 +97,7 @@
     <Compile Include="SalesForce\Function\NewTriggerFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshFolderFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshSourceFileFunction.cs" />
+    <Compile Include="SalesForce\Function\RunTestsFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\PropertiesFunction.cs" />
     <Compile Include="SalesForce\Function\TextCopyFunction.cs" />
@@ -505,6 +506,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\FolderOpen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\RunTests.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

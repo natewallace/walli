@@ -97,6 +97,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private string _className;
 
+        /// <summary>
+        /// Supports the ParseData property.
+        /// </summary>
+        private ParseResult _parseData;
+
         #endregion
 
         #region Constructors
@@ -152,7 +157,18 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The parsed code.
         /// </summary>
-        public ParseResult ParseData { get; private set; }
+        public ParseResult ParseData 
+        {
+            get
+            {
+                return _parseData;
+            }
+            private set
+            {
+                _parseData = value;
+                OnParseDataChanged(EventArgs.Empty);
+            }
+        }
 
         /// <summary>
         /// The language manager to use.
@@ -592,6 +608,16 @@ namespace Wallace.IDE.SalesForce.UI
                 TextChanged(this, e);
         }
 
+        /// <summary>
+        /// Raises the ParseDataChanged event.
+        /// </summary>
+        /// <param name="e">Event arguments.</param>
+        protected virtual void OnParseDataChanged(EventArgs e)
+        {
+            if (ParseDataChanged != null)
+                ParseDataChanged(this, e);
+        }
+
         #endregion
 
         #region Event Handlers
@@ -925,6 +951,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the text has been changed.
         /// </summary>
         public event EventHandler TextChanged;
+
+        /// <summary>
+        /// Raised when the parse data has been changed.
+        /// </summary>
+        public event EventHandler ParseDataChanged;
 
         #endregion
     }

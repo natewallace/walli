@@ -413,6 +413,7 @@ namespace Wallace.IDE.SalesForce.Framework
                                         new TextPosition(0,0),
                                         sObjectDetail.Name,
                                         null,
+                                        null,
                                         SymbolModifier.Public,
                                         SymbolTableType.SObject,
                                         null,

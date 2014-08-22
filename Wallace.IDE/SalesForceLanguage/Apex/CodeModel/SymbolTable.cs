@@ -39,6 +39,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         public SymbolTable()
         {
+            Attributes = new string[0];
             TableType = SymbolTableType.Class;
             VariableScopes = new VariableScope[0];
             Fields = new Field[0];
@@ -70,6 +71,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             TextPosition location,
             string name,
             TextSpan span,
+            string[] attributes,
             SymbolModifier modifier,
             SymbolTableType tableType,
             VariableScope[] variableScopes,
@@ -82,6 +84,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             SymbolTable[] innerClasses)
             : base(location, name, span, modifier, name)
         {
+            Attributes = attributes ?? new string[0];
             TableType = tableType;
             VariableScopes = variableScopes ?? new VariableScope[0];
             Fields = fields ?? new Field[0];
@@ -106,6 +109,11 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// Local variables organzied by the scope they are defined in.
         /// </summary>
         public VariableScope[] VariableScopes { get; private set; }
+
+        /// <summary>
+        /// The attributes on this symbol table.
+        /// </summary>
+        public string[] Attributes { get; private set; }
 
         /// <summary>
         /// Fields for the table.
@@ -142,9 +150,31 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// </summary>
         public SymbolTable[] InnerClasses { get; private set; }
 
+        /// <summary>
+        /// Checks to see if this is a test class.
+        /// </summary>
+        public bool IsTest
+        {
+            get { return HasAttribute("istest"); }
+        }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Check to see if this symbol table has the given attribute.
+        /// </summary>
+        /// <param name="name">The name of the attribute to check for.</param>
+        /// <returns>true if the attribute is present, false if it isn't.</returns>
+        public bool HasAttribute(string name)
+        {
+            foreach (string a in Attributes)
+                if (String.Compare(a, name, true) == 0)
+                    return true;
+
+            return false;
+        }
 
         /// <summary>
         /// Get Fields that have the given modifiers.
@@ -212,6 +242,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             List<Method> methods = new List<Method>();
             List<string> interfaces = new List<string>();
             List<SymbolTable> innerClasses = new List<SymbolTable>();
+            List<string> attributes = new List<string>();
 
             if (!reader.IsEmptyElement)
             {
@@ -279,6 +310,16 @@ namespace SalesForceLanguage.Apex.CodeModel
                             reader.Read();
                             break;
 
+                        case "attributes":
+                            reader.Read();
+                            while (reader.IsStartElement("attribute"))
+                            {
+                                attributes.Add(reader["name"]);
+                                reader.Read();
+                            }
+                            reader.Read();
+                            break;
+
                         case "innerClasses":
                             reader.Read();
                             while (reader.IsStartElement("class"))
@@ -306,6 +347,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             Methods = methods.ToArray();
             Interfaces = interfaces.ToArray();
             InnerClasses = innerClasses.ToArray();
+            Attributes = attributes.ToArray();
 
             Id = Type.ToLower();
         }
@@ -377,6 +419,18 @@ namespace SalesForceLanguage.Apex.CodeModel
                 {
                     writer.WriteStartElement("interface");
                     writer.WriteAttributeString("name", i);
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+            }
+
+            if (Attributes.Length > 0)
+            {
+                writer.WriteStartElement("attributes");
+                foreach (string a in Attributes)
+                {
+                    writer.WriteStartElement("attribute");
+                    writer.WriteAttributeString("name", a);
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();

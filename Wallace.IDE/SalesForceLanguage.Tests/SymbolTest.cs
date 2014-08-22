@@ -111,6 +111,7 @@ namespace Wallace.Language.Apex.Tests
                 new TextPosition(1, 1),
                 "MyTestClass",
                 new TextSpan(new TextPosition(1, 1), new TextPosition(20, 20)),
+                null,
                 SymbolModifier.Public,
                 SymbolTableType.Class,
                 null,

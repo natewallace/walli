@@ -432,10 +432,21 @@ namespace SalesForceLanguage.Apex.Parser
                         }
                     }
 
+                    List<string> attributeList = new List<string>();
+                    ApexSyntaxNode attributes = node.GetChildNodeWithToken(Tokens.grammar_attributes);
+                    if (attributes != null)
+                    {
+                        foreach (ApexSyntaxNode attributeSection in attributes.GetNodesWithToken(Tokens.grammar_attribute_section))
+                        {
+                            attributeList.Add(attributeSection.GetChildNodeWithToken(Tokens.grammar_identifier).GetLeavesDisplayText());
+                        }
+                    }
+
                     _classes.Push(new SymbolTable(
                         new TextPosition(className.TextSpan),
                         className.GetLeavesDisplayText(),
                         new TextSpan(node.TextSpan),
+                        attributeList.ToArray(),
                         classVisibility,
                         SymbolTableType.Class,
                         _variableScopes.ToArray(),
@@ -491,6 +502,7 @@ namespace SalesForceLanguage.Apex.Parser
                         new TextPosition(interfaceName.TextSpan),
                         interfaceName.GetLeavesDisplayText(),
                         new TextSpan(node.TextSpan),
+                        null,
                         interfaceVisibility,
                         SymbolTableType.Interface,
                         null,

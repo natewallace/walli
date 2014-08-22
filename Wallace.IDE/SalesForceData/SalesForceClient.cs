@@ -192,6 +192,65 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Start tests for a given class.
+        /// </summary>
+        /// <param name="file">The files to start tests for.</param>
+        /// <returns>The started test run.</returns>
+        public TestRun StartTests(IEnumerable<SourceFile> files)
+        {
+            if (files == null)
+                throw new ArgumentNullException("files");
+            
+            // get class ids
+            StringBuilder fileNameBuilder = new StringBuilder();
+            foreach (SourceFile file in files)
+                fileNameBuilder.AppendFormat("'{0}',", file.Name);
+            fileNameBuilder.Length--;
+
+            DataSelectResult classIdData = DataSelectAll(
+                String.Format("SELECT Id, Name FROM ApexClass WHERE Name IN ({0})", fileNameBuilder.ToString()));
+
+            // submit test run items
+            Dictionary<string, string> apexClassNameMap = new Dictionary<string, string>();
+            DataTable dt = new DataTable("ApexTestQueueItem");
+            dt.Columns.Add("ApexClassId");
+
+            foreach (DataRow row in classIdData.Data.Rows)
+            {
+                DataRow testRunRow = dt.NewRow();
+                testRunRow["ApexClassId"] = row["Id"];
+                dt.Rows.Add(testRunRow);
+
+                apexClassNameMap.Add(row["Id"] as string, row["Name"] as string);
+            }
+
+            DataInsert(dt);
+
+            // create the test run object
+            List<TestRunItem> items = new List<TestRunItem>();
+            foreach (DataRow row in dt.Rows)
+            {
+                items.Add(new TestRunItem(
+                    apexClassNameMap[row["ApexClassId"] as string],
+                    row["ApexClassId"] as string));
+            }
+
+            DataSelectResult jobIdData = DataSelect(
+                String.Format("SELECT ParentJobId FROM ApexTestQueueItem WHERE Id = '{0}'", dt.Rows[0]["Id"]));
+
+            return new TestRun(jobIdData.Data.Rows[0]["ParentJobId"] as string, items.ToArray());
+        }
+
+        /// <summary>
+        /// Update the test run with the most recent status.
+        /// </summary>
+        /// <param name="testRun">The test run to update.</param>
+        public void UpdateTests(TestRun testRun)
+        {
+            //TODO:
+        }
+
+        /// <summary>
         /// Delete the given file.
         /// </summary>
         /// <param name="file">The file to delete.</param>

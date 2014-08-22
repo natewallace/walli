@@ -150,6 +150,10 @@ namespace Wallace.IDE.SalesForce.Framework
             TextSearchFunction searchTextFunction = new TextSearchFunction();
             App.Instance.Menu.AddFunction(searchTextFunction, "DOCUMENT");
 
+            RunTestsFunction runTestsFunction = new RunTestsFunction();
+            App.Instance.Menu.AddFunction(runTestsFunction, "DOCUMENT");
+            App.Instance.ToolBar.AddFunction(runTestsFunction);
+
             ApexDocumentationFunction apexDocFunction = new ApexDocumentationFunction();
             App.Instance.Menu.AddFunction(apexDocFunction, "HELP");
         }
