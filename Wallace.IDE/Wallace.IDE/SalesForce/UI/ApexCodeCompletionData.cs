@@ -178,7 +178,15 @@ namespace Wallace.IDE.SalesForce.UI
         /// <param name="insertionRequestEventArgs">Insertion request arguments.</param>
         public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
         {
-            textArea.Document.Replace(completionSegment, Text);
+            if (_symbol is Keyword && (_symbol.Id == "select" || _symbol.Id == "find"))
+            {
+                textArea.Document.Replace(completionSegment, Text + " ]");
+                textArea.Caret.Offset = textArea.Caret.Offset - 1;
+            }
+            else
+            {
+                textArea.Document.Replace(completionSegment, Text);
+            }
         }
 
         /// <summary>

@@ -809,61 +809,11 @@ namespace Wallace.IDE.SalesForce.UI
                 {
                     Symbol[] symbols = null;
 
+                    // calculate completions
                     if (e.Text == ".")
                     {
-                        // get line to calculate completions for
-                        StringBuilder line = new StringBuilder();
-                        int openDelimiterCount = 0;
-                        bool stop = false;
-                        for (int offset = textEditor.TextArea.Caret.Offset - 2; offset >= 0; offset--)
-                        {
-                            char c = textEditor.Document.GetCharAt(offset);
-                            switch (c)
-                            {
-                                case ')':
-                                case ']':
-                                case '>':
-                                    if (openDelimiterCount == 0)
-                                        line.Insert(0, c);
-                                    openDelimiterCount++;
-                                    break;
-
-                                case '{':
-                                case '}':
-                                case '(':
-                                case '[':
-                                case '<':
-                                    if (openDelimiterCount == 0)
-                                    {
-                                        stop = true;
-                                    }
-                                    else
-                                    {
-                                        openDelimiterCount--;
-                                        if (openDelimiterCount == 0)
-                                            line.Insert(0, c);
-                                    }
-                                    break;
-
-                                case ';':
-                                case ',':
-                                    if (openDelimiterCount == 0)
-                                        stop = true;
-                                    break;
-
-                                default:
-                                    if (openDelimiterCount == 0)
-                                        line.Insert(0, c);
-                                    break;
-                            }
-
-                            if (stop)
-                                break;
-                        }
-
-                        // calculate completions
                         symbols = LanguageManager.Completion.GetCodeCompletionsDot(
-                            line.ToString(),
+                            new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset - 1),
                             _className,
                             new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column));
                     }

@@ -150,7 +150,8 @@ namespace SalesForceLanguage.Apex.Parser
                 return false;
 
             if (StartLine == position.Line)
-                return (StartColumn <= position.Column && EndColumn >= position.Column);
+                return (EndLine > StartLine ||
+                        StartColumn <= position.Column && EndColumn >= position.Column);
 
             if (StartLine < position.Line)
             {

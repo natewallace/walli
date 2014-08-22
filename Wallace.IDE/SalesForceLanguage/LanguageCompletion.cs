@@ -47,6 +47,20 @@ namespace SalesForceLanguage
         /// </summary>
         private static List<Symbol> _genericCompletions;
 
+        /// <summary>
+        /// Tokens for which code completions should be ignored.
+        /// </summary>
+        private static Tokens[] _tokensToIgnore = new Tokens[] 
+        {
+            Tokens.COMMENT_BLOCK,
+            Tokens.COMMENT_DOC,
+            Tokens.COMMENT_DOCUMENTATION,
+            Tokens.COMMENT_INLINE,
+            Tokens.SOQL,
+            Tokens.SOSL,
+            Tokens.LITERAL_STRING
+        };
+
         #endregion
 
         #region Constructors
@@ -133,6 +147,39 @@ namespace SalesForceLanguage
         #region Methods
 
         /// <summary>
+        /// Check to see if the given position is within a comment.
+        /// </summary>
+        /// <param name="position">The position to check.</param>
+        /// <param name="text">The text to check.</param>
+        /// <returns>true if the position is within a comment.</returns>
+        private bool IsInToken(TextPosition position, Stream text, Tokens[] tokens)
+        {
+            long currentPosition = text.Position;
+
+            bool result = false;
+            text.Position = 0;
+            ApexLexer lexer = new ApexLexer(text, true);
+            while (lexer.yylex() > 2)
+            {
+                if (lexer.yylval != null)
+                {
+                    if (lexer.yylval.TextSpan.Contains(position) ||
+                        lexer.yylval.TextSpan.StartLine > position.Line)
+                        break;
+                }
+            }
+
+            text.Position = currentPosition;
+
+            if (lexer.yylval != null &&
+                lexer.yylval.TextSpan.Contains(position) &&
+                tokens.Contains(lexer.yylval.Token))
+                return true;
+
+            return result;
+        }
+
+        /// <summary>
         /// Get generic code completions.
         /// </summary>
         /// <param name="text">The text stream to process.</param>
@@ -142,9 +189,14 @@ namespace SalesForceLanguage
         public Symbol[] GetCodeCompletionsLetter(Stream text, string className, TextPosition position)
         {
             string word = null;
+            bool isOpenBracket = false;
 
             if (text.Position > 0)
             {
+                // check to see if it's in a token that should be ignored
+                if (IsInToken(position, text, _tokensToIgnore))
+                    return new Symbol[0];
+
                 // get the char directly before the insertion point
                 text.Position = text.Position - 1;
                 char prevChar = (char)text.ReadByte();
@@ -175,6 +227,11 @@ namespace SalesForceLanguage
                         {
                             return new Symbol[0];
                         }
+                        else if (c == '[')
+                        {
+                            isOpenBracket = true;
+                            break;
+                        }
                         else
                         {
                             break;
@@ -185,41 +242,6 @@ namespace SalesForceLanguage
                 }
                 word = wordBuilder.ToString().Trim().ToLower();
             }
-
-            // lex the current text to see if it's in a comment
-            bool ignore = false;
-            text.Position = 0;
-            ApexLexer lexer = new ApexLexer(text, true);
-            while (lexer.yylex() > 2)
-            {
-                if (lexer.yylval != null)
-                {
-                    if (lexer.yylval.TextSpan.Contains(position))
-                    {
-                        switch (lexer.yylval.Token)
-                        {
-                            case Tokens.COMMENT_BLOCK:
-                            case Tokens.COMMENT_DOC:
-                            case Tokens.COMMENT_DOCUMENTATION:
-                            case Tokens.COMMENT_INLINE:
-                                ignore = true;
-                                break;
-
-                            default:
-                                break;
-                        }
-                        
-                        break;
-                    }
-                    else if (lexer.yylval.TextSpan.CompareTo(position) > 0)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (ignore)
-                return new Symbol[0];
 
             // don't do code completions for text that:
             // immediately follows a type,
@@ -270,6 +292,13 @@ namespace SalesForceLanguage
             result.AddRange(_genericCompletions);
             result.AddRange(_language.GetAllSymbols());
 
+            // if the first non-whitespace char before the insertion point is a bracket add the SELECT and FIND keywords
+            if (isOpenBracket)
+            {
+                result.Add(new Keyword("SELECT"));
+                result.Add(new Keyword("FIND"));
+            }
+
             SymbolTable classSymbol = _language.GetSymbols(className);
             if (classSymbol != null)
             {
@@ -296,22 +325,84 @@ namespace SalesForceLanguage
         /// <summary>
         /// Parse the text and give possible symbols that can be added to the end of the text.
         /// </summary>
-        /// <param name="text">The text to get code completions for.</param>
+        /// <param name="text">The text stream to process.</param>
         /// <param name="className">The name of the class.</param>
         /// <param name="position">The position in the class text for the code completion.</param>
         /// <returns>Valid symbols that can be used for the code completion.</returns>
-        public Symbol[] GetCodeCompletionsDot(string text, string className, TextPosition position)
+        public Symbol[] GetCodeCompletionsDot(Stream text, string className, TextPosition position)
         {
             List<Symbol> result = new List<Symbol>();
 
-            // empty string
-            if (String.IsNullOrWhiteSpace(text))
+            if (IsInToken(position, text, _tokensToIgnore))
                 return result.ToArray();
 
-            text = text.ToLower();
+            string line = null;
+
+            if (text.Position > 0)
+            {
+                // get line to calculate completions for
+                StringBuilder lineBuilder = new StringBuilder();
+                int openDelimiterCount = 0;
+                bool stop = false;
+
+                while (text.Position > 0)
+                {
+                    text.Position = text.Position - 1;
+                    char c = (char)text.ReadByte();
+
+                    switch (c)
+                    {
+                        case ')':
+                        case ']':
+                        case '>':
+                            if (openDelimiterCount == 0)
+                                lineBuilder.Insert(0, c);
+                            openDelimiterCount++;
+                            break;
+
+                        case '{':
+                        case '}':
+                        case '(':
+                        case '[':
+                        case '<':
+                            if (openDelimiterCount == 0)
+                            {
+                                stop = true;
+                            }
+                            else
+                            {
+                                openDelimiterCount--;
+                                if (openDelimiterCount == 0)
+                                    lineBuilder.Insert(0, c);
+                            }
+                            break;
+
+                        case ';':
+                        case ',':
+                            if (openDelimiterCount == 0)
+                                stop = true;
+                            break;
+
+                        default:
+                            if (openDelimiterCount == 0)
+                                lineBuilder.Insert(0, c);
+                            break;
+                    }
+
+                    if (stop)
+                        break;
+
+                    text.Position = text.Position - 1;
+                }
+
+                line = lineBuilder.ToString().ToLower();
+            }
+
+            if (String.IsNullOrWhiteSpace(line))
+                return result.ToArray();
 
             // filter lines
-            string[] lines = text.Split('\n');
+            string[] lines = line.Split('\n');
             for (int i = 0; i < lines.Length; i++)
             {
                 if (lines[i] == null)
@@ -324,9 +415,9 @@ namespace SalesForceLanguage
 
             // create parts
             List<string> parts = new List<string>();
-            foreach (string line in lines)
-                if (line != null)
-                    parts.AddRange(line.Split(new char[] { ' ', '.', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+            foreach (string l in lines)
+                if (l != null)
+                    parts.AddRange(l.Split(new char[] { ' ', '.', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
 
             // combine and filter out parts
             for (int i = 0; i < parts.Count; i++)
