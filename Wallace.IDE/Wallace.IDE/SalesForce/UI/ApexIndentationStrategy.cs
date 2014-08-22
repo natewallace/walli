@@ -47,8 +47,6 @@ namespace Wallace.IDE.SalesForce.UI
             if (line == null)
                 throw new ArgumentNullException("line");
 
-            bool customIndent = false;             
-             
             DocumentLine previousLine = line.PreviousLine;
             if (previousLine != null)
             {
@@ -59,7 +57,6 @@ namespace Wallace.IDE.SalesForce.UI
                     Match match = Regex.Match(previousLineText, @"^[ \t]*/?\*(?!/)");
                     if (match != null && match.Success)
                     {
-                        customIndent = true;
                         StringBuilder sb = new StringBuilder();
                         foreach (char c in match.Value)
                         {
@@ -85,7 +82,6 @@ namespace Wallace.IDE.SalesForce.UI
                     // check for opening block of code
                     else if (previousLineText.Trim().EndsWith("{"))
                     {
-                        customIndent = true;
                         StringBuilder sb = new StringBuilder();
                         bool done = false;
                         foreach (char c in previousLineText)
@@ -109,12 +105,29 @@ namespace Wallace.IDE.SalesForce.UI
                         sb.Append('\t');
                         document.Insert(line.Offset, sb.ToString());
                     }
+                    // copy indent from previous line
+                    else
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        foreach (char c in previousLineText)
+                        {
+                            switch (c)
+                            {
+                                case ' ':
+                                case '\t':
+                                    sb.Append(c);
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        }
+
+                        if (sb.Length > 0)
+                            document.Insert(line.Offset, sb.ToString());
+                    }
                 }
             }
-
-            // default
-            if (!customIndent)
-                base.IndentLine(document, line);
         }
 
         #endregion
