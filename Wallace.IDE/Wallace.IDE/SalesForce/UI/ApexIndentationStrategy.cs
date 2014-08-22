@@ -109,6 +109,7 @@ namespace Wallace.IDE.SalesForce.UI
                     else
                     {
                         StringBuilder sb = new StringBuilder();
+                        bool done = false;
                         foreach (char c in previousLineText)
                         {
                             switch (c)
@@ -119,8 +120,12 @@ namespace Wallace.IDE.SalesForce.UI
                                     break;
 
                                 default:
+                                    done = true;
                                     break;
                             }
+
+                            if (done)
+                                break;
                         }
 
                         if (sb.Length > 0)
