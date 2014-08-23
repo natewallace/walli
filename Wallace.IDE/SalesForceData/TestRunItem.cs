@@ -21,14 +21,34 @@
  */
 
 using System;
+using System.ComponentModel;
 
 namespace SalesForceData
 {
     /// <summary>
     /// An individual test run item.
     /// </summary>
-    public class TestRunItem
+    public class TestRunItem : INotifyPropertyChanged
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the Status property.
+        /// </summary>
+        private TestRunItemStatus _status;
+
+        /// <summary>
+        /// Supports the ExtendedStatus property.
+        /// </summary>
+        private string _extendedStatus;
+
+        /// <summary>
+        /// Supports the Results property.
+        /// </summary>
+        private TestRunItemResult[] _results;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -47,6 +67,7 @@ namespace SalesForceData
             ApexClassId = apexClassId;
             Status = TestRunItemStatus.Preparing;
             ExtendedStatus = String.Empty;
+            Results = null;
         }
 
         #endregion
@@ -66,12 +87,98 @@ namespace SalesForceData
         /// <summary>
         /// The status of the test run item.
         /// </summary>
-        public TestRunItemStatus Status { get; internal set; }
+        public TestRunItemStatus Status
+        {
+            get
+            {
+                return _status;
+            }
+            internal set
+            {
+                _status = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("Status"));
+            }
+        }
 
         /// <summary>
         /// The extended status of the test run item.
         /// </summary>
-        public string ExtendedStatus { get; internal set; }
+        public string ExtendedStatus
+        {
+            get { return _extendedStatus; }
+            internal set
+            {
+                _extendedStatus = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("ExtendedStatus"));
+            }
+        }
+
+        /// <summary>
+        /// Flag that indicates when the test run is complete for this item.
+        /// </summary>
+        public bool IsDone
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case TestRunItemStatus.Holding:
+                    case TestRunItemStatus.Preparing:
+                    case TestRunItemStatus.Processing:
+                    case TestRunItemStatus.Queued:
+                        return false;
+
+                    default:
+                        return true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The results of the test run for this item.
+        /// </summary>
+        public TestRunItemResult[] Results 
+        {
+            get { return _results; }
+            internal set
+            {
+                _results = value ?? new TestRunItemResult[0];
+                if (_results != null)
+                {
+                    foreach (TestRunItemResult result in _results)
+                    {
+                        if (result.Status == TestRunItemResultStatus.CompileFail || result.Status == TestRunItemResultStatus.Fail)
+                        {
+                            Status = TestRunItemStatus.Failed;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Raises the PropertyChanged event.
+        /// </summary>
+        /// <param name="e">Arguments to pass with the event.</param>
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raised when a property is changed.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
     }

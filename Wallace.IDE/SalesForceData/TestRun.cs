@@ -43,6 +43,8 @@ namespace SalesForceData
 
             JobId = jobId;
             Items = items ?? new TestRunItem[0];
+            Started = DateTime.Now;
+            Finished = DateTime.MinValue;
         }
 
         #endregion
@@ -58,6 +60,31 @@ namespace SalesForceData
         /// The items in the test run.
         /// </summary>
         public TestRunItem[] Items { get; private set; }
+
+        /// <summary>
+        /// The date and time this test was started.
+        /// </summary>
+        public DateTime Started { get; internal set; }
+
+        /// <summary>
+        /// The date and time this test was finished.
+        /// </summary>
+        public DateTime Finished { get; internal set; }
+
+        /// <summary>
+        /// Returns true if all of the Items in this test run are done.
+        /// </summary>
+        public bool IsDone
+        {
+            get
+            {
+                foreach (TestRunItem item in Items)
+                    if (!item.IsDone)
+                        return false;
+
+                return true;
+            }
+        }
 
         #endregion
     }

@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="Wallace.IDE.SalesForce.UI.TestRunControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:localUI="clr-namespace:Wallace.IDE.SalesForce.UI"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <localUI:TestRunItemStatusIconConverter x:Key="ClassIconConverter" />
+        <localUI:TestRunItemResultStatusIconConverter x:Key="MethodIconConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" MinWidth="30" />
+            <ColumnDefinition Width="*" MinWidth="30" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="300" MinHeight="30" />
+            <RowDefinition Height="*" MinHeight="30" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="textBlockTitle"
+                   Padding="0,4,0,4"
+                   Foreground="Black"
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Text="Test Run started " />
+        
+        <ListView x:Name="listViewClasses"
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="0,2,4,0"
+                  SelectionChanged="listViewClasses_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="Class">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Status, Converter={StaticResource ClassIconConverter}}" 
+                                           Margin="2"
+                                           Height="16"
+                                           Width="16"/>
+                                    <TextBlock Text="{Binding Name}" Margin="2" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="150" Header="Status">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ExtendedStatus}" Margin="2" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <GridSplitter HorizontalAlignment="Right"
+                      Width="4"
+                      Background="White"
+                      Grid.Row="1"
+                      Grid.Column="0" />
+
+        <ListView x:Name="listViewMethods"
+                  Grid.Column="1"
+                  Grid.Row="1"
+                  Margin="0,2,0,0"
+                  SelectionChanged="listViewMethods_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="Method">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Status, Converter={StaticResource MethodIconConverter}}" 
+                                           Margin="2"
+                                           Height="16"
+                                           Width="16"/>
+                                    <TextBlock Text="{Binding MethodName}" Margin="2" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <TextBox x:Name="textBoxResults"
+                 Padding="5"
+                 FontFamily="Consolas"
+                 FontSize="10pt"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 Grid.Row="2" 
+                 Margin="0,4,0,0"
+                 IsReadOnly="True" />
+
+        <GridSplitter VerticalAlignment="Top"
+                      Background="White"
+                      Grid.Row="2"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      Height="4"
+                      HorizontalAlignment="Stretch"/>
+        
+    </Grid>
+</UserControl>

@@ -87,6 +87,8 @@
     <Compile Include="SourceFileType.cs" />
     <Compile Include="TestRun.cs" />
     <Compile Include="TestRunItem.cs" />
+    <Compile Include="TestRunItemResult.cs" />
+    <Compile Include="TestRunItemResultStatus.cs" />
     <Compile Include="TestRunItemStatus.cs" />
     <Compile Include="TriggerEvents.cs" />
   </ItemGroup>

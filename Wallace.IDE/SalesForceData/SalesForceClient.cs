@@ -247,7 +247,72 @@ namespace SalesForceData
         /// <param name="testRun">The test run to update.</param>
         public void UpdateTests(TestRun testRun)
         {
-            //TODO:
+            InitClients();
+
+            // filter out completed test runs
+            Dictionary<string, TestRunItem> itemsMap = new Dictionary<string, TestRunItem>();
+            foreach (TestRunItem item in testRun.Items)
+            {
+                if (!item.IsDone)
+                    itemsMap.Add(item.ApexClassId, item);
+            }
+
+            // get updated status
+            StringBuilder completedItemsBuilder = new StringBuilder();
+            if (itemsMap.Count > 0)
+            {
+                DataSelectResult testRunData = DataSelectAll(
+                    String.Format("SELECT ApexClassId, Status, ExtendedStatus FROM ApexTestQueueItem WHERE ParentJobId = '{0}'", testRun.JobId));
+
+                foreach (DataRow row in testRunData.Data.Rows)
+                {
+                    TestRunItem item = itemsMap[row["ApexClassId"] as string];
+                    item.Status = (TestRunItemStatus)Enum.Parse(typeof(TestRunItemStatus), row["Status"] as string);
+                    item.ExtendedStatus = row["ExtendedStatus"] as string;
+
+                    if (item.IsDone)
+                        completedItemsBuilder.AppendFormat("'{0}',", item.ApexClassId);
+                }
+            }
+
+            // get details for items that were completed
+            if (completedItemsBuilder.Length > 0)
+            {
+                completedItemsBuilder.Length--;
+
+                DataSelectResult completedData = DataSelectAll(
+                    String.Format("SELECT ApexClassId, ApexLogId, Message, MethodName, Outcome, StackTrace FROM ApexTestResult WHERE AsyncApexJobId = '{0}' AND ApexClassId IN ({1})",
+                                  testRun.JobId,
+                                  completedItemsBuilder.ToString()));
+
+                Dictionary<string, List<TestRunItemResult>> resultsMap = new Dictionary<string, List<TestRunItemResult>>();
+                foreach (DataRow row in completedData.Data.Rows)
+                {
+                    List<TestRunItemResult> resultList = null;
+                    string classId = row["ApexClassId"] as string;
+                    if (resultsMap.ContainsKey(classId))
+                    {
+                        resultList = resultsMap[classId];
+                    }
+                    else
+                    {
+                        resultList = new List<TestRunItemResult>();
+                        resultsMap.Add(classId, resultList);
+                    }
+
+                    resultList.Add(new TestRunItemResult(
+                        row["Message"] as string,
+                        row["MethodName"] as string,
+                        (TestRunItemResultStatus)Enum.Parse(typeof(TestRunItemResultStatus), row["Outcome"] as string),
+                        row["StackTrace"] as string));
+                }
+
+                foreach (KeyValuePair<string, List<TestRunItemResult>> kvp in resultsMap)
+                    itemsMap[kvp.Key].Results = kvp.Value.OrderBy(t => t.MethodName).ToArray();
+            }
+
+            if (testRun.IsDone)
+                testRun.Finished = DateTime.Now;
         }
 
         /// <summary>

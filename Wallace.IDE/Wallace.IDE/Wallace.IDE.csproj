@@ -80,6 +80,7 @@
     <Compile Include="SalesForce\Document\PackageEditorDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocumentBase.cs" />
+    <Compile Include="SalesForce\Document\TestRunDocument.cs" />
     <Compile Include="SalesForce\Document\TriggerEditorDocument.cs" />
     <Compile Include="SalesForce\Document\VisualForceEditorDocument.cs" />
     <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
@@ -161,6 +162,11 @@
       <DependentUpon>PropertiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Framework\UI\TreeViewMultiSelectItem.cs" />
+    <Compile Include="SalesForce\UI\TestRunControl.xaml.cs">
+      <DependentUpon>TestRunControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\TestRunItemResultStatusIconConverter.cs" />
+    <Compile Include="SalesForce\UI\TestRunItemStatusIconConverter.cs" />
     <Compile Include="SalesForce\UI\VisualForceEditorControl.xaml.cs">
       <DependentUpon>VisualForceEditorControl.xaml</DependentUpon>
     </Compile>
@@ -264,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\PropertiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\TestRunControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -509,6 +519,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\RunTests.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Blocked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Asterix.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Success.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

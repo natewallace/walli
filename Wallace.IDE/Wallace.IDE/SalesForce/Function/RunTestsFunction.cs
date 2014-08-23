@@ -20,12 +20,8 @@
  * THE SOFTWARE.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SalesForceData;
+using System;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
 
@@ -39,25 +35,6 @@ namespace Wallace.IDE.SalesForce.Function
         #region Methods
 
         /// <summary>
-        /// Set the header.
-        /// </summary>
-        /// <param name="host">The type of host.</param>
-        /// <param name="presenter">The presenter to use.</param>
-        public override void Init(FunctionHost host, IFunctionPresenter presenter)
-        {
-            if (host == FunctionHost.Toolbar)
-            {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "RunTests.png");
-                presenter.ToolTip = "Run the tests for this class.";
-            }
-            else
-            {
-                presenter.Header = "Run tests";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "RunTests.png");
-            }
-        }
-
-        /// <summary>
         /// Set the visibility of the header.
         /// </summary>
         /// <param name="host">The type of host for this function.</param>
@@ -65,24 +42,41 @@ namespace Wallace.IDE.SalesForce.Function
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
             bool isVisible = false;
+            bool isEnabled = false;
 
             if (CurrentDocument is ClassEditorDocument)
             {
                 isVisible = (CurrentDocument as ClassEditorDocument).IsTest;
+                isEnabled = !CurrentDocument.IsDirty;
+
+                if (host == FunctionHost.Toolbar)
+                {
+                    presenter.Header = VisualHelper.CreateIconHeader(null, "RunTests.png");
+                    presenter.ToolTip = String.Format("Run tests for {0}.", CurrentDocument.File.Name);
+                }
+                else
+                {
+                    presenter.Header = String.Format("Run tests for {0}.", CurrentDocument.File.Name);
+                    presenter.Icon = VisualHelper.CreateIconHeader(null, "RunTests.png");
+                }
             }
 
             IsVisible = isVisible;
-            IsEnabled = isVisible;
+            IsEnabled = isEnabled;
         }
 
         /// <summary>
-        /// Save the document changes.
+        /// Start the test run.
         /// </summary>
         public override void Execute()
         {
-            //TODO:
-            TestRun testRun = App.Instance.SalesForceApp.CurrentProject.Client.StartTests(
-                new SourceFile[] { CurrentDocument.File });
+            using (App.Wait("Starting tests..."))
+            {
+                TestRun testRun = App.Instance.SalesForceApp.CurrentProject.Client.StartTests(
+                    new SourceFile[] { CurrentDocument.File });
+
+                App.Instance.Content.OpenDocument(new TestRunDocument(App.Instance.SalesForceApp.CurrentProject, testRun));
+            }
         }
 
         #endregion
