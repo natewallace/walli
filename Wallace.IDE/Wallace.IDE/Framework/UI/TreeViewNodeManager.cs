@@ -24,6 +24,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Text;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -86,6 +88,16 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         private RoutedPropertyChangedEventArgs<object> _delayedSelection;
 
+        /// <summary>
+        /// Used to reset the text entered by a user for a search after a certain period of time.
+        /// </summary>
+        private Timer _searchTimer;
+
+        /// <summary>
+        /// Text entered by user to do a search.
+        /// </summary>
+        private StringBuilder _searchTextBuilder;
+
         #endregion
 
         #region Constructors
@@ -106,6 +118,13 @@ namespace Wallace.IDE.Framework.UI
             _lastSelectedTreeViewItem = null;
             _suspendSelectionChange = false;
             _delayedSelection = null;
+
+            _searchTimer = new Timer();
+            _searchTimer.Interval = 750;
+            _searchTimer.AutoReset = false;
+            _searchTimer.Elapsed += searchTimer_Elapsed;
+
+            _searchTextBuilder = new StringBuilder();
         }
 
         /// <summary>
@@ -155,7 +174,7 @@ namespace Wallace.IDE.Framework.UI
                 Host.PreviewMouseMove -= Host_PreviewMouseMove;
                 Host.PreviewMouseUp -= Host_PreviewMouseUp;
                 Host.SelectedItemChanged -= Host_SelectedItemChanged;
-                Host.KeyDown -= Host_KeyDown;
+                Host.TextInput -= Host_TextInput;
 
                 if (Nodes != null)
                     (Nodes as ObservableCollection<INode>).CollectionChanged -= TreeViewNodeManager_NodesChanged;
@@ -182,7 +201,7 @@ namespace Wallace.IDE.Framework.UI
                 Host.PreviewMouseMove += Host_PreviewMouseMove;
                 Host.PreviewMouseUp += Host_PreviewMouseUp;
                 Host.SelectedItemChanged += Host_SelectedItemChanged;
-                Host.KeyDown += Host_KeyDown;
+                Host.TextInput += Host_TextInput;
 
                 Nodes = new ObservableCollection<INode>();
                 (Nodes as ObservableCollection<INode>).CollectionChanged += TreeViewNodeManager_NodesChanged;
@@ -679,6 +698,53 @@ namespace Wallace.IDE.Framework.UI
         }
 
         /// <summary>
+        /// Performs search for node with the given text from the currently selected node.
+        /// </summary>
+        /// <param name="text">The text to search for.</param>
+        private void SearchNodes(string text)
+        {
+            bool start = false;
+            foreach (TreeViewItem item in Host.Items)
+                if (SearchNodes(text, item, ref start))
+                    break;
+        }
+
+        /// <summary>
+        /// Recursive search through visible nodes.
+        /// </summary>
+        /// <param name="text">The text to search for.</param>
+        /// <param name="item">The item to search.</param>
+        /// <param name="start">When set to true the search will start in the recursion.</param>
+        /// <returns>true if a match was found, false if not.</returns>
+        private bool SearchNodes(string text, TreeViewItem item, ref bool start)
+        {
+            if (item == null)
+                return false;
+
+            if (!start && item == Host.SelectedItem)
+                start = true;
+
+            if (item.Tag is INode)
+            {
+                INode node = item.Tag as INode;
+                if (start && node.Text != null && node.Text.StartsWith(text, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    item.IsSelected = true;
+                    return true;
+                }
+            }
+
+            if (item.IsExpanded)
+            {
+                foreach (TreeViewItem i in item.Items)
+                    if (SearchNodes(text, i, ref start))
+                        return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Raises the ActiveNodeChanged event.
         /// </summary>
         /// <param name="e">Arguments to pass with the event.</param>
@@ -1158,9 +1224,25 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
-        private void Host_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Host_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            // TODO: implement search
+            _searchTimer.Stop();
+            _searchTextBuilder.Append(e.Text);
+            SearchNodes(_searchTextBuilder.ToString());
+            _searchTimer.Start();
+        }
+
+        /// <summary>
+        /// Reset the search text.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void searchTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (Host != null)
+            {
+                Host.Dispatcher.Invoke(() => _searchTextBuilder.Clear());
+            }
         }
 
         #endregion
