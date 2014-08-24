@@ -261,7 +261,6 @@
 %token grammar_finally_clause
 %token grammar_fixed_parameter
 %token grammar_fixed_parameters
-%token grammar_floating_point_type
 %token grammar_for_condition
 %token grammar_for_initializer
 %token grammar_for_iterator
@@ -273,7 +272,6 @@
 %token grammar_identifier
 %token grammar_if_statement
 %token grammar_inclusive_or_expression
-%token grammar_integral_type
 %token grammar_interface_accessors
 %token grammar_interface_base
 %token grammar_interface_body
@@ -304,7 +302,6 @@
 %token grammar_namespace_or_type_name
 %token grammar_non_array_type
 %token grammar_non_reserved_identifier
-%token grammar_numeric_type
 %token grammar_object_creation_expression
 %token grammar_parenthesized_expression
 %token grammar_post_decrement_expression
@@ -318,14 +315,12 @@
 %token grammar_qualified_name
 %token grammar_rank_specifier
 %token grammar_rank_specifiers
-%token grammar_reference_type
 %token grammar_relational_expression
 %token grammar_return_statement
 %token grammar_selection_statement
 %token grammar_set_accessor_declaration
 %token grammar_shift_expression
 %token grammar_simple_name
-%token grammar_simple_type
 %token grammar_specific_catch_clause
 %token grammar_specific_catch_clauses
 %token grammar_statement
@@ -334,7 +329,6 @@
 %token grammar_statement_list
 %token grammar_static_constructor_body
 %token grammar_static_constructor_declaration
-%token grammar_struct_type
 %token grammar_template_parameter_list
 %token grammar_template_parameters
 %token grammar_this_access
@@ -348,7 +342,6 @@
 %token grammar_type_declaration
 %token grammar_type_name
 %token grammar_unary_expression
-%token grammar_value_type
 %token grammar_variable_declarator
 %token grammar_variable_declarators
 %token grammar_variable_initializer
@@ -383,14 +376,23 @@ non_reserved_identifier:
     RESERVED_JOIN |
     RESERVED_SORT |
     KEYWORD_GET |
-    KEYWORD_ID |
     KEYWORD_SET |
     KEYWORD_TRIGGER |
     KEYWORD_INSERT |
     KEYWORD_UNDELETE |
     KEYWORD_UPDATE |
     KEYWORD_UPSERT |
-	KEYWORD_NEW ;
+	KEYWORD_NEW |
+	KEYWORD_ID |
+	KEYWORD_BLOB |
+	KEYWORD_DATE |
+	KEYWORD_DATETIME |
+	KEYWORD_BOOLEAN | 
+	KEYWORD_STRING |
+	KEYWORD_DECIMAL |
+	KEYWORD_INTEGER |
+	KEYWORD_LONG |
+	KEYWORD_DOUBLE ;
 
 literal:
 	LITERAL_TRUE |
@@ -414,43 +416,10 @@ qualified_name:
 	identifier |
 	qualified_name SEPARATOR_DOT identifier ;
 
-type:
-	value_type |
-	reference_type ;
-
-value_type:
-	struct_type |
-	enum_type ;
-
-struct_type:
-	type_name |
-	simple_type ;
-
-simple_type:
-	numeric_type |
-	KEYWORD_ID |
-	KEYWORD_BLOB |
-	KEYWORD_DATE |
-	KEYWORD_DATETIME |
-	KEYWORD_BOOLEAN | 
-	KEYWORD_STRING ;
-
-numeric_type:
-	integral_type |
-	floating_point_type |
-	KEYWORD_DECIMAL ;
-
-integral_type:
-	KEYWORD_INTEGER |
-	KEYWORD_LONG ;
-
-floating_point_type:
-	KEYWORD_DOUBLE ;
-
 enum_type:
 	type_name ;
 
-reference_type:
+type:
 	class_type |
 	interface_type |
 	array_type ;

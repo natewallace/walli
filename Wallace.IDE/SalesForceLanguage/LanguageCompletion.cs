@@ -200,7 +200,7 @@ namespace SalesForceLanguage
                 // get the char directly before the insertion point
                 text.Position = text.Position - 1;
                 char prevChar = (char)text.ReadByte();
-                if (Char.IsLetterOrDigit(prevChar) || prevChar == '_' || prevChar == '\'')
+                if (Char.IsLetterOrDigit(prevChar) || prevChar == '_' || prevChar == '\'' || prevChar == '.')
                     return new Symbol[0];
 
                 // get the word directly before the insertion point
@@ -451,6 +451,8 @@ namespace SalesForceLanguage
             if (classSymbol != null)
             {
                 bool partFound = false;
+                bool typeSearchDone = false;
+                bool isTypeReference = false;
 
                 for (int i = 0; i < parts.Count; i++)
                 {
@@ -573,7 +575,31 @@ namespace SalesForceLanguage
                     if (!partFound)
                     {
                         matchedSymbol = null;
-                        break;
+                        if (typeSearchDone)
+                            break;
+
+                        // see if it's a type reference
+                        StringBuilder typeNameBuilder = new StringBuilder();
+                        for (i = 0; i < parts.Count; i++)
+                        {
+                            if (i == 0)
+                                typeNameBuilder.Append(parts[i]);
+                            else
+                                typeNameBuilder.AppendFormat(".{0}", parts[i]);
+
+                            matchedSymbol = _language.GetSymbols(typeNameBuilder.ToString());
+                            if (matchedSymbol != null)
+                            {
+                                isTypeReference = true;
+                                break;
+                            }
+                        }
+
+                        typeSearchDone = true;
+                    }
+                    else
+                    {
+                        isTypeReference = false;
                     }
                 }
 
@@ -589,36 +615,18 @@ namespace SalesForceLanguage
                         result.AddRange(GetProperties(symbols, isExternal));
                         result.AddRange(GetMethods(symbols, isExternal));
 
-                        // filter out static values
+                        // filter out values
                         for (int i = 0; i < result.Count; i++)
                         {
-                            if (result[i] is ModifiedSymbol &&
-                                (result[i] as ModifiedSymbol).Modifier.HasFlag(SymbolModifier.Static))
+                            if (result[i] is ModifiedSymbol)
                             {
-                                result.RemoveAt(i);
-                                i--;
-                            }
-                        }
-                    }
-                }
-                // look for static references on a type
-                else if (parts.Count == 1)
-                {
-                    SymbolTable symbols = _language.GetSymbols(parts[0]);
-                    if (symbols != null)
-                    {
-                        result.AddRange(GetFields(symbols, true));
-                        result.AddRange(GetProperties(symbols, true));
-                        result.AddRange(GetMethods(symbols, true));
-
-                        // filter out non static values
-                        for (int i = 0; i < result.Count; i++)
-                        {
-                            if (result[i] is ModifiedSymbol &&
-                                !(result[i] as ModifiedSymbol).Modifier.HasFlag(SymbolModifier.Static))
-                            {
-                                result.RemoveAt(i);
-                                i--;
+                                SymbolModifier modifier = (result[i] as ModifiedSymbol).Modifier;
+                                if ((modifier.HasFlag(SymbolModifier.Static) && !isTypeReference) ||
+                                    (!modifier.HasFlag(SymbolModifier.Static) && isTypeReference))
+                                {
+                                    result.RemoveAt(i);
+                                    i--;
+                                }
                             }
                         }
                     }

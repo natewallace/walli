@@ -267,13 +267,15 @@ namespace SalesForceLanguage.Apex.Parser
                     {
                         List<TextSpan> parts = new List<TextSpan>();
                         foreach (ApexSyntaxNode part in identifierNodes)
-                            parts.Add(new TextSpan(part.TextSpan));
+                            if (part.Nodes[0].Token != Tokens.grammar_non_reserved_identifier)
+                                parts.Add(new TextSpan(part.TextSpan));
 
-                        _typeReferences.Add(new ReferenceTypeSymbol(
-                            new TextPosition(node.TextSpan),
-                            node.GetLeavesDisplayText(),
-                            new TextSpan(node.TextSpan),
-                            parts.ToArray()));
+                        if (parts.Count > 0)
+                            _typeReferences.Add(new ReferenceTypeSymbol(
+                                new TextPosition(node.TextSpan),
+                                node.GetLeavesDisplayText(),
+                                new TextSpan(node.TextSpan),
+                                parts.ToArray()));
                     }
 
                     break;

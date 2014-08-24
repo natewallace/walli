@@ -278,5 +278,337 @@
       </method>
     </methods>
   </SymbolTable>    
+  
+  <!-- Database -->
+  <SymbolTable name="Database" modifier="1" type="System.Database">
+    <methods>
+      <method name="convertLead" modifier="9" type="Database.LeadConvertResult">
+        <parameters>
+          <parameter name="leadToConvert" modifier="4" type="Database.LeadConvert" />
+          <parameter name="opt_allOrNone" modifier="4" type="boolean" />
+        </parameters>
+      </method>
+      <method name="convertLead" modifier="9" type="Database.LeadConvertResult[]">
+        <parameters>
+          <parameter name="leadsToConvert" modifier="4" type="Database.LeadConvert[]" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="countQuery" modifier="9" type="System.Integer">
+        <parameters>
+          <parameter name="query" modifier="4" type="System.String" />
+        </parameters>
+      </method>
+      <method name="delete" modifier="9" type="Database.DeleteResult">
+        <parameters>
+          <parameter name="recordToDelete" modifier="4" type="System.SObject" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="delete" modifier="9" type="Database.DeleteResult[]">
+        <parameters>
+          <parameter name="recordsToDelete" modifier="4" type="System.SObject[]" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="delete" modifier="9" type="Database.DeleteResult">
+        <parameters>
+          <parameter name="recordID" modifier="4" type="System.Id" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="delete" modifier="9" type="Database.DeleteResult[]">
+        <parameters>
+          <parameter name="recordIDs" modifier="4" type="System.Id[]" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="emptyRecycleBin" modifier="9" type="Database.EmptyRecycleBinResult[]">
+        <parameters>
+          <parameter name="recordIds" modifier="4" type="System.Id[]" />
+        </parameters>
+      </method>
+      <method name="emptyRecycleBin" modifier="9" type="Database.EmptyRecycleBinResult">
+        <parameters>
+          <parameter name="obj" modifier="4" type="System.sObject" />
+        </parameters>
+      </method>
+      <method name="emptyRecycleBin" modifier="9" type="Database.EmptyRecycleBinResult[]">
+        <parameters>
+          <parameter name="listOfSObjects" modifier="4" type="System.sObject[]" />
+        </parameters>
+      </method>
+      <method name="executeBatch" modifier="9" type="System.Id">
+        <parameters>
+          <parameter name="className" modifier="4" type="System.sObject" />
+        </parameters>
+      </method>
+      <method name="executeBatch" modifier="9" type="System.Id">
+        <parameters>
+          <parameter name="className" modifier="4" type="System.sObject" />
+          <parameter name="scope" modifier="4" type="System.Integer" />
+        </parameters>
+      </method>
+      <method name="getDeleted" modifier="9" type="Database.GetDeletedResult">
+        <parameters>
+          <parameter name="sObjectType" modifier="4" type="System.String" />
+          <parameter name="startDate" modifier="4" type="System.Datetime" />
+          <parameter name="endDate" modifier="4" type="System.Datetime" />
+        </parameters>
+      </method>
+      <method name="getQueryLocator" modifier="9" type="Database.QueryLocator">
+        <parameters>
+          <parameter name="listOfQueries" modifier="4" type="Systsem.sObject[]" />
+        </parameters>
+      </method>
+      <method name="getQueryLocator" modifier="9" type="Database.QueryLocator">
+        <parameters>
+          <parameter name="query" modifier="4" type="System.String" />
+        </parameters>
+      </method>
+      <method name="getUpdated" modifier="9" type="Database.GetUpdatedResult">
+        <parameters>
+          <parameter name="sobjectType" modifier="4" type="System.String" />
+          <parameter name="startDate" modifier="4" type="System.Datetime" />
+          <parameter name="endDate" modifier="4" type="System.Datetime" />
+        </parameters>
+      </method>
+      <method name="insert" modifier="9" type="Database.SaveResult">
+        <parameters>
+          <parameter name="recordToInsert" modifier="4" type="System.sObject" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="insert" modifier="9" type="Database.SaveResult[]">
+        <parameters>
+          <parameter name="recordsToInsert" modifier="4" type="System.sObject[]" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="insert" modifier="9" type="Database.SaveResult">
+        <parameters>
+          <parameter name="recordToInsert" modifier="4" type="System.sObject" />
+          <parameter name="options" modifier="4" type="Database.DMLOptions" />
+        </parameters>
+      </method>
+      <method name="insert" modifier="9" type="Database.SaveResult">
+        <parameters>
+          <parameter name="recordToInsert" modifier="4" type="System.sObject[]" />
+          <parameter name="options" modifier="4" type="Database.DMLOptions" />
+        </parameters>
+      </method>
+      <method name="merge" modifier="9" type="Database.MergeResult">
+        <parameters>
+          <parameter name="master" modifier="4" type="System.sObject" />
+          <parameter name="duplicate" modifier="4" type="System.Id" />
+        </parameters>
+      </method>
+      <method name="merge" modifier="9" type="Database.MergeResult">
+        <parameters>
+          <parameter name="master" modifier="4" type="System.sObject" />
+          <parameter name="duplicate" modifier="4" type="System.sObject" />
+        </parameters>
+      </method>
+      <method name="merge" modifier="9" type="Database.MergeResult[]">
+        <parameters>
+          <parameter name="master" modifier="4" type="System.sObject" />
+          <parameter name="duplicates" modifier="4" type="System.Id[]" />
+        </parameters>
+      </method>
+      <method name="merge" modifier="9" type="Database.MergeResult[]">
+        <parameters>
+          <parameter name="master" modifier="4" type="System.sObject" />
+          <parameter name="duplicates" modifier="4" type="System.sObject[]" />
+        </parameters>
+      </method>
+      <method name="merge" modifier="9" type="Database.MergeResult">
+        <parameters>
+          <parameter name="master" modifier="4" type="System.sObject" />
+          <parameter name="duplicate" modifier="4" type="System.Id" />
+          <parameter name="allOrNothing" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="merge" modifier="9" type="Database.MergeResult">
+        <parameters>
+          <parameter name="master" modifier="4" type="System.sObject" />
+          <parameter name="duplicate" modifier="4" type="System.sObject" />
+          <parameter name="allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="merge" modifier="9" type="Database.MergeResult[]">
+        <parameters>
+          <parameter name="master" modifier="4" type="System.sObject" />
+          <parameter name="duplicates" modifier="4" type="System.Id[]" />
+          <parameter name="allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="merge" modifier="9" type="Database.MergeResult[]">
+        <parameters>
+          <parameter name="master" modifier="4" type="System.sObject" />
+          <parameter name="duplicates" modifier="4" type="System.sObject[]" />
+          <parameter name="allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="query" modifier="9" type="System.sObject[]">
+        <parameters>
+          <parameter name="query" modifier="4" type="System.String" />
+        </parameters>
+      </method>
+      <method name="rollback" modifier="9" type="void">
+        <parameters>
+          <parameter name="sp" modifier="4" type="System.Savepoint" />
+        </parameters>
+      </method>
+      <method name="setSavepoint" modifier="9" type="System.Savepoint">
+      </method>
+      <method name="undelete" modifier="9" type="Database.UndeleteResult">
+        <parameters>
+          <parameter name="recordToUndelete" modifier="4" type="System.sObject" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="undelete" modifier="9" type="Database.UndeleteResult[]">
+        <parameters>
+          <parameter name="recordsToUndelete" modifier="4" type="System.sObject[]" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="undelete" modifier="9" type="Database.UndeleteResult">
+        <parameters>
+          <parameter name="recordID" modifier="4" type="System.Id" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="undelete" modifier="9" type="Database.UndeleteResult[]">
+        <parameters>
+          <parameter name="recordIDs" modifier="4" type="System.Id[]" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="update" modifier="9" type="Database.SaveResult">
+        <parameters>
+          <parameter name="recordToUpdate" modifier="4" type="System.sObject" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="update" modifier="9" type="Database.SaveResult[]">
+        <parameters>
+          <parameter name="recordsToUpdate" modifier="4" type="System.sObject[]" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="update" modifier="9" type="Database.SaveResult">
+        <parameters>
+          <parameter name="recordToUpdate" modifier="4" type="System.sObject" />
+          <parameter name="options" modifier="4" type="Database.DmlOptions" />
+        </parameters>
+      </method>
+      <method name="update" modifier="9" type="Database.SaveResult[]">
+        <parameters>
+          <parameter name="recordsToUpdate" modifier="4" type="System.sObject[]" />
+          <parameter name="options" modifier="4" type="Database.DMLOptions" />
+        </parameters>
+      </method>
+      <method name="upsert" modifier="9" type="Database.UpsertResult">
+        <parameters>
+          <parameter name="recordToUpsert" modifier="4" type="System.sObject" />
+          <parameter name="external_ID_Field" modifier="4" type="Schema.SObjectField" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="upsert" modifier="9" type="Database.UpsertResult[]">
+        <parameters>
+          <parameter name="recordsToUpsert" modifier="4" type="System.sObject[]" />
+          <parameter name="External_ID_Field" modifier="4" type="Schema.SObjectField" />
+          <parameter name="opt_allOrNone" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+    </methods>
+  </SymbolTable>
+
+  <!-- Date -->
+  <SymbolTable name="Date" modifier="1" type="System.Date">
+    <methods>
+      <method name="addDays" modifier="1" type="System.Date">
+        <parameters>
+          <parameter name="addlDays" modifier="4" type="System.Integer" />
+        </parameters>
+      </method>
+      <method name="addMonths" modifier="1" type="System.Date">
+        <parameters>
+          <parameter name="addlMonths" modifier="4" type="System.Integer" />
+        </parameters>
+      </method>
+      <method name="addYears" modifier="1" type="System.Date">
+        <parameters>
+          <parameter name="addlYears" modifier="4" type="System.Integer" />
+        </parameters>
+      </method>
+      <method name="day" modifier="1" type="System.Integer">
+      </method>
+      <method name="dayOfYear" modifier="1" type="System.Integer">
+      </method>
+      <method name="daysBetween" modifier="1" type="System.Integer">
+        <parameters>
+          <parameter name="compDate" modifier="4" type="System.Date" />
+        </parameters>
+      </method>
+      <method name="daysInMonth" modifier="9" type="System.Integer">
+        <parameters>
+          <parameter name="year" modifier="4" type="System.Integer" />
+          <parameter name="month" modifier="4" type="System.Integer" />
+        </parameters>
+      </method>
+      <method name="format" modifier="1" type="System.String">
+      </method>
+      <method name="isLeapYear" modifier="9" type="System.Boolean">
+        <parameters>
+          <parameter name="year" modifier="4" type="System.Integer" />
+        </parameters>
+      </method>
+      <method name="isSameDay" modifier="1" type="System.Boolean">
+        <parameters>
+          <parameter name="compDate" modifier="4" type="System.Boolean" />
+        </parameters>
+      </method>
+      <method name="month" modifier="1" type="System.Integer">
+      </method>
+      <method name="monthsBetween" modifier="1" type="System.Integer">
+        <parameters>
+          <parameter name="compDate" modifier="4" type="System.Date" />
+        </parameters>
+      </method>
+      <method name="newInstance" modifier="9" type="System.Date">
+        <parameters>
+          <parameter name="year" modifier="4" type="System.Integer" />
+          <parameter name="month" modifier="4" type="System.Integer" />
+          <parameter name="date" modifier="4" type="System.Integer" />
+        </parameters>
+      </method>
+      <method name="parse" modifier="9" type="System.Date">
+        <parameters>
+          <parameter name="Date" modifier="4" type="System.String" />
+        </parameters>
+      </method>
+      <method name="today" modifier="9" type="System.Date">
+      </method>
+      <method name="toStartOfMonth" modifier="1" type="System.Date">
+      </method>
+      <method name="toStartOfWeek" modifier="1" type="System.Date">
+      </method>
+      <method name="valueOf" modifier="9" type="System.Date">
+        <parameters>
+          <parameter name="toDate" modifier="4" type="System.String" />
+        </parameters>
+      </method>
+      <method name="valueOf" modifier="9" type="System.Date">
+        <parameters>
+          <parameter name="fieldValue" modifier="4" type="System.Object" />
+        </parameters>
+      </method>
+      <method name="year" modifier="1" type="System.Integer">
+      </method>
+    </methods>
+  </SymbolTable>
 
 </ArrayOfSymbolTable>
