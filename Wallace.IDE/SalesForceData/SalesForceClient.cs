@@ -74,6 +74,11 @@ namespace SalesForceData
         /// </summary>
         public static readonly double METADATA_VERSION = 31.0;
 
+        /// <summary>
+        /// The amount of time to wait on a save operation before throwing an exception.
+        /// </summary>
+        private static readonly TimeSpan SAVE_TIMEOUT = new TimeSpan(0, 1, 0);
+
         #endregion
 
         #region Constructors
@@ -857,7 +862,8 @@ namespace SalesForceData
                     }
                     string saveRequestId = apexSaveResponse.result[0].id;
 
-                    // get result               
+                    // get result        
+                    DateTime startTime = DateTime.Now;
                     apexSaveRequest.State = "Queued";
                     while (apexSaveRequest.State == "Queued")
                     {
@@ -870,6 +876,14 @@ namespace SalesForceData
                             pollResponse.result.records.Length == 1)
                         {
                             apexSaveRequest = pollResponse.result.records[0] as SalesForceAPI.Tooling.ContainerAsyncRequest;
+                        }
+
+                        if (apexSaveRequest.State == "Queued")
+                        {
+                            if (DateTime.Now - startTime > SAVE_TIMEOUT)
+                                throw new Exception("A client side timeout occured while trying to save a file to SalesForce.");
+
+                            System.Threading.Thread.Sleep((int)TimeSpan.FromSeconds(2).TotalMilliseconds);
                         }
                     }
 
