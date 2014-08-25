@@ -83,6 +83,14 @@ namespace Wallace.IDE.SalesForce.UI
             menuItemDeleteRecord.Icon = imageDeleteRecord;
             menuItemDeleteRecord.Click += menuItemDeleteRecord_Click;
             _contextMenu.Items.Add(menuItemDeleteRecord);
+
+            MenuItem menuItemCopyValue = new MenuItem();
+            menuItemCopyValue.Header = "Copy value to clipboard";
+            Image imageCopyValue = new Image();
+            imageCopyValue.Source = VisualHelper.LoadBitmap("Copy.png");
+            menuItemCopyValue.Icon = imageCopyValue;
+            menuItemCopyValue.Click += menuItemCopyValue_Click;
+            _contextMenu.Items.Add(menuItemCopyValue);
         }
 
         #endregion
@@ -427,6 +435,33 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Copy the cell that is under the current mouse position.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void menuItemCopyValue_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                
+
+                if (dataGridResults.SelectedCells.Count == 1)
+                {
+                    DataRowView row = dataGridResults.SelectedCells[0].Item as DataRowView;
+                    DataGridColumn column = dataGridResults.SelectedCells[0].Column;
+                    if (row != null && row.Row != null && column != null && row.Row.ItemArray[column.DisplayIndex] != null)
+                    {
+                        Clipboard.SetText(row.Row.ItemArray[column.DisplayIndex].ToString());
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
         /// Show context menu.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
@@ -436,9 +471,9 @@ namespace Wallace.IDE.SalesForce.UI
             try
             {
                 DataGridRow item = VisualHelper.GetAncestor<DataGridRow>(e.OriginalSource as DependencyObject);
-                dataGridResults.SelectedIndex = item.GetIndex();
                 if (item != null)
                 {
+                    dataGridResults.SelectedIndex = item.GetIndex();
                     _contextMenu.PlacementTarget = item;
                     _contextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
                     _contextMenu.IsOpen = true;
