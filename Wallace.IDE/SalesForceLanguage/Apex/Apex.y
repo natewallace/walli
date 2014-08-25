@@ -251,7 +251,6 @@
 %token grammar_enum_declaration
 %token grammar_enum_member_declaration
 %token grammar_enum_member_declarations
-%token grammar_enum_type
 %token grammar_equality_expression
 %token grammar_exclusive_or_expression
 %token grammar_expression
@@ -415,9 +414,6 @@ namespace_or_type_name:
 qualified_name:
 	identifier |
 	qualified_name SEPARATOR_DOT identifier ;
-
-enum_type:
-	type_name ;
 
 type:
 	class_type |

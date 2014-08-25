@@ -46,6 +46,16 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private ContextMenu _contextMenu;
 
+        /// <summary>
+        /// Holds the cell that was most recently right clicked on.
+        /// </summary>
+        private DataGridCell _rightClickedCell;
+
+        /// <summary>
+        /// Menu item for copying cell values to clipboard.
+        /// </summary>
+        private MenuItem _menuItemCopyValue;
+
         #endregion
 
         #region Constructors
@@ -84,13 +94,13 @@ namespace Wallace.IDE.SalesForce.UI
             menuItemDeleteRecord.Click += menuItemDeleteRecord_Click;
             _contextMenu.Items.Add(menuItemDeleteRecord);
 
-            MenuItem menuItemCopyValue = new MenuItem();
-            menuItemCopyValue.Header = "Copy value to clipboard";
+            _menuItemCopyValue = new MenuItem();
+            _menuItemCopyValue.Header = "Copy value to clipboard";
             Image imageCopyValue = new Image();
             imageCopyValue.Source = VisualHelper.LoadBitmap("Copy.png");
-            menuItemCopyValue.Icon = imageCopyValue;
-            menuItemCopyValue.Click += menuItemCopyValue_Click;
-            _contextMenu.Items.Add(menuItemCopyValue);
+            _menuItemCopyValue.Icon = imageCopyValue;
+            _menuItemCopyValue.Click += menuItemCopyValue_Click;
+            _contextMenu.Items.Add(_menuItemCopyValue);
         }
 
         #endregion
@@ -443,16 +453,9 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                
-
-                if (dataGridResults.SelectedCells.Count == 1)
+                if (_rightClickedCell != null && _rightClickedCell.Content is TextBlock)
                 {
-                    DataRowView row = dataGridResults.SelectedCells[0].Item as DataRowView;
-                    DataGridColumn column = dataGridResults.SelectedCells[0].Column;
-                    if (row != null && row.Row != null && column != null && row.Row.ItemArray[column.DisplayIndex] != null)
-                    {
-                        Clipboard.SetText(row.Row.ItemArray[column.DisplayIndex].ToString());
-                    }
+                    Clipboard.SetText((_rightClickedCell.Content as TextBlock).Text);
                 }
             }
             catch (Exception err)
@@ -470,13 +473,21 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
+                _rightClickedCell = VisualHelper.GetAncestor<DataGridCell>(e.OriginalSource as DependencyObject);
+                _menuItemCopyValue.Visibility = (_rightClickedCell != null && _rightClickedCell.Content is TextBlock) ?
+                    System.Windows.Visibility.Visible :
+                    System.Windows.Visibility.Collapsed;
+
                 DataGridRow item = VisualHelper.GetAncestor<DataGridRow>(e.OriginalSource as DependencyObject);
                 if (item != null)
                 {
                     dataGridResults.SelectedIndex = item.GetIndex();
-                    _contextMenu.PlacementTarget = item;
-                    _contextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
-                    _contextMenu.IsOpen = true;
+                    if (dataGridResults.SelectedIndex < dataGridResults.Items.Count - 1)
+                    {
+                        _contextMenu.PlacementTarget = item;
+                        _contextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+                        _contextMenu.IsOpen = true;
+                    }
                 }
             }
             catch (Exception err)
