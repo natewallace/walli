@@ -107,7 +107,6 @@ namespace SalesForceLanguage
             _genericCompletions.Add(new Keyword("rollback"));
             _genericCompletions.Add(new Keyword("set"));
             _genericCompletions.Add(new Keyword("static"));
-            _genericCompletions.Add(new Keyword("string"));
             _genericCompletions.Add(new Keyword("super"));
             _genericCompletions.Add(new Keyword("testmethod"));
             _genericCompletions.Add(new Keyword("this"));

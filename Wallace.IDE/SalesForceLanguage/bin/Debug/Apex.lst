@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 8/25/2014 7:43:19 AM>
+//  GPPG error listing for yacc source file <C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 8/26/2014 10:49:53 AM>
 // ==========================================================================
 //  Version:  1.5.0
 //  Machine:  PTLLDVC0ZN1
-//  DateTime: 8/25/2014 7:46:13 AM
+//  DateTime: 8/26/2014 10:50:18 AM
 //  UserName: DUX07
 // ==========================================================================
 
@@ -152,67 +152,6 @@
 %token SEPARATOR_COMMA
 %token SEPARATOR_DOT 
 
-%token RESERVED_ACTIVATE
-%token RESERVED_ANY
-%token RESERVED_ARRAY
-%token RESERVED_ASC
-%token RESERVED_AUTONOMOUS
-%token RESERVED_BEGIN
-%token RESERVED_BIGDECIMAL
-%token RESERVED_BULK
-%token RESERVED_BYTE
-%token RESERVED_CAST
-%token RESERVED_CHAR
-%token RESERVED_COLLECT
-%token RESERVED_COMMIT
-%token RESERVED_CONST
-%token RESERVED_DEFAULT
-%token RESERVED_DESC
-%token RESERVED_END
-%token RESERVED_EXIT
-%token RESERVED_EXPORT
-%token RESERVED_FLOAT
-%token RESERVED_FROM
-%token RESERVED_GOTO
-%token RESERVED_GROUP
-%token RESERVED_HAVING
-%token RESERVED_HINT
-%token RESERVED_IMPORT
-%token RESERVED_IN
-%token RESERVED_INNER
-%token RESERVED_INT
-%token RESERVED_INTO
-%token RESERVED_JOIN
-%token RESERVED_LIKE
-%token RESERVED_LIMIT
-%token RESERVED_LOOP
-%token RESERVED_NOT
-%token RESERVED_NULLS
-%token RESERVED_NUMBER
-%token RESERVED_OBJECT
-%token RESERVED_OF
-%token RESERVED_ON
-%token RESERVED_OR
-%token RESERVED_OUTER
-%token RESERVED_PACKAGE
-%token RESERVED_PARALLEL
-%token RESERVED_PRAGMA
-%token RESERVED_RETRIEVE
-%token RESERVED_RETURNING
-%token RESERVED_SEARCH
-%token RESERVED_SELECT
-%token RESERVED_SHORT
-%token RESERVED_SORT
-%token RESERVED_STAT
-%token RESERVED_SWITCH
-%token RESERVED_SYNCHRONIZED
-%token RESERVED_THEN
-%token RESERVED_TRANSACTION
-%token RESERVED_TYPE
-%token RESERVED_USING
-%token RESERVED_WHEN
-%token RESERVED_WHERE
-
 // Non terminals
 %token grammar_accessor_body
 %token grammar_accessor_declarations
@@ -262,7 +201,6 @@
 %token grammar_enum_declaration
 %token grammar_enum_member_declaration
 %token grammar_enum_member_declarations
-%token grammar_enum_type
 %token grammar_equality_expression
 %token grammar_exclusive_or_expression
 %token grammar_expression
@@ -375,8 +313,15 @@
 %right OPERATOR_INCREMENT OPERATOR_DECREMENT OPERATOR_LOGICAL_COMPLEMENT
 
 %%
-// Warning: NonTerminal symbol "enum_type" is unreachable
-// ------------------------------------------------------
+// Error: NonTerminal symbol "RESERVED_JOIN" has no productions
+// Error: NonTerminal symbol "RESERVED_SORT" has no productions
+// Warning: Terminating RESERVED_SORT fixes the following size-1 NonTerminal set
+   // {RESERVED_SORT}
+// Error: There are 2 non-terminating NonTerminal Symbols
+   //  {RESERVED_JOIN, RESERVED_SORT}
+// Warning: Terminating RESERVED_JOIN fixes the following size-1 NonTerminal set
+   // {RESERVED_JOIN}
+// -----------------------------------------------------------------------------
  
 identifier:
 	KEYWORD_ANNOTATE IDENTIFIER |
@@ -395,6 +340,9 @@ non_reserved_identifier:
     KEYWORD_UNDELETE |
     KEYWORD_UPDATE |
     KEYWORD_UPSERT |
+	KEYWORD_DELETE |
+	KEYWORD_ROLLBACK |
+	KEYWORD_MERGE |
 	KEYWORD_NEW |
 	KEYWORD_ID |
 	KEYWORD_BLOB |
@@ -428,9 +376,6 @@ namespace_or_type_name:
 qualified_name:
 	identifier |
 	qualified_name SEPARATOR_DOT identifier ;
-
-enum_type:
-	type_name ;
 
 type:
 	class_type |

@@ -1,0 +1,1249 @@
+﻿public class Gen {
+
+	public class Answers {
+		public static ID[] findSimilar(Question q);
+		public static Void setBestReply(String questionId, String replyId);
+	}
+
+	public class ApexPages {
+		public Void addMessage(ApexPages.Message msg);
+		public Void addMessages(Exception ex);
+		public System.PageReference currentPage();
+		public ApexPages.Message[] getMessages();
+		public Boolean hasMessages();
+		public Boolean hasMessages(ApexPages.Severity sev);
+	}
+
+	public class Approval {
+		public static Approval.ProcessResult process(Approval.ProcessRequest processRequest);
+		public static Approval.ProcessResult process(Approval.ProcessRequest processRequests, Boolean opt_allOrNone);
+		public static Approval.ProcessResult [] process(Approval.ProcessRequest[] processRequests);
+		public static Approval.ProcessResult [] process(Approval.ProcessRequest[] processRequests, Boolean opt_allOrNone);
+	}
+
+	public class Blob {
+		public Integer size();
+		public static Blob toPdf(String stringToConvert);
+		public String toString();
+		public static Blob valueOf(String toBlob);
+	}
+
+	public class Boolean {
+		public static Boolean valueOf(String toBoolean);
+		public static Boolean valueOf(Object fieldValue);
+	}
+
+	public class Cases {
+		public static ID getCaseIdFromEmailThreadId(String emailThreadId);
+	}
+
+	public interface Comparable {
+		Integer compareTo(Object objectToCompareTo);
+	}
+
+	public class Cookie {
+		public Cookie(String name, String value, String path, Integer maxAge, Boolean isSecure);
+		public String getDomain();
+		public Integer getMaxAge();
+		public String getName();
+		public String getPath();
+		public String getValue();
+		public Boolean isSecure();
+	}
+
+	public class Crypto {
+		public static Blob decrypt(String algorithmName, Blob privateKey, Blob initializationVector, Blob cipherText);
+		public static Blob decryptWithManagedIV(String algorithmName, Blob privateKey, Blob IVAndCipherText);
+		public static Blob encrypt(String algorithmName, Blob privateKey, Blob initializationVector, Blob clearText);
+		public static Blob encryptWithManagedIV(String algorithmName, Blob privateKey, Blob clearText);
+		public static Blob generateAesKey(Integer size);
+		public static Blob generateDigest(String algorithmName, Blob input);
+		public static Blob generateMac(String algorithmName, Blob input, Blob privateKey);
+		public static Integer getRandomInteger();
+		public static Long getRandomLong();
+		public static Blob sign(String algorithmName, Blob input, Blob privateKey);
+		public static Blob signWithCertificate(String algorithmName, Blob input, String certDevName);
+		public Void signXML(String algorithmName, Dom.XmlNode node, String idAttributeName, String certDevName);
+	}
+
+	public class BusinessHours {
+		public static Datetime add(String businessHoursId, Datetime startDate, Long interval);
+		public static Datetime addGmt(String businessHoursId, Datetime startDate, Long interval);
+		public static Long diff(String businessHoursId, Datetime startDate, Datetime endDate);
+		public static Boolean isWithin(String businessHoursId, Datetime targetDate);
+		public static Datetime nextStartDate(String businessHoursId, Datetime targetDate);
+	}
+
+	public class CustomSettings {
+		public Map<String, CustomSetting__c> getAll();
+		public CustomSetting__c getInstance(String dataset_name);
+		public CustomSetting__c getValues(String dataset_name);
+		public CustomSetting__c getInstance();
+		public CustomSetting__c getInstance(ID user_Id);
+		public CustomSetting__c getInstance(ID profile_Id);
+		public CustomSetting__c getOrgDefaults();
+		public CustomSetting__c getValues(ID user_Id);
+		public CustomSetting__c getValues(ID Profile_Id);
+	}
+
+	public class Database {
+		public static Database.LeadConvertResult convertLead(Database.LeadConvert leadToConvert, Boolean opt_allOrNone);
+		public static Database.LeadConvertResult[] convertLead(Database.LeadConvert[] leadsToConvert, Boolean opt_allOrNone);
+		public static Integer countQuery(String query);
+		public static Database.DeleteResult delete(SObject recordToDelete, Boolean opt_allOrNone);
+		public static Database.DeleteResult[] delete(SObject[] recordsToDelete, Boolean opt_allOrNone);
+		public static Database.DeleteResult delete(ID recordID, Boolean opt_allOrNone);
+		public static Database.DeleteResult[] delete(ID[] recordIDs, Boolean opt_allOrNone);
+		public static Database.EmptyRecycleBinResult[] emptyRecycleBin(ID [] recordIds);
+		public static Database.EmptyRecycleBinResult emptyRecycleBin(sObject obj);
+		public static Database.EmptyRecycleBinResult[] emptyRecycleBin(sObject[] listOfSObjects);
+		public static ID executeBatch(sObject className);
+		public static ID executeBatch(sObject className, Integer scope);
+		public static Database.GetDeletedResult getDeleted(String sObjectType, Datetime startDate, Datetime endDate);
+		public static Database. QueryLocator getQueryLocator(sObject [] listOfQueries);
+		public static Database.QueryLocator getQueryLocator(String query);
+		public static Database.GetUpdatedResult getUpdated(String sobjectType, Datetime startDate, Datetime endDate);
+		public static Database.SaveResult insert(sObject recordToInsert, Boolean opt_allOrNone);
+		public static Database.SaveResult[] insert(sObject [] recordsToInsert, Boolean opt_allOrNone);
+		public static Database.SaveResult insert(sObject recordToInsert, Database.DMLOptions options);
+		public static Database.SaveResult insert(sObject[] recordToInsert, Database.DMLOptions options);
+		public static Database.MergeResult merge(sObject master, Id duplicate);
+		public static Database.MergeResult merge(sObject master, sObject duplicate);
+		public static List<Database.MergeResult> merge(sObject master, List<Id> duplicates);
+		public static List<Database.MergeResult> merge(sObject master, List<SObject> duplicates);
+		public static Database.MergeResult merge(sObject master, Id duplicate, Boolean allOrNothing);
+		public static Database.MergeResult merge(sObject master, sObject duplicate, Boolean allOrNone);
+		public static List<Database.MergeResult> merge(sObject master, List<Id> duplicates, Boolean allOrNone);
+		public static List<Database.MergeResult> merge(sObject master, List<SObject> duplicates, Boolean allOrNone);
+		public static sObject[] query(String query);
+		public static Void rollback(System.Savepoint sp);
+		public static System.Savepoint setSavepoint();
+		public static Database.UndeleteResult undelete(sObject recordToUndelete, Boolean opt_allOrNone);
+		public static Database.UndeleteResult[] undelete(sObject [] recordsToUndelete, Boolean opt_allOrNone);
+		public static Database.UndeleteResult undelete(ID recordID, Boolean opt_allOrNone);
+		public static Database.UndeleteResult[] undelete(ID[] recordIDs, Boolean opt_allOrNone);
+		public static Database.SaveResult update(sObject recordToUpdate, Boolean opt_allOrNone);
+		public static Database.SaveResult[] update(sObject[] recordsToUpdate, Boolean opt_allOrNone);
+		public static Database.SaveResult update(sObject recordToUpdate, Database.DmlOptions options);
+		public static Database.SaveResult[] update(sObject[] recordsToUpdate, Database.DMLOptions options);
+		public static Database.UpsertResult upsert(sObject recordToUpsert, Schema.SObjectField external_ID_Field, Boolean opt_allOrNone);
+		public static Database.UpsertResult[] upsert(sObject [] recordsToUpsert, Schema.SObjectField External_ID_Field, Boolean opt_allOrNone);
+	}
+
+	public class Date {
+		public Date addDays(Integer addlDays);
+		public Date addMonths(Integer addlMonths);
+		public Date addYears(Integer addlYears);
+		public Integer day();
+		public Integer dayOfYear();
+		public Integer daysBetween(Date compDate);
+		public static Integer daysInMonth(Integer year, Integer month);
+		public String format();
+		public static Boolean isLeapYear(Integer year);
+		public Boolean isSameDay(Date compDate);
+		public Integer month();
+		public Integer monthsBetween(Date compDate);
+		public static Date newInstance(Integer year, Integer month, Integer date);
+		public static Date parse(String Date);
+		public static Date today();
+		public Date toStartOfMonth();
+		public Date toStartOfWeek();
+		public static Date valueOf(String toDate);
+		public static Date valueOf(Object fieldValue);
+		public Integer year();
+	}
+
+	public class Datetime {
+		public Datetime addDays(Integer addlDays);
+		public Datetime addHours(Integer addlHours);
+		public Datetime addMinutes(Integer addlMinutes);
+		public Datetime addMonths(Integer addlMonths);
+		public Datetime addSeconds(Integer addlSeconds);
+		public Datetime addYears(Integer addlYears);
+		public Date date();
+		public Date dateGMT();
+		public Integer day();
+		public Integer dayGmt();
+		public Integer dayOfYear();
+		public Integer dayOfYearGmt();
+		public String format();
+		public String format(String dateFormat);
+		public String format(String dateFormat, String timezone);
+		public String formatGmt(String dateFormat);
+		public String formatLong();
+		public Long getTime();
+		public Integer hour();
+		public Integer hourGmt();
+		public Boolean isSameDay(Datetime compDt);
+		public Integer millisecond();
+		public Integer millisecondGmt();
+		public Integer minute();
+		public Integer minuteGmt();
+		public Integer month();
+		public Integer monthGmt();
+		public static Datetime newInstance(Long milliseconds);
+		public static Datetime newInstance(Date dt, Time tm);
+		public static Datetime newInstance(Integer year, Integer month, Integer day);
+		public static Datetime newInstance(Integer year, Integer month, Integer day, Integer hour, Integer minute, Integer second);
+		public static Datetime newInstanceGmt(Date dt, Time tm);
+		public static Datetime newInstanceGmt(Integer year, Integer month, Integer date);
+		public static Datetime newInstanceGmt(Integer year, Integer month, Integer date, Integer hour, Integer minute, Integer second);
+		public static Datetime now();
+		public static Datetime parse(String datetime);
+		public Integer second();
+		public Integer secondGmt();
+		public Time time();
+		public Time timeGmt();
+		public static Datetime valueOf(String toDateTime);
+		public static Datetime valueOf(Object fieldValue);
+		public static Datetime valueOfGmt(String toDateTime);
+		public Integer year();
+		public Integer yearGmt();
+	}
+
+	public enum RoundingMode {
+		CEILING,
+		DOWN,
+		FLOOR,
+		HALF_DOWN,
+		HALF_EVEN,
+		HALF_UP,
+		UNNECESSARY,
+		UP
+	}
+
+	public class Decimal {
+		public Decimal abs();
+		public Decimal divide(Decimal divisor, Integer scale);
+		public Decimal divide(Decimal divisor, Integer scale, Object roundingMode);
+		public Double doubleValue();
+		public String format();
+		public Integer intValue();
+		public Long longValue();
+		public Decimal pow(Integer exponent);
+		public Integer precision();
+		public Long round();
+		public Long round(System.RoundingMode roundingMode);
+		public Integer scale();
+		public Decimal setScale(Integer scale);
+		public Decimal setScale(Integer scale, System.RoundingMode roundingMode);
+		public Decimal stripTrailingZeros();
+		public String toPlainString();
+		public static Decimal valueOf(Double convertToDecimal);
+		public static Decimal valueOf(Long convertToDecimal);
+		public static Decimal valueOf(String convertToDecimal);
+	}
+
+	public class Double {
+		public String format();
+		public Integer intValue();
+		public Long longValue();
+		public Long round();
+		public static Double valueOf(String toDouble);
+		public static Double valueOf(Object fieldValue);
+	}
+
+	public class EncodingUtil {
+		public static Blob base64Decode(String inputString);
+		public static String base64Encode(Blob inputBlob);
+		public static Blob convertToHex(String inputString);
+		public static String convertToHex(Blob inputString);
+		public static String urlDecode(String inputString, String encodingScheme);
+		public static String urlEncode(String inputString, String encodingScheme);
+	}
+
+	public class Exception {
+		public Exception getCause();
+		public integer getLineNumber();
+		public string getMessage();
+		public string getStackTraceString();
+		public string getTypeName();
+		public void initCause(Exception cause);
+		public void setMessage(string s);
+	}
+
+	public class DmlException extends Exception {
+		public string[] getDmlFieldNames(integer i);
+		public Schema.sObjectField[] getDmlFields(integer i);
+		public string getDmlId(integer i);
+		public integer getDmlIndex(integer i);
+		public string getDmlMessage(integer i);
+		public string getDmlStatusCode(integer i);
+		public System.StatusCode getDmlType(integer i);
+		public integer getNumDml();
+	}
+
+	public class AsyncException extends Exception {
+	}
+
+	public class CalloutException extends Exception {
+	}
+
+	public class EmailException extends Exception {
+	}
+	
+	public class InvalidParameterValueException extends Exception {
+	}
+	
+	public class JSONException extends Exception {
+	}
+	
+	public class ListException extends Exception {
+	}
+	
+	public class MathException extends Exception {
+	}
+	
+	public class NoAccessException extends Exception {
+	}
+	
+	public class NoDataFoundException extends Exception {
+	}
+	
+	public class NoSuchElementException extends Exception {
+	}
+	
+	public class NullPointerException extends Exception {
+	}
+	
+	public class QueryException extends Exception {
+	}
+	
+	public class RequiredFeatureMissing extends Exception {
+	}
+	
+	public class SearchException extends Exception {
+	}
+	
+	public class SecurityException extends Exception {
+	}
+	
+	public class SerializationException extends Exception {
+	}
+	
+	public class SObjectException extends Exception {
+	}
+	
+	public class StringException extends Exception {
+	}
+	
+	public class TypeException extends Exception {
+	}
+	
+	public class VisualforceException extends Exception {
+	}
+	
+	public class XmlException extends Exception {
+	}
+
+	public class Http {
+		public HttpResponse send(HttpRequest request);
+		public String toString();
+	}
+
+	public interface HttpCalloutMock {
+		HttpResponse respond(HttpRequest req);
+	}
+
+	public class HttpRequest {
+		public HttpRequest();
+		public String getBody();
+		public Blob getBodyAsBlob();
+		public Dom.Document getBodyDocument();
+		public Boolean getCompressed();
+		public String getEndpoint();
+		public String getHeader(String key);
+		public String getMethod();
+		public Void setBody(String body);
+		public Void setBodyAsBlob(Blob body);
+		public Void setBodyDocument(Dom.Document document);
+		public Void setClientCertificate(String clientCert, String password);
+		public Void setClientCertificateName(String certDevName);
+		public Void setCompressed(Boolean flag);
+		public Void setEndpoint(String endpoint);
+		public Void setHeader(String key, String Value);
+		public Void setMethod(String method);
+		public Void setTimeout(Integer timeout);
+		public String toString();
+	}
+
+	public class HttpResponse {
+		public String getBody();
+		public Blob getBodyAsBlob();
+		public Dom.Document getBodyDocument();
+		public String getHeader(String key);
+		public String[] getHeaderKeys();
+		public String getStatus();
+		public Integer getStatusCode();
+		public XmlStreamReader getXmlStreamReader();
+		public Void setBody(String body);
+		public Void setBodyAsBlob(Blob body);
+		public Void setHeader(String key, String value);
+		public Void setStatus(String status);
+		public Void setStatusCode(Integer statusCode);
+		public String toString();
+	}
+
+	public class Id {
+		public Void addError(String errorMsg);
+		public Void addError(String errorMsg, Boolean escape);
+		public Void addError(Exception exceptionError);
+		public Void addError(Exception exceptionError, Boolean escape);
+		public Schema.SObjectType getSObjectType();
+		public static ID valueOf(String toID);
+	}
+
+	public class Ideas {
+		public static ID[] findSimilar(Idea idea);
+		public static ID[] getAllRecentReplies(String userID, String communityID);
+		public static ID[] getReadRecentReplies(String userID, String communityID);
+		public static ID[] getUnreadRecentReplies(String userID, String communityID);
+		public static Void markRead(String ideaID);
+	}
+
+	public interface InstallHandler {
+		Void onInstall(InstallContext context);
+	}
+
+	public class Integer {
+		public String format();
+		public static Integer valueOf(String toInteger);
+		public static Integer valueOf(Object fieldValue);
+	}
+
+	public class JSON {
+		public static System.JSONGenerator createGenerator(Boolean pretty);
+		public static System.JSONParser createParser(String jsonString);
+		public static Object deserialize(String jsonString, System.Type apexType);
+		public static Object deserializeStrict(String jsonString, System.Type apexType);
+		public static Object deserializeUntyped(String jsonString);
+		public static String serialize(anyType object);
+		public static String serializePretty(Object anyType);
+	}
+
+	public class JSONGenerator {
+		public Void close();
+		public String getAsString();
+		public Boolean isClosed();
+		public Void writeBlob(Blob blobValue);
+		public Void writeBlobField(String fieldName, Blob blobValue);
+		public Void writeBoolean(Boolean blobValue);
+		public Void writeBooleanField(String fieldName, Boolean booleanValue);
+		public Void writeDate(Date dateValue);
+		public Void writeDateField(String fieldName, Date dateValue);
+		public Void writeDateTime(Datetime datetimeValue);
+		public Void writeDateTimeField(String fieldName, Datetime datetimeValue);
+		public Void writeEndArray();
+		public Void writeEndObject();
+		public Void writeFieldName(String fieldName);
+		public Void writeId(ID identifier);
+		public Void writeIdField(String fieldName, Id identifier);
+		public Void writeNull();
+		public Void writeNullField(String fieldName);
+		public Void writeNumber(Decimal num);
+		public Void writeNumber(Double num);
+		public Void writeNumber(Integer num);
+		public Void writeNumber(Long num);
+		public Void writeNumberField(String fieldName, Decimal num);
+		public Void writeNumberField(String fieldName, Double num);
+		public Void writeNumberField(String fieldName, Integer num);
+		public Void writeNumberField(String fieldName, Long num);
+		public Void writeObject(Object anyType);
+		public Void writeObjectField(String fieldName, Object anyType);
+		public Void writeStartArray();
+		public Void writeStartObject();
+		public Void writeString(String stringValue);
+		public Void writeStringField(String fieldName, String stringValue);
+		public Void writeTime(Time timeValue);
+		public Void writeTimeField(String fieldName, Time timeValue);
+	}
+
+	public class JSONParser {
+		public Void clearCurrentToken();
+		public Blob getBlobValue();
+		public Boolean getBooleanValue();
+		public String getCurrentName();
+		public System.JSONToken getCurrentToken();
+		public Datetime getDatetimeValue();
+		public Date getDateValue();
+		public Decimal getDecimalValue();
+		public Double getDoubleValue();
+		public ID getIdValue();
+		public Integer getIntegerValue();
+		public System.JSONToken getLastClearedToken();
+		public Long getLongValue();
+		public String getText();
+		public Time getTimeValue();
+		public Boolean hasCurrentToken();
+		public System.JSONToken nextToken();
+		public System.JSONToken nextValue();
+		public Object readValueAs(System.Type apexType);
+		public Object readValueAsStrict(System.Type apexType);
+		public Void skipChildren();
+	}
+
+	public enum JSONToken {
+		END_ARRAY,
+		END_OBJECT,
+		FIELD_NAME,
+		NOT_AVAILABLE,
+		START_ARRAY,
+		START_OBJECT,
+		VALUE_EMBEDDED_OBJECT,
+		VALUE_FALSE,
+		VALUE_NULL,
+		VALUE_NUMBER_FLOAT,
+		VALUE_NUMBER_INT,
+		VALUE_STRING,
+		VALUE_TRUE
+	}
+
+	public class Limits {
+		public static Integer getAggregateQueries();
+		public static Integer getLimitAggregateQueries();
+		public static Integer getCallouts();
+		public static Integer getLimitCallouts();
+		public static Integer getChildRelationshipsDescribes();
+		public static Integer getLimitChildRelationshipsDescribes();
+		public static Integer getCpuTime();
+		public static Integer getLimitCpuTime();
+		public static Integer getDMLRows();
+		public static Integer getLimitDMLRows();
+		public static Integer getDMLStatements();
+		public static Integer getLimitDMLStatements();
+		public static Integer getEmailInvocations();
+		public static Integer getLimitEmailInvocations();
+		public static Integer getFieldsDescribes();
+		public static Integer getLimitFieldsDescribes();
+		public static Integer getFieldSetsDescribes();
+		public static Integer getLimitFieldSetsDescribes();
+		public static Integer getFindSimilarCalls();
+		public static Integer getLimitFindSimilarCalls();
+		public static Integer getFutureCalls();
+		public static Integer getLimitFutureCalls();
+		public static Integer getHeapSize();
+		public static Integer getLimitHeapSize();
+		public static Integer getMobilePushApexCalls();
+		public static Integer getLimitMobilePushApexCalls();
+		public static Integer getQueries();
+		public static Integer getLimitQueries();
+		public static Integer getPicklistDescribes();
+		public static Integer getLimitPicklistDescribes();
+		public static Integer getQueryLocatorRows();
+		public static Integer getLimitQueryLocatorRows();
+		public static Integer getQueryRows();
+		public static Integer getLimitQueryRows();
+		public static Integer getRecordTypesDescribes();
+		public static Integer getLimitRecordTypesDescribes();
+		public static Integer getRunAs();
+		public static Integer getLimitRunAs();
+		public static Integer getSavepointRollbacks();
+		public static Integer getLimitSavepointRollbacks();
+		public static Integer getSavepoints();
+		public static Integer getLimitSavepoints();
+		public static Integer getScriptStatements();
+		public static Integer getLimitScriptStatements();
+		public static Integer getSoslQueries();
+		public static Integer getLimitSoslQueries();
+	}
+
+	public class List {
+		public List();
+		public List(List listToCopy);
+		public List(Set setToCopy);
+		public Void add(Object listElement);
+		public Void add(Integer index, Object listElement);
+		public Void addAll(List fromList);
+		public Void addAll(Set fromSet);
+		public Void clear();
+		public List<Object> clone();
+		public List<Object> deepClone(Boolean opt_preserve_id, Boolean opt_preserve_readonly_timestamps, Boolean opt_preserve_autonumber);
+		public Boolean equals(List list2);
+		public Object get(Integer index);
+		public Schema.SObjectType getSObjectType();
+		public Integer hashCode();
+		public Boolean isEmpty();
+		public Iterator iterator();
+		public Object remove(Integer index);
+		public Void set(Integer index, Object listElement);
+		public Integer size();
+		public Void sort();
+	}
+
+	public class Long {
+		public String format();
+		public Integer intValue();
+		public static Long valueOf(String toLong);
+	}
+
+	public class Map {
+		public Map();
+		public Map(Map mapToCopy);
+		public Map(List<sObject> recordList);
+		public Void clear();
+		public Map<Object, Object> clone();
+		public Boolean containsKey(Object key);
+		public Map<Object, Object> deepClone();
+		public Boolean equals(Map map2);
+		public Object get(Object key);
+		public Schema.SObjectType getSObjectType();
+		public Integer hashCode();
+		public Boolean isEmpty();
+		public Set<Object> keySet();
+		public Object put(Object key, Object value);
+		public Void putAll(Map fromMap);
+		public putAll(sObject[] sobjectArray);
+		public Object remove(Key key);
+		public Integer size();
+		public List<Object> values();
+	}
+
+	public class Matcher {
+		public Integer end();
+		public Integer end(Integer groupIndex);
+		public Boolean find();
+		public Boolean find(Integer group);
+		public String group();
+		public String group(Integer groupIndex);
+		public Integer groupCount();
+		public Boolean hasAnchoringBounds();
+		public Boolean hasTransparentBounds();
+		public Boolean hitEnd();
+		public Boolean lookingAt();
+		public Boolean matches();
+		public Pattern pattern();
+		public static String quoteReplacement(String inputString);
+		public Matcher region(Integer start, Integer end);
+		public Integer regionEnd();
+		public Integer regionStart();
+		public String replaceAll(String replacementString);
+		public String replaceFirst(String replacementString);
+		public Boolean requireEnd();
+		public Matcher reset();
+		public Matcher reset(String inputSequence);
+		public Integer start();
+		public Integer start(Integer groupIndex);
+		public Matcher useAnchoringBounds(Boolean anchoringBounds);
+		public Matcher usePattern(Pattern pattern);
+		public Matcher useTransparentBounds(Boolean transparentBounds);
+	}
+
+	public class Math {
+		public static Decimal abs(Decimal d);
+		public static Double abs(Double d);
+		public static Integer abs(Integer i);
+		public static Long abs(Long l);
+		public static Decimal acos(Decimal d);
+		public static Double acos(Double d);
+		public static Decimal asin(Decimal d);
+		public static Double asin(Double d);
+		public static Decimal atan(Decimal d);
+		public static Double atan(Double d);
+		public static Decimal atan2(Decimal x, Decimal y);
+		public static Double atan2(Double x, Double y);
+		public static Decimal cbrt(Decimal d);
+		public static Double cbrt(Double d);
+		public static Decimal ceil(Decimal d);
+		public static Double ceil(Double d);
+		public static Decimal cos(Decimal d);
+		public static Double cos(Double d);
+		public static Decimal cosh(Decimal d);
+		public static Double cosh(Double d);
+		public static Decimal exp(Decimal d);
+		public static Double exp(Double d);
+		public static Decimal floor(Decimal d);
+		public static Double floor(Double d);
+		public static Decimal log(Decimal d);
+		public static Double log(Double d);
+		public static Decimal log10(Decimal d);
+		public static Double log10(Double d);
+		public static Decimal max(Decimal d1, Decimal d2);
+		public static Double max(Double d1, Double d2);
+		public static Integer max(Integer i1, Integer i2);
+		public static Long max(Long l1, Long l2);
+		public static Decimal min(Decimal d1, Decimal d2);
+		public static Double min(Double d1, Double d2);
+		public static Integer min(Integer i1, Integer i2);
+		public static Long min(Long l1, Long l2);
+		public static Integer mod(Integer i1, Integer i2);
+		public static Long mod(Long L1, Long L2);
+		public static Double pow(Double d, Double exp);
+		public static Double random();
+		public static Decimal rint(Decimal d);
+		public static Double rint(Double d);
+		public static Integer round(Double d);
+		public static Integer round(Decimal d);
+		public static Long roundToLong(Decimal d);
+		public static Long roundToLong(Double d);
+		public static Decimal signum(Decimal d);
+		public static Double signum(Double d);
+		public static Decimal sin(Decimal d);
+		public static Double sin(Double d);
+		public static Decimal sinh(Decimal d);
+		public static Double sinh(Double d);
+		public static Decimal sqrt(Decimal d);
+		public static Double sqrt(Double d);
+		public static Decimal tan(Decimal d);
+		public static Double tan(Double d);
+		public static Decimal tanh(Decimal d);
+		public static Double tanh(Double d);
+	}
+
+	public class Messaging {
+		public Void reserveMassEmailCapacity(Integer amountReserved);
+		public Void reserveSingleEmailCapacity(Integer amountReserved);
+		public Messaging.SendEmailResult[] sendEmail(Messaging.Email[] emails, Boolean allOrNothing);
+		public Messaging.SendEmailResult[] sendEmailMessage(List <ID> emailMessageIds, Boolean allOrNothing);
+	}
+
+	public class MultiStaticResourceCalloutMock {
+		public MultiStaticResourceCalloutMock();
+		public Void setHeader(String headerName, String headerValue);
+		public Void setStaticResource(String endpoint, String resourceName);
+		public Void setStatus(String httpStatus);
+		public Void setStatusCode(Integer httpStatusCode);
+	}
+
+	public class Network {
+		public Network();
+		public String getNetworkId();
+		public String communitiesLanding();
+		public PageReference forwardToAuthPage(String startURL);
+	}
+
+	public class PageReference { 
+		public PageReference(String partialURL);
+		public PageReference(SObject record);
+		public String getAnchor();
+		public Blob getContent();
+		public Blob getContentAsPDF();
+		public Map<String, System.Cookie[]> getCookies();
+		public Map<String, String> getHeaders();
+		public Map<String, String> getParameters();
+		public Boolean getRedirect();
+		public String getUrl();
+		public System.PageReference setAnchor(String anchor);
+		public Void setCookies(Cookie[] cookies);
+		public System.PageReference setRedirect(Boolean redirect);
+	}
+
+	public class Pattern {
+		public static Pattern compile(String regExp);
+		public Matcher matcher(String regExp);
+		public static Boolean matches(String regExp, String s);
+		public String pattern();
+		public static String quote(String s);
+		public String[] split(String s);
+		public String[] split(String regExp, Integer limit);
+	}
+
+	public class QuickAction {
+		public static List<QuickAction.DescribeAvailableQuickActionResult> describeAvailableQuickActions(String parentType);
+		public static List<QuickAction.DescribeQuickActionResult> describeAvailableQuickActions(List<String> sObjectNames);
+		public static QuickAction.QuickActionResult performQuickAction(QuickAction.QuickActionRequest performQuickAction);
+		public static QuickAction.QuickActionResult performQuickAction(QuickAction.QuickActionRequest performQuickAction, Boolean allOrNothing);
+		public static List<QuickAction.QuickActionResult> performQuickActions(List<QuickAction.QuickActionRequest> performQuickActions);
+		public static List<QuickAction.QuickActionResult> performQuickActions(List<QuickAction.QuickActionRequest> performQuickActions, Boolean allOrNothing);
+	}
+
+	public class ResetPasswordResult {
+		public String getPassword();
+	}
+
+	public class RestContext {
+		public RestRequest request {get; set;}
+		public RestResponse response {get; set;}
+	}
+
+	public class RestRequest {
+		public RestRequest();
+		public Map<String, String> headers {get; set;}
+		public String httpMethod {get; set;}
+		public Map <String, String> params {get; set;}
+		public String remoteAddress {get; set;}
+		public Blob requestBody {get; set;}
+		public String requestURI {get; set;}
+		public String resourcePath {get; set;}
+		public Void addHeader(String name, String value);
+		public Void addParameter(String name, String value);
+	}
+
+	public class RestResponse {
+		public RestResponse();
+		public Blob responseBody {get; set;}
+		public Map<String, String> headers {get; set;}
+		public Integer statuscode {get; set;}
+		public Void addHeader(String name, String value);
+
+	}
+
+	public interface Schedulable {
+		Void execute(SchedulableContext context);
+	} 
+
+	public interface SchedulableContext {
+		Id getTriggerId();
+	}
+
+	public class Schema {
+		public static Map<String, Schema.SObjectType> getGlobalDescribe();
+		public static List<Schema.DescribeDataCategoryGroupResult> describeDataCategoryGroups(List<String> sObjectNames);
+		public static List<Schema.DescribeSObjectResult> describeSObjects(List<String> types);
+		public static List<Schema.DescribeTabSetResult> describeTabs();
+		public static List<Schema.DescribeDataCategoryGroupStructureResult> describeDataCategoryGroupStructures(List<Schema.DataCategoryGroupSobjectTypePair> pairs);
+	}
+
+	public class Search {
+		public static sObject[] query(String query);
+	}
+
+	public class SelectOption {
+		public SelectOption(String value, String label);
+		public SelectOption(String value, String label, Boolean isDisabled);
+		public Boolean getDisabled();
+		public Boolean getEscapeItem();
+		public String getLabel();
+		public String getValue();
+		public Void setDisabled(Boolean isDisabled);
+		public Void setEscapeItem(Boolean itemsEscaped);
+		public Void setLabel(String label);
+		public Void setValue(String value);
+	}
+
+	public class Set {
+		public Set();
+		public Set(Set setToCopy);
+		public Set(List listToCopy);
+		public Boolean add(Object setElement);
+		public Boolean addAll(List<Object> fromList);
+		public Boolean addAll(Set<Object> fromSet);
+		public Void clear();
+		public Set<Object> clone();
+		public Boolean contains(Object setElement);
+		public Boolean containsAll(List<Object> listToCompare);
+		public Boolean containsAll(Set<Object> setToCompare);
+		public Boolean equals(Set<Object> set2);
+		public Integer hashCode();
+		public Boolean isEmpty();
+		public Boolean remove(Object setElement);
+		public Boolean removeAll(List<Object> listOfElementsToRemove);
+		public Boolean retainAll(List<Object> listOfElementsToRetain);
+		public Boolean retainAll(Set setOfElementsToRetain);
+		public Integer size();
+	}
+
+	public class Site {
+		public static System.PageReference changePassword(String newpassword, String verifynewpassword, String opt_oldpassword);
+		public static ID createPersonAccountPortalUser(sObject user, String ownerId, String password);
+		public static ID createPersonAccountPortalUser(sObject user, String ownerId, String recordTypeId, String password);
+		public static ID createPortalUser(sObject user, String accountId, String opt_password, Boolean opt_sendEmailConfirmation);
+		public static Boolean forgotPassword(String username);
+		public static String getAdminEmail();
+		public static ID getAdminId();
+		public static String getAnalyticsTrackingCode();
+		public static String getCurrentSiteUrl();
+		public static String getBaseCustomUrl();
+		public static String getBaseInsecureUrl();
+		public static String getBaseRequestUrl();
+		public static String getBaseSecureUrl();
+		public static String getBaseUrl();
+		public static String getCustomWebAddress();
+		public static String getDomain();
+		public static String getErrorDescription();
+		public static String getErrorMessage();
+		public static String getMasterLabel();
+		public static String getName();
+		public static String getOriginalUrl();
+		public static String getPathPrefix();
+		public static String getPrefix();
+		public static String getSiteId();
+		public static System.PageReference getTemplate();
+		public static String getSiteType();
+		public static String getSyteTypeLabel();
+		public static Boolean isLoginEnabled();
+		public static Boolean isPasswordExpired();
+		public static Boolean isRegistrationEnabled();
+		public static System.PageReference login(String username, String password, String startUrl);
+		public static Void setPortalUserAsAuthProvider(sObject user, String contactId);
+	}
+
+	public class sObject {
+		public Void addError(String errorMsg);
+		public Void addError(String errorMsg, Boolean escape);
+		public Void addError(Exception exceptionError);
+		public Void addError(Exception exceptionError, Boolean escape);
+		public Void addError(String errorMsg);
+		public Void addError(String errorMsg, Boolean escape);
+		public Void clear();
+		public sObject clone(Boolean opt_preserve_id, Boolean opt_IsDeepClone, Boolean opt_preserve_readonly_timestamps, Boolean opt_preserve_autonumber);
+		public Object get(String fieldName);
+		public Object get(Schema.sObjectField field);
+		public Database.DMLOptions getOptions();
+		public sObject getSObject(String fieldName);
+		public sObject getSObject(Schema.SObjectField fieldName);
+		public sObject[] getSObjects(String fieldName);
+		public sObject[] getSObjects(Schema.SObjectType fieldName);
+		public Schema.SObjectType getSObjectType();
+		public String getQuickActionName();
+		public Object put(String fieldName, Object value);
+		public Object put(Schema.SObjectField fieldName, Object value);
+		public sObject putSObject(String fieldName, sObject value);
+		public sObject putSObject(Schema.sObjectType fieldName, sObject value);
+		public Void setOptions(database.DMLOptions DMLOptions);
+	}
+
+	public class StaticResourceCalloutMock {
+		public StaticResourceCalloutMock();
+		public Void setHeader(String headerName, String headerValue);
+		public Void setStaticResource(String resourceName);
+		public Void setStatus(String httpStatus);
+		public Void setStatusCode(Integer httpStatusCode);
+	}
+
+	public class String {
+		public String abbreviate(Integer maxWidth);
+		public String abbreviate(Integer maxWidth, Integer offset);
+		public String capitalize();
+		public String center(Integer size);
+		public String center(Integer size, String padStr);
+		public Integer charAt(Integer index);
+		public Integer codePointAt(Integer index);
+		public Integer codePointBefore(Integer index);
+		public Integer codePointCount(Integer beginIndex, Integer endIndex);
+		public Integer compareTo(String compString);
+		public Boolean contains(String compString);
+		public Boolean containsAny(String compString);
+		public Boolean containsIgnoreCase(String compString);
+		public Boolean containsNone(String compString);
+		public Boolean containsOnly(String compString);
+		public Boolean containsWhitespace();
+		public Integer countMatches(String compString);
+		public String deleteWhitespace();
+		public String difference(String compString);
+		public Boolean endsWith(String suffix);
+		public Boolean endsWithIgnoreCase(String suffix);
+		public Boolean equals(String compString);
+		public Boolean equalsIgnoreCase(String compString);
+		public String escapeCsv();
+		public String escapeEcmaScript();
+		public String escapeHtml3();
+		public String escapeHtml4();
+		public String escapeJava();
+		public static String escapeSingleQuotes(String stringToEscape);
+		public String escapeUnicode();
+		public String escapeXml();
+		public static String format(String stringToFormat, List<String> formattingArguments);
+		public static String fromCharArray(List<Integer> charArray);
+		public List<Integer> getChars();
+		public static String getCommonPrefix(List<String> strings);
+		public Integer getLevenshteinDistance(String stringToCompare);
+		public Integer getLevenshteinDistance(String stringToCompare, Integer threshold);
+		public Integer hashCode();
+		public Integer indexOf(String subString);
+		public Integer indexOf(String substring, Integer index);
+		public Integer indexOfAny(String substring);
+		public Integer indexOfAnyBut(String substring);
+		public Integer indexOfChar(Integer character);
+		public Integer indexOfChar(Integer character, Integer startIndex);
+		public Integer indexOfDifference(String stringToCompare);
+		public Integer indexOfIgnoreCase(String substring);
+		public Integer indexOfIgnoreCase(String substring, Integer startPosition);
+		public Boolean isAllLowerCase();
+		public Boolean isAllUpperCase();
+		public Boolean isAlpha();
+		public Boolean isAlphaSpace();
+		public Boolean isAlphanumeric();
+		public Boolean isAlphanumericSpace();
+		public Boolean isAsciiPrintable();
+		public static Boolean isBlank(String inputString);
+		public static Boolean isEmpty(String inputString);
+		public static Boolean isNotBlank(String inputString);
+		public static Boolean isNotEmpty(String inputString);
+		public Boolean isNumeric();
+		public Boolean isNumericSpace();
+		public Boolean isWhitespace();
+		public static String join(Object iterableObj, String separator);
+		public Integer lastIndexOf(String substring);
+		public Integer lastIndexOf(String substring, Integer endPosition);
+		public Integer indexOfChar(Integer character);
+		public Integer lastIndexOfChar(Integer character, Integer endIndex);
+		public Integer lastIndexOfIgnoreCase(String substring);
+		public Integer lastIndexOfIgnoreCase(String substring, Integer endPosition);
+		public String left(Integer length);
+		public String leftPad(Integer length);
+		public Integer length();
+		public String mid(Integer startIndex, Integer length);
+		public String normalizeSpace();
+		public Integer offsetByCodePoints(Integer index, Integer codePointOffset);
+		public String remove(String substring);
+		public String removeEnd(String substring);
+		public String removeEndIgnoreCase(String substring);
+		public String removeStart(String substring);
+		public String removeStartIgnoreCase(String substring);
+		public String repeat(Integer numTimes);
+		public String repeat(String separator, Integer numTimes);
+		public String replace(String target, String replacement);
+		public String replaceAll(String regExp, String replacement);
+		public String replaceFirst(String regExp, String replacement);
+		public String reverse();
+		public String right(Integer length);
+		public String rightPad(Integer length);
+		public String[] split(String regExp, Integer limit);
+		public List<String> splitByCharacterType();
+		public List<String> splitByCharacterTypeCamelCase();
+		public Boolean startsWith(String prefix);
+		public Boolean startsWithIgnoreCase(String prefix);
+		public String stripHtmlTags(String htmlInput);
+		public String substring(Integer startIndex);
+		public String substring(Integer startIndex, Integer endIndex);
+		public String substringAfter(String separator);
+		public String substringAfterLast(String separator);
+		public String substringBefore(String separator);
+		public String substringBeforeLast(String separator);
+		public String substringBetween(String tag);
+		public String substringBetween(String open, String close);
+		public String swapCase(String open, String close);
+		public String toLowerCase();
+		public String toLowerCase(String locale);
+		public String toUpperCase();
+		public String toUpperCase(String locale);
+		public String trim();
+		public String uncapitalize();
+		public String unescapeCsv();
+		public String unescapeEcmaScript();
+		public String unescapeHtml3();
+		public String unescapeHtml4();
+		public String unescapeJava();
+		public String unescapeUnicode();
+		public String unescapeXml();
+		public static String valueOf(Date dateToConvert);
+		public static String valueOf(Datetime datetimeToConvert);
+		public static String valueOf(Decimal decimalToConvert);
+		public static String valueOf(Double doubleToConvert);
+		public static String valueOf(Integer integerToConvert);
+		public static String valueOf(Long longToConvert);
+		public static String valueOf(Object toConvert);
+		public static String valueOfGmt(Datetime datetimeToConvert);
+	}
+
+	public enum LoggingLevel {
+		ERROR,
+		WARN,
+		INFO,
+		DEBUG,
+		FINE,
+		FINER,
+		FINEST
+	}
+
+	public class System {
+		public static Void abortJob(String Job_ID);
+		public static Void assert(Boolean condition, Object opt_msg);
+		public static Void assertEquals(Object expected, Object actual, Object opt_msg);
+		public static Void assertNotEquals(Object expected, Object actual, Object opt_msg);
+		public static System.PageReference currentPageReference();
+		public static Long currentTimeMillis();
+		public static Void debug(Object msg);
+		public static Void debug(LoggingLevel logLevel, Object msg);
+		public static Boolean equals(Object obj1, Object obj2);
+		public static System.ApplicationReadWriteMode getApplicationReadWriteMode();
+		public static Integer hashCode(Object obj);
+		public static Boolean isBatch();
+		public static Boolean isFuture();
+		public static Boolean isScheduled();
+		public static Datetime now();
+		public static List<Id> process(List<Id> WorkItemIDs, String Action, String Comments, String NextApprover);
+		public static Integer purgeOldAsyncJobs(Date dt);
+		public static System.Version requestVersion();
+		public static System.ResetPasswordResult resetPassword(ID userID, Boolean send_user_email);
+		public static Void runAs(System.Version version);
+		public static Void runAs(User user_var);
+		public static String schedule(String JobName, String CronExpression, Object schedulable_class);
+		public static String scheduleBatch(Database.Batchable batchable, String jobName, Integer minutesFromNow);
+		public static String scheduleBatch(Database.Batchable batchable, String jobName, Integer minutesFromNow, Integer scopeSize);
+		public static Void setPassword(ID userID, String password);
+		public static List<ID> submit(List<ID> workItemIDs, String Comments, String NextApprover);
+		public static Date today();
+	}
+
+	public class Test {
+		public static Id getStandardPricebookId();
+		public static Boolean isRunningTest();
+		public static List<sObject> loadData(Schema.SObjectType sObjectToken, String resourceName);
+		public static Void setCurrentPage(PageReference page);
+		public static Void setCurrentPageReference(PageReference page);
+		public static Void setFixedSearchResults(ID[] opt_set_search_results);
+		public static Void setMock(Type interfaceType, Object instance);
+		public static Void setReadOnlyApplicationMode(Boolean application_mode);
+		public static Void startTest();
+		public static Void stopTest();
+		public static Void testInstall(InstallHandler installImp, Version ver, Boolean isPush);
+		public static Void testUninstall(UninstallHandler uninstImp);
+	}
+
+	public class Time {
+		public Time addHours(Integer addlHours);
+		public Time addMilliseconds(Integer addlMilliseconds);
+		public Time addMinutes(Integer addlMinutes);
+		public Time addSeconds(Integer addlSeconds);
+		public Integer hour();
+		public Integer millisecond();
+		public Integer minute();
+		public static Time newInstance(Integer hour, Integer minutes, Integer seconds, Integer milliseconds);
+		public Integer second();
+	}
+
+	public class TimeZone {
+		public String getDisplayName();
+		public String getID();
+		public Integer getOffset(Datetime date);
+		public static TimeZone getTimeZone(String Id);
+		public String toString();
+	}
+
+	public class Type {
+		public Boolean equals(Object toCompare);
+		public static System.Type forName(String fullyQualifiedName);
+		public static System.Type forName(String namespace, String name);
+		public String getName();
+		public Integer hashCode();
+		public Object newInstance();
+		public String toString();
+
+	}
+
+	public interface UninstallHandler {
+		Void onUninstall(UninstallContext context);
+	}
+
+	public class URL {
+		public Url(String spec);
+		public Url(Url context, String spec);
+		public Url(String protocol, String host, String file);
+		public Url(String protocol, String host, Integer port, String file);
+		public String getAuthority();
+		public static System.URL getCurrentRequestUrl();
+		public Integer getDefaultPort();
+		public String getFile();
+		public static String getFileFieldURL(String entityId, String fieldName);
+		public String getHost();
+		public String getPath();
+		public Integer getPort();
+		public String getProtocol();
+		public String getQuery();
+		public String getRef();
+		public static System.URL getSalesforceBaseUrl();
+		public String getUserInfo();
+		public Boolean sameFile(System.URL URLToCompare);
+		public String toExternalForm();
+	}
+
+	public class UserInfo {
+		public static String getDefaultCurrency();
+		public static String getFirstName();
+		public static String getLanguage();
+		public static String getLastName();
+		public static String getLocale();
+		public static String getName();
+		public static String getOrganizationId();
+		public static String getOrganizationName();
+		public static String getProfileId();
+		public static String getSessionId();
+		public static System.TimeZone getTimeZone();
+		public static String getUiTheme();
+		public static String getUiThemeDisplayed();
+		public static String getUserEmail();
+		public static String getUserId();
+		public static String getUserName();
+		public static String getUserRoleId();
+		public static String getUserType();
+		public static Boolean isCurrentUserLicensed(String namespace);
+		public static Boolean isMultiCurrencyOrganization();
+	}
+
+	public class Version {
+		public Version(Integer major, Integer minor);
+		public Version(Integer major, Integer minor, Integer patch);
+		public Integer compareTo(System.Version version);
+		public Integer major();
+		public Integer minor();
+		public Integer patch();
+	}
+
+	public interface WebServiceMock {
+		Void doInvoke(Object stub, Object request, Map<String, Object> response, String endpoint, String soapAction, String requestName, String responseNS, String responseName, String responseType);
+	}
+
+	public enum XmlTag {
+		ATTRIBUTE,
+		CDATA,
+		CHARACTERS,
+		COMMENT,
+		DTD,
+		END_DOCUMENT,
+		END_ELEMENT,
+		ENTITY_DECLARATION,
+		ENTITY_REFERENCE,
+		NAMESPACE,
+		NOTATION_DECLARATION,
+		PROCESSING_INSTRUCTION,
+		SPACE,
+		START_DOCUMENT,
+		START_ELEMENT
+	}
+
+	public class XmlStreamReader {
+		public XmlStreamReader(String xmlInput);
+		public Integer getAttributeCount();
+		public String getAttributeLocalName(Integer index);
+		public String getAttributeNamespace(Integer index);
+		public String getAttributePrefix(Integer index);
+		public String getAttributeType(Integer index);
+		public String getAttributeValue(String namespaceURI, String localName);
+		public String getAttributeValueAt(Integer index);
+		public System.XmlTag getEventType();
+		public String getLocalName();
+		public String getLocation();
+		public String getNamespace();
+		public Integer getNamespaceCount();
+		public String getNamespacePrefix(Integer index);
+		public String getNamespaceURI(String Prefix);
+		public String getNamespaceURIAt(Integer Index);
+		public String getPIData();
+		public String getPITarget();
+		public String getPrefix();
+		public String getText();
+		public String getVersion();
+		public Boolean hasName();
+		public Boolean hasNext();
+		public Boolean hasText();
+		public Boolean isCharacters();
+		public Boolean isEndElement();
+		public Boolean isStartElement();
+		public Boolean isWhiteSpace();
+		public Integer next();
+		public Integer nextTag();
+		public Void setCoalescing(Boolean returnAsSingleBlock);
+		public Void setNamespaceAware(Boolean isNamespaceAware);
+		public String toString();
+	}
+
+	public class XmlStreamWriter {
+		public XmlStreamWriter();
+		public Void close();
+		public String getXmlString();
+		public Void setDefaultNamespace(String URI);
+		public Void writeAttribute(String prefix, String namespaceURI, String localName, String value);
+		public Void writeCData(String data);
+		public Void writeCharacters(String text);
+		public Void writeComment(String data);
+		public Void writeDefaultNamespace(String namespaceURI);
+		public Void writeEmptyElement(String prefix, String localName, String namespaceURI);
+		public Void writeEndDocument();
+		public Void writeEndElement();
+		public Void writeNamespace(String prefix, String namespaceURI);
+		public Void writeProcessingInstruction(String target, String data);
+		public Void writeStartDocument(String encoding, String version);
+		public Void writeStartElement(String prefix, String localName, String namespaceURI);
+	}
+}

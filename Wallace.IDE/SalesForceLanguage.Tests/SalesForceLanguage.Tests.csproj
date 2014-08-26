@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ApexLexerTest.cs" />
     <Compile Include="ApexParserTest.cs" />
+    <Compile Include="LanguageSignatures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SymbolTest.cs" />
   </ItemGroup>
@@ -82,6 +83,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestInput\apexTest7.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestInput\SystemSignatures.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestInput\lexerTest1.txt">

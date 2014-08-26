@@ -162,65 +162,7 @@ WithoutSharing 			WITHOUT{WhiteSpace}*SHARING
 	"<<="               { return Symbol(Tokens.OPERATOR_ASSIGNMENT_BITWISE_SHIFT_LEFT); }
 	">>="               { return Symbol(Tokens.OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT); }
 	">>>="              { return Symbol(Tokens.OPERATOR_ASSIGNMENT_BITWISE_SHIFT_RIGHT_UNSIGNED); } 
-	"instanceof"        { return Symbol(Tokens.OPERATOR_INSTANCEOF); }
-	
-	"activate"			{ return Symbol(Tokens.RESERVED_ACTIVATE); }
-	"any"				{ return Symbol(Tokens.RESERVED_ANY); }
-	"array"				{ return Symbol(Tokens.RESERVED_ARRAY); }
-	"asc"				{ return Symbol(Tokens.RESERVED_ASC); }
-	"autonomous"        { return Symbol(Tokens.RESERVED_AUTONOMOUS); }
-	"begin"				{ return Symbol(Tokens.RESERVED_BEGIN); }
-	"bigdecimal"		{ return Symbol(Tokens.RESERVED_BIGDECIMAL); }
-	"bulk"				{ return Symbol(Tokens.RESERVED_BULK); }
-	"byte"				{ return Symbol(Tokens.RESERVED_BYTE); }
-	"cast"				{ return Symbol(Tokens.RESERVED_CAST); }
-	"char"				{ return Symbol(Tokens.RESERVED_CHAR); }
-	"collect"			{ return Symbol(Tokens.RESERVED_COLLECT); }
-	"commit"			{ return Symbol(Tokens.RESERVED_COMMIT); }
-	"const"				{ return Symbol(Tokens.RESERVED_CONST); }
-	"default"			{ return Symbol(Tokens.RESERVED_DEFAULT); }
-	"desc"				{ return Symbol(Tokens.RESERVED_DESC); }
-	"end"				{ return Symbol(Tokens.RESERVED_END); }
-	"exit"				{ return Symbol(Tokens.RESERVED_EXIT); }
-	"export"			{ return Symbol(Tokens.RESERVED_EXPORT); }
-	"float"				{ return Symbol(Tokens.RESERVED_FLOAT); }
-	"from"				{ return Symbol(Tokens.RESERVED_FROM); }
-	"goto"				{ return Symbol(Tokens.RESERVED_GOTO); }
-	"group"				{ return Symbol(Tokens.RESERVED_GROUP); }
-	"having"			{ return Symbol(Tokens.RESERVED_HAVING); }
-	"hint"				{ return Symbol(Tokens.RESERVED_HINT); }
-	"import"			{ return Symbol(Tokens.RESERVED_IMPORT); }
-	"in"				{ return Symbol(Tokens.RESERVED_IN); }
-	"inner"				{ return Symbol(Tokens.RESERVED_INNER); }
-	"int"				{ return Symbol(Tokens.RESERVED_INT); }
-	"into"				{ return Symbol(Tokens.RESERVED_INTO); }
-	"join"				{ return Symbol(Tokens.RESERVED_JOIN); }
-	"like"				{ return Symbol(Tokens.RESERVED_LIKE); }
-	"limit"				{ return Symbol(Tokens.RESERVED_LIMIT); }
-	"loop"				{ return Symbol(Tokens.RESERVED_LOOP); }
-	"not"				{ return Symbol(Tokens.RESERVED_NOT); }
-	"nulls"				{ return Symbol(Tokens.RESERVED_NULLS); }
-	"number"			{ return Symbol(Tokens.RESERVED_NUMBER); }
-	"of"				{ return Symbol(Tokens.RESERVED_OF); }
-	"or"				{ return Symbol(Tokens.RESERVED_OR); }
-	"outer"				{ return Symbol(Tokens.RESERVED_OUTER); }
-	"package"			{ return Symbol(Tokens.RESERVED_PACKAGE); }
-	"parallel"			{ return Symbol(Tokens.RESERVED_PARALLEL); }
-	"pragma"			{ return Symbol(Tokens.RESERVED_PRAGMA); }
-	"retrieve"			{ return Symbol(Tokens.RESERVED_RETRIEVE); }
-	"returning"			{ return Symbol(Tokens.RESERVED_RETURNING); }
-	"search"			{ return Symbol(Tokens.RESERVED_SEARCH); }
-	"select"			{ return Symbol(Tokens.RESERVED_SELECT); }
-	"short"				{ return Symbol(Tokens.RESERVED_SHORT); }
-	"sort"				{ return Symbol(Tokens.RESERVED_SORT); }
-	"stat"				{ return Symbol(Tokens.RESERVED_STAT); }
-	"switch"			{ return Symbol(Tokens.RESERVED_SWITCH); }
-	"synchronized"		{ return Symbol(Tokens.RESERVED_SYNCHRONIZED); }
-	"then"				{ return Symbol(Tokens.RESERVED_THEN); }
-	"transaction"		{ return Symbol(Tokens.RESERVED_TRANSACTION); }
-	"using"				{ return Symbol(Tokens.RESERVED_USING); }
-	"when"				{ return Symbol(Tokens.RESERVED_WHEN); }
-	"where"				{ return Symbol(Tokens.RESERVED_WHERE); }	
+	"instanceof"        { return Symbol(Tokens.OPERATOR_INSTANCEOF); }	
    
     "true"				{ return Symbol(Tokens.LITERAL_TRUE); }
 	"false"				{ return Symbol(Tokens.LITERAL_FALSE); }
