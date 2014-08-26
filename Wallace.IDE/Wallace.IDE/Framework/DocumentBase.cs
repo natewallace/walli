@@ -59,6 +59,11 @@ namespace Wallace.IDE.Framework
         }
 
         /// <summary>
+        /// The text used to display this document.
+        /// </summary>
+        public virtual string Text { protected set; get; }
+
+        /// <summary>
         /// Called by the UI when the document is ready for display.
         /// </summary>
         /// <param name="presenter">The presenter used to display the document.</param>

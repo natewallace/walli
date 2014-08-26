@@ -53,7 +53,8 @@ namespace Wallace.IDE.SalesForce.Document
                 throw new ArgumentNullException("package");
 
             Project = project;
-            Package = package;            
+            Package = package;
+            Text = Package.Name;
 
             View = new PackageEditorControl();
             View.ListDragOver += View_DragOver;

@@ -69,6 +69,7 @@ namespace Wallace.IDE.SalesForce.Document
             File = file;
 
             _isDirty = false;
+            Text = File.Name;
 
             View = Activator.CreateInstance<TView>();
             OnViewCreated();

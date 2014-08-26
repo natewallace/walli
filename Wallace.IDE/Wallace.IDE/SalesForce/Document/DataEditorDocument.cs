@@ -176,9 +176,15 @@ namespace Wallace.IDE.SalesForce.Document
                         DataResult.Size);
 
                 if (String.IsNullOrWhiteSpace(DataResult.Data.TableName))
+                {
                     Presenter.Header = VisualHelper.CreateIconHeader("SOQL", "Table.png");
+                    Text = "SOQL";
+                }
                 else
+                {
                     Presenter.Header = VisualHelper.CreateIconHeader(DataResult.Data.TableName, "Table.png");
+                    Text = DataResult.Data.TableName;
+                }
             }
             else
             {

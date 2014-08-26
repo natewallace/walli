@@ -69,6 +69,7 @@ namespace Wallace.IDE.SalesForce.Document
 
             Project = project;
             TestRun = testRun;
+            Text = "Test Run";
 
             View = new TestRunControl();
 

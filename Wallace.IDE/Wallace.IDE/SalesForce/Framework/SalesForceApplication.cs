@@ -154,6 +154,13 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(runTestsFunction, "DOCUMENT");
             App.Instance.ToolBar.AddFunction(runTestsFunction);
 
+            CloseDocumentFunction closeDocumentFunction = new CloseDocumentFunction();
+            App.Instance.Menu.AddFunction(new FunctionSeparator(closeDocumentFunction), "DOCUMENT");
+            App.Instance.Menu.AddFunction(closeDocumentFunction, "DOCUMENT");
+
+            CloseAllDocumentsFunction closeAllDocumentsFunction = new CloseAllDocumentsFunction();
+            App.Instance.Menu.AddFunction(closeAllDocumentsFunction, "DOCUMENT");
+
             ApexDocumentationFunction apexDocFunction = new ApexDocumentationFunction();
             App.Instance.Menu.AddFunction(apexDocFunction, "HELP");
         }

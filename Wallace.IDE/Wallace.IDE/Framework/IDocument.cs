@@ -33,6 +33,11 @@ namespace Wallace.IDE.Framework
         string Id { get; }
 
         /// <summary>
+        /// The text used to display this document.
+        /// </summary>
+        string Text { get; }
+
+        /// <summary>
         /// Called by the UI when the document is ready for display.
         /// </summary>
         /// <param name="presenter">The presenter used to display the document.</param>
