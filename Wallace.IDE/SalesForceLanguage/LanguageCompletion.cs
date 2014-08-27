@@ -179,20 +179,12 @@ namespace SalesForceLanguage
         }
 
         /// <summary>
-        /// Get the symbols leading up to the current text position.
+        /// Break the given line in the given text down to distinct parts.
         /// </summary>
-        /// <param name="text">The text to get the symbols from.</param>
-        /// <param name="className">The name of the class the text is in.</param>
-        /// <param name="position">The position in the class text to start from.</param>
-        /// <param name="includeIncompleteMethods">If true, incomplete methods will be included in matches.</param>
-        /// <returns>The symbols that matched or null if a match can't be made.</returns>
-        private Symbol[] MatchSymbols(Stream text, string className, TextPosition position, bool includeIncompleteMethods)
+        /// <param name="text">The text to get parts for.</param>
+        /// <returns>The parts to process.</returns>
+        private string[] GetLineParts(Stream text)
         {
-            List<Symbol> result = new List<Symbol>();
-
-            if (IsInToken(position, text, _tokensToIgnore))
-                return result.ToArray();
-
             string line = null;
 
             if (text.Position > 0)
@@ -236,6 +228,17 @@ namespace SalesForceLanguage
 
                         case ';':
                         case ',':
+                        case '=':
+                        case '-':
+                        case '+':
+                        case '*':
+                        case '/':
+                        case ':':
+                        case '&':
+                        case '|':
+                        case '!':
+                        case '^':
+                        case '?':
                             if (openDelimiterCount == 0)
                                 stop = true;
                             break;
@@ -256,7 +259,7 @@ namespace SalesForceLanguage
             }
 
             if (String.IsNullOrWhiteSpace(line))
-                return result.ToArray();
+                return new string[0];
 
             // filter lines
             string[] lines = line.Split('\n');
@@ -301,6 +304,24 @@ namespace SalesForceLanguage
                 }
             }
 
+            return parts.ToArray();
+        }
+
+        /// <summary>
+        /// Get the symbols leading up to the current text position.
+        /// </summary>
+        /// <param name="text">The text to get the symbols from.</param>
+        /// <param name="className">The name of the class the text is in.</param>
+        /// <param name="position">The position in the class text to start from.</param>
+        /// <param name="includeIncompleteMethods">If true, incomplete methods will be included in matches.</param>
+        /// <returns>The symbols that matched or null if a match can't be made.</returns>
+        private Symbol[] MatchSymbols(Stream text, string className, TextPosition position, bool includeIncompleteMethods)
+        {
+            List<Symbol> result = new List<Symbol>();
+
+            // get parts
+            string[] parts = GetLineParts(text);
+
             // match parts to types
             SymbolTable classSymbol = _language.GetSymbols(className);
             TypedSymbol matchedSymbol = null;
@@ -311,7 +332,7 @@ namespace SalesForceLanguage
                 bool typeSearchDone = false;
                 bool methodSearchDone = false;
 
-                for (int i = 0; i < parts.Count; i++)
+                for (int i = 0; i < parts.Length; i++)
                 {
                     string part = parts[i];
                     partFound = false;
@@ -327,7 +348,7 @@ namespace SalesForceLanguage
                             {
                                 if (m.Id == methodName)
                                 {
-                                    if (m.Type != "void" || i == parts.Count - 1)
+                                    if (m.Type != "void" || i == parts.Length - 1)
                                     {
                                         matchedSymbol = m;
                                         partFound = true;
@@ -438,7 +459,7 @@ namespace SalesForceLanguage
                         int tempIndex = i;
 
                         StringBuilder typeNameBuilder = new StringBuilder();
-                        for (i = 0; i < parts.Count; i++)
+                        for (i = 0; i < parts.Length; i++)
                         {
                             if (i == 0)
                                 typeNameBuilder.Append(parts[i]);
@@ -466,7 +487,7 @@ namespace SalesForceLanguage
                     if (!partFound &&
                         includeIncompleteMethods &&
                         !methodSearchDone &&
-                        i == parts.Count - 1)
+                        i == parts.Length - 1)
                     {
                         parts[i] = String.Format("{0}()", parts[i]);
                         i--;
@@ -496,15 +517,14 @@ namespace SalesForceLanguage
         /// <returns>Generic code completions.</returns>
         public Symbol[] GetCodeCompletionsLetter(Stream text, string className, TextPosition position)
         {
+            if (IsInToken(position, text, _tokensToIgnore))
+                return new Symbol[0];
+
             string word = null;
             bool isOpenBracket = false;
 
             if (text.Position > 0)
             {
-                // check to see if it's in a token that should be ignored
-                if (IsInToken(position, text, _tokensToIgnore))
-                    return new Symbol[0];
-
                 // get the char directly before the insertion point
                 text.Position = text.Position - 1;
                 char prevChar = (char)text.ReadByte();
@@ -512,43 +532,9 @@ namespace SalesForceLanguage
                     return new Symbol[0];
 
                 // get the word directly before the insertion point
-                StringBuilder wordBuilder = new StringBuilder();
-                bool isPastWhitespace = false;
-                while (text.Position > 0)
-                {
-                    text.Position = text.Position - 1;
-                    char c = (char)text.ReadByte();
-
-                    if (wordBuilder != null)
-                    {
-                        if (c == ' ' || c == '\t' || c == '\n')
-                        {
-                            if (isPastWhitespace)
-                                break;
-                        }
-                        else if (Char.IsLetterOrDigit(c) || c == '_')
-                        {
-                            isPastWhitespace = true;
-                            wordBuilder.Insert(0, c);
-                        }
-                        else if (c == '\'')
-                        {
-                            return new Symbol[0];
-                        }
-                        else if (c == '[')
-                        {
-                            isOpenBracket = true;
-                            break;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    text.Position = text.Position - 1;
-                }
-                word = wordBuilder.ToString().Trim().ToLower();
+                string[] parts = GetLineParts(text);
+                if (parts.Length > 0)
+                    word = parts[parts.Length - 1];
             }
 
             // don't do code completions for text that:
@@ -639,6 +625,9 @@ namespace SalesForceLanguage
         /// <returns>Valid symbols that can be used for the code completion.</returns>
         public Symbol[] GetCodeCompletionsDot(Stream text, string className, TextPosition position)
         {
+            if (IsInToken(position, text, _tokensToIgnore))
+                return new Symbol[0];
+
             List<Symbol> result = new List<Symbol>();
 
             // get class definition

@@ -128,7 +128,8 @@ namespace SalesForceLanguage
             if (String.IsNullOrWhiteSpace(type))
                 return null;
 
-            type = type.ToLower();
+            TypedSymbol typedSymbol = new TypedSymbol(new TextPosition(0,0), null, null, SymbolModifier.None, type);
+            type = typedSymbol.Type.ToLower();
 
             if (_classes.ContainsKey(type))
                 return _classes[type];
