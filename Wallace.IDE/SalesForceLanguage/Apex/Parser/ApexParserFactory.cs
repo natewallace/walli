@@ -48,6 +48,11 @@ namespace SalesForceLanguage.Apex.Parser
         private Stack<Field> _fields;
 
         /// <summary>
+        /// Holds fields on an enumeration.
+        /// </summary>
+        private Stack<Field> _enumFields;
+
+        /// <summary>
         /// Holds properties that have been defined.
         /// </summary>
         private Stack<Property> _properties;
@@ -240,6 +245,7 @@ namespace SalesForceLanguage.Apex.Parser
             _variableScopes = new List<VariableScope>();
             _variables = new Stack<Field>();
             _fields = new Stack<Field>();
+            _enumFields = new Stack<Field>();
             _properties = new Stack<Property>();
             _constructors = new Stack<Constructor>();
             _methods = new Stack<Method>();
@@ -321,6 +327,17 @@ namespace SalesForceLanguage.Apex.Parser
                             fieldVisibility,
                             fieldType));
                     }
+
+                    break;
+
+                // enum member
+                case Tokens.grammar_enum_member_declaration:
+                    _enumFields.Push(new Field(
+                        new TextPosition(node.TextSpan),
+                        node.GetLeavesDisplayText(),
+                        null,
+                        SymbolModifier.Final | SymbolModifier.Public | SymbolModifier.Static,
+                        "System.Object"));
 
                     break;
 
@@ -515,6 +532,48 @@ namespace SalesForceLanguage.Apex.Parser
                         interfaceExtends,
                         interfaceBases.ToArray(),
                         GetSymbols<SymbolTable>(node, _classes)));
+
+                    break;
+
+                // enum
+                case Tokens.grammar_enum_declaration:
+                    ApexSyntaxNode enumModifiers = node.GetChildNodeWithToken(Tokens.grammar_modifiers);
+                    SymbolModifier enumVisibility = SymbolModifier.Private;
+                    if (enumModifiers != null)
+                        enumVisibility = GetModifiers(enumModifiers.GetNodesWithToken(Tokens.grammar_modifier));
+
+                    ApexSyntaxNode enumName = node.GetChildNodeWithToken(Tokens.grammar_identifier);
+                    _typeReferences.Add(new ReferenceTypeSymbol(
+                        new TextPosition(enumName.TextSpan),
+                        enumName.GetLeavesDisplayText(), 
+                        null,
+                        new TextSpan[] { new TextSpan(enumName.TextSpan) }));
+
+                    List<string> enumAttributeList = new List<string>();
+                    ApexSyntaxNode enumAttributes = node.GetChildNodeWithToken(Tokens.grammar_attributes);
+                    if (enumAttributes != null)
+                    {
+                        foreach (ApexSyntaxNode attributeSection in enumAttributes.GetNodesWithToken(Tokens.grammar_attribute_section))
+                        {
+                            enumAttributeList.Add(attributeSection.GetChildNodeWithToken(Tokens.grammar_identifier).GetLeavesDisplayText());
+                        }
+                    }
+
+                    _classes.Push(new SymbolTable(
+                        new TextPosition(enumName.TextSpan),
+                        enumName.GetLeavesDisplayText(),
+                        new TextSpan(node.TextSpan),
+                        enumAttributeList.ToArray(),
+                        enumVisibility,
+                        SymbolTableType.Enum,
+                        null,
+                        GetSymbols<Field>(node, _enumFields),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null));
 
                     break;
 
