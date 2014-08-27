@@ -21,6 +21,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -33,6 +34,12 @@ namespace Wallace.IDE.Framework
     /// </summary>
     public static class VisualHelper
     {
+        #region Fields
+
+        private static Dictionary<string, BitmapImage> _imageMap = new Dictionary<string, BitmapImage>();
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -121,10 +128,19 @@ namespace Wallace.IDE.Framework
         /// <returns>The loaded bitmap.</returns>
         public static BitmapImage LoadBitmap(string name)
         {
+            if (String.IsNullOrWhiteSpace(name))
+                return null;
+
+            string key = name.Trim().ToLower();
+            if (_imageMap.ContainsKey(key))
+                return _imageMap[key];
+
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(String.Format(@"pack://application:,,,/Resources/{0}", name));
             bitmap.EndInit();
+
+            _imageMap.Add(key, bitmap);
 
             return bitmap;
         }

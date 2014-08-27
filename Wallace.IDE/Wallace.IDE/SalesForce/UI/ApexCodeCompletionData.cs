@@ -170,8 +170,6 @@ namespace Wallace.IDE.SalesForce.UI
             }
             else
                 return null;
-
-            
         }
 
         #endregion

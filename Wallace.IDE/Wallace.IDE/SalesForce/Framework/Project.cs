@@ -66,6 +66,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         private EventWaitHandle _symbolsDownloaded;
 
+        /// <summary>
+        /// This is set to true when the project symbols are being loaded.
+        /// </summary>
+        private volatile bool _symbolsDownloading;
+
         #endregion
 
         #region Constructors
@@ -273,6 +278,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public void LoadSymbolsAsync()
         {
+            if (_symbolsDownloading)
+                return;
+
+            _symbolsDownloading = true;
+
             ThreadPool.QueueUserWorkItem(
                 (state) =>
                 {
@@ -428,6 +438,7 @@ namespace Wallace.IDE.SalesForce.Framework
                             }
                             finally
                             {
+                                _symbolsDownloading = false;
                                 project._symbolsDownloaded.Set();
                             }
                         }
