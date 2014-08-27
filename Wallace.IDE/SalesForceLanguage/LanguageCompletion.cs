@@ -321,7 +321,7 @@ namespace SalesForceLanguage
                     {
                         string methodName = part.Substring(0, part.IndexOf('('));
                         SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.Type);
-                        if (externalClass != null)
+                        while (externalClass != null && !partFound)
                         {
                             foreach (Method m in externalClass.Methods)
                             {
@@ -335,6 +335,9 @@ namespace SalesForceLanguage
                                     break;
                                 }
                             }
+
+                            if (!partFound)
+                                externalClass = _language.GetSymbols(externalClass.Extends);
                         }
                     }
                     // variables
@@ -429,9 +432,11 @@ namespace SalesForceLanguage
                     }
 
                     // check for type reference
-                    if (!partFound && !typeSearchDone)
+                    if (!partFound && !typeSearchDone && result.Count == 0)
                     {
                         TypedSymbol tempSymbol = matchedSymbol;
+                        int tempIndex = i;
+
                         StringBuilder typeNameBuilder = new StringBuilder();
                         for (i = 0; i < parts.Count; i++)
                         {
@@ -449,7 +454,10 @@ namespace SalesForceLanguage
                         }
 
                         if (!partFound)
+                        {
                             matchedSymbol = tempSymbol;
+                            i = tempIndex;
+                        }
 
                         typeSearchDone = true;
                     }

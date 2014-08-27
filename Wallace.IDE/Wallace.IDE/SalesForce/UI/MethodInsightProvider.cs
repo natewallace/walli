@@ -137,7 +137,7 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 _selectedIndex = value;
                 CurrentIndexText = String.Format("{0} of {1}", SelectedIndex + 1, Count);
-                CurrentHeader = _methods[SelectedIndex].ToString();
+                CurrentHeader = _methods[SelectedIndex].ToStringWithReturnType();
             }
         }
 
