@@ -71,6 +71,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         private volatile bool _symbolsDownloading;
 
+        /// <summary>
+        /// This is set to true when the downloading of symbols is canceled.
+        /// </summary>
+        private volatile bool _symbolsDownloadCancel;
+
         #endregion
 
         #region Constructors
@@ -195,6 +200,18 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
+        /// Returns true if symbols are currently being downloaded.
+        /// </summary>
+        public bool IsDownloadingSymbols
+        {
+            get { return _symbolsDownloading; }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
         /// Checks to see if a project with the given name already exists.
         /// </summary>
         /// <param name="projectName">The name of the project to check for.</param>
@@ -268,9 +285,13 @@ namespace Wallace.IDE.SalesForce.Framework
             return project;
         }
 
-        #endregion
-
-        #region Methods
+        /// <summary>
+        /// Calling this method will cancel the downloading of symbols.
+        /// </summary>
+        public void CancelLoadSymbolsAsync()
+        {
+            _symbolsDownloadCancel = true;
+        }
 
         /// <summary>
         /// Checks to see if symbols have already been downloaded.  If they haven't, they are loaded from the server
@@ -282,6 +303,7 @@ namespace Wallace.IDE.SalesForce.Framework
                 return;
 
             _symbolsDownloading = true;
+            _symbolsDownloadCancel = false;
 
             ThreadPool.QueueUserWorkItem(
                 (state) =>
@@ -311,6 +333,9 @@ namespace Wallace.IDE.SalesForce.Framework
                                 // download symbols in groups of 10
                                 while (classIds.Count > 0)
                                 {
+                                    if (project._symbolsDownloadCancel)
+                                        break;
+
                                     StringBuilder query = new StringBuilder("SELECT Id, Body FROM ApexClass WHERE Id IN (");
                                     for (int i = 0; i < 10 && classIds.Count > 0; i++)
                                         query.AppendFormat("'{0}',", classIds.Dequeue());
@@ -324,121 +349,132 @@ namespace Wallace.IDE.SalesForce.Framework
                                 }
 
                                 // download symbols for SObjects
-                                SObjectTypePartial[] sObjects = client.DataDescribeGlobal();
-                                foreach (SObjectTypePartial sObject in sObjects)
+                                if (!project._symbolsDownloadCancel)
                                 {
-                                    SObjectType sObjectDetail = client.DataDescribeObjectType(sObject);
-                                    List<Field> fields = new List<Field>();
-                                    foreach (SObjectFieldType sObjectField in sObjectDetail.Fields)
+                                    SObjectTypePartial[] sObjects = client.DataDescribeGlobal();
+                                    foreach (SObjectTypePartial sObject in sObjects)
                                     {
-                                        string fieldType = null;
-                                        switch (sObjectField.FieldType)
+                                        if (project._symbolsDownloadCancel)
+                                            break;
+
+                                        SObjectType sObjectDetail = client.DataDescribeObjectType(sObject);
+                                        List<Field> fields = new List<Field>();
+                                        foreach (SObjectFieldType sObjectField in sObjectDetail.Fields)
                                         {
-                                            case FieldType.String:
-                                            case FieldType.Picklist:
-                                            case FieldType.MultiPicklist:
-                                            case FieldType.Combobox:
-                                            case FieldType.TextArea:
-                                            case FieldType.Phone:
-                                            case FieldType.Url:
-                                            case FieldType.Email:
-                                            case FieldType.EncryptedString:
-                                                fieldType = "System.String";
-                                                break;
+                                            string fieldType = null;
+                                            switch (sObjectField.FieldType)
+                                            {
+                                                case FieldType.String:
+                                                case FieldType.Picklist:
+                                                case FieldType.MultiPicklist:
+                                                case FieldType.Combobox:
+                                                case FieldType.TextArea:
+                                                case FieldType.Phone:
+                                                case FieldType.Url:
+                                                case FieldType.Email:
+                                                case FieldType.EncryptedString:
+                                                    fieldType = "System.String";
+                                                    break;
 
-                                            case FieldType.Id:
-                                            case FieldType.Reference:
-                                                fieldType = "System.Id";
-                                                break;
-                                                
-                                            case FieldType.Date:
-                                                fieldType = "System.Date";
-                                                break;
+                                                case FieldType.Id:
+                                                case FieldType.Reference:
+                                                    fieldType = "System.Id";
+                                                    break;
 
-                                            case FieldType.DateTime:
-                                                fieldType = "System.DateTime";
-                                                break;
+                                                case FieldType.Date:
+                                                    fieldType = "System.Date";
+                                                    break;
 
-                                            case FieldType.Time:
-                                                fieldType = "System.Time";
-                                                break;
+                                                case FieldType.DateTime:
+                                                    fieldType = "System.DateTime";
+                                                    break;
 
-                                            case FieldType.Base64:
-                                                fieldType = "System.Long";
-                                                break;
+                                                case FieldType.Time:
+                                                    fieldType = "System.Time";
+                                                    break;
 
-                                            case FieldType.Double:
-                                            case FieldType.Percent:
-                                                fieldType = "System.Double";
-                                                break;
+                                                case FieldType.Base64:
+                                                    fieldType = "System.Long";
+                                                    break;
 
-                                            case FieldType.Boolean:
-                                                fieldType = "System.Boolean";
-                                                break;
+                                                case FieldType.Double:
+                                                case FieldType.Percent:
+                                                    fieldType = "System.Double";
+                                                    break;
 
-                                            case FieldType.Int:
-                                            case FieldType.Currency:
-                                                fieldType = "System.Integer";
-                                                break;
-                                                
-                                            default:
-                                                break;
+                                                case FieldType.Boolean:
+                                                    fieldType = "System.Boolean";
+                                                    break;
+
+                                                case FieldType.Int:
+                                                case FieldType.Currency:
+                                                    fieldType = "System.Integer";
+                                                    break;
+
+                                                default:
+                                                    break;
+                                            }
+
+                                            // add the field
+                                            fields.Add(new Field(
+                                                new TextPosition(0, 0),
+                                                sObjectField.Name,
+                                                null,
+                                                SymbolModifier.Public,
+                                                fieldType));
+
+                                            // add reference field if appropriate
+                                            if (sObjectField.FieldType == FieldType.Reference &&
+                                                sObjectField.ReferenceTo != null &&
+                                                sObjectField.ReferenceTo.Length > 0)
+                                            {
+                                                if (sObjectField.Name.EndsWith("__c", StringComparison.CurrentCultureIgnoreCase))
+                                                {
+                                                    fields.Add(new Field(
+                                                        new TextPosition(0, 0),
+                                                        sObjectField.Name.Replace("__c", "__r"),
+                                                        null,
+                                                        SymbolModifier.Public,
+                                                        sObjectField.ReferenceTo[0]));
+                                                }
+                                                else if (sObjectField.Name.EndsWith("Id", StringComparison.CurrentCultureIgnoreCase))
+                                                {
+                                                    fields.Add(new Field(
+                                                        new TextPosition(0, 0),
+                                                        sObjectField.Name.Substring(0, sObjectField.Name.Length - 2),
+                                                        null,
+                                                        SymbolModifier.Public,
+                                                        sObjectField.ReferenceTo[0]));
+                                                }
+                                            }
                                         }
 
-                                        // add the field
-                                        fields.Add(new Field(
+                                        language.UpdateSymbols(new SymbolTable(
                                             new TextPosition(0, 0),
-                                            sObjectField.Name,
+                                            sObjectDetail.Name,
+                                            null,
                                             null,
                                             SymbolModifier.Public,
-                                            fieldType));
-
-                                        // add reference field if appropriate
-                                        if (sObjectField.FieldType == FieldType.Reference &&
-                                            sObjectField.ReferenceTo != null &&
-                                            sObjectField.ReferenceTo.Length > 0)
-                                        {
-                                            if (sObjectField.Name.EndsWith("__c", StringComparison.CurrentCultureIgnoreCase))
-                                            {
-                                                fields.Add(new Field(
-                                                    new TextPosition(0, 0),
-                                                    sObjectField.Name.Replace("__c", "__r"),
-                                                    null,
-                                                    SymbolModifier.Public,
-                                                    sObjectField.ReferenceTo[0]));
-                                            }
-                                            else if (sObjectField.Name.EndsWith("Id", StringComparison.CurrentCultureIgnoreCase))
-                                            {
-                                                fields.Add(new Field(
-                                                    new TextPosition(0, 0),
-                                                    sObjectField.Name.Substring(0, sObjectField.Name.Length - 2),
-                                                    null,
-                                                    SymbolModifier.Public,
-                                                    sObjectField.ReferenceTo[0]));
-                                            }
-                                        }
+                                            SymbolTableType.SObject,
+                                            null,
+                                            fields.ToArray(),
+                                            null,
+                                            null,
+                                            null,
+                                            "System.sObject",
+                                            null,
+                                            null), false, true);
                                     }
+                                }
 
-                                    language.UpdateSymbols(new SymbolTable(
-                                        new TextPosition(0,0),
-                                        sObjectDetail.Name,
-                                        null,
-                                        null,
-                                        SymbolModifier.Public,
-                                        SymbolTableType.SObject,
-                                        null,
-                                        fields.ToArray(),
-                                        null,
-                                        null,
-                                        null,
-                                        "System.sObject",
-                                        null,
-                                        null), false, true);
+                                // remove symbols if the download was interupted
+                                if (_symbolsDownloadCancel)
+                                {
+                                    Directory.Delete(project.SymbolsFolder, true);
                                 }
                             }
                             finally
                             {
-                                _symbolsDownloading = false;
                                 project._symbolsDownloaded.Set();
                             }
                         }
@@ -467,6 +503,7 @@ namespace Wallace.IDE.SalesForce.Framework
                     finally
                     {
                         App.Instance.Dispatcher.Invoke(() => App.SetStatus(null));
+                        _symbolsDownloading = false;
                     }
                 },
                 new object[] { this, Client, Language });
@@ -526,6 +563,7 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public void Dispose()
         {
+            CancelLoadSymbolsAsync();
             _symbolsDownloaded.WaitOne();
 
             if (Client != null)
