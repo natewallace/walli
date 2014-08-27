@@ -184,8 +184,9 @@ namespace SalesForceLanguage
         /// <param name="text">The text to get the symbols from.</param>
         /// <param name="className">The name of the class the text is in.</param>
         /// <param name="position">The position in the class text to start from.</param>
+        /// <param name="includeIncompleteMethods">If true, incomplete methods will be included in matches.</param>
         /// <returns>The symbols that matched or null if a match can't be made.</returns>
-        private Symbol[] MatchSymbols(Stream text, string className, TextPosition position)
+        private Symbol[] MatchSymbols(Stream text, string className, TextPosition position, bool includeIncompleteMethods)
         {
             List<Symbol> result = new List<Symbol>();
 
@@ -455,6 +456,7 @@ namespace SalesForceLanguage
 
                     // check for incomplete method
                     if (!partFound &&
+                        includeIncompleteMethods &&
                         !methodSearchDone &&
                         i == parts.Count - 1)
                     {
@@ -637,7 +639,7 @@ namespace SalesForceLanguage
                 return result.ToArray();
 
             // get symbol matches
-            Symbol[] matchedSymbols = MatchSymbols(text, className, position);
+            Symbol[] matchedSymbols = MatchSymbols(text, className, position, false);
             if (matchedSymbols == null || matchedSymbols.Length == 0)
                 return result.ToArray();
 
@@ -702,7 +704,7 @@ namespace SalesForceLanguage
                 return result.ToArray();
 
             // get symbol matches
-            Symbol[] matchedSymbols = MatchSymbols(text, className, position);
+            Symbol[] matchedSymbols = MatchSymbols(text, className, position, true);
             if (matchedSymbols == null || matchedSymbols.Length == 0)
                 return result.ToArray();
 
@@ -732,17 +734,27 @@ namespace SalesForceLanguage
             bool isExternal = (classSymbol.Id != parent.Id);
 
             // build results
-            result.AddRange(GetMethods(parent, isExternal));
+            HashSet<string> signatures = new HashSet<string>();
+            SymbolTable currentClass = parent;
+            while (currentClass != null)
+            {
+                foreach (Method m in currentClass.Methods)
+                {
+                    if (m.Id == method.Id && !signatures.Contains(m.Signature))
+                    {
+                        result.Add(m);
+                        signatures.Add(m.Signature);
+                    }
+                }
 
-            // filter out values
+                currentClass = _language.GetSymbols(currentClass.Extends);
+            }
+
+            // filter out methods based on visibility
             for (int i = 0; i < result.Count; i++)
             {
-                if (result[i].Id != method.Id)
-                {
-                    result.RemoveAt(i);
-                    i--;
-                }
-                else if (result[i] is ModifiedSymbol)
+
+                if (result[i] is ModifiedSymbol)
                 {
                     SymbolModifier modifier = (result[i] as ModifiedSymbol).Modifier;
                     if ((modifier.HasFlag(SymbolModifier.Static) && !isTypeReference) ||

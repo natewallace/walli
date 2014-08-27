@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 
 namespace SalesForceLanguage.Apex.CodeModel
@@ -39,6 +40,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         public Method()
         {
             Parameters = new Parameter[0];
+            Signature = String.Empty;
         }
 
         /// <summary>
@@ -60,6 +62,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             : base(location, name, span, modifier, type)
         {
             Parameters = parameters ?? new Parameter[0];
+            BuildSignature();
         }
 
         #endregion
@@ -70,6 +73,60 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// The parameters that belong to this symbol.
         /// </summary>
         public Parameter[] Parameters { get; private set; }
+
+        /// <summary>
+        /// The method signature.
+        /// </summary>
+        public string Signature { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Builds the signature for this method.
+        /// </summary>
+        private void BuildSignature()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("{0}(", Id);
+
+            for (int i = 0; i < Parameters.Length; i++)
+            {
+                string methodType = Parameters[i].Type ?? String.Empty;
+                methodType = methodType.ToLower();
+                if (!methodType.Contains("."))
+                    methodType = String.Format("system.{0}", methodType);
+
+                sb.AppendFormat("{0},", methodType);
+            }
+
+            if (Parameters.Length > 0)
+                sb.Length--;
+
+            sb.Append(")");
+
+            Signature = sb.ToString();
+        }
+
+        /// <summary>
+        /// Return a string that represents this method.
+        /// </summary>
+        /// <returns>A string that represents this method.</returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("{0} ", Type);
+            sb.AppendFormat("{0}(", Name);
+            foreach (Parameter p in Parameters)
+                sb.AppendFormat("{0} {1}, ", p.Type, p.Name);
+            if (Parameters.Length > 0)
+                sb.Length = sb.Length - 2;
+            sb.Append(")");
+
+            return sb.ToString();
+        }
 
         #endregion
 
@@ -103,6 +160,8 @@ namespace SalesForceLanguage.Apex.CodeModel
             }
 
             Parameters = parameters.ToArray();
+
+            BuildSignature();
         }
 
         /// <summary>

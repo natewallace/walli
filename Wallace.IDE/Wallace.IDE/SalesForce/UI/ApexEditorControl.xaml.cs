@@ -93,6 +93,16 @@ namespace Wallace.IDE.SalesForce.UI
         private CompletionWindow _completionWindow;
 
         /// <summary>
+        /// Window used for insight.
+        /// </summary>
+        private OverloadInsightWindow _insightWindow;
+
+        /// <summary>
+        /// Keeps track of where the insight window was opened.
+        /// </summary>
+        private int _insightWindowStartOffset;
+
+        /// <summary>
         /// Holds the class name from the last successful parse.
         /// </summary>
         private string _className;
@@ -138,6 +148,7 @@ namespace Wallace.IDE.SalesForce.UI
             _searchPanel.MarkerBrush = Brushes.DarkOrange;
             _toolTip = new ToolTip();
             _completionWindow = null;
+            _insightWindow = null;
 
             _suspendNavigation = false;
             _suspendParse = false;
@@ -486,7 +497,63 @@ namespace Wallace.IDE.SalesForce.UI
         /// <param name="methods">The methods to show insights for.</param>
         private void ShowMethodInsights(Method[] methods)
         {
+            if (_insightWindow == null && methods != null && methods.Length > 0)
+            {
+                _insightWindowStartOffset = Math.Max(textEditor.TextArea.Caret.Offset - 1, 0);
 
+                _insightWindow = new OverloadInsightWindow(textEditor.TextArea);
+                _insightWindow.Style = null;
+                _insightWindow.Provider = new MethodInsightProvider(methods);
+
+                _insightWindow.Show();
+                _insightWindow.Closed += delegate { _insightWindow = null; };
+            }
+        }
+
+        /// <summary>
+        /// Close the insight window when a close paren is typed.
+        /// </summary>
+        private void CloseMethodInsightsOnCloseParen()
+        {
+            if (_insightWindow != null)
+            {
+                int openDelimiter = 0;
+                bool openString = false;
+                for (int i = _insightWindowStartOffset; i < textEditor.TextArea.Caret.Offset; i++)
+                {
+                    char c = textEditor.Document.GetCharAt(i);
+                    switch (c)
+                    {
+                        case '(':
+                            if (!openString)
+                                openDelimiter++;
+                            break;
+
+                        case ')':
+                            if (!openString)
+                                openDelimiter--;
+                            break;
+
+                        case '\'':
+                            if (i > 0)
+                            {
+                                if (textEditor.Document.GetCharAt(i - 1) != '\\')
+                                    openString = !openString;
+                            }
+                            else
+                            {
+                                openString = !openString;
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                if (openDelimiter == 0)
+                    _insightWindow.Close();
+            }
         }
 
         /// <summary>
@@ -857,6 +924,11 @@ namespace Wallace.IDE.SalesForce.UI
                             new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset - 1),
                             _className,
                             new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)));
+                    }
+                    // close insights if the end paren has been typed
+                    else if (e.Text == ")")
+                    {
+                        CloseMethodInsightsOnCloseParen();
                     }
                     // modify indentation when closing bracket is entered.
                     else if (e.Text == "}")
