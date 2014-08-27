@@ -199,17 +199,17 @@ namespace SalesForceData
         /// <summary>
         /// Start tests for a given class.
         /// </summary>
-        /// <param name="file">The files to start tests for.</param>
+        /// <param name="names">The names of the classes to start tests for.</param>
         /// <returns>The started test run.</returns>
-        public TestRun StartTests(IEnumerable<SourceFile> files)
+        public TestRun StartTests(IEnumerable<string> names)
         {
-            if (files == null)
-                throw new ArgumentNullException("files");
+            if (names == null)
+                throw new ArgumentNullException("names");
             
             // get class ids
             StringBuilder fileNameBuilder = new StringBuilder();
-            foreach (SourceFile file in files)
-                fileNameBuilder.AppendFormat("'{0}',", file.Name);
+            foreach (string name in names)
+                fileNameBuilder.AppendFormat("'{0}',", name);
             fileNameBuilder.Length--;
 
             DataSelectResult classIdData = DataSelectAll(
@@ -256,18 +256,25 @@ namespace SalesForceData
 
             // filter out completed test runs
             Dictionary<string, TestRunItem> itemsMap = new Dictionary<string, TestRunItem>();
+            StringBuilder classIdBuilder = new StringBuilder();
             foreach (TestRunItem item in testRun.Items)
             {
                 if (!item.IsDone)
+                {
                     itemsMap.Add(item.ApexClassId, item);
+                    classIdBuilder.AppendFormat("'{0}',", item.ApexClassId);
+                }
             }
 
             // get updated status
             StringBuilder completedItemsBuilder = new StringBuilder();
             if (itemsMap.Count > 0)
             {
-                DataSelectResult testRunData = DataSelectAll(
-                    String.Format("SELECT ApexClassId, Status, ExtendedStatus FROM ApexTestQueueItem WHERE ParentJobId = '{0}'", testRun.JobId));
+                classIdBuilder.Length--;
+                DataSelectResult testRunData = DataSelectAll(String.Format(
+                    "SELECT ApexClassId, Status, ExtendedStatus FROM ApexTestQueueItem WHERE ParentJobId = '{0}' AND ApexClassId IN ({1})", 
+                    testRun.JobId,
+                    classIdBuilder.ToString()));
 
                 foreach (DataRow row in testRunData.Data.Rows)
                 {

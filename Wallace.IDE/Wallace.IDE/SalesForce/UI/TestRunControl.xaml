@@ -11,7 +11,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" MinWidth="30" />
+            <ColumnDefinition Width="500" MinWidth="30" />
             <ColumnDefinition Width="*" MinWidth="30" />
         </Grid.ColumnDefinitions>
 
@@ -36,7 +36,7 @@
                   SelectionChanged="listViewClasses_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="Auto" Header="Class">
+                    <GridViewColumn Width="250" Header="Class">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -73,7 +73,7 @@
                   SelectionChanged="listViewMethods_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="Auto" Header="Method">
+                    <GridViewColumn Width="250" Header="Method">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

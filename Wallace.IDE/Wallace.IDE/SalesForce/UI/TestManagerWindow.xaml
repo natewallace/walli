@@ -1,0 +1,63 @@
+﻿<Window x:Class="Wallace.IDE.SalesForce.UI.TestManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Select tests to run" 
+        Height="475" 
+        Width="350"
+        MinHeight="300"
+        MinWidth="300"    
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResizeWithGrip"
+        Style="{StaticResource ChromeWindowStyle}"
+        Background="{StaticResource CaptionBackgroundBrush}">
+    <Border Padding="5,5,20,5">
+        <Grid>
+        
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0" 
+                        Orientation="Horizontal"
+                        Margin="0,0,0,5">
+                <TextBlock>[ </TextBlock>
+                <Button Style="{StaticResource ChromeLinkButtonStyle}"
+                        Click="buttonCheckAll_Click">
+                    check all
+                </Button>
+                <TextBlock> | </TextBlock>
+                <Button Style="{StaticResource ChromeLinkButtonStyle}"
+                        Click="buttonUncheckAll_Click">
+                    uncheck all
+                </Button>
+                <TextBlock> ]</TextBlock>
+            </StackPanel>
+        
+            <ListBox x:Name="listBoxTestNames"
+                     Grid.Row="1"
+                     CheckBox.Checked="checkBox_CheckChange"
+                     CheckBox.Unchecked="checkBox_CheckChange">
+            </ListBox>
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right">
+                <Button x:Name="buttonRun"
+                        Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonRun_Click">
+                    Run
+                </Button>
+                <Button Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonCancel_Click">
+                    Cancel
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

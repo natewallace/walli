@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="Framework/Styles/ChromeMenuStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/ChromeComboBoxStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/ChromeToolbarStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/ChromeLinkButtonStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/TreeViewMultiSelectItemStyle.xaml" />
                 <ResourceDictionary Source="SalesForce/UI/SearchPanelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>

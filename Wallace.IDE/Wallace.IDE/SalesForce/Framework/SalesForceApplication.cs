@@ -102,6 +102,9 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(dataEdit);
             App.Instance.Menu.AddFunction(dataEdit, "PROJECT");
 
+            TestManagerFunction testManager = new TestManagerFunction();
+            App.Instance.Menu.AddFunction(testManager, "PROJECT");
+
             DeleteSourceFileFunction deleteSourceFileFunction = new DeleteSourceFileFunction();
             App.Instance.Menu.AddFunction(deleteSourceFileFunction, "PROJECT");
             App.Instance.RegisterFunction(deleteSourceFileFunction);
