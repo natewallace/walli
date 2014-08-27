@@ -80,7 +80,7 @@
     <Compile Include="SalesForce\Document\PackageEditorDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocumentBase.cs" />
-    <None Include="SalesForce\Document\TestRunDocument.cs" />
+    <Compile Include="SalesForce\Document\TestRunDocument.cs" />
     <Compile Include="SalesForce\Document\TriggerEditorDocument.cs" />
     <Compile Include="SalesForce\Document\VisualForceEditorDocument.cs" />
     <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
@@ -164,9 +164,9 @@
       <DependentUpon>PropertiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Framework\UI\TreeViewMultiSelectItem.cs" />
-    <None Include="SalesForce\UI\TestRunControl.xaml.cs">
+    <Compile Include="SalesForce\UI\TestRunControl.xaml.cs">
       <DependentUpon>TestRunControl.xaml</DependentUpon>
-    </None>
+    </Compile>
     <Compile Include="SalesForce\UI\TestRunItemResultStatusIconConverter.cs" />
     <Compile Include="SalesForce\UI\TestRunItemStatusIconConverter.cs" />
     <Compile Include="SalesForce\UI\VisualForceEditorControl.xaml.cs">
@@ -275,10 +275,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <None Include="SalesForce\UI\TestRunControl.xaml">
+    <Page Include="SalesForce\UI\TestRunControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </None>
+    </Page>
     <Page Include="SalesForce\UI\VisualForceEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

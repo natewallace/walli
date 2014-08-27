@@ -481,6 +481,15 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Display the insights window.
+        /// </summary>
+        /// <param name="methods">The methods to show insights for.</param>
+        private void ShowMethodInsights(Method[] methods)
+        {
+
+        }
+
+        /// <summary>
         /// Update the navigation controls based on current cursor position.
         /// </summary>
         private void UpdateNavigation()
@@ -833,15 +842,21 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 if (Language != null && _completionWindow == null)
                 {
-                    Symbol[] symbols = null;
-
-                    // calculate completions
+                    // calculate and show completions
                     if (e.Text == ".")
                     {
-                        symbols = LanguageManager.Completion.GetCodeCompletionsDot(
+                        ShowCodeCompletions(LanguageManager.Completion.GetCodeCompletionsDot(
                             new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset - 1),
                             _className,
-                            new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column));
+                            new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)));
+                    }
+                    // calculate and show insights
+                    else if (e.Text == "(")
+                    {
+                        ShowMethodInsights(LanguageManager.Completion.GetMethodCompletions(
+                            new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset - 1),
+                            _className,
+                            new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)));
                     }
                     // modify indentation when closing bracket is entered.
                     else if (e.Text == "}")
@@ -901,9 +916,6 @@ namespace Wallace.IDE.SalesForce.UI
                             }
                         }
                     }
-
-                    // show completions
-                    ShowCodeCompletions(symbols);
                 }
             }
             catch (Exception err)

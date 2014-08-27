@@ -179,6 +179,305 @@ namespace SalesForceLanguage
         }
 
         /// <summary>
+        /// Get the symbols leading up to the current text position.
+        /// </summary>
+        /// <param name="text">The text to get the symbols from.</param>
+        /// <param name="className">The name of the class the text is in.</param>
+        /// <param name="position">The position in the class text to start from.</param>
+        /// <returns>The symbols that matched or null if a match can't be made.</returns>
+        private Symbol[] MatchSymbols(Stream text, string className, TextPosition position)
+        {
+            List<Symbol> result = new List<Symbol>();
+
+            if (IsInToken(position, text, _tokensToIgnore))
+                return result.ToArray();
+
+            string line = null;
+
+            if (text.Position > 0)
+            {
+                // get line to calculate completions for
+                StringBuilder lineBuilder = new StringBuilder();
+                int openDelimiterCount = 0;
+                bool stop = false;
+
+                while (text.Position > 0)
+                {
+                    text.Position = text.Position - 1;
+                    char c = (char)text.ReadByte();
+
+                    switch (c)
+                    {
+                        case ')':
+                        case ']':
+                        case '>':
+                            if (openDelimiterCount == 0)
+                                lineBuilder.Insert(0, c);
+                            openDelimiterCount++;
+                            break;
+
+                        case '{':
+                        case '}':
+                        case '(':
+                        case '[':
+                        case '<':
+                            if (openDelimiterCount == 0)
+                            {
+                                stop = true;
+                            }
+                            else
+                            {
+                                openDelimiterCount--;
+                                if (openDelimiterCount == 0)
+                                    lineBuilder.Insert(0, c);
+                            }
+                            break;
+
+                        case ';':
+                        case ',':
+                            if (openDelimiterCount == 0)
+                                stop = true;
+                            break;
+
+                        default:
+                            if (openDelimiterCount == 0)
+                                lineBuilder.Insert(0, c);
+                            break;
+                    }
+
+                    if (stop)
+                        break;
+
+                    text.Position = text.Position - 1;
+                }
+
+                line = lineBuilder.ToString().ToLower();
+            }
+
+            if (String.IsNullOrWhiteSpace(line))
+                return result.ToArray();
+
+            // filter lines
+            string[] lines = line.Split('\n');
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i] == null)
+                    continue;
+
+                lines[i] = lines[i].Trim();
+                if (lines[i].StartsWith("//") || lines[i].StartsWith("/*"))
+                    lines[i] = null;
+            }
+
+            // create parts
+            List<string> parts = new List<string>();
+            foreach (string l in lines)
+                if (l != null)
+                    parts.AddRange(l.Split(new char[] { ' ', '.', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+
+            // combine and filter out parts
+            for (int i = 0; i < parts.Count; i++)
+            {
+                if (i + 1 < parts.Count)
+                {
+                    if (parts[i + 1] == "()")
+                    {
+                        parts[i] = parts[i] + parts[i + 1];
+                    }
+                    if (parts[i + 1] == "[]")
+                    {
+                        parts[i] = "list";
+                    }
+                }
+
+                if (parts[i] == "if()" ||
+                    parts[i] == "()" ||
+                    parts[i] == "[]" ||
+                    parts[i] == "<>")
+                {
+                    parts.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            // match parts to types
+            SymbolTable classSymbol = _language.GetSymbols(className);
+            TypedSymbol matchedSymbol = null;
+
+            if (classSymbol != null)
+            {
+                bool partFound = false;
+                bool typeSearchDone = false;
+                bool methodSearchDone = false;
+
+                for (int i = 0; i < parts.Count; i++)
+                {
+                    string part = parts[i];
+                    partFound = false;
+
+                    // method
+                    if (parts[i].EndsWith("()"))
+                    {
+                        string methodName = part.Substring(0, part.IndexOf('('));
+                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.Type);
+                        if (externalClass != null)
+                        {
+                            foreach (Method m in externalClass.Methods)
+                            {
+                                if (m.Id == methodName)
+                                {
+                                    if (m.Type != "void" || i == parts.Count - 1)
+                                    {
+                                        matchedSymbol = m;
+                                        partFound = true;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    // variables
+                    else
+                    {
+                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.Type);
+
+                        if (i == 0)
+                        {
+                            // this keyword
+                            if (part == "this")
+                            {
+                                matchedSymbol = classSymbol;
+                                partFound = true;
+                            }
+                            else
+                            {
+                                // look for method parameters
+                                foreach (Method method in classSymbol.Methods)
+                                {
+                                    if (method.Contains(position))
+                                    {
+                                        foreach (Parameter parameter in method.Parameters)
+                                        {
+                                            if (parameter.Id == part)
+                                            {
+                                                matchedSymbol = parameter;
+                                                partFound = true;
+                                                break;
+                                            }
+                                        }
+
+                                        break;
+                                    }
+                                }
+
+                                // look for local variable
+                                if (!partFound)
+                                {
+                                    foreach (VariableScope scope in classSymbol.VariableScopes)
+                                    {
+                                        if (scope.Span.Contains(position))
+                                        {
+                                            foreach (Field variable in scope.Variables)
+                                            {
+                                                if (variable.Id == part && variable.Location.CompareTo(position) < 0)
+                                                {
+                                                    matchedSymbol = variable;
+                                                    partFound = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (partFound)
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (externalClass != null)
+                        {
+                            // look for fields
+                            if (!partFound)
+                            {
+                                foreach (Field field in externalClass.Fields)
+                                {
+                                    if (field.Id == part)
+                                    {
+                                        matchedSymbol = field;
+                                        partFound = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // look for properties
+                            if (!partFound)
+                            {
+                                foreach (Property property in externalClass.Properties)
+                                {
+                                    if (property.Id == part)
+                                    {
+                                        matchedSymbol = property;
+                                        partFound = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // check for type reference
+                    if (!partFound && !typeSearchDone)
+                    {
+                        TypedSymbol tempSymbol = matchedSymbol;
+                        StringBuilder typeNameBuilder = new StringBuilder();
+                        for (i = 0; i < parts.Count; i++)
+                        {
+                            if (i == 0)
+                                typeNameBuilder.Append(parts[i]);
+                            else
+                                typeNameBuilder.AppendFormat(".{0}", parts[i]);
+
+                            matchedSymbol = _language.GetSymbols(typeNameBuilder.ToString());
+                            if (matchedSymbol != null)
+                            {
+                                partFound = true;
+                                break;
+                            }
+                        }
+
+                        if (!partFound)
+                            matchedSymbol = tempSymbol;
+
+                        typeSearchDone = true;
+                    }
+
+                    // check for incomplete method
+                    if (!partFound &&
+                        !methodSearchDone &&
+                        i == parts.Count - 1)
+                    {
+                        parts[i] = String.Format("{0}()", parts[i]);
+                        i--;
+                        methodSearchDone = true;
+                    }
+
+                    // collect the matched symbol
+                    if (partFound && matchedSymbol != null)
+                        result.Add(matchedSymbol);
+                    else if (matchedSymbol == null)
+                        return null;
+                }
+            }
+
+            if (result.Count == 0)
+                return null;
+            else
+                return result.ToArray();
+        }
+
+        /// <summary>
         /// Get generic code completions.
         /// </summary>
         /// <param name="text">The text stream to process.</param>
@@ -332,307 +631,130 @@ namespace SalesForceLanguage
         {
             List<Symbol> result = new List<Symbol>();
 
-            if (IsInToken(position, text, _tokensToIgnore))
-                return result.ToArray();
-
-            string line = null;
-
-            if (text.Position > 0)
-            {
-                // get line to calculate completions for
-                StringBuilder lineBuilder = new StringBuilder();
-                int openDelimiterCount = 0;
-                bool stop = false;
-
-                while (text.Position > 0)
-                {
-                    text.Position = text.Position - 1;
-                    char c = (char)text.ReadByte();
-
-                    switch (c)
-                    {
-                        case ')':
-                        case ']':
-                        case '>':
-                            if (openDelimiterCount == 0)
-                                lineBuilder.Insert(0, c);
-                            openDelimiterCount++;
-                            break;
-
-                        case '{':
-                        case '}':
-                        case '(':
-                        case '[':
-                        case '<':
-                            if (openDelimiterCount == 0)
-                            {
-                                stop = true;
-                            }
-                            else
-                            {
-                                openDelimiterCount--;
-                                if (openDelimiterCount == 0)
-                                    lineBuilder.Insert(0, c);
-                            }
-                            break;
-
-                        case ';':
-                        case ',':
-                            if (openDelimiterCount == 0)
-                                stop = true;
-                            break;
-
-                        default:
-                            if (openDelimiterCount == 0)
-                                lineBuilder.Insert(0, c);
-                            break;
-                    }
-
-                    if (stop)
-                        break;
-
-                    text.Position = text.Position - 1;
-                }
-
-                line = lineBuilder.ToString().ToLower();
-            }
-
-            if (String.IsNullOrWhiteSpace(line))
-                return result.ToArray();
-
-            // filter lines
-            string[] lines = line.Split('\n');
-            for (int i = 0; i < lines.Length; i++)
-            {
-                if (lines[i] == null)
-                    continue;
-
-                lines[i] = lines[i].Trim();
-                if (lines[i].StartsWith("//") || lines[i].StartsWith("/*"))
-                    lines[i] = null;
-            }
-
-            // create parts
-            List<string> parts = new List<string>();
-            foreach (string l in lines)
-                if (l != null)
-                    parts.AddRange(l.Split(new char[] { ' ', '.', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
-
-            // combine and filter out parts
-            for (int i = 0; i < parts.Count; i++)
-            {
-                if (i + 1 < parts.Count)
-                {
-                    if (parts[i + 1] == "()")
-                    {
-                        parts[i] = parts[i] + parts[i + 1];
-                    }
-                    if (parts[i + 1] == "[]")
-                    {
-                        parts[i] = "list";
-                    }
-                }
-
-                if (parts[i] == "if()" ||
-                    parts[i] == "()" ||
-                    parts[i] == "[]" ||
-                    parts[i] == "<>")
-                {
-                    parts.RemoveAt(i);
-                    i--;
-                }
-            }
-
-            // match parts to types
+            // get class definition
             SymbolTable classSymbol = _language.GetSymbols(className);
-            TypedSymbol matchedSymbol = null;
+            if (classSymbol == null)
+                return result.ToArray();
 
-            if (classSymbol != null)
+            // get symbol matches
+            Symbol[] matchedSymbols = MatchSymbols(text, className, position);
+            if (matchedSymbols == null || matchedSymbols.Length == 0)
+                return result.ToArray();
+
+            // get the symbol definitions
+            Symbol symbol = matchedSymbols[matchedSymbols.Length - 1];
+            SymbolTable typeSymbol = null;
+            bool isTypeReference = false;
+            if (symbol is SymbolTable)
             {
-                bool partFound = false;
-                bool typeSearchDone = false;
-                bool isTypeReference = false;
+                isTypeReference = true;
+                typeSymbol = symbol as SymbolTable;
+            }
+            else
+            {
+                isTypeReference = false;
+                if (symbol is TypedSymbol)
+                    typeSymbol = _language.GetSymbols((symbol as TypedSymbol).Type);
+            }
 
-                for (int i = 0; i < parts.Count; i++)
+            if (typeSymbol == null)
+                return result.ToArray();
+
+            bool isExternal = (classSymbol.Id != symbol.Id);
+
+            // build the results
+            result.AddRange(GetFields(typeSymbol, isExternal));
+            result.AddRange(GetProperties(typeSymbol, isExternal));
+            result.AddRange(GetMethods(typeSymbol, isExternal));
+
+            // filter out values
+            for (int i = 0; i < result.Count; i++)
+            {
+                if (result[i] is ModifiedSymbol)
                 {
-                    string part = parts[i];
-                    partFound = false;
-
-                    // method
-                    if (parts[i].EndsWith("()"))
+                    SymbolModifier modifier = (result[i] as ModifiedSymbol).Modifier;
+                    if ((modifier.HasFlag(SymbolModifier.Static) && !isTypeReference) ||
+                        (!modifier.HasFlag(SymbolModifier.Static) && isTypeReference))
                     {
-                        string methodName = part.Substring(0, part.IndexOf('('));
-                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.Type);
-                        if (externalClass != null)
-                        {
-                            foreach (Method m in externalClass.Methods)
-                            {
-                                if (m.Id == methodName)
-                                {
-                                    if (m.Type != "void")
-                                    {
-                                        matchedSymbol = m;
-                                        partFound = true;
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    // variables
-                    else
-                    {
-                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.Type);
-
-                        if (i == 0)
-                        {
-                            // this keyword
-                            if (part == "this")
-                            {
-                                matchedSymbol = classSymbol;
-                                partFound = true;
-                            }
-                            else
-                            {
-                                // look for method parameters
-                                foreach (Method method in classSymbol.Methods)
-                                {
-                                    if (method.Contains(position))
-                                    {
-                                        foreach (Parameter parameter in method.Parameters)
-                                        {
-                                            if (parameter.Id == part)
-                                            {
-                                                matchedSymbol = parameter;
-                                                partFound = true;
-                                                break;
-                                            }
-                                        }
-
-                                        break;
-                                    }
-                                }
-
-                                // look for local variable
-                                if (!partFound)
-                                {
-                                    foreach (VariableScope scope in classSymbol.VariableScopes)
-                                    {
-                                        if (scope.Span.Contains(position))
-                                        {
-                                            foreach (Field variable in scope.Variables)
-                                            {
-                                                if (variable.Id == part && variable.Location.CompareTo(position) < 0)
-                                                {
-                                                    matchedSymbol = variable;
-                                                    partFound = true;
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                        if (partFound)
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (externalClass != null)
-                        {
-                            // look for fields
-                            if (!partFound)
-                            {
-                                foreach (Field field in externalClass.Fields)
-                                {
-                                    if (field.Id == part)
-                                    {
-                                        matchedSymbol = field;
-                                        partFound = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            // look for properties
-                            if (!partFound)
-                            {
-                                foreach (Property property in externalClass.Properties)
-                                {
-                                    if (property.Id == part)
-                                    {
-                                        matchedSymbol = property;
-                                        partFound = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // check that the part was found
-                    if (!partFound)
-                    {
-                        matchedSymbol = null;
-                        if (typeSearchDone)
-                            break;
-
-                        // see if it's a type reference
-                        StringBuilder typeNameBuilder = new StringBuilder();
-                        for (i = 0; i < parts.Count; i++)
-                        {
-                            if (i == 0)
-                                typeNameBuilder.Append(parts[i]);
-                            else
-                                typeNameBuilder.AppendFormat(".{0}", parts[i]);
-
-                            matchedSymbol = _language.GetSymbols(typeNameBuilder.ToString());
-                            if (matchedSymbol != null)
-                            {
-                                isTypeReference = true;
-                                break;
-                            }
-                        }
-
-                        typeSearchDone = true;
-                    }
-                    else
-                    {
-                        isTypeReference = false;
-                    }
-                }
-
-                // build completions from matched symbol
-                if (matchedSymbol != null)
-                {
-                    SymbolTable symbols = _language.GetSymbols(matchedSymbol.Type);
-                    if (symbols != null)
-                    {
-                        bool isExternal = (classSymbol == null || classSymbol.Id != symbols.Id);
-
-                        result.AddRange(GetFields(symbols, isExternal));
-                        result.AddRange(GetProperties(symbols, isExternal));
-                        result.AddRange(GetMethods(symbols, isExternal));
-
-                        // filter out values
-                        for (int i = 0; i < result.Count; i++)
-                        {
-                            if (result[i] is ModifiedSymbol)
-                            {
-                                SymbolModifier modifier = (result[i] as ModifiedSymbol).Modifier;
-                                if ((modifier.HasFlag(SymbolModifier.Static) && !isTypeReference) ||
-                                    (!modifier.HasFlag(SymbolModifier.Static) && isTypeReference))
-                                {
-                                    result.RemoveAt(i);
-                                    i--;
-                                }
-                            }
-                        }
+                        result.RemoveAt(i);
+                        i--;
                     }
                 }
             }
 
             return result.OrderBy(s => s.Name).ToArray();
+        }
+
+        /// <summary>
+        /// Get the methods that match for the current text.
+        /// </summary>
+        /// <param name="text">The text stream to process.</param>
+        /// <param name="className">The name of the class.</param>
+        /// <param name="position">The position in the class text for the method completions.</param>
+        /// <returns>The methods that match for the current position.</returns>
+        public Method[] GetMethodCompletions(Stream text, string className, TextPosition position)
+        {
+            List<Method> result = new List<Method>();
+
+            // get class definition
+            SymbolTable classSymbol = _language.GetSymbols(className);
+            if (classSymbol == null)
+                return result.ToArray();
+
+            // get symbol matches
+            Symbol[] matchedSymbols = MatchSymbols(text, className, position);
+            if (matchedSymbols == null || matchedSymbols.Length == 0)
+                return result.ToArray();
+
+            // get the matched method
+            Method method = matchedSymbols[matchedSymbols.Length - 1] as Method;
+            if (method == null)
+                return result.ToArray();
+
+            // get the parent
+            SymbolTable parent = null;
+            bool isTypeReference = false;
+            if (matchedSymbols.Length == 1)
+            {
+                parent = classSymbol;
+                isTypeReference = true;
+            }
+            else
+            {
+                if (matchedSymbols[matchedSymbols.Length - 2] is TypedSymbol)
+                    parent = _language.GetSymbols((matchedSymbols[matchedSymbols.Length - 2] as TypedSymbol).Type);
+                isTypeReference = (matchedSymbols[matchedSymbols.Length - 2] is SymbolTable);
+            }
+
+            if (parent == null)
+                return result.ToArray();
+
+            bool isExternal = (classSymbol.Id != parent.Id);
+
+            // build results
+            result.AddRange(GetMethods(parent, isExternal));
+
+            // filter out values
+            for (int i = 0; i < result.Count; i++)
+            {
+                if (result[i].Id != method.Id)
+                {
+                    result.RemoveAt(i);
+                    i--;
+                }
+                else if (result[i] is ModifiedSymbol)
+                {
+                    SymbolModifier modifier = (result[i] as ModifiedSymbol).Modifier;
+                    if ((modifier.HasFlag(SymbolModifier.Static) && !isTypeReference) ||
+                        (!modifier.HasFlag(SymbolModifier.Static) && isTypeReference))
+                    {
+                        result.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+
+            return result.ToArray();
         }
 
         /// <summary>
