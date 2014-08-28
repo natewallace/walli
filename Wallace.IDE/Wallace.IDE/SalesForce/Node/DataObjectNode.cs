@@ -112,6 +112,11 @@ namespace Wallace.IDE.SalesForce.Node
             foreach (SObjectFieldType field in fullObject.Fields.OrderBy(f => f.Name))
                 nodes.Add(new DataObjectFieldNode(Project, field));
 
+            Project.Language.UpdateSymbols(
+                Project.ConvertToSymbolTable(fullObject),
+                true,
+                true);
+
             return nodes.ToArray();
         }
 
