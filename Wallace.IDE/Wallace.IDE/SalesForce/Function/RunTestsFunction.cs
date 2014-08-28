@@ -52,11 +52,11 @@ namespace Wallace.IDE.SalesForce.Function
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "RunTests.png");
-                    presenter.ToolTip = String.Format("Run tests for {0}.", CurrentDocument.File.Name);
+                    presenter.ToolTip = String.Format("Run tests for {0}", CurrentDocument.File.Name);
                 }
                 else
                 {
-                    presenter.Header = String.Format("Run tests for {0}.", CurrentDocument.File.Name);
+                    presenter.Header = String.Format("Run tests for {0}", CurrentDocument.File.Name);
                     presenter.Icon = VisualHelper.CreateIconHeader(null, "RunTests.png");
                 }
             }
