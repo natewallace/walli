@@ -375,7 +375,7 @@ namespace SalesForceLanguage
                             // this keyword
                             if (part == "this")
                             {
-                                matchedSymbol = classSymbol;
+                                matchedSymbol = new Field(new TextPosition(0, 0), "this", null, SymbolModifier.None, classSymbol.Type);
                                 partFound = true;
                             }
                             else
