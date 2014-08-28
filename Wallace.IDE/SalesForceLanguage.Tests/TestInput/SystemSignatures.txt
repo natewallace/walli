@@ -93,6 +93,62 @@
 		public static Approval.ProcessResult process(Approval.ProcessRequest processRequests, Boolean opt_allOrNone);
 		public static Approval.ProcessResult [] process(Approval.ProcessRequest[] processRequests);
 		public static Approval.ProcessResult [] process(Approval.ProcessRequest[] processRequests, Boolean opt_allOrNone);
+
+		public class ProcessRequest {
+			public String getComments();
+			public ID[] getNextApproverIds();
+			public Void setComments(String comments);
+			public Void setNextApproverIds(ID[] nextApproverIds);
+		}
+
+		public class ProcessResult {
+			public String getEntityId();
+			public Database.Error[] getErrors();
+			public String getInstanceId();
+			public String getInstanceStatus();
+			public ID[] getNewWorkitemIds();
+			public Boolean isSuccess();
+		}
+
+		public class ProcessSubmitRequest {
+			public String getObjectId();
+			public Void setObjectId(String Id);
+		}
+
+		public class ProcessWorkitemRequest {
+			public String getAction();
+			public String getWorkitemId();
+			public Void setAction(String s);
+			public Void setWorkitemId(String Id);
+		}
+	}
+
+	public class Auth {
+		public class AuthToken {
+			public String getAccessToken(String authProviderId, String providerName);
+			public Map<String, String> getAccessTokenMap(String authProviderId, String providerName);
+			public Map<String, String> refreshAccessToken(String authProviderId, String providerName, String oldAccessToken);
+		}
+
+		public interface RegistrationHandler {
+			User createUser(ID portalId, Auth.UserData userData);
+			Void updateUser(ID userId, ID portalId, Auth.UserData userData);
+		} 
+
+		public class UserData {
+			public UserData(String identifier, String firstName, String lastName, String fullName, String email, String link, String userName, String locale, String provider, String siteLoginUrl, Map<String, String> attributeMap);
+			public String identifier {get; set;}
+			public String firstName {get; set;}
+			public String lastName {get; set;}
+			public String fullName {get; set;}
+			public String email {get; set;}
+			public String link {get; set;}
+			public String username {get; set;}
+			public String locale {get; set;}
+			public String provider {get; set;}
+			public String siteLoginUrl {get; set;}
+			public Map<String, String> attributeMap {get; set;}
+		}
 	}
 
 	public class Blob {
@@ -109,6 +165,716 @@
 
 	public class Cases {
 		public static ID getCaseIdFromEmailThreadId(String emailThreadId);
+	}
+
+	public class Canvas {
+		public interface ApplicationContext {
+			String getCanvasUrl();
+			String getDeveloperName();
+			String getName();
+			String getNamespace();
+			String getVersion();
+			void setCanvasUrlPath(String newPath);
+		}
+
+		public class CanvasLifecycleHandler {
+			public Set<Canvas.ContextTypeEnum> excludeContextTypes();
+			public void onRender(Canvas.RenderContext renderContext);
+		}
+
+		public enum ContextTypeEnum {
+			ORGANIZATION,
+			RECORD_DETAIL,
+			USER
+		}
+
+		public interface EnvironmentContext {
+			void addEntityField(String fieldName);
+			void addEntityFields(Set<String> fieldNames);
+			String getDisplayLocation();
+			List<String> getEntityFields();
+			String getLocationUrl();
+			String getParametersAsJSON();
+			String getSublocation();
+			void setParametersAsJSON(String jsonString);
+		}
+
+		public interface RenderContext {
+			Canvas.ApplicationContext getApplicationContext();
+			Canvas.EnvironmentContext getEnvironmentContext();
+		}
+
+		public class Test {
+			public static final object KEY_CANVAS_URL;
+			public static final object KEY_DEVELOPER_NAME;
+			public static final object KEY_DISPLAY_LOCATION;
+			public static final object KEY_LOCATION_URL;
+			public static final object KEY_NAME;
+			public static final object KEY_NAMESPACE;
+			public static final object KEY_SUB_LOCATION;
+			public static final object KEY_VERSION;
+			public static Canvas.RenderContext mockRenderContext(Map<String,String> appContextTestValues, Map<String,String> envContextTestValues);
+			public static Void testCanvasLifecycle(Canvas.CanvasLifecycleHandler lifecycleHandler,Canvas.RenderContext mockRenderContext);
+		}
+
+		public class CanvasRenderException extends Exception {
+
+		}
+	}
+
+	public class ChatterAnswers {
+		public interface AccountCreator {
+			String createAccount(String firstname, String lastname, Id siteAdminId);
+		}
+	}
+
+	public class ConnectApi {
+		public class Announcements {
+			public static void deleteAnnouncement(String communityId, String announcementId);
+			public static ConnectApi.Announcement getAnnouncement(String communityId, String announcementId);
+			public static ConnectApi.Announcement udpateAnnouncement(String communityId, String announcementId, Date expirationDate);
+		}
+
+		public class Chatter {
+			public static void deleteSubscription(String communityId, String subscriptionId);
+			public static ConnectApi.FollowerPage getFollowers(String communityId, String recordId);
+			public static ConnectApi.FollowerPage getFollowers(String communityId, String recordId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.Subscription getSubscription(String communityId, String subscriptionId);
+		}
+
+		public class ChatterFavorites {
+			public static ConnectApi.FeedFavorite addFavorite(String communityId, String subjectId, String searchText);
+			public static ConnectApi.FeedFavorite addRecordFavorite(String communityId, String subjectId, String targetId);
+			public static Void deleteFavorite(String communityId, String subjectId, String favoriteId);
+			public static ConnectApi.FeedFavorite getFavorite(String communityId, String subjectId, String favoriteId);
+			public static ConnectApi.FeedFavorites getFavorites(String communityId, String subjectId);
+			public static ConnectApi.FeedElementPage getFeedElements(String communityId, String subjectId, String favoriteId);
+			public static ConnectApi.FeedElementPage getFeedElements(String communityId, String subjectId, String favoriteId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage getFeedElements(String communityId, String subjectId, String favoriteId, Integer recentCommentCount, Integer elementsPerBundle, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage getFeedItems(String communityId, String subjectId, String favoriteId);
+			public static ConnectApi.FeedItemPage getFeedItems(String communityId, String subjectId, String favoriteId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage getFeedItems(String communityId, String subjectId, String favoriteId, Integer recentCommentCount, String pageParam, Integer pageSize, FeedSortOrder sortParam);
+			public static Void setTestGetFeedElements(String communityId, String subjectId, String favoriteId, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElements(String communityId, String subjectId, String favoriteId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElements(String communityId, String subjectId, String favoriteId, Integer recentCommentCount, Integer elementsPerClump, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedItems(String communityId, String subjectId, String favoriteId, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItems(String communityId, String subjectId, String favoriteId, String pageParam, Integer pageSize, FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItems(String communityId, String subjectId, String favoriteId, Integer recentCommentCount, String pageParam, Integer pageSize, FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static ConnectApi.FeedFavorite updateFavorite(String communityId, String subjectId, String favoriteId, Boolean updateLastViewDate);
+		}
+
+		public class ChatterFeeds {
+			public static Void deleteComment(String communityId, String commentId);
+			public static deleteFeedElement(String communityId, String feedElementId);
+			public static Void deleteFeedItem(String communityId, String feedItemId);
+			public static Void deleteLike(String communityId, String likeId);
+			public static ConnectApi.Comment getComment(String communityId, String commentId);
+			public static ConnectApi.CommentPage getCommentsForFeedItem(String communityId, String feedItemId);
+			public static ConnectApi.CommentPage getCommentsForFeedItem(String communityId, String feedItemId, String pageParam, Integer pageSize);
+			public static ConnectApi.Feed getFeed(String communityId, ConnectApi.FeedType feedType);
+			public static ConnectApi.Feed getFeed(String communityId, ConnectApi.FeedType feedType, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.Feed getFeed(String communityId, ConnectApi.FeedType feedType, String subjectId);
+			public static ConnectApi.Feed getFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedDirectory getFeedDirectory(String communityId);
+			public static ConnectApi.FeedElement getFeedElement(String communityId, String feedElementId);
+			public static ConnectApi.FeedElement getFeedElement(String communityId, String feedElementId, Integer recentCommentCount, Integer elementsPerBundle);
+			public static ConnectApi.BatchResult[] getFeedElementBatch(String communityId, List<String> feedElementIds);
+			public static ConnectApi.FeedElementPage getFeedElementsFromBundle(String communityId, String feedElementId);
+			public static ConnectApi.FeedElementPage getFeedElementsFromBundle(String communityId, String feedElementId, String pageParam, Integer pageSize, Integer elementsPerBundle, Integer recentCommentCount);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, Boolean showInternalOnly);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, Integer elementsPerBundle, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, Boolean showInternalOnly);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFilterFeed(String communityId, String subjectId, String keyPrefix);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFilterFeed(String communityId, String subjectId, String keyPrefix, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFilterFeed(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, Integer elementsPerBundle, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage getFeedElementsFromFilterFeedUpdatedSince(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, Integer elementsPerClump, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince);
+			public static ConnectApi.FeedElementPage getFeedElementsUpdatedSince(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince);
+			public static ConnectApi.FeedElementPage getFeedElementsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince);
+			public static ConnectApi.FeedElementPage getFeedElementsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, Boolean showInternalOnly);
+			public static ConnectApi.FeedElementPage getFeedElementsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, Integer elementsPerClump, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, Boolean showInternalOnly);
+			public static ConnectApi.FeedItem getFeedItem(String communityId, String feedItemId);
+			public static ConnectApi.BatchResult[] getFeedItemBatch(String communityId, List<String> feedItemIds);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, Boolean showInternalOnly);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFilterFeed(String communityId, String subjectId, String keyPrefix);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFilterFeed(String communityId, String subjectId, String keyPrefix, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFilterFeed(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage getFeedItemsFromFilterFeedUpdatedSince(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince);
+			public static ConnectApi.FeedItemPage getFeedItemsUpdatedSince(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince);
+			public static ConnectApi.FeedItemPage getFeedItemsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince);
+			public static ConnectApi.FeedItemPage getFeedItemsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, Boolean showInternalOnly);
+			public static ConnectApi.FeedPoll getFeedPoll(String communityId, String feedItemId);
+			public static ConnectApi.Feed getFilterFeed(String communityId, String subjectId, String keyPrefix);
+			public static ConnectApi.Feed getFilterFeed(String communityId, String subjectId, String keyPrefix, ConnectApi.FeedType sortParam);
+			public static ConnectApi.FeedDirectory getFilterFeedDirectory(String communityId, String subjectId);
+			public static ConnectApi.ChatterLike getLike(String communityId, String likeId);
+			public static ConnectApi.ChatterLikePage getLikesForComment(String communityId, String commentId);
+			public static ConnectApi.ChatterLikePage getLikesForComment(String communityId, String commentId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.ChatterLikePage getLikesForFeedItem(String communityId, String feedItemId);
+			public static ConnectApi.ChatterLikePage getLikesForFeedItem(String communityId, String feedItemId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.FeedModifiedInfo isModified(String communityId, ConnectApi.FeedType feedType, String subjectId, String since);
+			public static ConnectApi.ChatterLike likeComment(String communityId, String commentId);
+			public static ConnectApi.ChatterLike likeFeedItem(String communityId, String feedItemId);
+			public static ConnectApi.Comment postComment(String communityId, String feedItemId, String text);
+			public static ConnectApi.Comment postComment(String communityId, String feedItemId, ConnectApi.CommentInput comment, ConnectApi.BinaryInput feedItemFileUpload);
+			public static ConnectApi.FeedElement postFeedElement(String communityId, String subjectId, ConnectApi.FeedElementType feedElementType, String text);
+			public static ConnectApi.FeedElement postFeedElement(String communityId, ConnectApi.FeedElementInput feedElement, ConnectApi.BinaryInput feedElementFileUpload);
+			public static ConnectApi.FeedItem postFeedItem(String communityId, ConnectApi.FeedType feedType, String subjectId, String text);
+			public static ConnectApi.FeedItem postFeedItem(String communityId, ConnectApi.FeedType feedType, String subjectId, ConnectApi.FeedItemInput feedItemInput, ConnectApi.BinaryInput feedItemFileUpload);
+			public static ConnectApi.FeedElementPage searchFeedElements(String communityId, String q);
+			public static ConnectApi.FeedElementPage searchFeedElements(String communityId, String q, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage searchFeedElements(String communityId, String q, String pageParam, Integer pageSize);
+			public static ConnectApi.FeedElementPage searchFeedElements(String communityId, String q, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage searchFeedElements(String communityId, String q, Integer recentCommentCount, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String q);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String q);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, Boolean showInternalOnly);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFilterFeed(String communityId, String subjectId, String keyPrefix, String q);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFilterFeed(String communityId, String subjectId, String keyPrefix, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedElementPage searchFeedElementsInFilterFeed(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedItemPage searchFeedItems(String communityId, String q);
+			public static ConnectApi.FeedItemPage searchFeedItems(String communityId, String q, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage searchFeedItems(String communityId, String q, String pageParam, Integer pageSize);
+			public static ConnectApi.FeedItemPage searchFeedItems(String communityId, String q, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage searchFeedItems(String communityId, String q, Integer recentCommentCount, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String q);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String q);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, Boolean showInternalOnly);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFilterFeed(String communityId, String subjectId, String keyPrefix, String q);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFilterFeed(String communityId, String subjectId, String keyPrefix, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static ConnectApi.FeedItemPage searchFeedItemsInFilterFeed(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q);
+			public static Void setTestGetFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, Boolean showInternalOnly, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, Integer elementsPerClump, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, Boolean showInternalOnly, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFilterFeed(String communityId, String subjectId, String keyPrefix, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFilterFeed(String communityId, String subjectId, String keyPrefix, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFilterFeed(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, Integer elementsPerClump, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsFromFilterFeedUpdatedSince(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, Integer elementsPerClump, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsUpdatedSince(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, Boolean showInternalOnly, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedElementsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, Integer elementsPerClump, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, Boolean showInternalOnly, ConnectApi.FeedElementPage result);
+			public static Void setTestGetFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, Boolean showInternalOnly, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFilterFeed(String communityId, String subjectId, String keyPrefix, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFilterFeed(String communityId, String subjectId, String keyPrefix, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFilterFeed(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsFromFilterFeedUpdatedSince(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String updatedSince, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsUpdatedSince(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince);
+			public static Void setTestGetFeedItemsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, ConnectApi.FeedItemPage result);
+			public static Void setTestGetFeedItemsUpdatedSince(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, String updatedSince, Boolean showInternalOnly, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedElements(String communityId, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElements(String communityId, String q, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElements(String communityId, String q, String pageParam, Integer pageSize, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElements(String communityId, String q, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElements(String communityId, String q, Integer recentCommentCount, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, Boolean showInternalOnly, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFilterFeed(String communityId, String subjectId, String keyPrefix, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFilterFeed(String communityId, String subjectId, String keyPrefix, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedElementPage result);
+			public static Void setTestSearchFeedElementsInFilterFeed(String communityId, String subjectId, String keyPrefix, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedElementPage result);
+			public static Void searchFeedItems(String communityId, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItems(String communityId, String q, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItems(String communityId, String q, String pageParam, Integer pageSize, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItems(String communityId, String q, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItems(String communityId, String q, Integer recentCommentCount, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFilterFeed(String communityId, String subjectId, String keyPrefix, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFilterFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String keyPrefix, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedItemPage result);
+			public static Void setTestSearchFeedItemsInFilterFeed(String communityId, ConnectApi.FeedType feedType, String subjectId, String keyPrefix, Integer recentCommentCount, ConnectApi.FeedDensity density, String pageParam, Integer pageSize, ConnectApi.FeedSortOrder sortParam, String q, ConnectApi.FeedItemPage result);
+			public static ConnectApi.FeedElement shareFeedElement(String communityId, String subjectId, ConnectApi.FeedElementType feedElementType, String originalFeedElementId);
+			public static ConnectApi.FeedItem shareFeedItem(String communityId, ConnectApi.FeedType feedType, String subjectId, String originalFeedItemId);
+			public static ConnectApi.FeedItem updateBookmark(String communityId, String feedItemId, Boolean isBookmarkedByCurrentUser);
+			public static ConnectApi.FeedPoll voteOnFeedPoll(String communityId, String feedItemId, String myChoiceId);
+		}
+
+		public class ChatterGroups {
+			public static ConnectApi.GroupMember addMember(String communityId, String groupId, String userId);
+			public static ConnectApi.GroupMember addMemberWithRole(String communityId, String groupId, String userId, ConnectApi.GroupMembershipType role);
+			public static ConnectApi.ChatterGroupDetail createGroup(String communityId, ConnectApi.ChatterGroupInput groupInput);
+			public static Void deleteMember(String communityId, String membershipId);
+			public static Void deletePhoto(String communityId, String groupId);
+			public static ConnectApi.AnnouncementPage getAnnouncements(String communityId, String groupId);
+			public static ConnectApi.AnnouncementPage getAnnouncements(String communityId, String groupId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.ChatterGroupDetail getGroup(String communityId, String groupId);
+			public static ConnectApi.BatchResult[] getGroupBatch(String communityId, List<String> groupIds);
+			public static ConnectApi.GroupMembershipRequest getGroupMembershipRequest(String communityId, String requestId);
+			public static ConnectApi.GroupMembershipRequests getGroupMembershipRequests(String communityId, String groupId);
+			public static ConnectApi.GroupMembershipRequests getGroupMembershipRequests(String communityId, String groupId, ConnectApi.GroupMembershipRequestStatus status);
+			public static ConnectApi.ChatterGroupPage getGroups(String communityId);
+			public static ConnectApi.ChatterGroupPage getGroups(String communityId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.ChatterGroupPage getGroups(String communityId, Integer pageParam, Integer pageSize, ConnectApi.GroupArchiveStatus archiveStatus);
+			public static ConnectApi.GroupMember getMember(String communityId, String membershipId);
+			public static ConnectApi.GroupMemberPage getMembers(String communityId, String groupId);
+			public static ConnectApi.GroupMemberPage getMembers(String communityId, String groupId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.BatchResult[] getMembershipBatch(String communityId, List<String> membershipIds);
+			public static ConnectApi.GroupChatterSettings getMyChatterSettings(String communityId, String groupId);
+			public static ConnectApi.Photo getPhoto(String communityId, String groupId);
+			public static ConnectApi.Announcement postAnnouncement(String communityId, String groupId, ConnectApi.AnnouncementInput announcement);
+			public static ConnectApi.GroupMembershipRequest requestGroupMembership(String communityId, String groupId);
+			public static ConnectApi.ChatterGroupPage searchGroups(String communityId, String q);
+			public static ConnectApi.ChatterGroupPage searchGroups(String communityId, String q, Integer pageParam, Integer pageSize);
+			public static ConnectApi.ChatterGroupPage searchGroups(String communityId, String q, ConnectApi.GroupArchiveStatus archiveStatus, Integer pageParam, Integer pageSize);
+			public static ConnectApi.Photo setPhoto(String communityId, String groupId, String fileId, Integer versionNumber);
+			public static ConnectApi.Photo setPhoto(String communityId, String groupId, ConnectApi.BinaryInput fileUpload);
+			public static ConnectApi.Photo setPhotoWithAttributes(String communityId, String groupId, ConnectApi.PhotoInput photo);
+			public static ConnectApi.Photo setPhotoWithAttributes(String communityId, String groupId, ConnectApi.PhotoInput photo, ConnectApi.BinaryInput fileUpload);
+			public static Void setTestSearchGroups(String communityId, String q, ConnectApi.ChatterGroupPage result);
+			public static Void setTestSearchGroups(String communityId, String q, Integer pageParam, Integer pageSize, ConnectApi.ChatterGroupPage result);
+			public static Void setTestSearchGroups(String communityId, String q, ConnectApi.GroupArchiveStatus archiveStatus, Integer pageParam, Integer pageSize, ConnectApi.ChatterGroupPage result);
+			public static ConnectApi.ChatterGroup updateGroup(String communityId, String groupId, ConnectApi.ChatterGroupInput groupInput);
+			public static ConnectApi.ChatterGroup updateGroupMember(String communityId, String membershipId, ConnectApi.GroupMembershipType role);
+			public static ConnectApi.GroupChatterSettings updateMyChatterSettings(String communityId, String groupId, ConnectApi.GroupEmailFrequency emailFrequency);
+			public static ConnectApi.GroupMembershipRequest updateRequestStatus(String communityId, String requestId, ConnectApi.GroupMembershipRequestStatus status);
+		}
+
+		public class ChatterMessages {
+			public static ConnectApi.ChatterConversation getConversation(String conversationId);
+			public static ConnectApi.ChatterConversation getConversation(String conversationId, String pageParam, Integer pageSize);
+			public static ConnectApi.ChatterConversation getConversation(String communityId, String conversationId);
+			public static ConnectApi.ChatterConversation getConversation(String communityId, String conversationId, String pageParam, String pageSize);
+			public static ConnectApi.ChatterConversationPage getConversations();
+			public static ConnectApi.ChatterConversationPage getConversations(String pageParam, Integer pageSize);
+			public static ConnectApi.ChatterConversationPage getConversations(String communityId);
+			public static ConnectApi.ChatterConversationPage getConversations(String communityId, String pageParam, Integer pageSize);
+			public static ConnectApi.ChatterMessage getMessage(String messageId);
+			public static ConnectApi.ChatterMessage getMessage(String communityId, String messageId);
+			public static ConnectApi.ChatterMessagePage getMessages();
+			public static ConnectApi.ChatterMessagePage getMessages(String pageParam, Integer pageSize);
+			public static ConnectApi.ChatterMessagePage getMessages(String communityId);
+			public static ConnectApi.ChatterMessagePage getMessages(String communityId, String pageParam, Integer pageSize);
+			public static ConnectApi.UnreadConversationCount getUnreadCount();
+			public static ConnectApi.UnreadConversationCount getUnreadCount(String communityId);
+			public static ConnectApi.ChatterConversationSummary markConversationRead(String conversationId, Boolean read);
+			public static ConnectApi.ChatterConversationSummary markConversationRead(String communityId, String conversationID, Boolean read);
+			public static ConnectApi.ChatterMessage replyToMessage(String text, String inReplyTo);
+			public static ConnectApi.ChatterMessage replyToMessage(String communityId, String text, String inReplyTo);
+			public static ConnectApi.ChatterConversation searchConversation(String conversationId, String q);
+			public static ConnectApi.ChatterConversation searchConversation(String conversationId, String pageParam, Integer pageSize, String q);
+			public static ConnectApi.ChatterConversation searchConversation(String communityId, String conversationId, String q);
+			public static ConnectApi.ChatterConversation searchConversation(String communityId, String conversationId, String pageParam, Integer pageSize, String q);
+			public static ConnectApi.ChatterConversationPage searchConversations(String q);
+			public static ConnectApi.ChatterConversationPage searchConversations(String pageParam, Integer pageSize, String q);
+			public static ConnectApi.ChatterConversationPage searchConversations(String communityId, String q);
+			public static ConnectApi.ChatterConversationPage searchConversations(String communityId, String pageParam, Integer pageSize, String q);
+			public static ConnectApi.ChatterMessagePage searchMessages(String q);
+			public static ConnectApi.ChatterMessagePage searchMessages(String pageParam, Integer pageSize, String q);
+			public static ConnectApi.ChatterMessagePage searchMessages(String communityId, String q);
+			public static ConnectApi.ChatterMessagePage searchMessages(String communityId, String pageParam, Integer pageSize, String q);
+			public static ConnectApi.ChatterMessage sendMessage(String text, String recipients);
+			public static ConnectApi.ChatterMessage sendMessage(String communityId, String text, String recipients);
+		}
+
+		public class ChatterUsers {
+			public static Void deletePhoto(String communityId, String userId);
+			public static ConnectApi.Subscription follow(String communityId, String userId, String subjectId);
+			public static ConnectApi.UserChatterSettings getChatterSettings(String communityId, String userId);
+			public static ConnectApi.FollowerPage getFollowers(String communityId, String userId);
+			public static ConnectApi.FollowerPage getFollowers(String communityId, String userId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.FollowingPage getFollowings(String communityId, String userId);
+			public static ConnectApi.FollowingPage getFollowings(String communityId, String userId, Integer pageParam);
+			public static ConnectApi.FollowingPage getFollowings(String communityId, String userId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.FollowingPage getFollowings(String communityId, String userId, String filterType);
+			public static ConnectApi.FollowingPage getFollowings(String communityId, String userId, String filterType, Integer pageParam);
+			public static ConnectApi.FollowingPage getFollowings(String communityId, String userId, String filterType, Integer pageParam, Integer pageSize);
+			public static ConnectApi.UserGroupPage getGroups(String communityId, String userId);
+			public static ConnectApi.UserGroupPage getGroups(String communityId, String userId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.Photo getPhoto(String communityId, String userId);
+			public static ConnectApi.UserSummary getUser(String communityId, String userId);
+			public static ConnectApi.BatchResult[] getUserBatch(String communityId, List<String> userIds);
+			public static ConnectApi.UserPage getUsers(String communityId);
+			public static ConnectApi.UserPage getUsers(String communityId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.UserGroupPage searchUserGroups(String communityId, String userId, String q);
+			public static ConnectApi.UserGroupPage searchUserGroups(String communityId, String userId, String q, Integer pageParam, Integer pageSize);
+			public static ConnectApi.UserPage searchUsers(String communityId, String q);
+			public static ConnectApi.UserPage searchUsers(String communityId, String q, Integer pageParam, Integer pageSize);
+			public static ConnectApi.UserPage searchUsers(String communityId, String q, String searchContextId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.Photo setPhoto(String communityId, String userId, String fileId, Integer versionNumber);
+			public static ConnectApi.Photo setPhoto(String communityId, String userId, ConnectApi.BinaryInput fileUpload);
+			public static ConnectApi.Photo setPhotoWithAttributes(String communityId, String userId, ConnectApi.Photo photo);
+			public static ConnectApi.Photo setPhotoWithAttributes(String communityId, String userId, ConnectApi.Photo photo, ConnectApi.BinaryInput fileUpload);
+			public static Void setTestSearchUsers(String communityId, String q, ConnectApi.UserPage result);
+			public static Void setTestSearchUsers(String communityId, String q, Integer pageParam, Integer pageSize, ConnectApi.UserPage result);
+			public static Void setTestSearchUsers(String communityId, String q, String searchContextId, Integer pageParam, Integer pageSize, ConnectApi.UserPage result);
+			public static ConnectApi.UserChatterSettings updateChatterSettings(String communityId, String userId, ConnectApi.GroupEmailFrequency defaultGroupEmailFrequency);
+			public static ConnectApi.UserDetail updateUser(String communityId, String userId, ConnectApi.UserInput userInput);
+		}
+
+		public class Communities {
+			public static ConnectApi.CommunityPage getCommunities();
+			public static ConnectApi.CommunityPage getCommunities(ConnectApi.CommunityStatus communityStatus);
+			public static ConnectApi.Community getCommunity(String communityId);
+		}
+
+		public class CommunityModeration {
+			public static ConnectApi.ModerationFlags addFlagToComment(String communityId, String commentId);
+			public static ConnectApi.ModerationFlags addFlagToComment(String communityId, String commentId, ConnectApi.CommunityFlagVisibility visibility);
+			public static ConnectApi.ModerationCapability addFlagToFeedElement(String communityId, String feedElementId);
+			public static ConnectApi.ModerationCapability addFlagToFeedElement(String communityId, String feedElementId, ConnectApi.CommunityFlagVisibility visibility);
+			public static ConnectApi.ModerationFlags addFlagToFeedItem(String communityId, String feedItemId);
+			public static ConnectApi.ModerationFlags addFlagToFeedItem(String communityId, String feedItemId, ConnectApi.CommunityFlagVisibility visibility);
+			public static ConnectApi.ModerationFlags getFlagsOnComment(String communityId, String commentId);
+			public static ConnectApi.ModerationFlags getFlagsOnComment(String communityId, String commentId, ConnectApi.CommunityFlagVisibility visibility);
+			public static ConnectApi.ModerationCapability getFlagsOnFeedElement(String communityId, String feedElementId);
+			public static ConnectApi.ModerationCapability getFlagsOnFeedElement(String communityId, String feedElementId, ConnectApi.CommunityFlagVisibility visibility);
+			public static ConnectApi.ModerationFlags getFlagsOnFeedItem(String communityId, String feedItemId);
+			public static ConnectApi.ModerationFlags getFlagsOnFeedItem(String communityId, String feedItemId, ConnectApi.CommunityFlagVisibility visibility);
+			public static ConnectApi.ModerationFlags removeFlagsOnComment(String communityId, String commentId, String userId);
+			public static void removeFlagFromFeedElement(String communityId, String feedElementId, String userId);
+			public static ConnectApi.ModerationFlags removeFlagsOnFeedItem(String communityId, String feedItemId, String userId);
+		}
+
+		public class Organization {
+			public static ConnectApi. OrganizationSettings getSettings();
+		}
+
+		public class Mentions {
+			public static ConnectApi.MentionCompletionPage getMentionCompletions (String communityId, String q, String contextId);
+			public static ConnectApi.Mentions getMentionCompletions (String communityId, String q, String contextId, ConnectApi.MentionCompletionType type, Integer pageParam, Integer pageSize);
+			public static ConnectApi.Mentions getMentionValidations(String communityId, String parentId, List<String> recordIds, ConnectApi.FeedItemVisibilityType visibility);
+			public static Void setTestGetMentionCompletions (String communityId, String q, String contextId, ConnectApi.MentionCompletionPage result);
+			public static Void setTestGetMentionCompletions (String communityId, String q, String contextId, ConnectApi.MentionCompletionType type, Integer pageParam, Integer pageSize, ConnectApi.MentionCompletionPage result);
+		}
+
+		public class RecordDetails {
+			public static ConnectApi.RecordSummaryList getRecentRecords(String communityId, String userId);
+			public static ConnectApi.RecordSummaryList getRecentRecords(String communityId, String userId, Integer size);
+			public static ConnectApi.RecordView getRecordView(String communityId, String recordId);
+		}
+
+		public class Records {
+			public static ConnectApi.Motif getMotif(String communityId, String idOrPrefix);
+			public static ConnectApi.BatchResult[] getMotifBatch(String communityId, List<String> idOrPrefixList);
+		}
+
+		public class Topics {
+			public static ConnectApi.Topic assignTopic(String communityId, String recordId, String topicId);
+			public static ConnectApi.Topic assignTopicByName(String communityId, String recordId, String topicName);
+			public static Void deleteTopic(String communityId, String topicId);
+			public static ConnectApi.ChatterGroupSummaryPage getGroupsRecentlyTalkingAboutTopic(String communityId, String topicId);
+			public static ConnectApi.TopicPage getRecentlyTalkingAboutTopicsForGroup(String communityId, String groupId);
+			public static ConnectApi.TopicPage getRecentlyTalkingAboutTopicsForUser(String communityId, String userId);
+			public static ConnectApi.TopicPage getRelatedTopics(String communityId, String topicId);
+			public static ConnectApi.Topic getTopic(String communityId, String topicId);
+			public static ConnectApi.TopicPage getTopics(String communityId, String recordId);
+			public static ConnectApi.TopicPage getTopics(String communityId);
+			public static ConnectApi.TopicPage getTopics(String communityId, ConnectApi.TopicSort sortParam);
+			public static ConnectApi.TopicPage getTopics(String communityId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.TopicPage getTopics(String communityId, Integer pageParam, Integer pageSize, ConnectApi.TopicSort sortParam);
+			public static ConnectApi.TopicPage getTopics(String communityId, String q, ConnectApi.TopicSort sortParam);
+			public static ConnectApi.TopicPage getTopics(String communityId, String q, Integer pageParam, Integer pageSize);
+			public static ConnectApi.TopicPage getTopics(String communityId, String q, Integer pageParam, Integer pageSize, ConnectApi.TopicSort sortParam);
+			public static ConnectApi.TopicSuggestionPage getTopicSuggestions(String communityId, String recordId, Integer maxResults);
+			public static ConnectApi.TopicSuggestionPage getTopicSuggestions(String communityId, String recordId);
+			public static ConnectApi.TopicSuggestionPage getTopicSuggestionsForText(String communityId, String text, Integer maxResults);
+			public static ConnectApi.TopicSuggestionPage getTopicSuggestionsForText(String communityId, String text);
+			public static ConnectApi.TopicPage getTrendingTopics(String communityId);
+			public static ConnectApi.TopicPage getTrendingTopics(String communityId, Integer maxResults);
+			public static Void setTestGetGroupsRecentlyTalkingAboutTopic(String communityId, String topicId, ConnectApi.ChatterGroupSummaryPage result);
+			public static Void setTestGetRecentlyTalkingAboutTopicsForGroup(String communityId, String groupId, ConnectApi.TopicPage result);
+			public static Void setTestGetRecentlyTalkingAboutTopicsForUser(String communityId, String userId, ConnectApi.TopicPage result);
+			public static Void setTestGetRelatedTopics(String communityId, String topicId, ConnectApi.TopicPage result);
+			public static Void setTestGetTopicSuggestions(String communityId, String recordId, Integer maxResults, ConnectApi.TopicSuggestionPage result);
+			public static Void setTestGetTopicSuggestions(String communityId, String recordId, ConnectApi.TopicSuggestionPage result);
+			public static Void setTestGetTopicSuggestionsForText(String communityId, String text, Integer maxResults, ConnectApi.TopicSuggestionPage result);
+			public static Void setTestGetTopicSuggestionsForText(String communityId, String text, ConnectApi.TopicSuggestionPage result);
+			public static Void setTestGetTrendingTopics(String communityId, ConnectApi.TopicPage result);
+			public static Void setTestGetTrendingTopics(String communityId, Integer maxResults, ConnectApi.TopicPage result);
+			public static Void unassignTopic(String communityId, String recordId, String topicId);
+			public static ConnectApi.Topic updateTopic(String communityId, String topicId, ConnectApi.TopicInput topic);
+		}
+
+		public class UserProfiles {
+			public static ConnectApi.UserProfile getUserProfile(String communityId, String userId);
+		}
+
+		public class Zones {
+			public static ConnectApi.Zone getZone(String communityId, String zoneId);
+			public static ConnectApi.ZonePage getZones(String communityId);
+			public static ConnectApi.Zone getZones(String communityId, Integer pageParam, Integer pageSize);
+			public static ConnectApi.ZoneSearchPage searchInZone(String communityId, String zoneId, String q, ConnectApi.ZoneSearchResultType filter);
+			public static ConnectApi.ZoneSearchPage searchInZone(String communityId, String zoneId, String q, ConnectApi.ZoneSearchResultType filter, String pageParam, Integer pageSize);
+			public static Void setTestSearchInZone(String communityId, String zoneId, String q, ConnectApi.ZoneSearchResultType filter, ConnectApi.ZoneSearchPage result);
+			public static Void setTestSearchInZone(String communityId, String zoneId, String q, ConnectApi.ZoneSearchResultType filter, String pageParam, Integer pageSize, ConnectApi.ZoneSearchPage result);
+		}
+
+		public class AnnouncementInput {
+			public ConnectApi.MessageSegmentInput body { get; set; }
+			public Date expirationDate { get; set; }
+		}
+
+		public class BinaryInput {
+			public BinaryInput(Blob blob, String contentType, string filename);
+			public Blob blob { get; set; }
+			public String contentType { get; set; }
+			public String filename { get; set; }
+		}
+
+		public class CanvasAttachmentInput extends ConnectApi.FeedItemAttachmentInput {
+			public String description { get; set; }
+			public String developerName { get; set; }
+			public string height { get; set; }
+			public String namespacePrefix { get; set; }
+			public String parameters { get; set; }
+			public String thumbnailUrl { get; set; }
+			public String title { get; set; }
+		}
+
+		public class ChatterGroupInput {
+			public string announcement { get; set; }
+			public boolean canHaveChatterGuests { get; set; }
+			public string descriptions { get; set; }
+			public ConnectApi.GroupInformationInput information { get; set; }
+			public boolean isArchived { get; set; }
+			public boolean isAutoArchiveDisabled { get; set; }
+			public string name { get; set; }
+			public string owner { get; set; }
+			public ConnectApi.GroupVisibilityType visibility { get; set; }
+		}
+
+		public class CommentInput {
+			public ConnectApi.FeedItemAttachmentInput attachment { get; set; }
+			public ConnectApi.MessageBodyInput body { get; set; }
+		}
+
+		public class ContentAttachmentInput extends ConnectApi.FeedItemAttachmentInput {
+			public string contentDocumentId { get; set; }
+		}
+
+		public class FeedElementInput extends ConnectApi.FeedItemInput {
+			public ConnectApi.FeedElementType feedElementType { get; set; }
+			public string subjectId { get; set; }
+		}
+
+		public abstract class FeedItemAttachmentInput {
+		}
+
+		public class FeedItemInput extends ConnectApi.FeedElementInput {
+			public ConnectApi.FeedItemAttachmentInput attachment { get; set; }
+			public ConnectApi.MessageBodyInput body { get; set; }
+			public boolean isBookmarkedByCurrentUser { get; set; }
+			public string originalFeedElementId { get; set; }
+			public string originalFeedItemId { get; set; }
+			public ConnectApi.FeedItemVisibilityType visibility { get; set; }
+		}
+
+		public class GroupInformationInput {
+			public string text { get; set; }
+			public string title { get; set; }
+		}
+
+		public class HashtagSegmentInput extends ConnectApi.MessageSegmentInput {
+			public string tag { get; set; }
+		}
+
+		public class LinkAttachmentInput extends ConnectApi.FeedItemAttachmentInput {
+			public string url { get; set; }
+			public string urlName { get; set; }
+		}
+
+		public class LinkSegmentInput extends ConnectApi.MessageSegmentInput {
+			public string url { get; set; }
+		}
+
+		public class MentionSegmentInput extends ConnectApi.MessageSegmentInput {
+			public string id { get; set; }
+		}
+
+		public class MessageBodyInput {
+			public List<ConnectApi.MessageSegmentInput> messageSegments { get; set; }
+		}
+
+		public abstract class MessageSegmentInput {
+		}
+
+		public class NewFileAttachmentInput extends ConnectApi.FeedItemAttachmentInput {
+			public string description { get; set; }
+			public string title { get; set; }
+		}
+
+		public class PhotoInput {
+			public integer cropSize { get; set; }
+			public integer cropX { get; set; }
+			public integer cropY { get; set; }
+			public string fileId { get; set; }
+			public integer versionNumber { get; set; }
+		}
+
+		public class PollAttachmentInput extends ConnectApi.FeedItemAttachmentInput {
+			public List<string> pollChoices { get; set; }
+		}
+
+		public class TextSegmentInput extends ConnectApi.MessageSegmentInput {
+			public string text { get; set; }
+		}
+
+		public class TopicInput {
+			public string description { get; set; }
+			public string name { get; set; }
+		}
+
+		public class UserInput {
+			public string aboutMe { get; set; }
+		}
+
+		public class AbstractBundleCapability extends ConnectApi.FeedElementCapability {
+			public ConnectApi.BundleType bundleType { get; set; }
+			public ConnectApi.FeedElementPage feedElements { get; set; }
+			public integer totalElements { get; set; }
+		}
+
+		public class AbstractMessageBody {
+			public List<ConnectApi.MessageSegment> messageSegments { get; set; }
+			public string text { get; set; }
+		}
+
+		public class AbstractRecordField {
+			public string type { get; set; }
+		}
+
+		public class AbstractRecordView {
+			public string name { get; set; }
+		}
+
+		public class Actor {
+			public string name { get; set; }
+			public string type { get; set; }
+		}
+
+		public class ActorWithId extends ConnectApi.Actor {
+			public string id { get; set; }
+			public ConnectApi.Motif motif { get; set; }
+			public ConnectApi.Reference mySubscription { get; set; }
+			public string recordViewUrl { get; set; }
+			public string url { get; set; }
+		}
+
+		public class Address {
+			public string city { get; set; }
+			public string country { get; set; }
+			public string formattedAddress { get; set; }
+			public string state { get; set; }
+			public string street { get; set; }
+			public string zip { get; set; }
+		}
+
+		public class Announcement {
+			public Date expirationDate { get; set; }
+			public ConnectApi.FeedElement feedElement { get; set; }
+			public string id { get; set; }
+		}
+
+		public class AnnouncementPage {
+			public List<ConnectApi.Announcement> announcements { get; set; }
+			public string currentPageUrl { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+		}
+
+		public class ApprovalAttachment extends ConnectApi.FeedItemAttachment {
+			public string id { get; set; }
+			public List<ConnectApi.ApprovalPostTemplateField> postTemplateFields { get; set; }
+			public string processInstanceStepId { get; set; }
+			public ConnectApi.WorkflowProcessStatus status { get; set; }
+		}
+
+		public class ApprovalPostTemplateField {
+			public string displayName { get; set; }
+			public string displayValue { get; set; }
+			public ConnectApi.Reference record { get; set; }
+		}
+
+		public class BannerCapability extends ConnectApi.FeedElementCapability {
+			public ConnectApi.Motif motif { get; set; }
+			public ConnectApi.BannerStyle style { get; set; }
+		}
+
+		public class BasicTemplateAttachment extends ConnectApi.FeedItemAttachment {
+			public string description { get; set; }
+			public ConnectApi.Icon icon { get; set; }
+			public string linkRecordId { get; set; }
+			public string linkUrl { get; set; }
+			public string title { get; set; }
+		}
+
+		public class BatchResult {
+			public ConnectApi.ConnectApiException getError();
+			public String getErrorMessage();
+			public String getErrorTypeName();
+			public Object getResult();
+			public Boolean isSuccess();
+		}
+
+		public class BlankRecordField extends ConnectApi.AbstractRecordField {
+		}
+
+		public class BookmarksCapability extends ConnectApi.FeedElementCapability {
+		}
+
+		public class Bundle extends ConnectApi.FeedElement {
+			public ConnectApi.BundleType bundleType { get; set; }
+		}
+
+		public class CanvasTemplateAttachment extends ConnectApi.FeedItemAttachment {
+			public string description { get; set; }
+			public string developerName { get; set; }
+			public string height { get; set; }
+			public ConnectApi.Icon icon { get; set; }
+			public string namespacePrefix { get; set; }
+			public string parameters { get; set; }
+			public string thumbnailUrl { get; set; }
+			public string title { get; set; }
+		}
+
+		public class CaseComment extends ConnectApi.FeedItemAttachment {
+			public ConnectApi.CaseActorType actorType { get; set; }
+			public ConnectApi.UserSummary createdBy { get; set; }
+			public Datetime createdDate { get; set; }
+			public string id { get; set; }
+			public boolean published { get; set; }
+			public string text { get; set; }
+		}
+
+		// todo:
 	}
 
 	public interface Comparable {
@@ -202,6 +968,139 @@
 		public static Database.SaveResult[] update(sObject[] recordsToUpdate, Database.DMLOptions options);
 		public static Database.UpsertResult upsert(sObject recordToUpsert, Schema.SObjectField external_ID_Field, Boolean opt_allOrNone);
 		public static Database.UpsertResult[] upsert(sObject [] recordsToUpsert, Schema.SObjectField External_ID_Field, Boolean opt_allOrNone);
+
+		public interface Batchable {
+			Void execute(Database.BatchableContext context, List<sObject> scope);
+			Void finish(Database.BatchableContext context);
+			System.Iterable start(Database.BatchableContext context);
+			Database.QueryLocator start(Database.BatchableContext context);
+		}
+
+		public interface BatchableContext {
+			Id getChildJobId();
+			Id getJobId();
+		}
+
+		public class DeletedRecord {
+			public Date getDeletedDate();
+			public Id getId();
+		}
+
+		public class DeleteResult {
+			public Database.Error[] getErrors();
+			public ID getId();
+			public Boolean isSuccess();
+		}
+
+		public class DMLOptions {
+			public Boolean allowFieldTruncation {get; set;}
+			public Database.DmlOptions.Assignmentruleheader assignmentRuleHeader {get; set;}
+			public Database.DmlOptions.EmailHeader emailHeader {get; set;}
+			public Database.DmlOptions.LocaleOptions localeOptions {get; set;}
+			public Boolean optAllOrNone {get; set;}
+
+			public class AssignmentRuleHeader {
+				public Id assignmentRuleID {get; set;}
+				public Boolean useDefaultRule {get; set;}
+			}
+
+			public class EmailHeader {
+				public Boolean triggerAutoResponseEmail {get; set;}
+				public Boolean triggerOtherEmail {get; set;}
+				public Boolean triggerUserEmail {get; set;}
+			}
+		}
+
+		public class EmptyRecycleBinResult {
+			public Database.Errors[] getErrors();
+			public ID getId();
+			public Boolean isSuccess();
+		}
+
+		public class Error {
+			public String[] getFields();
+			public String getMessage();
+			public StatusCode getStatusCode();
+		}
+
+		public class GetDeletedResult {
+			public List<Database.DeletedRecord> getDeletedRecords();
+			public Date getEarliestDateAvailable();
+			public Date getLatestDateCovered();
+		}
+
+		public class GetUpdatedResult {
+			public List<Id> getIds();
+			public Date getLatestDateCovered();
+		}
+
+		public class LeadConvert {
+			public LeadConvert();
+			public ID getAccountId();
+			public ID getContactId();
+			public String getConvertedStatus();
+			public ID getLeadID();
+			public String getOpportunityName();
+			public ID getOwnerID();
+			public Boolean isDoNotCreateOpportunity();
+			public Boolean isOverWriteLeadSource();
+			public Boolean isSendNotificationEmail();
+			public Void setAccountId(ID accountID);
+			public Void setContactId(ID contactID);
+			public Void setConvertedStatus(String Status);
+			public Void setDoNotCreateOpportunity(Boolean createOpportunity);
+			public Void setLeadId(ID leadID);
+			public Void setOpportunityName(String OppName);
+			public Void setOverwriteLeadSource(Boolean overwriteLeadSource);
+			public Void setOwnerId(ID ownerID);
+			public Void setSendNotificationEmail(Boolean sendEmail);
+		}
+
+		public class LeadConvertResult {
+			public ID getAccountId();
+			public ID getContactId();
+			public Database.Error[] getErrors();
+			public ID getLeadId();
+			public ID getOpportunityId();
+			public Boolean isSuccess();
+		}
+
+		public class MergeResult {
+			public List<Database.Error> getErrors();
+			public Id getId();
+			public List<String> getMergedRecordIds();
+			public List<String> getUpdatedRelatedIds();
+			public Boolean isSuccess();
+		}
+
+		public class QueryLocator {
+			public String getQuery();
+			public Database.QueryLocatorIterator iterator();
+		}
+
+		public class QueryLocatorIterator {
+			public Boolean hasNext();
+			public sObject next();
+		}
+
+		public class SaveResult {
+			public Database.Error[] getErrors();
+			public ID getId();
+			public Boolean isSuccess();
+		}
+
+		public class UndeleteResult {
+			public Database.Error[] getErrors();
+			public ID getId();
+			public Boolean isSuccess();
+		}
+
+		public class UpsertResult {
+			public Database.Error[] getErrors();
+			public ID getId();
+			public Boolean isCreated();
+			public Boolean isSuccess();
+		}
 	}
 
 	public class Date {

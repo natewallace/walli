@@ -64,11 +64,20 @@ namespace Wallace.Language.Apex.Tests
                 else
                 {
                     FieldInfo fi = typeof(TypedSymbol).GetField("_type", BindingFlags.NonPublic | BindingFlags.Instance);
+                    PropertyInfo pi = typeof(SymbolTable).GetProperty("TableType");
 
                     List<SymbolTable> symbols = new List<SymbolTable>();
                     foreach (SymbolTable symbol in result.Symbols.InnerClasses)
                     {
                         fi.SetValue(symbol, String.Format("System.{0}", symbol.Name));
+                        if (symbol.InnerClasses.Length > 0 &&
+                            symbol.Fields.Length == 0 &&
+                            symbol.Constructors.Length == 0 &&
+                            symbol.Properties.Length == 0 &&
+                            symbol.Methods.Length == 0 &&
+                            symbol.Interfaces.Length == 0 &&
+                            String.IsNullOrWhiteSpace(symbol.Extends))
+                            pi.SetValue(symbol, SymbolTableType.Namespace);
                         symbols.Add(symbol);
                     }
 

@@ -29,6 +29,11 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <summary>
         /// An SObject definition.
         /// </summary>
-        SObject
+        SObject,
+
+        /// <summary>
+        /// A namespace.
+        /// </summary>
+        Namespace
     }
 }

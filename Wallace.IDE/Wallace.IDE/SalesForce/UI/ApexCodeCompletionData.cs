@@ -114,6 +114,9 @@ namespace Wallace.IDE.SalesForce.UI
 
                 switch (st.TableType)
                 {
+                    case SymbolTableType.Namespace:
+                        return "Namespace.png";
+
                     case SymbolTableType.Enum:
                         if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
                             return "EnumPrivate.png";

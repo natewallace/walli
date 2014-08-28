@@ -445,10 +445,6 @@ namespace SalesForceLanguage
                     {
                         parts[i] = "list";
                     }
-                    else if (parts[i + 1] == "<>")
-                    {
-                        parts[i] = "map";
-                    }
                 }
 
                 if (parts[i] == "if()" ||
