@@ -327,7 +327,6 @@ namespace SalesForceLanguage.Apex.CodeModel
                                 SymbolTable st = new SymbolTable();
                                 st.ReadXml(reader);
                                 innerClasses.Add(st);
-                                reader.Read();
                             }
                             reader.Read();
                             break;

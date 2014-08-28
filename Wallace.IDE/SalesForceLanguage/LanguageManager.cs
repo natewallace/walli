@@ -119,6 +119,32 @@ namespace SalesForceLanguage
         }
 
         /// <summary>
+        /// Look for the given symbol.
+        /// </summary>
+        /// <param name="type">The symbol to look for.</param>
+        /// <returns>The symbols if found, null if not found.</returns>
+        private SymbolTable LookupSymbol(string type)
+        {
+            // do simple lookup
+            if (_classes.ContainsKey(type))
+                return _classes[type];
+            if (_predefinedClasses.ContainsKey(type))
+                return _predefinedClasses[type];
+
+            // check for system types
+            if (!type.Contains('.'))
+            {
+                type = "system." + type;
+                if (_classes.ContainsKey(type))
+                    return _classes[type];
+                if (_predefinedClasses.ContainsKey(type))
+                    return _predefinedClasses[type];
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Get the symbols for the class with the given name.
         /// </summary>
         /// <param name="type">The name of the type to get symbols for.</param>
@@ -128,21 +154,45 @@ namespace SalesForceLanguage
             if (String.IsNullOrWhiteSpace(type))
                 return null;
 
+            // normalize name
             TypedSymbol typedSymbol = new TypedSymbol(new TextPosition(0,0), null, null, SymbolModifier.None, type);
             type = typedSymbol.Type.ToLower();
 
-            if (_classes.ContainsKey(type))
-                return _classes[type];
-            if (_predefinedClasses.ContainsKey(type))
-                return _predefinedClasses[type];
+            // do initial lookup
+            SymbolTable result = LookupSymbol(type);
+            if (result != null)
+                return result;
 
-            if (!type.Contains('.'))
+            // check for inner class reference
+            if (type.Contains('.'))
             {
-                type = "system." + type;
-                if (_classes.ContainsKey(type))
-                    return _classes[type];
-                if (_predefinedClasses.ContainsKey(type))
-                    return _predefinedClasses[type];
+                string[] parts = type.Split('.');
+                if (parts.Length > 0)
+                {
+                    result = LookupSymbol(parts[0]);
+                    if (result == null)
+                        return null;
+
+                    bool found = false;
+                    for (int i = 1; i < parts.Length; i++)
+                    {
+                        found = false;
+                        foreach (SymbolTable innerClass in result.InnerClasses)
+                        {
+                            if (innerClass.Id == parts[i])
+                            {
+                                found = true;
+                                result = innerClass;
+                                break;
+                            }
+                        }
+
+                        if (!found)
+                            return null;
+                    }
+
+                    return result;
+                }
             }
 
             return null;

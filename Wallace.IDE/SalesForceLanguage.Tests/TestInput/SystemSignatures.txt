@@ -8,10 +8,84 @@
 	public class ApexPages {
 		public Void addMessage(ApexPages.Message msg);
 		public Void addMessages(Exception ex);
-		public System.PageReference currentPage();
+		public static System.PageReference currentPage();
 		public ApexPages.Message[] getMessages();
 		public Boolean hasMessages();
 		public Boolean hasMessages(ApexPages.Severity sev);
+
+		public class Action {
+			public Action(String action);
+			public String getExpression();
+			public System.PageReference invoke();
+		}
+
+		public class Component {
+			public List <ApexPages.Component> childComponents {get; set;}
+			public String expressions {get; set;}
+			public String facets {get; set;}
+		}
+
+		public class IdeaStandardController {
+			public IdeaComment[] getCommentList();
+		}
+
+		public class IdeaStandardSetController {
+			public Idea[] getIdeaList();
+		}
+
+		public class KnowledgeArticleVersionStandardController {
+			public KnowledgeArticleVersionStandardController(SObject article);
+			public String getSourceId();
+			public Void setDataCategory(String categoryGroup, String category);
+		}
+
+		public class Message {
+			public Message(ApexPages.Severity severity, String summary);
+			public Message(ApexPages.Severity severity, String summary, String detail);
+			public Message(ApexPages.Severity severity, String summary, String detail, String id);
+			public String getDetail();
+			public ApexPages.Severity getSeverity();
+			public String getSummary();
+		}
+
+		public class StandardController {
+			public StandardController(SObject controllerSObject);
+			public Void addFields(List<String> fieldNames);
+			public System.PageReference cancel();
+			public System.PageReference delete();
+			public System.PageReference edit();
+			public String getId();
+			public SObject getRecord();
+			public Void reset();
+			public System.PageReference save();
+			public System.PageReference view();
+		}
+
+		public class StandardSetController {
+			public StandardSetController(Database.QueryLocator SObjectList);
+			public StandardSetController(List<SObject> controllerSObjects);
+			public System.PageReference cancel();
+			public Void first();
+			public Boolean getCompleteResult();
+			public String getFilterId();
+			public Boolean getHasNext();
+			public Boolean getHasPrevious();
+			public System.SelectOption getListViewOptions();
+			public Integer getPageNumber();
+			public Integer getPageSize();
+			public sObject getRecord();
+			public sObject[] getRecords();
+			public Integer getResultSize();
+			public sObject[] getSelected();
+			public Void last();
+			public Void next();
+			public Void previous();
+			public System.PageReference save();
+			public Void setFilterID(String filterId);
+			public Void setpageNumber(Integer pageNumber);
+			public Void setPageSize(Integer pageSize);
+			public Void setSelected(sObject[] selectedRecords);
+		}
 	}
 
 	public class Approval {

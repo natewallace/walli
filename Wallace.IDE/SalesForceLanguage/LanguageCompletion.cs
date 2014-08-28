@@ -61,6 +61,11 @@ namespace SalesForceLanguage
             Tokens.LITERAL_STRING
         };
 
+        /// <summary>
+        /// Holds all of the visual force symbols.
+        /// </summary>
+        private static Dictionary<string, string[]> _visualForceSymbols;
+
         #endregion
 
         #region Constructors
@@ -127,6 +132,154 @@ namespace SalesForceLanguage
             _genericCompletions.Add(new Keyword("without sharing"));
 
             _genericCompletions = _genericCompletions.OrderBy(s => s.Name).ToList();
+
+            _visualForceSymbols = new Dictionary<string, string[]>();
+            _visualForceSymbols.Add("analytics:reportChart", new string[] { "cacheAge", "cacheResults", "developerName", "filter", "hideOnError", "rendered", "reportId", "showRefreshButton", "size" });
+            _visualForceSymbols.Add("apex:actionFunction", new string[] { "action", "focus", "id", "immediate", "name", "namespace", "onbeforedomupdate", "oncomplete", "rendered", "reRender", "status", "timeout" });
+            _visualForceSymbols.Add("apex:actionPoller", new string[] { "action", "enabled", "id", "interval", "oncomplete", "onsubmit", "rendered", "reRender", "status", "timeout" });
+            _visualForceSymbols.Add("apex:actionRegion", new string[] { "id", "immediate", "rendered", "renderRegionOnly" });
+            _visualForceSymbols.Add("apex:actionStatus", new string[] { "dir", "for", "id", "lang", "layout", "onclick", "ondblclick", "onkeydown", "onkeypress", "onkeyup", "onmousedown", "onmousemove", "onmouseout", "onmouseover", "onmouseup", "onstart", "onstop", "rendered", "startStyle", "startStyleClass", "startText", "stopStyle", "stopStyleClass", "stopText", "style", "styleClass", "title" });
+            _visualForceSymbols.Add("apex:actionSupport", new string[] { "action", "disabled", "diableDefault", "event", "focus", "id", "immediate", "onbeforedomupdate", "oncomplete", "onsubmit", "rendered", "reRender", "status", "timeout" });
+            _visualForceSymbols.Add("apex:areaSeries", new string[] { "axis", "colorSet", "highlight", "highlightLineWidth", "highlightOpacity", "highlightStrokeColor", "id", "opacity", "rendered", "rendererFn", "showInLegend", "tips", "title", "xField", "yField" });
+            _visualForceSymbols.Add("apex:attribute", new string[] { "access", "assignTo", "default", "description", "encode", "id", "name", "required", "type" });
+            _visualForceSymbols.Add("apex:axis", new string[] { "dashSize", "fields", "grid", "gridFill", "id", "margin", "maximum", "minimum", "position", "rendered", "steps", "title", "type" });
+            /*_visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });
+            _visualForceSymbols.Add("", new string[] { });*/
         }
 
         /// <summary>
@@ -329,10 +482,10 @@ namespace SalesForceLanguage
             // match parts to types
             SymbolTable classSymbol = _language.GetSymbols(className);
             TypedSymbol matchedSymbol = null;
+            bool partFound = false;
 
             if (classSymbol != null)
             {
-                bool partFound = false;
                 bool typeSearchDone = false;
                 bool methodSearchDone = false;
 
@@ -456,6 +609,24 @@ namespace SalesForceLanguage
                         }
                     }
 
+                    // check for inner class
+                    if (!partFound && matchedSymbol != null)
+                    {
+                        SymbolTable symbolType = _language.GetSymbols(matchedSymbol.Type);
+                        if (symbolType != null)
+                        {
+                            foreach (SymbolTable innerClass in symbolType.InnerClasses)
+                            {
+                                if (part == innerClass.Id)
+                                {
+                                    matchedSymbol = innerClass;
+                                    partFound = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     // check for type reference
                     if (!partFound && !typeSearchDone && result.Count == 0)
                     {
@@ -506,7 +677,7 @@ namespace SalesForceLanguage
                 }
             }
 
-            if (result.Count == 0)
+            if (result.Count == 0 || !partFound)
                 return null;
             else
                 return result.ToArray();
@@ -537,8 +708,12 @@ namespace SalesForceLanguage
 
                 // get the word directly before the insertion point
                 string[] parts = GetLineParts(text);
-                if (parts.Length > 0)
-                    word = parts[parts.Length - 1];
+                StringBuilder wordBuilder = new StringBuilder();
+                foreach (string part in parts)
+                    wordBuilder.AppendFormat("{0}.", part);
+                if (wordBuilder.Length > 0)
+                    wordBuilder.Length--;
+                word = wordBuilder.ToString();
             }
 
             // don't do code completions for text that:
@@ -683,6 +858,14 @@ namespace SalesForceLanguage
                         i--;
                     }
                 }
+            }
+
+            // add inner classes
+            if (isTypeReference)
+            {
+                foreach (SymbolTable innerClass in typeSymbol.InnerClasses)
+                    if (innerClass.Modifier.HasFlag(SymbolModifier.Public))
+                        result.Add(innerClass);
             }
 
             return result.OrderBy(s => s.Name).ToArray();
