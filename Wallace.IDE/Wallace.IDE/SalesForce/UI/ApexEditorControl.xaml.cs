@@ -470,12 +470,7 @@ namespace Wallace.IDE.SalesForce.UI
         {
             if (_completionWindow == null && symbols != null && symbols.Length > 0)
             {
-                Style style = new System.Windows.Style(typeof(ListBoxItem));
-                style.Setters.Add(new Setter(ListBoxItem.MarginProperty, new Thickness(2, 0, 20, 0)));
-
                 _completionWindow = new CompletionWindow(textEditor.TextArea);
-                _completionWindow.Resources.Add(typeof(ListBoxItem), style);
-
                 _completionWindow.Style = null;
                 _completionWindow.CompletionList.Style = null;
                 _completionWindow.SizeToContent = SizeToContent.WidthAndHeight;
