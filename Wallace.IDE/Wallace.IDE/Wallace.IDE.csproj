@@ -100,6 +100,7 @@
     <Compile Include="SalesForce\Function\NewTriggerFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshFolderFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshSourceFileFunction.cs" />
+    <Compile Include="SalesForce\Function\ReloadSymbolsFunction.cs" />
     <Compile Include="SalesForce\Function\RunTestsFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\PropertiesFunction.cs" />

@@ -177,8 +177,12 @@ namespace Wallace.IDE
             if (window == null)
                 throw new ArgumentNullException("window");
 
-            window.Owner = Instance._window;
-            window.ShowInTaskbar = false;
+            if (Instance._window.IsLoaded)
+            {
+                window.Owner = Instance._window;
+                window.ShowInTaskbar = false;
+            }
+
             bool? result = window.ShowDialog();
 
             return (result.HasValue && result.Value);

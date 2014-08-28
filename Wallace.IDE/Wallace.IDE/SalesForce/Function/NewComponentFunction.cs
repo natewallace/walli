@@ -66,7 +66,7 @@ namespace Wallace.IDE.SalesForce.Function
         }
 
         /// <summary>
-        /// Create a new class.
+        /// Create a new component.
         /// </summary>
         public override void Execute()
         {

@@ -294,6 +294,18 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
+        /// Reload the symbols cache.
+        /// </summary>
+        public void ReloadSymbolsAsync()
+        {
+            if (IsDownloadingSymbols)
+                return;
+
+            Language.ResetSymbols();
+            LoadSymbolsAsync(true);
+        }
+
+        /// <summary>
         /// Convert an sObject type to a SymbolTable.
         /// </summary>
         /// <param name="objectType">The sObject type to convert.</param>
@@ -412,7 +424,8 @@ namespace Wallace.IDE.SalesForce.Framework
         /// Checks to see if symbols have already been downloaded.  If they haven't, they are loaded from the server
         /// in the background.
         /// </summary>
-        public void LoadSymbolsAsync()
+        /// <param name="forceReload">If true the symbols will be loaded even if there are already symbols present.</param>
+        public void LoadSymbolsAsync(bool forceReload)
         {
             if (_symbolsDownloading)
                 return;
@@ -426,7 +439,7 @@ namespace Wallace.IDE.SalesForce.Framework
                     try
                     {
                         // download apex, parse it and then save to cache
-                        if (Directory.GetFiles(SymbolsFolder).Length == 0)
+                        if (forceReload || Directory.GetFiles(SymbolsFolder).Length == 0)
                         {
                             App.Instance.Dispatcher.Invoke(() => App.SetStatus("Downloading symbols..."));
 

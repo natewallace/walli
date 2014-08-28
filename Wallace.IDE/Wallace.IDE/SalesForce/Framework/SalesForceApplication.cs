@@ -105,6 +105,9 @@ namespace Wallace.IDE.SalesForce.Framework
             TestManagerFunction testManager = new TestManagerFunction();
             App.Instance.Menu.AddFunction(testManager, "PROJECT");
 
+            ReloadSymbolsFunction reloadSymbols = new ReloadSymbolsFunction();
+            App.Instance.Menu.AddFunction(reloadSymbols, "PROJECT");
+
             DeleteSourceFileFunction deleteSourceFileFunction = new DeleteSourceFileFunction();
             App.Instance.Menu.AddFunction(deleteSourceFileFunction, "PROJECT");
             App.Instance.RegisterFunction(deleteSourceFileFunction);
@@ -198,7 +201,7 @@ namespace Wallace.IDE.SalesForce.Framework
                     using (App.Wait("Verifying credentials..."))
                         SalesForceClient.TestLogin(credential);
 
-                    project.LoadSymbolsAsync();
+                    project.LoadSymbolsAsync(false);
 
                     break;
                 }

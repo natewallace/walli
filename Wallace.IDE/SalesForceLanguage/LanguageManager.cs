@@ -199,6 +199,19 @@ namespace SalesForceLanguage
         }
 
         /// <summary>
+        /// Resets the symbol cache.
+        /// </summary>
+        public void ResetSymbols()
+        {
+            lock (_classes)
+            {
+                _classes.Clear();
+                foreach (string file in Directory.GetFiles(SymbolsFolder))
+                    File.Delete(file);
+            }
+        }
+
+        /// <summary>
         /// Update the symbols in the manager.
         /// </summary>
         /// <param name="symbols">The symbols to update.</param>
