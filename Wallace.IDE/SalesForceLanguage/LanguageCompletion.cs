@@ -288,9 +288,13 @@ namespace SalesForceLanguage
                     {
                         parts[i] = parts[i] + parts[i + 1];
                     }
-                    if (parts[i + 1] == "[]")
+                    else if (parts[i + 1] == "[]")
                     {
                         parts[i] = "list";
+                    }
+                    else if (parts[i + 1] == "<>")
+                    {
+                        parts[i] = "map";
                     }
                 }
 

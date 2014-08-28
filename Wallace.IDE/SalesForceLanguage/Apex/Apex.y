@@ -265,7 +265,6 @@
 %token grammar_statement_expression
 %token grammar_statement_expression_list
 %token grammar_statement_list
-%token grammar_static_constructor_body
 %token grammar_static_constructor_declaration
 %token grammar_template_parameter_list
 %token grammar_template_parameters
@@ -445,7 +444,9 @@ predefined_type:
 
 invocation_expression:
 	primary_expression SEPARATOR_PARENTHESES_LEFT argument_list SEPARATOR_PARENTHESES_RIGHT |
-	primary_expression SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT ;
+	primary_expression SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT |
+	primary_expression SEPARATOR_PARENTHESES_LEFT argument_list SEPARATOR_PARENTHESES_RIGHT block |
+	primary_expression SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT block ;
 
 element_access:
 	identifier SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT |
@@ -610,7 +611,8 @@ declaration_statement:
 	local_variable_declaration SEPARATOR_SEMICOLON ;
 
 local_variable_declaration:
-	type local_variable_declarators ;
+	type local_variable_declarators |
+	KEYWORD_FINAL type local_variable_declarators ;
 
 local_variable_declarators:
 	local_variable_declarator |
@@ -889,12 +891,7 @@ constructor_body:
 	SEPARATOR_SEMICOLON ;
 
 static_constructor_declaration:
-	attributes KEYWORD_STATIC static_constructor_body |
-	           KEYWORD_STATIC static_constructor_body ;
-
-static_constructor_body:
-	block |
-	SEPARATOR_SEMICOLON ;
+	KEYWORD_STATIC block ;
 
 array_initializer:
 	SEPARATOR_BRACE_LEFT variable_initializer_list SEPARATOR_BRACE_RIGHT |

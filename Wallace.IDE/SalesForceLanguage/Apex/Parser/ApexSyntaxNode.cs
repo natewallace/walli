@@ -390,6 +390,8 @@ namespace SalesForceLanguage.Apex.Parser
                     return ",";
                 case Tokens.SEPARATOR_DOT:
                     return ".";
+                case Tokens.SEPARATOR_BRACKET_EMPTY:
+                    return "[]";
                 default:
                     return null;
             }
