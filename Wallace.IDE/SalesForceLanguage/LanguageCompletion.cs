@@ -437,12 +437,11 @@ namespace SalesForceLanguage
         /// <returns>The parts to process.</returns>
         private string[] GetLineParts(Stream text)
         {
-            string line = null;
+            StringBuilder lineBuilder = new StringBuilder();
 
             if (text.Position > 0)
             {
-                // get line to calculate completions for
-                StringBuilder lineBuilder = new StringBuilder();
+                // find start of the line
                 int openDelimiterCount = 0;
                 bool stop = false;
 
@@ -456,8 +455,6 @@ namespace SalesForceLanguage
                         case ')':
                         case ']':
                         case '>':
-                            if (openDelimiterCount == 0)
-                                lineBuilder.Insert(0, c);
                             openDelimiterCount++;
                             break;
 
@@ -467,15 +464,9 @@ namespace SalesForceLanguage
                         case '[':
                         case '<':
                             if (openDelimiterCount == 0)
-                            {
                                 stop = true;
-                            }
                             else
-                            {
                                 openDelimiterCount--;
-                                if (openDelimiterCount == 0)
-                                    lineBuilder.Insert(0, c);
-                            }
                             break;
 
                         case ';':
@@ -496,64 +487,109 @@ namespace SalesForceLanguage
                             break;
 
                         default:
-                            if (openDelimiterCount == 0)
-                                lineBuilder.Insert(0, c);
                             break;
                     }
 
                     if (stop)
                         break;
 
+                    lineBuilder.Insert(0, c);
                     text.Position = text.Position - 1;
                 }
-
-                line = lineBuilder.ToString().ToLower();
             }
 
-            if (String.IsNullOrWhiteSpace(line))
-                return new string[0];
-
-            // filter lines
-            string[] lines = line.Split('\n');
-            for (int i = 0; i < lines.Length; i++)
-            {
-                if (lines[i] == null)
-                    continue;
-
-                lines[i] = lines[i].Trim();
-                if (lines[i].StartsWith("//") || lines[i].StartsWith("/*"))
-                    lines[i] = null;
-            }
-
-            // create parts
+            // lex the line
             List<string> parts = new List<string>();
-            foreach (string l in lines)
-                if (l != null)
-                    parts.AddRange(l.Split(new char[] { ' ', '.', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+            StringBuilder partBuilder = new StringBuilder();
+            int openDelimiter = 0;
+            int openTemplate = 0;
 
-            // combine and filter out parts
+            using (MemoryStream lineReader = new MemoryStream(Encoding.ASCII.GetBytes(lineBuilder.ToString())))
+            {
+                ApexLexer lexer = new ApexLexer(lineReader);
+                while (lexer.yylex() > 2)
+                {
+                    if (lexer.yylval != null)
+                    {
+                        switch (lexer.yylval.Token)
+                        {
+                            case Tokens.SEPARATOR_DOT:
+                                if (openDelimiter == 0 && partBuilder.Length > 0)
+                                {
+                                    parts.Add(partBuilder.ToString());
+                                    partBuilder.Clear();
+                                }
+                                break;
+
+                            case Tokens.SEPARATOR_BRACKET_EMPTY:
+                                if (openDelimiter == 0)
+                                {
+                                    partBuilder.Append("[]");
+                                    parts.Add(partBuilder.ToString());
+                                    partBuilder.Clear();
+                                }
+                                break;
+
+                            case Tokens.OPERATOR_LESS_THAN:
+                                if (openDelimiter == 0)
+                                {
+                                    openTemplate++;
+                                    partBuilder.Append(lexer.yytext);
+                                }
+                                break;
+
+                            case Tokens.OPERATOR_GREATER_THAN:
+                            case Tokens.OPERATOR_GREATER_THAN_A:
+                            case Tokens.OPERATOR_GREATER_THAN_B:
+                            case Tokens.OPERATOR_GREATER_THAN_C:
+                                if (openDelimiter == 0)
+                                {
+                                    openTemplate--;
+                                    partBuilder.Append(lexer.yytext);
+                                }
+                                break;
+
+                            case Tokens.SEPARATOR_BRACKET_LEFT:
+                            case Tokens.SEPARATOR_PARENTHESES_LEFT:
+                                if (openDelimiter == 0 || openTemplate > 0)
+                                    partBuilder.Append(lexer.yytext);
+                                openDelimiter++;
+                                break;
+
+                            case Tokens.SEPARATOR_BRACKET_RIGHT:
+                            case Tokens.SEPARATOR_PARENTHESES_RIGHT:
+                                openDelimiter--;
+                                if (openDelimiter == 0 || openTemplate > 0)
+                                    partBuilder.Append(lexer.yytext);
+                                break;
+
+                            default:
+                                if (openDelimiter == 0)
+                                    partBuilder.Append(lexer.yytext);
+                                break;
+                        }
+                    }
+                }
+
+                if (partBuilder.Length > 0)
+                    parts.Add(partBuilder.ToString());
+            }
+
+            // process parts
             for (int i = 0; i < parts.Count; i++)
             {
-                if (i + 1 < parts.Count)
+                if (parts[i].EndsWith("[]"))
                 {
-                    if (parts[i + 1] == "()")
+                    int index = i;
+                    while (parts[index].EndsWith("[]"))
                     {
-                        parts[i] = parts[i] + parts[i + 1];
-                    }
-                    else if (parts[i + 1] == "[]")
-                    {
-                        parts[i] = "list";
+                        parts[index] = parts[index].Substring(0, parts[index].Length - 2).ToLower();
+                        parts.Insert(index + 1, "get()");
+                        i++;
                     }
                 }
-
-                if (parts[i] == "if()" ||
-                    parts[i] == "()" ||
-                    parts[i] == "[]" ||
-                    parts[i] == "<>")
-                {
-                    parts.RemoveAt(i);
-                    i--;
-                }
+                else
+                    parts[i] = parts[i].ToLower();
             }
 
             return parts.ToArray();
@@ -593,7 +629,7 @@ namespace SalesForceLanguage
                     if (parts[i].EndsWith("()"))
                     {
                         string methodName = part.Substring(0, part.IndexOf('('));
-                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.Type);
+                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.FullType);
                         while (externalClass != null && !partFound)
                         {
                             foreach (Method m in externalClass.Methods)
@@ -616,14 +652,14 @@ namespace SalesForceLanguage
                     // variables
                     else
                     {
-                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.Type);
+                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.FullType);
 
                         if (i == 0)
                         {
                             // this keyword
                             if (part == "this")
                             {
-                                matchedSymbol = new Field(new TextPosition(0, 0), "this", null, SymbolModifier.None, classSymbol.Type);
+                                matchedSymbol = new Field(new TextPosition(0, 0), "this", null, SymbolModifier.None, classSymbol.FullType);
                                 partFound = true;
                             }
                             else
@@ -707,7 +743,7 @@ namespace SalesForceLanguage
                     // check for inner class
                     if (!partFound && matchedSymbol != null)
                     {
-                        SymbolTable symbolType = _language.GetSymbols(matchedSymbol.Type);
+                        SymbolTable symbolType = _language.GetSymbols(matchedSymbol.FullType);
                         if (symbolType != null)
                         {
                             foreach (SymbolTable innerClass in symbolType.InnerClasses)
@@ -927,7 +963,7 @@ namespace SalesForceLanguage
             {
                 isTypeReference = false;
                 if (symbol is TypedSymbol)
-                    typeSymbol = _language.GetSymbols((symbol as TypedSymbol).Type);
+                    typeSymbol = _language.GetSymbols((symbol as TypedSymbol).FullType);
             }
 
             if (typeSymbol == null)
@@ -1003,7 +1039,7 @@ namespace SalesForceLanguage
             else
             {
                 if (matchedSymbols[matchedSymbols.Length - 2] is TypedSymbol)
-                    parent = _language.GetSymbols((matchedSymbols[matchedSymbols.Length - 2] as TypedSymbol).Type);
+                    parent = _language.GetSymbols((matchedSymbols[matchedSymbols.Length - 2] as TypedSymbol).FullType);
                 isTypeReference = (matchedSymbols[matchedSymbols.Length - 2] is SymbolTable);
             }
 

@@ -163,6 +163,84 @@ namespace SalesForceLanguage.Apex.CodeModel
         #region Methods
 
         /// <summary>
+        /// Generate a concrete type from a template.
+        /// </summary>
+        /// <param name="symbol">The symbol to create a concrete type for.</param>
+        /// <returns>The concrete type.</returns>
+        public SymbolTable GenerateFromTemplate(TypedSymbol symbol)
+        {
+            List<Field> fields = new List<Field>();
+            foreach (Field f in Fields)
+            {
+                fields.Add(new Field(f.Location, f.Name, f.Span, f.Modifier, ResolveType(f.Type, f.TemplateParameters)));
+            }
+
+            List<Constructor> constructors = new List<Constructor>();
+            foreach (Constructor c in Constructors)
+            {
+                List<Parameter> parameters = new List<Parameter>();
+                foreach (Parameter p in c.Parameters)
+                    parameters.Add(new Parameter(p.Location, p.Name, p.Span, p.Modifier, ResolveType(p.Type, symbol.TemplateParameters)));
+
+                constructors.Add(new Constructor(c.Location, c.Name, c.Span, c.Modifier, parameters.ToArray()));
+            }
+
+            List<Property> properties = new List<Property>();
+            foreach (Property p in Properties)
+            {
+                properties.Add(new Property(p.Location, p.Name, p.Span, p.Modifier, ResolveType(p.Type, symbol.TemplateParameters)));
+            }
+
+            List<Method> methods = new List<Method>();
+            foreach (Method m in Methods)
+            {
+                List<Parameter> parameters = new List<Parameter>();
+                foreach (Parameter p in m.Parameters)
+                    parameters.Add(new Parameter(p.Location, p.Name, p.Span, p.Modifier, ResolveType(p.Type, symbol.TemplateParameters)));
+
+                methods.Add(new Method(m.Location, m.Name, m.Span, m.Modifier, ResolveType(m.Type, symbol.TemplateParameters), parameters.ToArray()));
+            }
+
+            return new SymbolTable(
+                Location,
+                Name,
+                Span,
+                Attributes,
+                Modifier,
+                TableType,
+                VariableScopes,
+                fields.ToArray(),
+                constructors.ToArray(),
+                properties.ToArray(),
+                methods.ToArray(),
+                Extends,
+                Interfaces,
+                InnerClasses);
+        }
+
+        /// <summary>
+        /// Resolves the typeName using the typeParameters.
+        /// </summary>
+        /// <param name="typeName">The type name to resolve.</param>
+        /// <param name="typeParameters">The parameters to use.</param>
+        /// <returns>The resolved type name.</returns>
+        private string ResolveType(string typeName, string[] typeParameters)
+        {
+            if (String.IsNullOrWhiteSpace(typeName) || typeName[0] != 'T')
+                return typeName;
+
+            int index = -1;
+            if (!int.TryParse(typeName.Substring(1), out index))
+                return typeName;
+
+            index = index - 1;
+            if (index < 0 || index >= typeParameters.Length)
+                return typeName;
+
+            return typeParameters[index];
+        }
+
+        /// <summary>
         /// Check to see if this symbol table has the given attribute.
         /// </summary>
         /// <param name="name">The name of the attribute to check for.</param>

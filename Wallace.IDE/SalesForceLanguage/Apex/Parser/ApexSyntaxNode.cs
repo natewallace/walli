@@ -333,6 +333,9 @@ namespace SalesForceLanguage.Apex.Parser
                 case Tokens.OPERATOR_LESS_THAN:
                     return "<";
                 case Tokens.OPERATOR_GREATER_THAN:
+                case Tokens.OPERATOR_GREATER_THAN_A:
+                case Tokens.OPERATOR_GREATER_THAN_B:
+                case Tokens.OPERATOR_GREATER_THAN_C:
                     return ">";
                 case Tokens.OPERATOR_LESS_THAN_OR_EQUAL:
                     return "<=";

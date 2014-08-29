@@ -1632,21 +1632,21 @@
 		public List();
 		public List(List listToCopy);
 		public List(Set setToCopy);
-		public Void add(Object listElement);
-		public Void add(Integer index, Object listElement);
+		public Void add(T1 listElement);
+		public Void add(Integer index, T1 listElement);
 		public Void addAll(List fromList);
 		public Void addAll(Set fromSet);
 		public Void clear();
-		public List<Object> clone();
-		public List<Object> deepClone(Boolean opt_preserve_id, Boolean opt_preserve_readonly_timestamps, Boolean opt_preserve_autonumber);
+		public List<T1> clone();
+		public List<T1> deepClone(Boolean opt_preserve_id, Boolean opt_preserve_readonly_timestamps, Boolean opt_preserve_autonumber);
 		public Boolean equals(List list2);
-		public Object get(Integer index);
+		public T1 get(Integer index);
 		public Schema.SObjectType getSObjectType();
 		public Integer hashCode();
 		public Boolean isEmpty();
 		public Iterator iterator();
-		public Object remove(Integer index);
-		public Void set(Integer index, Object listElement);
+		public T1 remove(Integer index);
+		public Void set(Integer index, T1 listElement);
 		public Integer size();
 		public Void sort();
 	}
@@ -1662,21 +1662,21 @@
 		public Map(Map mapToCopy);
 		public Map(List<sObject> recordList);
 		public Void clear();
-		public Map<Object, Object> clone();
-		public Boolean containsKey(Object key);
-		public Map<Object, Object> deepClone();
+		public Map<T1, T2> clone();
+		public Boolean containsKey(T1 key);
+		public Map<T1, T2> deepClone();
 		public Boolean equals(Map map2);
-		public Object get(Object key);
+		public T2 get(T1 key);
 		public Schema.SObjectType getSObjectType();
 		public Integer hashCode();
 		public Boolean isEmpty();
-		public Set<Object> keySet();
-		public Object put(Object key, Object value);
+		public Set<T1> keySet();
+		public T2 put(T1 key, T2 value);
 		public Void putAll(Map fromMap);
 		public putAll(sObject[] sobjectArray);
-		public Object remove(Key key);
+		public T2 remove(T1 key);
 		public Integer size();
-		public List<Object> values();
+		public List<T2> values();
 	}
 
 	public class Matcher {
@@ -2067,6 +2067,232 @@
 		public static List<Schema.DescribeSObjectResult> describeSObjects(List<String> types);
 		public static List<Schema.DescribeTabSetResult> describeTabs();
 		public static List<Schema.DescribeDataCategoryGroupStructureResult> describeDataCategoryGroupStructures(List<Schema.DataCategoryGroupSobjectTypePair> pairs);
+
+		public class ChildRelationship {
+			public Schema.SObjectType getChildSObject();
+			public Schema.SObjectField getField();
+			public String getRelationshipName();
+			public Boolean isCascadeDelete();
+			public Boolean isDeprecatedAndHidden();
+			public Boolean isRestrictedDelete();
+		}
+
+		public class DataCategory {
+			public Schema.DataCategory getChildCategories();
+			public String getLabel();
+			public String getName();
+		}
+
+		public class DataCategoryGroupSobjectTypePair {
+			public DataCategoryGroupSobjectTypePair();
+			public String getDataCategoryGroupName();
+			public String getSobject();
+			public String setDataCategoryGroupName(String name);
+			public Void setSobject(String sObjectName);
+		}
+
+		public class DescribeColorResult {
+			public String getColor();
+			public String getContext();
+			public String getTheme();
+		}
+
+		public class DescribeDataCategoryGroupResult {
+			public Integer getCategoryCount();
+			public String getDescription();
+			public String getLabel();
+			public String getName();
+			public String getSobject();
+		}
+
+		public class DescribeDataCategoryGroupStructureResult {
+			public String getDescription();
+			public String getLabel();
+			public String getName();
+			public String getSobject();
+			public List<Schema.DataCategory> getTopCategories();
+		}
+
+		public class DescribeFieldResult {
+			public Integer getByteLength();
+			public String getCalculatedFormula();
+			public Schema.sObjectField getController();
+			public Object getDefaultValue();
+			public String getDefaultValueFormula();
+			public Integer getDigits();
+			public String getInlineHelpText();
+			public String getLabel();
+			public Integer getLength();
+			public String getLocalName();
+			public String getName();
+			public List<Schema.PicklistEntry> getPicklistValues();
+			public Integer getPrecision();
+			public List <Schema.sObjectType> getReferenceTo();
+			public String getRelationshipName();
+			public Integer getRelationshipOrder();
+			public Integer getScale();
+			public Schema.SOAPType getSOAPType();
+			public Schema.sObjectField getSObjectField();
+			public Schema.DisplayType getType();
+			public Boolean isAccessible();
+			public Boolean isAutoNumber();
+			public Boolean isCalculated();
+			public Boolean isCascadeDelete();
+			public Boolean isCaseSensitive();
+			public Boolean isCreateable();
+			public Boolean isCustom();
+			public Boolean isDefaultedOnCreate();
+			public Boolean isDependentPicklist();
+			public Boolean isDeprecatedAndHidden();
+			public Boolean isExternalID();
+			public Boolean isFilterable();
+			public Boolean isGroupable();
+			public Boolean isHtmlFormatted();
+			public Boolean isIdLookup();
+			public Boolean isNameField();
+			public Boolean isNamePointing();
+			public Boolean isNillable();
+			public Boolean isPermissionable();
+			public Boolean isRestrictedDelete();
+			public Boolean isRestrictedPicklist();
+			public Boolean isSortable();
+			public Boolean isUnique();
+			public Boolean isUpdateable();
+			public Boolean isWriteRequiresMasterRead();
+		}
+
+		public class DescribeIconResult {
+			public String getContentType();
+			public Integer getHeight();
+			public String getTheme();
+			public String getUrl();
+			public Integer getWidth();
+		}
+
+		public class DescribeSObjectResult {
+			public Schema.SObjectTypeFields fields();
+			public Schema.SObjectTypeFields fieldSets();
+			public Schema.ChildRelationship getChildRelationships();
+			public String getKeyPrefix();
+			public String getLabel();
+			public String getLabelPlural();
+			public String getLocalName();
+			public String getName();
+			public List<Schema.RecordTypeInfo> getRecordTypeInfos();
+			public Schema.RecordTypeInfo getRecordTypeInfosById();
+			public Schema.RecordTypeInfo getRecordTypeInfosByName();
+			public Schema.SObjectType getSobjectType();
+			public Boolean isAccessible();
+			public Boolean isCreateable();
+			public Boolean isCustom();
+			public Boolean isCustomSetting();
+			public Boolean isDeletable();
+			public Boolean isDeprecatedAndHidden();
+			public Boolean isFeedEnabled();
+			public Boolean isMergeable();
+			public Boolean isQueryable();
+			public Boolean isSearchable();
+			public Boolean isUndeletable();
+			public Boolean isUpdateable();
+		}
+
+		public class DescribeTabResult {
+			public List<Schema.DescribeColorResult> getColors();
+			public List<Schema.DescribeIconResult> getIcons();
+			public String getLabel();
+			public String getMiniIconUrl();
+			public String getSobjectName();
+			public String getUrl();
+			public Boolean isCustom();
+		}
+
+		public class DescribeTabSetResult {
+			public String getLabel();
+			public String getLogoUrl();
+			public String getNamespace();
+			public List<Schema.DescribeTabResult> getTabs();
+			public Boolean isSelected();
+		}
+
+		public enum DisplayType {
+			anytype,
+			base64,
+			Boolean,
+			Combobox,
+			Currency,
+			DataCategoryGroupReference,
+			Date,
+			DateTime,
+			Double,
+			Email,
+			EncryptedString,
+			ID,
+			Integer,
+			MultiPicklist,
+			Percent,
+			Phone,
+			Picklist,
+			Reference,
+			String,
+			TextArea,
+			Time,
+			URL
+		}
+
+		public class FieldSet {
+			public String getDescription();
+			public List<FieldSetMember> getFields();
+			public String getLabel();
+			public String getName();
+			public String getNamespace();
+			public Schema.SObjectType getSObjectType();
+		}
+
+		public class FieldSetMember {
+			public Boolean getDBRequired();
+			public String getFieldPath();
+			public String getLabel();
+			public Boolean getRequired();
+			public Schema.DisplayType getType();
+		}
+
+		public class PicklistEntry {
+			public String getLabel();
+			public String getValue();
+			public Boolean isActive();
+			public Boolean isDefaultValue();
+		}
+
+		public class RecordTypeInfo {
+			public String getName();
+			public ID getRecordTypeId();
+			public Boolean isAvailable();
+			public Boolean isDefaultRecordTypeMapping();
+		}
+
+		public enum SOAPType {
+			anytype,
+			base64binary,
+			Boolean,
+			Date,
+			DateTime,
+			Double,
+			ID,
+			Integer,
+			String,
+			Time
+		}
+
+		public class SObjectField {
+			public Schema.DescribeFieldResult getDescribe();
+		}
+
+		public class SObjectType {
+			public Schema.DescribeSObjectResult getDescribe();
+			public sObject newSObject();
+			public sObject newSObject(ID Id);
+			public sObject newSObject(ID recordTypeId, Boolean loadDefaults);
+		}
 	}
 
 	public class Search {
@@ -2090,20 +2316,20 @@
 		public Set();
 		public Set(Set setToCopy);
 		public Set(List listToCopy);
-		public Boolean add(Object setElement);
-		public Boolean addAll(List<Object> fromList);
-		public Boolean addAll(Set<Object> fromSet);
+		public Boolean add(T1 setElement);
+		public Boolean addAll(List<T1> fromList);
+		public Boolean addAll(Set<T1> fromSet);
 		public Void clear();
-		public Set<Object> clone();
-		public Boolean contains(Object setElement);
-		public Boolean containsAll(List<Object> listToCompare);
-		public Boolean containsAll(Set<Object> setToCompare);
-		public Boolean equals(Set<Object> set2);
+		public Set<T1> clone();
+		public Boolean contains(T1 setElement);
+		public Boolean containsAll(List<T1> listToCompare);
+		public Boolean containsAll(Set<T1> setToCompare);
+		public Boolean equals(Set<T1> set2);
 		public Integer hashCode();
 		public Boolean isEmpty();
-		public Boolean remove(Object setElement);
-		public Boolean removeAll(List<Object> listOfElementsToRemove);
-		public Boolean retainAll(List<Object> listOfElementsToRetain);
+		public Boolean remove(T1 setElement);
+		public Boolean removeAll(List<T1> listOfElementsToRemove);
+		public Boolean retainAll(List<T1> listOfElementsToRetain);
 		public Boolean retainAll(Set setOfElementsToRetain);
 		public Integer size();
 	}
@@ -2141,6 +2367,11 @@
 		public static Boolean isRegistrationEnabled();
 		public static System.PageReference login(String username, String password, String startUrl);
 		public static Void setPortalUserAsAuthProvider(sObject user, String contactId);
+
+		public interface UrlRewriter {
+			System.PageReference[] generateUrlFor(System.PageReference[] urls);
+			System.PageReference mapRequestUrl(System.PageReference url);
+		}
 	}
 
 	public class sObject {
@@ -2775,5 +3006,15 @@
 		public Void writeProcessingInstruction(String target, String data);
 		public Void writeStartDocument(String encoding, String version);
 		public Void writeStartElement(String prefix, String localName, String namespaceURI);
+	}
+
+	public class Support {
+		public interface EmailTemplateSelector {
+			ID getDefaultTemplateId(ID caseId);
+		}
+
+		public interface MilestoneTriggerTimeCalculator {
+			Integer calculateMilestoneTriggerTime(String caseId, String milestoneTypeId);
+		}
 	}
 }

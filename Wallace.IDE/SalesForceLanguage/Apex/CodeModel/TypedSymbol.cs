@@ -70,6 +70,11 @@ namespace SalesForceLanguage.Apex.CodeModel
         #region Properties
 
         /// <summary>
+        /// The full type name value including template parameters.
+        /// </summary>
+        public string FullType { get; set; }
+
+        /// <summary>
         /// The type for the symbol.
         /// </summary>
         public string Type
@@ -80,6 +85,8 @@ namespace SalesForceLanguage.Apex.CodeModel
             }
             set
             {
+                FullType = value;
+
                 if (String.IsNullOrWhiteSpace(value))
                 {
                     _type = String.Empty;

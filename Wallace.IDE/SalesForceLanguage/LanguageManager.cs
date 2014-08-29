@@ -125,23 +125,35 @@ namespace SalesForceLanguage
         /// <returns>The symbols if found, null if not found.</returns>
         private SymbolTable LookupSymbol(string type)
         {
+            SymbolTable result = null;
+
+            // normalize name
+            TypedSymbol typedSymbol = new TypedSymbol(new TextPosition(0, 0), null, null, SymbolModifier.None, type);
+            type = typedSymbol.Type.ToLower();
+
             // do simple lookup
             if (_classes.ContainsKey(type))
-                return _classes[type];
-            if (_predefinedClasses.ContainsKey(type))
-                return _predefinedClasses[type];
-
+            {
+                result = _classes[type];
+            }
+            else if (_predefinedClasses.ContainsKey(type))
+            {
+                result = _predefinedClasses[type];
+            }
             // check for system types
-            if (!type.Contains('.'))
+            else if (!type.Contains('.'))
             {
                 type = "system." + type;
                 if (_classes.ContainsKey(type))
-                    return _classes[type];
-                if (_predefinedClasses.ContainsKey(type))
-                    return _predefinedClasses[type];
+                    result = _classes[type];
+                else if (_predefinedClasses.ContainsKey(type))
+                    result = _predefinedClasses[type];
             }
 
-            return null;
+            if (typedSymbol.TemplateParameters.Length > 0)
+                return result.GenerateFromTemplate(typedSymbol);
+            else
+                return result;
         }
 
         /// <summary>
@@ -154,10 +166,6 @@ namespace SalesForceLanguage
             if (String.IsNullOrWhiteSpace(type))
                 return null;
 
-            // normalize name
-            TypedSymbol typedSymbol = new TypedSymbol(new TextPosition(0,0), null, null, SymbolModifier.None, type);
-            type = typedSymbol.Type.ToLower();
-
             // do initial lookup
             SymbolTable result = LookupSymbol(type);
             if (result != null)
@@ -166,7 +174,7 @@ namespace SalesForceLanguage
             // check for inner class reference
             if (type.Contains('.'))
             {
-                string[] parts = type.Split('.');
+                string[] parts = type.ToLower().Split('.');
                 if (parts.Length > 0)
                 {
                     result = LookupSymbol(parts[0]);
