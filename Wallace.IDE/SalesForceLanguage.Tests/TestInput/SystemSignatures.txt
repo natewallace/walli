@@ -1103,6 +1103,73 @@
 		}
 	}
 
+	public class Dom {
+		public class Document {
+			public Document();
+			public Dom.XmlNode createRootElement(String name, String namespace, String prefix);
+			public Dom.XmlNode getRootElement();
+			public Void load(String xml);
+			public String toXmlString();
+		}
+
+		public class XmlNode {
+			public Dom.XmlNode addChildElement(String name, String namespace, String prefix);
+			public Dom.XmlNode addCommentNode(String text);
+			public Dom.XmlNode addTextNode(String text);
+			public String getAttribute(String key, String keyNamespace);
+			public Integer getAttributeCount();
+			public String getAttributeKeyAt(Integer index);
+			public String getAttributeKeyNsAt(Integer index);
+			public String getAttributeValue(String key, String keyNamespace);
+			public String getAttributeValueNs(String key, String keyNamespace);
+			public Dom.XmlNode getChildElement(String name, String namespace);
+			public Dom.XmlNode[] getChildElements();
+			public Dom.XmlNode[] getChildren();
+			public String getName();
+			public String getNamespace();
+			public String getNamespaceFor(String prefix);
+			public Dom.XmlNodeType getNodeType();
+			public Dom.XmlNode getParent();
+			public String getPrefixFor(String namespace);
+			public String getText();
+			public Boolean removeAttribute(String key, String keyNamespace);
+			public Boolean removeChild(Dom.XmlNode childNode);
+			public Void setAttribute(String key, String value);
+			public Void setAttributeNs(String key, String value, String keyNamespace, String valueNamespace);
+			public Void setNamespace(String prefix, String namespace);
+		}
+	}
+
+	public class Flow {
+		public class Interview {
+			public Object getVariableValue(String variableName);
+			public Void start();
+		}
+	}
+
+	public class KbManagement {
+		public class PublishingService {
+			public static Void archiveOnlineArticle(String articleId, Datetime scheduledDate);
+			public static Void assignDraftArticleTask(String articleId, String assigneeID, String instructions, Datetime dueDate, Boolean sendEmailNotification);
+			public static Void assignDraftTranslationTask(String articleVersionId, String assigneeID, String instructions, Datetime dueDate, Boolean sendEmailNotification);
+			public static Void cancelScheduledArchivingOfArticle(String articleId);
+			public static Void cancelScheduledPublicationOfArticle(String articleId);
+			public static Void completeTranslation(String articleVersionId);
+			public static Void deleteArchivedArticle(String articleId);
+			public static Void deleteArchivedArticleVersion(String articleId, Integer versionNumber);
+			public static Void deleteDraftArticle(String articleId);
+			public static Void deleteDraftTranslation(String articleVersionId);
+			public static String editArchivedArticle(String articleId);
+			public static String editOnlineArticle(String articleId, Boolean unpublish);
+			public static String editPublishedTranslation(String articleId, String language, Boolean unpublish);
+			public static Void publishArticle(String articleId, Boolean flagAsNew);
+			public static String restoreOldVersion(String articleId, Integer versionNumber);
+			public static Void scheduleForPublication(String articleId, Datetime scheduledDate);
+			public static Void setTranslationToIncomplete(String articleVersionId);
+			public static String submitForTranslation(String articleId, String language, String assigneeID, Datetime dueDate);
+		}
+	}
+
 	public class Date {
 		public Date addDays(Integer addlDays);
 		public Date addMonths(Integer addlMonths);
@@ -1455,6 +1522,47 @@
 		public Void skipChildren();
 	}
 
+	public class Process {
+		public interface Plugin {
+			Process.PluginDescribeResult describe();
+			Process.PluginResult invoke(Process.PluginRequest request);
+		}
+
+		public class PluginDescribeResult {
+			public PluginDescribeResult();
+			public String Description {get; set;}
+			public List<Process.PluginDescribeResult.InputParameter> InputParameters {get; set;}
+			public String Name {get; set;}
+			public List<Process.PluginDescribeResult.OutputParameter> OutputParameters {get; set;}
+			public String Tag {get; set;}
+
+			public class InputParameter {
+				public InputParameter(String name, String description, Process.PluginDescribeResult.ParameterType parameterType, Boolean required);
+				public InputParameter(String name, Process.PluginDescribeResult.ParameterType parameterType, Boolean required);
+				public String Description {get; set;}
+				public String Name {get; set;}
+				public Process.PluginDescribeResult.ParameterType ParameterType {get; set;}
+				public Boolean Required {get; set;}
+			}
+
+			public class OutputParameter {
+				public OutputParameter(String name, String description, Process.PluginDescribeResult.ParameterType parameterType);
+				public OutputParameter(String name, Process.PluginDescribeResult.ParameterType parameterType);
+				public String Description {get; set;}
+				public String Name {get; set;}
+				public Process.PluginDescribeResult.ParameterType ParameterType {get; set;}
+			}
+		}
+
+		public class PluginRequest {
+			public MAP<String,ANY> inputParameters {get; set;}
+		}
+
+		public class PluginResult {
+			public MAP<String, ANY> outputParameters {get; set;}
+		}
+	}
+
 	public enum JSONToken {
 		END_ARRAY,
 		END_OBJECT,
@@ -1667,6 +1775,124 @@
 		public Void reserveSingleEmailCapacity(Integer amountReserved);
 		public Messaging.SendEmailResult[] sendEmail(Messaging.Email[] emails, Boolean allOrNothing);
 		public Messaging.SendEmailResult[] sendEmailMessage(List <ID> emailMessageIds, Boolean allOrNothing);
+
+		public class Email {
+			public Void setBccSender(Boolean bcc);
+			public Void setReplyTo(String replyAddress);
+			public Void setTemplateID(ID templateID);
+			public Void setSaveAsActivity(Boolean saveAsActivity);
+			public Void setSenderDisplayName(String displayName);
+			public Void setUseSignature(Boolean useSignature);
+		}
+
+		public class EmailFileAttachment {
+			public EmailFileAttachment();
+			public Void setBody(Blob attachment);
+			public Void setContentType(String content_type);
+			public Void setFileName(String file_name);
+			public Void setInline(Boolean contentDisposition);
+		}
+
+		public class InboundEmail {
+			public InboundEmail();
+			public InboundEmail.BinaryAttachment[] binaryAttachments {get; set;}
+			public String[] ccAddresses {get; set;}
+			public String fromAddress {get; set;}
+			public String fromName {get; set;}
+			public InboundEmail.Header[] headers {get; set;}
+			public String htmlBody {get; set;}
+			public Boolean htmlBodyIsTruncated {get; set;}
+			public String inReplyTo {get; set;}
+			public String messageId {get; set;}
+			public String plainTextBody {get; set;}
+			public Boolean plainTextBodyIsTruncated {get; set;}
+			public String[] references {get; set;}
+			public String replyTo {get; set;}
+			public String subject {get; set;}
+			public InboundEmail.TextAttachment[] textAttachments {get; set;}
+			public String[] toAddresses {get; set;}
+
+			public class BinaryAttachment {
+				public BinaryAttachment();
+				public Blob body {get; set;}
+				public String fileName {get; set;}
+				public String mimeTypeSubType {get; set;}
+			}
+
+			public class TextAttachment {
+				public TextAttachment();
+				public String body {get; set;}
+				public Boolean bodyIsTruncated {get; set;}
+				public String charset {get; set;}
+				public String fileName {get; set;}
+				public String mimeTypeSubType {get; set;}
+			}
+
+			public class Header {
+				public String name {get; set;}
+				public String value {get; set;}
+			}
+		}
+
+		public class InboundEmailResult {
+			public String message {get; set;}
+			public Boolean success {get; set;}
+		}
+
+		public class InboundEnvelope {
+			public String fromAddress {get; set;}
+			public String toAddress {get; set;}
+		}
+
+		public class MassEmailMessage {
+			public MassEmailMessage();
+			public Void setDescription(String description);
+			public Void setTargetObjectIds(ID[] targetObjectIds);
+			public Void setWhatIds(ID[] whatIds);
+		}
+
+		public class PushNotification {
+			public PushNotification();
+			public PushNotification(Map<String, Object> payload);
+			public void send(String application, Set<String> users);
+			public void setPayload(Map<String, Object> payload);
+			public void setTtl(Integer ttl);
+		}
+
+		public class PushNotificationPayload {
+			public static Map<String, Object> apple(String alert, String sound, Integer badgeCount, Map<String, Object> userData);
+			public static Map<String, Object> apple(String alertBody, String actionLocKey, String locKey, String[] locArgs, String launchImage, String sound, Integer badgeCount, Map<String, Object> userData);
+		}
+
+		public class SendEmailError {
+			public String[] getFields();
+			public String getMessage();
+			public System.StatusCode getStatusCode();
+			public String getTargetObjectId();
+		}
+
+		public class SendEmailResult {
+			public SendEmailError[] getErrors();
+			public Boolean isSuccess();
+		}
+
+		public class SingleEmailMessage {
+			public SingleEmailMessage();
+			public Void setBccAddresses(String[] bccAddresses);
+			public Void setCcAddresses(String[] ccAddresses);
+			public Void setCharset(String charset);
+			public Void setDocumentAttachments(ID[] docAttachments);
+			public Void setFileAttachments(EmailFileAttachment[] fileAttachments);
+			public Void setHtmlBody(String htmlBody);
+			public Void setInReplyTo(String inReplyTo);
+			public Void setPlainTextBody(String plainTextBody);
+			public Void setOrgWideEmailAddressId(ID emailAddressId);
+			public Void setReferences(String references);
+			public Void setSubject(String subject);
+			public Void setTargetObjectId(ID targetObjectId);
+			public Void setToAddresses(String[] toAddresses);
+			public Void setWhatId(ID whatId);
+		}
 	}
 
 	public class MultiStaticResourceCalloutMock {
@@ -1717,6 +1943,83 @@
 		public static QuickAction.QuickActionResult performQuickAction(QuickAction.QuickActionRequest performQuickAction, Boolean allOrNothing);
 		public static List<QuickAction.QuickActionResult> performQuickActions(List<QuickAction.QuickActionRequest> performQuickActions);
 		public static List<QuickAction.QuickActionResult> performQuickActions(List<QuickAction.QuickActionRequest> performQuickActions, Boolean allOrNothing);
+
+		public class DescribeAvailableQuickActionResult {
+			public String getLabel();
+			public String getName();
+			public String getType();
+		}
+
+		public class DescribeLayoutComponent {
+			public Integer getDisplayLines();
+			public Integer getTabOrder();
+			public String getType();
+			public String getValue();
+		}
+
+		public class DescribeLayoutItem {
+			public String getLabel();
+			public List<QuickAction.DescribeLayoutComponent> getLayoutComponents();
+			public Boolean isEditable();
+			public Boolean isPlaceholder();
+			public Boolean isRequired();
+		}
+
+		public class DescribeLayoutRow {
+			public List<QuickAction.DescribeLayoutItem> getLayoutItems();
+			public Integer getNumItems();
+		}
+
+		public class DescribeLayoutSection {
+			public Integer getColumns();
+			public String getHeading();
+			public List<QuickAction.DescribeLayoutRow> getLayoutRows();
+			public Integer getRows();
+			public Boolean isUseCollapsibleSection();
+			public Boolean isUseHeading();
+		}
+
+		public class DescribeQuickActionDefaultValue {
+			public String getDefaultValue();
+			public String getField();
+		}
+
+		public class DescribeQuickActionResult {
+			public String getCanvasApplicationName();
+			public List<QuickAction.DescribeQuickActionDefaultValue> getDefaultValues();
+			public Integer getHeight();
+			public String getIconName();
+			public String getIconUrl();
+			public List<Schema.DescribeIconResult> getIcons();
+			public String getLabel();
+			public QuickAction.DescribeLayoutSection getLayout();
+			public String getMiniIconUrl();
+			public String getName();
+			public String getSourceSobjectType();
+			public String getTargetParentField();
+			public String getTargetRecordTypeId();
+			public String getTargetSobjectType();
+			public String getType();
+			public String getVisualforcePageName();
+			public Integer getWidth();
+		}
+
+		public class QuickActionRequest {
+			public QuickActionRequest();
+			public Id getContextId();
+			public String getQuickActionName();
+			public SObject getRecord();
+			public Void setContextId(Id contextId);
+			public Void setQuickActionName(String name);
+			public Void setRecord(SObject record);
+		}
+
+		public class QuickActionResult {
+			public List<Database.Error> getErrors();
+			public List<Id> getIds();
+			public Boolean isCreated();
+			public Boolean isSuccess();
+		}
 	}
 
 	public class ResetPasswordResult {
@@ -2052,6 +2355,260 @@
 		public static Void stopTest();
 		public static Void testInstall(InstallHandler installImp, Version ver, Boolean isPush);
 		public static Void testUninstall(UninstallHandler uninstImp);
+	}
+
+	public class Reports {
+		public class AggregateColumn {
+			public String getName();
+			public String getLabel();
+			public Reports.ColumnDataType getDataType();
+			public String getAcrossGroupingContext();
+			public String getDownGroupingContext();
+		}
+
+		public enum ColumnDataType {
+			BOOLEAN_DATA,
+			COMBOBOX_DATA,
+			CURRENCY_DATA,
+			DATETIME_DATA,
+			DATE_DATA,
+			DOUBLE_DATA,
+			EMAIL_DATA,
+			ID_DATA,
+			INT_DATA,
+			MULTIPICKLIST_DATA,
+			PERCENT_DATA,
+			PHONE_DATA,
+			PICKLIST_DATA,
+			REFERENCE_DATA,
+			STRING_DATA,
+			TEXTAREA_DATA,
+			TIME_DATA,
+			URL_DATA
+		}
+
+		public enum ColumnSortOrder {
+			ASCENDING,
+			DESCENDING
+		}
+
+		public enum DateGranularity {
+			DAY,
+			DAY_IN_MONTH,
+			FISCAL_PERIOD,
+			FISCAL_QUARTER,
+			FISCAL_WEEK,
+			FISCAL_YEAR,
+			MONTH,
+			MONTH_IN_YEAR,
+			NONE,
+			QUARTER,
+			WEEK,
+			YEAR
+		}
+
+		public class DetailColumn {
+			public String getName();
+			public String getLabel();
+			public Reports.ColumnDataType getDataType();
+		}
+
+		public class Dimension {
+			public LIST<Reports.GroupingValue> getGroupings();
+		}
+
+		public class FilterOperator {
+			public String getLabel();
+			public String getName();
+		}
+
+		public class FilterValue {
+			public String getLabel();
+			public String getName();
+		}
+
+		public class GroupingColumn {
+			public String getName();
+			public String getLabel();
+			public Reports.ColumnDataType getDataType();
+			public Integer getGroupingLevel();
+		}
+
+		public class GroupingInfo {
+			public String getName();
+			public Reports.ColumnSortOrder getSortOrder();
+			public Reports.DateGranularity getDateGranularity();
+			public String getSortAggregate();
+		}
+
+		public class GroupingValue {
+			public LIST<Reports.GroupingValue> getGroupings();
+			public String getKey();
+			public String getLabel();
+			public Object getValue();
+		}
+
+		public class ReportCurrency {
+			public Decimal getAmount();
+			public String getCurrencyCode();
+		}
+
+		public class ReportDataCell {
+			public String getLabel();
+			public Object getValue();
+		}
+
+		public class ReportDescribeResult {
+			public Reports.ReportExtendedMetadata getReportExtendedMetadata();
+			public Reports.ReportMetadata getReportMetadata();
+			public Reports.ReportTypeMetadata getReportTypeMetadata();
+		}
+
+		public class ReportDetailRow {
+			public LIST<Reports.ReportDataCell> getDataCells();
+		}
+
+		public class ReportExtendedMetadata {
+			public MAP<String,Reports.AggregateColumn> getAggregateColumnInfo();
+			public MAP<String,Reports.DetailColumn> getDetailColumnInfo();
+			public MAP<String,Reports.GroupingColumn> getGroupingColumnInfo();
+		}
+
+		public class ReportFact {
+			public LIST<Reports.SummaryValue> getAggregates();
+			public String getKey();
+		}
+
+		public class ReportFactWithDetails {
+			public LIST<Reports.SummaryValue> getAggregates();
+			public String getKey();
+			public LIST<Reports.ReportDetailRow> getRows();
+		}
+
+		public class ReportFilter {
+			public ReportFilter();
+			public ReportFilter(String column, String operator, String value);
+			public String getColumn();
+			public String getOperator();
+			public String getValue();
+			public Void setColumn(String column);
+			public Void setOperator(String operator);
+			public Void setValue(String value);
+		}
+
+		public enum ReportFormat {
+			MATRIX,
+			SUMMARY,
+			TABULAR
+		}
+
+		public class ReportInstance {
+			public Datetime getCompletionDate();
+			public Id getId();
+			public Id getOwnerId();
+			public Id getReportId();
+			public Reports.ReportResults getReportResults();
+			public Datetime getRequestDate();
+			public String getStatus();
+		}
+
+		public class ReportManager {
+			public static Reports.ReportDescribeResult describeReport(Id reportId);
+			public static MAP<String,LIST<Reports.FilterOperator>> getDatatypeFilterOperatorMap();
+			public static Reports.ReportInstance getReportInstance(Id instanceId);
+			public static LIST<Reports.ReportInstance> getReportInstances(Id reportId);
+			public static Reports.ReportInstance runAsyncReport(Id reportId, Reports.ReportMetadata rmData, Boolean includeDetails);
+			public static Reports.ReportInstance runAsyncReport(Id reportId, Boolean includeDetails);
+			public static Reports.ReportInstance runAsyncReport(Id reportId, Reports.ReportMetadata rmData);
+			public static Reports.ReportInstance runAsyncReport(Id reportId);
+			public static Reports.ReportResults runReport(Id reportId, Reports.ReportMetadata rmData, Boolean includeDetails);
+			public static Reports.ReportResults runReport(Id reportId, Boolean includeDetails);
+			public static Reports.ReportResults runReport(Id reportId, Reports.ReportMetadata rmData);
+			public static Reports.ReportResults runReport(Id reportId);
+		}
+
+		public class ReportMetadata {
+			public LIST<String> getAggregates();
+			public String getCurrencyCode();
+			public LIST<String> getDetailColumns();
+			public String getDeveloperName();
+			public LIST<Reports.GroupingInfo> getGroupingsAcross();
+			public LIST<Reports.GroupingInfo> getGroupingsDown();
+			public LIST<String> getHistoricalSnapshotDates();
+			public Id getId();
+			public String getName();
+			public String getReportBooleanFilter();
+			public LIST<Reports.ReportFilter> getReportFilters();
+			public Reports.ReportFormat getReportFormat();
+			public Reports.ReportType getReportType();
+			public Void setHistoricalSnapshotDates(LIST<String> historicalSnapshot);
+			public Void setReportBooleanFilter(String reportBooleanFilter);
+			public Void setReportFilters(LIST<Reports.ReportFilter> reportFilters);
+		}
+
+		public class ReportResults {
+			public Boolean getAllData();
+			public MAP<String,Reports.ReportFact> getFactMap();
+			public Reports.Dimension getGroupingsAcross();
+			public Reports.Dimension getGroupingsDown();
+			public Boolean getHasDetailRows();
+			public Reports.ReportExtendedMetadata getReportExtendedMetadata();
+			public Reports.ReportMetadata getReportMetadata();
+		}
+
+		public class ReportType {
+			public String getLabel();
+			public String getType();
+		}
+
+		public class ReportTypeColumn {
+			public Reports.ColumnDataType getDataType();
+			public LIST<Reports.FilterValue> getFilterValues();
+			public Boolean getFilterable();
+			public String getLabel();
+			public String getName();
+		}
+
+		public class ReportTypeColumnCategory {
+			public MAP<String,Reports.ReportTypeColumn> getColumns();
+			public String getLabel();
+		}
+
+		public class ReportTypeMetadata {
+			public LIST<Reports.ReportTypeColumnCategory> getCategories();
+		}
+
+		public class SummaryValue {
+			public String getLabel();
+			public Object getValue();
+		}
+
+		public class FeatureNotSupportedException extends Exception {
+		}
+
+		public class InstanceAccessException extends Exception {
+		}
+
+		public class InvalidFilterException extends Exception {
+			public List<String> getFilterErrors();
+		}
+
+		public class InvalidReportMetadataException extends Exception {
+			public List<String> getReportMetadataErrors();
+		}
+
+		public class InvalidSnapshotDateException extends Exception {
+			public List<String> getSnapshotDateErrors();
+		}
+
+		public class MetadataException extends Exception {
+		}
+
+		public class ReportRunException extends Exception {
+		}
+
+		public class UnsupportedOperationException extends Exception {
+		}
 	}
 
 	public class Time {
