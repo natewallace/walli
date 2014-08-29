@@ -874,7 +874,1242 @@
 			public string text { get; set; }
 		}
 
-		// todo:
+		public class ChatterActivity {
+			public integer commentCount { get; set; }
+			public integer commentReceivedCount { get; set; }
+			public integer likeReceivedCount { get; set; }
+			public integer postCount { get; set; }
+		}
+
+		public class ChatterConversation {
+			public string conversationId { get; set; }
+			public string conversationUrl { get; set; }
+			public List<ConnectApi.UserSummary> members { get; set; }
+			public ConnectApi.ChatterMessagePage messages { get; set; }
+			public boolean read { get; set; }
+		}
+
+		public class ChatterConversationPage {
+			public List<ConnectApi.ChatterConversationSummary> conversations { get; set; }
+			public string currentPageToken { get; set; }
+			public string currentPageUrl { get; set; }
+			public string nextPageToken { get; set; }
+			public string nextPageUrl { get; set; }
+		}
+
+		public class ChatterConversationSummary {
+			public string id { get; set; }
+			public ConnectApi.ChatterMessage latestMessage { get; set; }
+			public List<ConnectApi.UserSummary> members { get; set; }
+			public boolean read { get; set; }
+			public string url { get; set; }
+		}
+
+		public class ChatterGroup extends ConnectApi.ActorWithId {
+			public string additionalLabel { get; set; }
+			public ConnectApi.Announcement announcement { get; set; }
+			public boolean canHaveChatterGuests { get; set; }
+			public ConnectApi.Reference community { get; set; }
+			public string description { get; set; }
+			public string emailToChatterAddress { get; set; }
+			public boolean isArchived { get; set; }
+			public boolean isAutoArchiveDisabled { get; set; }
+			public Datetime lastFeedElementPostDate { get; set; }
+			public Datetime lastFeedItemPostDate { get; set; }
+			public integer memberCount { get; set; }
+			public ConnectApi.GroupMembershipType myRole { get; set; }
+			public ConnectApi.Reference mySubscription { get; set; }
+			public string name { get; set; }
+			public ConnectApi.UserSummary owner { get; set; }
+			public ConnectApi.Photo photo { get; set; }
+			public ConnectApi.GroupVisibilityType visibility { get; set; }
+		}
+
+		public class ChatterGroupDetail extends ConnectApi.ChatterGroup {
+			public integer fileCount { get; set; }
+			public ConnectApi.GroupInformation information { get; set; }
+			public integer pendingRequests { get; set; }
+		}
+
+		public class ChatterGroupPage {
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.ChatterGroupDetail> groups { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+		}
+
+		public class ChatterGroupSummary extends ConnectApi.ChatterGroup {
+		}
+
+		public class ChatterGroupSummaryPage {
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.ChatterGroupSummary> groups { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+		}
+
+		public class ChatterLike {
+			public string id { get; set; }
+			public ConnectApi.Reference likedItem { get; set; }
+			public string url { get; set; }
+			public ConnectApi.UserSummary user { get; set; }
+		}
+
+		public class ChatterLikePage {
+			public integer currentPageToken { get; set; }
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.ChatterLike> likes { get; set; }
+			public integer nextPageToken { get; set; }
+			public string nextPageUrl { get; set; }
+			public integer previousPageToken { get; set; }
+			public string previousPageUrl { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class ChatterLikesCapability extends ConnectApi.FeedElementCapability {
+		}
+
+		public class ChatterMessage {
+			public ConnectApi.MessageBody body { get; set; }
+			public string conversationId { get; set; }
+			public string conversationUrl { get; set; }
+			public string id { get; set; }
+			public List<ConnectApi.UserSummary> recipients { get; set; }
+			public ConnectApi.UserSummary sender { get; set; }
+			public Date sentDate { get; set; }
+			public string url { get; set; }
+		}
+
+		public class ChatterMessagePage {
+			public string currentPageToken { get; set; }
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.ChatterMessage> messages { get; set; }
+			public string nextPageToken { get; set; }
+			public string nextPageUrl { get; set; }
+		}
+
+		public class ClientInfo {
+			public string applicationName { get; set; }
+			public string applicationUrl { get; set; }
+		}
+
+		public class Comment {
+			public ConnectApi.FeedItemAttachment attachment { get; set; }
+			public ConnectApi.FeedBody body { get; set; }
+			public ConnectApi.ClientInfo clientInfo { get; set; }
+			public Datetime createdDate { get; set; }
+			public ConnectApi.Reference feedItem { get; set; }
+			public string id { get; set; }
+			public boolean isDeleteRestricted { get; set; }
+			public ConnectApi.ChatterLikePage likes { get; set; }
+			public ConnectApi.MessageBody likesMessage { get; set; }
+			public ConnectApi.ModerationFlags moderationFlags { get; set; }
+			public ConnectApi.Reference myLike { get; set; }
+			public ConnectApi.Reference parent { get; set; }
+			public string relativeCreatedDate { get; set; }
+			public ConnectApi.CommentType type { get; set; }
+			public string url { get; set; }
+			public ConnectApi.UserSummary user { get; set; }
+		}
+
+		public class CommentPage {
+			public List<ConnectApi.Comment> comments { get; set; }
+			public string currentPageToken { get; set; }
+			public string currentPageUrl { get; set; }
+			public string nextPageToken { get; set; }
+			public string nextPageUrl { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class CommentsCapability extends ConnectApi.FeedElementCapability {
+		}
+
+		public class Community {
+			public boolean allowChatterAccessWithoutLogin { get; set; }
+			public boolean allowMembersToFlag { get; set; }
+			public string description { get; set; }
+			public string id { get; set; }
+			public boolean invitationsEnabled { get; set; }
+			public boolean knowledgeableEnabled { get; set; }
+			public string name { get; set; }
+			public boolean privateMessagesEnabled { get; set; }
+			public boolean reputationEnabled { get; set; }
+			public boolean sendWelcomeEmail { get; set; }
+			public string siteUrl { get; set; }
+			public ConnectApi.CommunityStatus status { get; set; }
+			public string url { get; set; }
+			public string urlPathPrefix { get; set; }
+		}
+
+		public class CommunityPage {
+			public List<ConnectApi.Community> communities { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class ComplexSegment extends ConnectApi.MessageSegment {
+			public List<ConnectApi.MessageSegment> segments { get; set; }
+		}
+
+		public class CompoundRecordField extends ConnectApi.LabeledRecordField {
+			public List<ConnectApi.AbstractRecordField> fields { get; set; }
+		}
+
+		public class ContentAttachment extends ConnectApi.FeedItemAttachment {
+			public string checkSum { get; set; }
+			public string contentUrl { get; set; }
+			public string description { get; set; }
+			public string downloadUrl { get; set; }
+			public string fileExtension { get; set; }
+			public string fileSize { get; set; }
+			public string fileType { get; set; }
+			public boolean hasImagePreview { get; set; }
+			public boolean hasPdfPreview { get; set; }
+			public string id { get; set; }
+			public boolean isInMyFileSync { get; set; }
+			public string mimeType { get; set; }
+			public string renditionUrl { get; set; }
+			public string renditionUrl240By180 { get; set; }
+			public string renditionUrl720By480 { get; set; }
+			public string textPreview { get; set; }
+			public string thumb120By90RenditionStatus { get; set; }
+			public string thumb240By180RenditionStatus { get; set; }
+			public string thumb720By480RenditionStatus { get; set; }
+			public string title { get; set; }
+			public string versionId { get; set; }
+		}
+
+		public class CurrencyRecordField extends ConnectApi.LabeledRecordField {
+		}
+
+		public class DashboardComponentAttachment extends ConnectApi.FeedItemAttachment {
+			public string componentId { get; set; }
+			public string componentName { get; set; }
+			public string dashboardBodyText { get; set; }
+			public string dashboardId { get; set; }
+			public string dashboardName { get; set; }
+			public string fullSizeImageUrl { get; set; }
+			public Datetime lastRefreshDate { get; set; }
+			public string lastRefreshDateDisplayText { get; set; }
+			public ConnectApi.UserSummary runningUser { get; set; }
+			public string thumbnailUrl { get; set; }
+		}
+
+		public class DateRecordField extends ConnectApi.LabeledRecordField {
+			public Date dateValue { get; set; }
+		}
+
+		public class EmailAddress {
+			public string displayName { get; set; }
+			public string emailAddress { get; set; }
+		}
+
+		public class EmailMessage extends FeedItemAttachment {
+			public ConnectApi.EmailMessageDirection direction { get; set; }
+			public string emailMessageId { get; set; }
+			public string subject { get; set; }
+			public string textBody { get; set; }
+			public List<ConnectApi.EmailAddress> toAddresses { get; set; }
+		}
+
+		public class EntityLinkSegment extends ConnectApi.MessageSegment {
+			public ConnectApi.Motif motif { get; set; }
+			public ConnectApi.Reference reference { get; set; }
+		}
+
+		public class Feature {
+			public boolean chatter { get; set; }
+			public boolean chatterActivity { get; set; }
+			public boolean chatterAnswers { get; set; }
+			public boolean chatterGlobalInfluence { get; set; }
+			public boolean chatterGroupRecords { get; set; }
+			public boolean chatterGroupRecordSharing { get; set; }
+			public boolean chatterMessages { get; set; }
+			public boolean chatterTopics { get; set; }
+			public boolean communitiesEnabled { get; set; }
+			public boolean communityModeration { get; set; }
+			public boolean connectRecords { get; set; }
+			public boolean dashboardComponentSnapshots { get; set; }
+			public string defaultCurrencyIsoCode { get; set; }
+			public boolean feedPolling { get; set; }
+			public boolean files { get; set; }
+			public boolean filesOnComments { get; set; }
+			public boolean groupsCanFollow { get; set; }
+			public boolean ideas { get; set; }
+			public boolean mobileNotificationsEnabled { get; set; }
+			public boolean multiCurrency { get; set; }
+			public boolean publisherActions { get; set; }
+			public boolean storeDataOnDevicesEnabled { get; set; }
+			public boolean thanksAllowed { get; set; }
+			public boolean trendingTopics { get; set; }
+			public boolean viralInvitesAllowed { get; set; }
+		}
+
+		public class Feed {
+			public string feedElementPostUrl { get; set; }
+			public string feedElementsUrl { get; set; }
+			public string feedItemsUrl { get; set; }
+			public string isModifiedUrl { get; set; }
+		}
+
+		public class FeedBody extends ConnectApi.AbstractMessageBody {
+		}
+
+		public class FeedDirectory {
+			public List<ConnectApi.FeedFavorite> favorites { get; set; }
+			public List<ConnectApi.FeedDirectoryItem> feeds { get; set; }
+		}
+
+		public class FeedDirectoryItem {
+			public string feedElementsUrl { get; set; }
+			public string feedItemsUrl { get; set; }
+			public ConnectApi.FeedType feedType { get; set; }
+			public string feedUrl { get; set; }
+			public string keyPrefix { get; set; }
+			public string label { get; set; }
+		}
+
+		public abstract class FeedElement {
+			public ConnectApi.FeedBody body { get; set; }
+			public ConnectApi.FeedElementCapabilities capabilities { get; set; }
+			public Date createdDate { get; set; }
+			public ConnectApi.FeedElementType feedElementType { get; set; }
+			public ConnectApi.MessageBody header { get; set; }
+			public string id { get; set; }
+			public Date modifiedDate { get; set; }
+			public ConnectApi.ActorWithId parent;
+			public Date relativeCreatedDate { get; set; }
+			public string url { get; set; }
+		}
+
+		public class FeedElementCapabilities {
+			public ConnectApi.BannerCapability banner { get; set; }
+			public ConnectApi.BookmarksCapability bookmarks { get; set; }
+			public ConnectApi.AbstractBundleCapability bundle { get; set; }
+			public ConnectApi.ChatterLikesCapability chatterLikes { get; set; }
+			public ConnectApi.CommentsCapability comments { get; set; }
+			public ConnectApi.ModerationCapability moderation { get; set; }
+			public ConnectApi.PollCapability poll { get; set; }
+			public ConnectApi.QuestionAndAnswerCapability questionAndAnswers { get; set; }
+			public ConnectApi.TopicsCapability topics { get; set; }
+		}
+
+		public class FeedElementCapability {
+		}
+
+		public class FeedElementPage {
+			public string currentPageToken { get; set; }
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.FeedElement> elements { get; set; }
+			public string isModifiedToken { get; set; }
+			public string isModifiedUrl { get; set; }
+			public string nextPageToken { get; set; }
+			public string nextPageUrl { get; set; }
+			public string updatesToken { get; set; }
+			public string updatesUrl { get; set; }
+		}
+
+		public class FeedFavorite {
+			public ConnectApi.Reference community { get; set; }
+			public ConnectApi.UserSummary createdBy { get; set; }
+			public string feedUrl { get; set; }
+			public string id { get; set; }
+			public Datetime lastViewDate { get; set; }
+			public string name { get; set; }
+			public string searchText { get; set; }
+			public ConnectApi.Reference target { get; set; }
+			public ConnectApi.FeedFavoriteType type { get; set; }
+			public string url { get; set; }
+			public ConnectApi.UserSummary user { get; set; }
+		}
+
+		public class FeedFavorites {
+			public List<ConnectApi.FeedFavorite> favorites { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class FeedItem extends ConnectApi.FeedElement {
+			public ConnectApi.Actor actor { get; set; }
+			public ConnectApi.FeedItemAttachment attachment { get; set; }
+			public Boolean canShare { get; set; }
+			public ConnectApi.ClientInfo clientInfo { get; set; }
+			public ConnectApi.CommentPage comments { get; set; }
+			public boolean event { get; set; }
+			public boolean isBookmarkedByCurrentUser { get; set; }
+			public boolean isDeleteRestricted { get; set; }
+			public boolean isLikedByCurrentUser { get; set; }
+			public ConnectApi.ChatterLikePage likes { get; set; }
+			public ConnectApi.MessageBody likesMessage { get; set; }
+			public ConnectApi.ModerationFlags moderationFlags { get; set; }
+			public ConnectApi.Reference myLike { get; set; }
+			public ConnectApi.Reference originalFeeditem { get; set; }
+			public ConnectApi.Actor originalFeedItemActor { get; set; }
+			public string photoUrl { get; set; }
+			public ConnectApi.MessageBody preamble { get; set; }
+			public ConnectApi.FeedItemTopicPage topics { get; set; }
+			public ConnectApi.FeedItemType type { get; set; }
+			public ConnectApi.FeedItemVisibilityType visibility { get; set; }
+		}
+
+		public abstract class FeedItemAttachment {
+		}
+
+		public class FeedItemPage {
+			public string currentPageToken { get; set; }
+			public string currentPageUrl { get; set; }
+			public string isModifiedToken { get; set; }
+			public string isModifiedUrl { get; set; }
+			public List<ConnectApi.FeedItem> items { get; set; }
+			public string nextPageToken { get; set; }
+			public string nextPageUrl { get; set; }
+			public string updatesToken { get; set; }
+			public string updatesUrl { get; set; }
+		}
+
+		public class FeedItemTopicPage {
+			public boolean canAssignTopics { get; set; }
+			public List<ConnectApi.Topic> topics { get; set; }
+		}
+
+		public class FeedModifiedInfo {
+			public boolean isModified { get; set; }
+			public string isModifiedToken { get; set; }
+			public string nextPollUrl { get; set; }
+		}
+
+		public class FeedPoll extends ConnectApi.FeedItemAttachment {
+			public List<ConnectApi.FeedPollChoice> choices { get; set; }
+			public string myChoiceId { get; set; }
+			public integer totalVoteCount { get; set; }
+		}
+
+		public class FeedPollChoice {
+			public string id { get; set; }
+			public integer position { get; set; }
+			public string text { get; set; }
+			public integer voteCount { get; set; }
+			public double voteCountRatio { get; set; }
+		}
+
+		public class FieldChangeSegment extends ConnectApi.ComplexSegment {
+		}
+
+		public class FieldChangeNameSegment extends ConnectApi.MessageSegment {
+		}
+
+		public class FieldChangeValueSegment extends ConnectApi.MessageSegment {
+			public ConnectApi.FieldChangeValueType valueType { get; set; }
+			public string url { get; set; }
+		}
+
+		public class File extends ConnectApi.ActorWithId {
+			public string checksum { get; set; }
+			public integer contentSize { get; set; }
+			public string contentUrl { get; set; }
+			public string description { get; set; }
+			public string downloadUrl { get; set; }
+			public string fileExtension { get; set; }
+			public string fileType { get; set; }
+			public string flashRenditionStatus { get; set; }
+			public boolean isInMyFileSync { get; set; }
+			public boolean isMajorVersion { get; set; }
+			public string mimeType { get; set; }
+			public ConnectApi.ModerationFlags moderationFlags { get; set; }
+			public Datetime modifiedDate { get; set; }
+			public string name { get; set; }
+			public string origin { get; set; }
+			public ConnectApi.UserSummary owner { get; set; }
+			public string pdfRenditionStatus { get; set; }
+			public ConnectApi.FilePublishStatus publishStatus { get; set; }
+			public string renditionUrl { get; set; }
+			public string renditionUrl240by180 { get; set; }
+			public string renditionUrl720By480 { get; set; }
+			public ConnectApi.FileSharingType sharingRole { get; set; }
+			public string textPreview { get; set; }
+			public string thumb120By90RenditionStatus { get; set; }
+			public string thumb240By180RenditionStatus { get; set; }
+			public string thumb720By480RenditionStatus { get; set; }
+			public string title { get; set; }
+			public string versionNumber { get; set; }
+		}
+
+		public class FileSummary extends ConnectApi.File {
+		}
+
+		public class FollowerPage {
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.Subscription> followers { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class FollowingCounts {
+			public integer people { get; set; }
+			public integer records { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class FollowingPage {
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.Subscription> following { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class GenericBundleCapability extends ConnectApi.AbstractBundleCapability {
+		}
+
+		public class GlobalInfluence {
+			public string percentile { get; set; }
+			public integer rank { get; set; }
+		}
+
+		public class GroupChatterSettings {
+			public ConnectApi.GroupEmailFrequency emailFrequency { get; set; }
+		}
+
+		public class GroupInformation {
+			public string text { get; set; }
+			public string title { get; set; }
+		}
+
+		public class GroupMember {
+			public string id { get; set; }
+			public Date lastFeedAccessDate { get; set; }
+			public ConnectApi.GroupMembershipType role { get; set; }
+			public string url { get; set; }
+			public ConnectApi.UserSummary user { get; set; }
+		}
+
+		public class GroupMemberPage {
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.GroupMember> members { get; set; }
+			public ConnectApi.Reference myMembership { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+			public integer totalMemberCount { get; set; }
+		}
+
+		public class GroupMembershipRequest {
+			public Datetime createdDate { get; set; }
+			public string id { get; set; }
+			public Datetime lastUpdateDate { get; set; }
+			public ConnectApi.Reference requestedGroup { get; set; }
+			public string responseMessage { get; set; }
+			public ConnectApi.GroupMembershipRequestStatus status { get; set; }
+			public string url { get; set; }
+			public ConnectApi.UserSummary user { get; set; }
+		}
+
+		public class GroupMembershipRequests {
+			public List<ConnectApi.GroupMembershipRequest> requests { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class HashtagSegment extends ConnectApi.MessageSegment {
+			public string tag { get; set; }
+			public string topicUrl { get; set; }
+			public string url { get; set; }
+		}
+
+		public class Icon {
+			public integer height { get; set; }
+			public integer width { get; set; }
+			public string url { get; set; }
+		}
+
+		public class LabeledRecordField extends ConnectApi.AbstractRecordField {
+			public string label { get; set; }
+			public string text { get; set; }
+		}
+
+		public class LinkAttachment extends ConnectApi.FeedItemAttachment {
+			public string title { get; set; }
+			public string url { get; set; }
+		}
+
+		public class LinkSegment extends ConnectApi.MessageSegment {
+			public string url { get; set; }
+		}
+
+		public class MentionCompletion {
+			public string additionalLabel { get; set; }
+			public string description { get; set; }
+			public string name { get; set; }
+			public string photoUrl { get; set; }
+			public string recordId { get; set; }
+			public ConnectApi.UserType userType { get; set; }
+		}
+
+		public class MentionCompletionPage {
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.MentionCompletion> mentionCompletions { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+		}
+
+		public class MentionSegment extends ConnectApi.MessageSegment {
+			public boolean accessible { get; set; }
+			public string name { get; set; }
+			public ConnectApi.ActorWithId record { get; set; }
+			public ConnectApi.UserSummary user { get; set; }
+		}
+
+		public class MentionValidation {
+			public string recordId { get; set; }
+			public ConnectApi.MentionValidationStatus validationStatus { get; set; }
+		}
+
+		public class MentionValidations {
+			public boolean hasErrors { get; set; }
+			public List<ConnectApi.MentionValidation> mentionValidations { get; set; }
+		}
+
+		public class MessageBody extends ConnectApi.AbstractMessageBody {
+		}
+
+		public abstract class MessageSegment {
+			public string text { get; set; }
+			public ConnectApi.MessageSegmentType type { get; set; }
+		}
+
+		public class ModerationCapability extends ConnectApi.FeedElementCapability {
+			public ConnectApi.ModerationFlags moderationFlags { get; set; }
+		}
+
+		public class ModerationFlags {
+			public integer flagCount { get; set; }
+			public boolean flaggedByMe { get; set; }
+		}
+
+		public class MoreChangesSegment extends ConnectApi.MessageSegment {
+			public List<ConnectApi.FieldChangeSegment> moreChanges { get; set; }
+			public integer moreChangesCount { get; set; }
+		}
+
+		public class Motif {
+			public string color { get; set; }
+			public string largeIconUrl { get; set; }
+			public string mediumIconUrl { get; set; }
+			public string smallIconUrl { get; set; }
+		}
+
+		public class OrganizationSettings {
+			public integer accessTimeout { get; set; }
+			public ConnectApi.Features features { get; set; }
+			public string name { get; set; }
+			public string orgId { get; set; }
+			public ConnectApi.UserSettings userSettings { get; set; }
+		}
+
+		public class PercentRecordField extends ConnectApi.LabeledRecordField {
+			public double value { get; set; }
+		}
+
+		public class PhoneNumber {
+			public string label { get; set; }
+			public string phoneNumber { get; set; }
+			public string phoneType { get; set; }
+			public string type { get; set; }
+		}
+
+		public class Photo {
+			public string fullEmailPhotoUrl { get; set; }
+			public string largePhotoUrl { get; set; }
+			public string photoVersionId { get; set; }
+			public string smallPhotoUrl { get; set; }
+			public string standardEmailPhotoUrl { get; set; }
+			public string url { get; set; }
+		}
+
+		public class PicklistRecordField extends ConnectApi.LabeledRecordField {
+		}
+
+		public class PollCapability extends ConnectApi.FeedElementCapability {
+		}
+
+		public class QuestionAndAnswersCapability {
+			public ConnectApi.FeedElementCapabilityType capabilityType { get; set; }
+		}
+
+		public class RecordField extends ConnectApi.LabeledRecordField {
+		}
+
+		public class RecordSnapshotAttachment extends ConnectApi.FeedItemAttachment {
+			public ConnectApi.RecordView recordView { get; set; }
+		}
+
+		public class RecordSummary extends ConnectApi.AbstractRecordView {
+		}
+
+		public class RecordSummaryList {
+			public List<ConnectApi.ActorWithId> records { get; set; }
+			public string url { get; set; }
+		}
+
+		public class RecordView extends ConnectApi.AbstractRecordView {
+			public List<ConnectApi.RecordViewSection> sections { get; set; }
+		}
+
+		public class RecordViewSection {
+			public integer columnCount { get; set; }
+			public ConnectApi.RecordColumnOrder columnOrder { get; set; }
+			public ConnectApi.AbstractRecordField fields { get; set; }
+			public string heading { get; set; }
+			public boolean isCollapsible { get; set; }
+		}
+
+		public class Reference {
+			public string id { get; set; }
+			public string url { get; set; }
+		}
+
+		public class ReferenceRecordField extends ConnectApi.LabeledRecordField {
+			public ConnectApi.RecordSummary reference { get; set; }
+		}
+
+		public class ReferenceWithDateRecordField extends LabeledRecordField {
+			public Date dateValue { get; set; }
+			public ConnectApi.RecordSummary reference { get; set; }
+		}
+
+		public class ResourceLinkSegment {
+			public string url { get; set; }
+		}
+
+		public class Subscription {
+			public ConnectApi.Reference community { get; set; }
+			public string id { get; set; }
+			public ConnectApi.Actor subject { get; set; }
+			public ConnectApi.Actor subscriber { get; set; }
+			public string url { get; set; }
+		}
+
+		public class TextSegment extends ConnectApi.MessageSegment {
+		}
+
+		public class TimeZone {
+			public double gmtOffset { get; set; }
+			public string name { get; set; }
+		}
+
+		public class Topic {
+			public Datetime createdDate { get; set; }
+			public string description { get; set; }
+			public string id { get; set; }
+			public string name { get; set; }
+			public integer talingAbout { get; set; }
+			public string url { get; set; }
+		}
+
+		public class TopicEndorsement {
+			public ConnectApi.UserSummary endorsee { get; set; }
+			public string endorsementId { get; set; }
+			public ConnectApi.UserSummary endorser { get; set; }
+			public ConnectApi.Topic topic { get; set; }
+			public string url { get; set; }
+		}
+
+		public class TopicEndorsementCollection {
+			public string currentPageUrl { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+			public List<ConnectApi.Topic> topicEndorsements { get; set; }
+		}
+
+		public class TopicPage {
+			public string currentPageUrl { get; set; }
+			public string nextPageUrl { get; set; }
+			public List<ConnectApi.Topic> topics { get; set; }
+		}
+
+		public class TopicsCapability extends ConnectApi.FeedElementCapability {
+		}
+
+		public class TopicSuggestion {
+			public ConnectApi.Topic existingTopic { get; set; }
+			public string name { get; set; }
+		}
+
+		public class TopicSuggestionPage {
+			public List<ConnectApi.TopicSuggestion> TopicSuggestionPage { get; set; }
+		}
+
+		public class TrackedChangeAttachment {
+			public List<ConnectApi.TrackedChangeItem> changes { get; set; }
+		}
+
+		public class TrackedChangeBundleCapability extends ConnectApi.AbstractBundleCapability {
+			public List<ConnectApi.TrackedChangeItem> changes { get; set; }
+		}
+
+		public class TrackedChangeItem {
+			public string fieldName { get; set; }
+			public string newValue { get; set; }
+			public string oldValue { get; set; }
+		}
+
+		public class UnauthenticatedUser extends ConnectApi.Actor {
+		}
+
+		public class UnreadConversationCount {
+			public boolean hasMore { get; set; }
+			public integer unreadCount { get; set; }
+		}
+
+		public class User extends ConnectApi.ActorWithId {
+			public string additionalLabel { get; set; }
+			public string companyName { get; set; }
+			public string firstName { get; set; }
+			public boolean isChatterGuest { get; set; }
+			public boolean isInThisCommunity { get; set; }
+			public string lastName { get; set; }
+			public ConnectApi.Photo photo { get; set; }
+			public string title { get; set; }
+			public ConnectApi.UserType userType { get; set; }
+		}
+
+		public class UserCapabilities {
+			public boolean canChat { get; set; }
+			public boolean canDirectMessage { get; set; }
+			public boolean canEdit { get; set; }
+			public boolean canFollow { get; set; }
+			public boolean canViewFeed { get; set; }
+			public boolean canViewFullProfile { get; set; }
+			public boolean isModerator { get; set; }
+		}
+
+		public class UserChatterSettings {
+			public ConnectApi.GroupEmailFrequency defaultGroupEmailFrequency { get; set; }
+		}
+
+		public class UserDetail extends ConnectApi.User {
+			public string aboutMe { get; set; }
+			public ConnectApi.Address address { get; set; }
+			public ConnectApi.ChatterActivity chatterActivity { get; set; }
+			public ConnectApi.GlobalInfluence chatterInfluence { get; set; }
+			public string email { get; set; }
+			public integer followersCount { get; set; }
+			public ConnectApi.FollowingCounts followingCounts { get; set; }
+			public integer groupCount { get; set; }
+			public boolean hasChatter { get; set; }
+			public boolean isActive { get; set; }
+			public string managerId { get; set; }
+			public string managerName { get; set; }
+			public integer thanksReceived { get; set; }
+			public List<ConnectApi.PhoneNumber> phoneNumbers { get; set; }
+			public string username { get; set; }
+		}
+
+		public class UserGroupPage {
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.ChatterGroupSummary> groups { get; set; }
+			public string nextPageUrl { get; set; }
+			public string previousPageUrl { get; set; }
+			public integer total { get; set; }
+		}
+
+		public class UserPage {
+			public integer currentPageToken { get; set; }
+			public string currentPageUrl { get; set; }
+			public integer nextPageToken { get; set; }
+			public string nextPageUrl { get; set; }
+			public integer previousPageToken { get; set; }
+			public string previousPageUrl { get; set; }
+			public List<ConnectApi.UserDetail> users { get; set; }
+		}
+
+		public class UserProfile {
+			public ConnectApi.UserCapabilities capabilities { get; set; }
+			public string id { get; set; }
+			public List<ConnectApi.UserProfileTab> tabs { get; set; }
+			public string url { get; set; }
+			public ConnectApi.UserDetail userDetail { get; set; }
+		}
+
+		public class UserProfileTab {
+			public string id { get; set; }
+			public boolean isDefault { get; set; }
+			public ConnectApi.UserProfileTabType tabType { get; set; }
+			public string tabUrl { get; set; }
+		}
+
+		public class UserSettings {
+			public boolean approvalPosts { get; set; }
+			public boolean canFollow { get; set; }
+			public boolean canModifyAllData { get; set; }
+			public boolean canOwnGroups { get; set; }
+			public boolean canViewAllData { get; set; }
+			public boolean canViewAllGroups { get; set; }
+			public boolean canViewAllUsers { get; set; }
+			public boolean canViewFullUserProfile { get; set; }
+			public boolean canViewPublicFiles { get; set; }
+			public string currencySymbol { get; set; }
+			public boolean externalUser { get; set; }
+			public integer fileSyncStorageLimit { get; set; }
+			public boolean hasAccessToInternalOrg { get; set; }
+			public boolean hasChatter { get; set; }
+			public boolean hasFileSync { get; set; }
+			public boolean hasResetDataApiAccess { get; set; }
+			public ConnectApi.TimeZone timeZone { get; set; }
+			public string userDefaultCurrencyIsoCode { get; set; }
+			public string userId { get; set; }
+			public string userLocale { get; set; }
+		}
+
+		public class UserSummary extends ConnectApi.User {
+			public boolean isActive { get; set; }
+		}
+
+		public class Zone {
+			public string description { get; set; }
+			public string id { get; set; }
+			public boolean isActive { get; set; }
+			public boolean isChatterAnswers { get; set; }
+			public string name { get; set; }
+			public string url { get; set; }
+			public ConnectApi.ZoneShowIn visibility { get; set; }
+			public string visibilityId { get; set; }
+		}
+
+		public class ZonePage {
+			public List<ConnectApi.Zone> zones { get; set; }
+			public string currentPageUrl { get; set; }
+			public string nextPageUrl { get; set; }
+		}
+
+		public class ZoneSearchPage {
+			public string currentPageToken { get; set; }
+			public string currentPageUrl { get; set; }
+			public List<ConnectApi.ZoneSearchResult> items { get; set; }
+			public string nextPageToken { get; set; }
+			public string nextPageUrl { get; set; }
+		}
+
+		public class ZoneSearchResult {
+			public boolean hasBestAnswer { get; set; }
+			public string id { get; set; }
+			public string title { get; set; }
+			public ConnectApi.ZoneSearchResultType type { get; set; }
+			public string voteCount { get; set; }
+		}
+
+		public class ConnectApiException extends Exception {
+		}
+
+		public class NotFoundException extends Exception {
+		}
+
+		public class RateLimitException extends Exception {
+		}
+
+		public enum BannerStyle {
+			Announcement
+		}
+
+		public enum BundleType {
+			GenericBundle,
+			TrackedChanges
+		}
+
+		public enum CaseActorType {
+			Customer,
+			CustomerService
+		}
+
+		public enum CaseCommentEventType {
+			NewInternal,
+			NewPublished,
+			NewPublishedByCustomer,
+			PublishExsiting,
+			PublishExistingByCustomer,
+			UnpublishExisting,
+			UnpublishExistingByCustomer
+		}
+
+		public enum CommentType {
+			ContentComment,
+			TextComment
+		}
+
+		public enum CommunityFlagVisibility {
+			ModeratorsOnly,
+			SelfAndModerators
+		}
+
+		public enum CommunityStatus {
+			Live,
+			Inactive,
+			UnderConstruction
+		}
+
+		public enum EmailMessageDirection {
+			Inbound,
+			Outbound
+		}
+
+		public enum FeedDensity {
+			AllUpdates,
+			FewerUpdates
+		}
+
+		public enum FeedElementCapabilityType {
+			AssociatedActions,
+			Banner,
+			Bookmarks,
+			Bundle,
+			ChatterLikes,
+			Comments,
+			Moderation,
+			Poll,
+			QuestionAndAnswers,
+			Topics
+		}
+
+		public enum FeedElementType {
+			Bundle,
+			FeedItem
+		}
+
+		public enum FeedFavoriteType {
+			ListView,
+			Search,
+			Topic
+		}
+
+		public enum FeedFavoriteAttachmentType {
+			Approval,
+			BasicTemplate,
+			Canvas,
+			CaseComment,
+			CaseComment,
+			Content,
+			DashboardComponent,
+			EmailMessage,
+			Link,
+			Poll,
+			Question,
+			RecordSnapshot,
+			TrackedChange
+		}
+
+		public enum FeedItemType {
+			ActivityEvent,
+			AdvancedTextPost,
+			ApprovalPost,
+			AttachArticleEvent,
+			BasicTemplateFeedItem,
+			CallLogPost,
+			CanvasPost,
+			CaseCommentPost,
+			ChangeStatusPost,
+			ChatTranscriptionPost,
+			CollaborationGroupCreated,
+			CollaborationGroupUnarchived,
+			ContentPost,
+			CreateRecordEvent,
+			DashboardComponentAlert,
+			DashboardComponentSnapshot,
+			EmailMessageEvent,
+			FacebookPost,
+			LinkPost,
+			MilestoneEvent,
+			PollPost,
+			ProfileSkillPost,
+			QuestionPost,
+			ReplyPost,
+			RypplePost,
+			SocialPost,
+			TextPost,
+			TrackedChange,
+			UserStatus
+		}
+
+		public enum FeedItemVisibilityType {
+			AllUsers,
+			InternalUsers
+		}
+
+		public enum FeedSortOrder {
+			CreatedDateDesc,
+			LastModifiedDateDesc
+		}
+
+		public enum FeedType {
+			Bookmarks,
+			Company,
+			Files,
+			Filter,
+			Groups,
+			Moderation,
+			News,
+			People,
+			Record,
+			To,
+			Topics,
+			UserProfile
+		}
+
+		public enum FieldChangeValueType {
+			NewValue,
+			OldValue
+		}
+
+		public enum FilePublishStatus {
+			PendingAccess,
+			PrivateAccess,
+			PublicAccess
+		}
+
+		public enum FileSharingType {
+			Admin,
+			Collaborator,
+			Owner,
+			Viewer,
+			WorkspaceManaged
+		}
+
+		public enum GroupArchiveStatus {
+			All,
+			Archived,
+			NotArchived
+		}
+
+		public enum GroupEmailFrequency {
+			All,
+			Archived,
+			NotArchived
+		}
+
+		public enum GroupEmailFrequency {
+			EachPost,
+			DailyDigest,
+			WeeklyDigest,
+			Never,
+			UseDefault
+		}
+
+		public enum GroupMembershipType {
+			GroupOwner,
+			GroupManager,
+			NotAMember,
+			NotAMemberPrivateRequested,
+			StandardMember
+		}
+
+		public enum GroupMembershipRequestStatus {
+			Accepted,
+			Declined,
+			Pending
+		}
+
+		public enum GroupVisibilityType {
+			PrivateAccess,
+			PublicAccess,
+			Unlisted
+		}
+
+		public enum MentionCompletionType {
+			All,
+			Group,
+			User
+		}
+
+		public enum MentionValidationStatus {
+			Disallowed,
+			Inaccessible,
+			Ok
+		}
+
+		public enum MessageSegmentType {
+			EntityLink,
+			FieldChange,
+			FieldChangeName,
+			FieldChangeValue,
+			Hashtag,
+			Link,
+			Mention,
+			MoreChanges,
+			ResourceLink,
+			Text
+		}
+
+		public enum RecordColumnOrder {
+			LeftRight,
+			TopDown
+		}
+
+		public enum RecordFieldType {
+			Address,
+			Blank,
+			Boolean,
+			Compound,
+			CreatedBy,
+			Date,
+			DateTime,
+			Email,
+			LastModifiedBy,
+			Location,
+			Name,
+			Number,
+			Percent,
+			Phone,
+			Picklist,
+			Reference,
+			Text,
+			Time
+		}
+
+		public enum SortOrder {
+			Ascending,
+			Descending
+		}
+
+		public enum TopicSort {
+			popularDesc,
+			alphaAsc
+		}
+
+		public enum UserProfileTabType {
+			CustomVisualForce,
+			CustomWeb,
+			Feed,
+			Overview
+		}
+
+		public enum UserType {
+			ChatterGuest,
+			ChatterOnly,
+			Guest,
+			Internal,
+			Portal,
+			System,
+			Undefined
+		}
+
+		public enum WorkflowProcessStatus {
+			Approved,
+			Fault,
+			Held,
+			NoResponse,
+			Pending,
+			Reassigned,
+			Rejected,
+			Removed,
+			Started
+		}
+
+		public enum ZoneSearchResultType {
+			Article,
+			Question
+		}
+
+		public enum ZoneShowIn {
+			Community,
+			Internal,
+			Portal
+		}
 	}
 
 	public interface Comparable {
