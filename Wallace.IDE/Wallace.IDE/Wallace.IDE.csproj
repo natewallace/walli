@@ -175,6 +175,7 @@
     </Compile>
     <Compile Include="SalesForce\UI\TestRunItemResultStatusIconConverter.cs" />
     <Compile Include="SalesForce\UI\TestRunItemStatusIconConverter.cs" />
+    <Compile Include="SalesForce\UI\VisualForceCompletionData.cs" />
     <Compile Include="SalesForce\UI\VisualForceEditorControl.xaml.cs">
       <DependentUpon>VisualForceEditorControl.xaml</DependentUpon>
     </Compile>
@@ -555,6 +556,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Namespace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Element.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

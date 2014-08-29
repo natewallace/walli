@@ -907,7 +907,7 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                if (Language != null && _completionWindow == null)
+                if (LanguageManager != null && _completionWindow == null)
                 {
                     // calculate and show completions
                     if (e.Text == ".")

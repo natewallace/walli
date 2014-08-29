@@ -56,6 +56,14 @@ namespace Wallace.IDE.SalesForce.Document
             return "DocumentPage.png";
         }
 
+        /// <summary>
+        /// Set the language manager on the view.
+        /// </summary>
+        protected override void OnViewCreated()
+        {
+            View.LanguageManager = Project.Language;
+        }
+
         #endregion
     }
 }

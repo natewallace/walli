@@ -299,6 +299,105 @@ namespace SalesForceLanguage
         #region Methods
 
         /// <summary>
+        /// Get visualforce tags for the current position.
+        /// </summary>
+        /// <param name="text">The text to inspect to determine tags.</param>
+        /// <returns>The tags to use for completions.</returns>
+        public string[] GetVisualForceCompletionsTags(Stream text)
+        {
+            return _visualForceSymbols.Keys.ToArray();
+        }
+
+        /// <summary>
+        /// Get visualforce tags for the current position.
+        /// </summary>
+        /// <param name="text">The text to inspect to determine tags.</param>
+        /// <returns>The tags to use for completions.</returns>
+        public string[] GetVisualForceCompletionsAttributes(Stream text)
+        {
+            string line = null;
+            bool openString = false;
+            int startAttributeIndex = 0;
+            int insertIndex = (int)text.Position;
+
+            if (text.Position > 0)
+            {
+                // get line to calculate completions for
+                StringBuilder lineBuilder = new StringBuilder();
+                bool stop = false;
+
+                while (text.Position > 0)
+                {
+                    text.Position = text.Position - 1;
+                    char c = (char)text.ReadByte();
+
+                    switch (c)
+                    {
+                        case '>':
+                            return new string[0];
+
+                        case '<':
+                        case '/':
+                            bool firstCharFound = false;
+                            int b = text.ReadByte();
+                            while (b != -1)
+                            {
+                                char c2 = (char)b;
+                                switch (c2)
+                                {
+                                    case ' ':
+                                    case '\t':
+                                    case '\n':
+                                    case '\r':
+                                        if (firstCharFound)
+                                        {
+                                            stop = true;
+                                            startAttributeIndex = (int)text.Position;
+                                        }
+                                        break;
+
+                                    default:
+                                        firstCharFound = true;
+                                        lineBuilder.Append(c2);
+                                        break;
+                                }
+                                if (stop)
+                                    break;
+
+                                b = text.ReadByte();
+                            }
+                            stop = true;
+                            break;
+
+                        case '"':
+                            openString = !openString;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    if (stop)
+                        break;
+
+                    text.Position = text.Position - 1;
+                }
+
+                line = lineBuilder.ToString();
+            }
+
+            if (openString || 
+                insertIndex < startAttributeIndex || 
+                String.IsNullOrWhiteSpace(line))
+                return new string[0];
+
+            if (_visualForceSymbols.ContainsKey(line))
+                return _visualForceSymbols[line];
+            else
+                return new string[0];
+        }
+
+        /// <summary>
         /// Check to see if the given position is within a comment.
         /// </summary>
         /// <param name="position">The position to check.</param>

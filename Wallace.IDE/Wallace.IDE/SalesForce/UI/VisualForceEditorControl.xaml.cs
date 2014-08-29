@@ -26,9 +26,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Resources;
+using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
+using SalesForceLanguage;
 using Wallace.IDE.Framework;
 
 namespace Wallace.IDE.SalesForce.UI
@@ -44,6 +46,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// The text search panel.
         /// </summary>
         private SearchPanel _searchPanel;
+
+        /// <summary>
+        /// Window used for code completions.
+        /// </summary>
+        private CompletionWindow _completionWindow;
 
         #endregion
 
@@ -67,9 +74,12 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.TextArea.SelectionBrush = Brushes.LightBlue;
             textEditor.TextArea.SelectionBorder = null;
             textEditor.TextArea.SelectionForeground = null;
+            textEditor.TextArea.TextEntered += TextArea_TextEntered;
 
             _searchPanel = SearchPanel.Install(textEditor.TextArea);
             _searchPanel.MarkerBrush = Brushes.DarkOrange;
+
+            _completionWindow = null;
         }
 
         #endregion
@@ -85,9 +95,44 @@ namespace Wallace.IDE.SalesForce.UI
             set { textEditor.Text = value; }
         }
 
+        /// <summary>
+        /// The language manager to use.
+        /// </summary>
+        public LanguageManager LanguageManager { get; set; }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Show the code completions window.
+        /// </summary>
+        /// <param name="items">The items to show completions for.</param>
+        /// <param name="isTag">true if the items are tags, false if they are attributes.</param>
+        private void ShowCodeCompletions(string[] items, bool isTag)
+        {
+            if (_completionWindow == null && items != null && items.Length > 0)
+            {
+                _completionWindow = new CompletionWindow(textEditor.TextArea);
+                _completionWindow.Style = null;
+                _completionWindow.CompletionList.Style = null;
+                _completionWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                _completionWindow.MaxWidth = 400;
+                _completionWindow.AllowsTransparency = true;
+                _completionWindow.Background = Brushes.Transparent;
+                _completionWindow.SnapsToDevicePixels = true;
+                _completionWindow.UseLayoutRounding = true;
+
+                foreach (string tag in items)
+                    _completionWindow.CompletionList.CompletionData.Add(new VisualForceCompletionData(tag, isTag));
+
+                if (_completionWindow.CompletionList.CompletionData.Count > 0)
+                {
+                    _completionWindow.Show();
+                    _completionWindow.Closed += delegate { _completionWindow = null; };
+                }
+            }
+        }
 
         /// <summary>
         /// Give focus to the text input.
@@ -211,6 +256,59 @@ namespace Wallace.IDE.SalesForce.UI
             try
             {
                 OnTextChanged(EventArgs.Empty);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Do code completions.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void TextArea_TextEntered(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            try
+            {
+                if (LanguageManager != null)
+                {
+                    if (_completionWindow == null)
+                    {
+                        // tags
+                        if (e.Text == "<")
+                        {
+                            ShowCodeCompletions(LanguageManager.Completion.GetVisualForceCompletionsTags(
+                                new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset)),
+                                true);
+                        }
+                        // attributes
+                        else if (e.Text == " ")
+                        {
+                            ShowCodeCompletions(LanguageManager.Completion.GetVisualForceCompletionsAttributes(
+                                new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset)),
+                                false);
+                        }
+                    }
+                    // closing tags
+                    else if (e.Text == "/")
+                    {
+                        if (textEditor.TextArea.Caret.Offset > 1 && textEditor.Document.GetCharAt(textEditor.TextArea.Caret.Offset - 2) == '<')
+                        {
+                            _completionWindow.Close();
+                            ShowCodeCompletions(LanguageManager.Completion.GetVisualForceCompletionsTags(
+                                new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset)),
+                                true);
+                        }
+                    }
+                    // close window
+                    else if (e.Text == ">")
+                    {
+                        _completionWindow.Close();
+                    }
+                }
+                
             }
             catch (Exception err)
             {
