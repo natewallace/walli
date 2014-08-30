@@ -22,6 +22,7 @@
 
 using SalesForceData;
 using System;
+using System.Linq;
 using System.Timers;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
@@ -84,7 +85,7 @@ namespace Wallace.IDE.SalesForce.Document
                                            Environment.NewLine,
                                            TestRun.Started);
 
-            View.TestRunItems = TestRun.Items;
+            View.TestRunItems = TestRun.Items.OrderBy(i => i.Name);
             UpdateTestRun();
         }
 
