@@ -113,9 +113,16 @@ namespace Wallace.IDE.SalesForce.UI
             get
             {
                 if (_isTag)
+                {
                     return VisualHelper.LoadBitmap("Element.png");
+                }
                 else
-                    return VisualHelper.LoadBitmap("Field.png");
+                {
+                    if (Text.StartsWith("on", StringComparison.CurrentCultureIgnoreCase))
+                        return VisualHelper.LoadBitmap("Event.png");
+                    else
+                        return VisualHelper.LoadBitmap("Field.png");
+                }
             }
         }
 

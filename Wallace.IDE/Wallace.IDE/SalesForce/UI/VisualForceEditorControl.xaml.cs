@@ -303,7 +303,7 @@ namespace Wallace.IDE.SalesForce.UI
                         }
                     }
                     // close window
-                    else if (e.Text == ">")
+                    else if (e.Text == ">" || e.Text == " ")
                     {
                         _completionWindow.Close();
                     }
