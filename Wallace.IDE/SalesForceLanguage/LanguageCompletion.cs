@@ -617,8 +617,10 @@ namespace SalesForceLanguage
 
             // lex the line
             List<string> parts = new List<string>();
-            StringBuilder partBuilder = new StringBuilder();
-            int openDelimiter = 0;
+            StringBuilder delimiterBuilder = new StringBuilder();
+            StringBuilder templateBuilder = new StringBuilder();
+            int openBracket = 0;
+            int openParens = 0;
             int openTemplate = 0;
 
             using (MemoryStream lineReader = new MemoryStream(Encoding.ASCII.GetBytes(lineBuilder.ToString())))
@@ -630,28 +632,25 @@ namespace SalesForceLanguage
                     {
                         switch (lexer.yylval.Token)
                         {
-                            case Tokens.SEPARATOR_DOT:
-                                if (openDelimiter == 0 && partBuilder.Length > 0)
-                                {
-                                    parts.Add(partBuilder.ToString());
-                                    partBuilder.Clear();
-                                }
-                                break;
-
                             case Tokens.SEPARATOR_BRACKET_EMPTY:
-                                if (openDelimiter == 0)
+                                if (openTemplate > 0)
                                 {
-                                    partBuilder.Append("[]");
-                                    parts.Add(partBuilder.ToString());
-                                    partBuilder.Clear();
+                                    templateBuilder.Append(lexer.yytext);
+                                }
+                                else if (openBracket == 0 && openParens == 0)
+                                {
+                                    if (parts.Count == 0)
+                                        parts.Add("[]");
+                                    else
+                                        parts[parts.Count - 1] = String.Format("{0}[]", parts[parts.Count - 1]);
                                 }
                                 break;
 
                             case Tokens.OPERATOR_LESS_THAN:
-                                if (openDelimiter == 0)
+                                if (openBracket == 0 && openParens == 0)
                                 {
+                                    templateBuilder.Append(lexer.yytext);
                                     openTemplate++;
-                                    partBuilder.Append(lexer.yytext);
                                 }
                                 break;
 
@@ -659,54 +658,107 @@ namespace SalesForceLanguage
                             case Tokens.OPERATOR_GREATER_THAN_A:
                             case Tokens.OPERATOR_GREATER_THAN_B:
                             case Tokens.OPERATOR_GREATER_THAN_C:
-                                if (openDelimiter == 0)
+                                if (openBracket == 0 && openParens == 0)
                                 {
+                                    templateBuilder.Append(lexer.yytext);
                                     openTemplate--;
-                                    partBuilder.Append(lexer.yytext);
+
+                                    if (openTemplate == 0)
+                                    {
+                                        if (parts.Count == 0)
+                                            parts.Add(templateBuilder.ToString());
+                                        else
+                                            parts[parts.Count - 1] = String.Format("{0}{1}", parts[parts.Count - 1], templateBuilder.ToString());
+
+                                        templateBuilder.Clear();
+                                    }
                                 }
                                 break;
 
-                            case Tokens.SEPARATOR_BRACKET_LEFT:
-                            case Tokens.SEPARATOR_PARENTHESES_LEFT:
-                                if (openDelimiter == 0 || openTemplate > 0)
-                                    partBuilder.Append(lexer.yytext);
-                                openDelimiter++;
+                            case Tokens.SEPARATOR_BRACKET_LEFT:                            
+                                if (openTemplate > 0)
+                                {
+                                    templateBuilder.Append(lexer.yytext);
+                                }
+                                else if (openParens == 0)
+                                {
+                                    if (openBracket == 0)
+                                    {
+                                        if (parts.Count == 0)
+                                            parts.Add("[]");
+                                        else
+                                            parts[parts.Count - 1] = String.Format("{0}[]", parts[parts.Count - 1]);
+                                    }
+
+                                    openBracket++;
+                                }
                                 break;
 
                             case Tokens.SEPARATOR_BRACKET_RIGHT:
+                                if (openTemplate > 0)
+                                {
+                                    templateBuilder.Append(lexer.yytext);
+                                }
+                                else if (openParens == 0)
+                                {
+                                    openBracket--;
+                                }
+                                break;
+
+                            case Tokens.SEPARATOR_PARENTHESES_LEFT:
+                                if (openTemplate > 0)
+                                {
+                                    templateBuilder.Append(lexer.yytext);
+                                }
+                                else if (openBracket == 0)
+                                {
+                                    if (openParens == 0)
+                                    {
+                                        if (parts.Count == 0)
+                                            parts.Add("()");
+                                        else
+                                            parts[parts.Count - 1] = String.Format("{0}()", parts[parts.Count - 1]);
+                                    }
+
+                                    openParens++;
+                                }
+                                break;
+
                             case Tokens.SEPARATOR_PARENTHESES_RIGHT:
-                                openDelimiter--;
-                                if (openDelimiter == 0 || openTemplate > 0)
-                                    partBuilder.Append(lexer.yytext);
+                                if (openTemplate > 0)
+                                {
+                                    templateBuilder.Append(lexer.yytext);
+                                }
+                                else if (openBracket == 0)
+                                {
+                                    openParens--;
+                                }
+                                break;
+
+                            case Tokens.IDENTIFIER:
+                                if (openTemplate > 0)
+                                {
+                                    templateBuilder.Append(lexer.yytext);
+                                }
+                                else if (openBracket == 0 && openParens == 0)
+                                {
+                                    parts.Add(lexer.yytext);
+                                }
                                 break;
 
                             default:
-                                if (openDelimiter == 0)
-                                    partBuilder.Append(lexer.yytext);
+                                if (openTemplate > 0)
+                                {
+                                    templateBuilder.Append(lexer.yytext);
+                                }
+                                else if (openBracket == 0 && openParens == 0)
+                                {
+                                    parts.Add(lexer.yytext);
+                                }
                                 break;
                         }
                     }
                 }
-
-                if (partBuilder.Length > 0)
-                    parts.Add(partBuilder.ToString());
-            }
-
-            // process parts
-            for (int i = 0; i < parts.Count; i++)
-            {
-                if (parts[i].EndsWith("[]"))
-                {
-                    int index = i;
-                    while (parts[index].EndsWith("[]"))
-                    {
-                        parts[index] = parts[index].Substring(0, parts[index].Length - 2).ToLower();
-                        parts.Insert(index + 1, "get()");
-                        i++;
-                    }
-                }
-                else
-                    parts[i] = parts[i].ToLower();
             }
 
             return parts.ToArray();
@@ -724,8 +776,23 @@ namespace SalesForceLanguage
         {
             List<Symbol> result = new List<Symbol>();
 
-            // get parts
-            string[] parts = GetLineParts(text);
+            // get parts and do some pre-processing
+            List<string> parts = new List<string>(GetLineParts(text));
+            for (int i = 0; i < parts.Count; i++)
+            {
+                if (parts[i].EndsWith("[]"))
+                {
+                    int index = i;
+                    while (parts[index].EndsWith("[]"))
+                    {
+                        parts[index] = parts[index].Substring(0, parts[index].Length - 2).ToLower();
+                        parts.Insert(index + 1, "get()");
+                        i++;
+                    }
+                }
+                else
+                    parts[i] = parts[i].ToLower();
+            }
 
             // match parts to types
             SymbolTable classSymbol = _language.GetSymbols(className);
@@ -737,7 +804,7 @@ namespace SalesForceLanguage
                 bool typeSearchDone = false;
                 bool methodSearchDone = false;
 
-                for (int i = 0; i < parts.Length; i++)
+                for (int i = 0; i < parts.Count; i++)
                 {
                     string part = parts[i];
                     partFound = false;
@@ -753,7 +820,7 @@ namespace SalesForceLanguage
                             {
                                 if (m.Id == methodName)
                                 {
-                                    if (m.Type != "void" || i == parts.Length - 1)
+                                    if (m.Type != "void" || i == parts.Count - 1)
                                     {
                                         matchedSymbol = m;
                                         partFound = true;
@@ -882,7 +949,7 @@ namespace SalesForceLanguage
                         int tempIndex = i;
 
                         StringBuilder typeNameBuilder = new StringBuilder();
-                        for (i = 0; i < parts.Length; i++)
+                        for (i = 0; i < parts.Count; i++)
                         {
                             if (i == 0)
                                 typeNameBuilder.Append(parts[i]);
@@ -910,7 +977,7 @@ namespace SalesForceLanguage
                     if (!partFound &&
                         includeIncompleteMethods &&
                         !methodSearchDone &&
-                        i == parts.Length - 1)
+                        i == parts.Count - 1)
                     {
                         parts[i] = String.Format("{0}()", parts[i]);
                         i--;
