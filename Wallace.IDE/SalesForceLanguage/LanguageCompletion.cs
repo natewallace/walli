@@ -850,7 +850,11 @@ namespace SalesForceLanguage
                     // variables
                     else
                     {
-                        SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.FullType);
+                        SymbolTable externalClass = null;
+                        if (i == 0)
+                            externalClass = classSymbol;
+                        else if (matchedSymbol != null) 
+                            externalClass = _language.GetSymbols(matchedSymbol.FullType);
 
                         if (i == 0)
                         {
@@ -1002,12 +1006,13 @@ namespace SalesForceLanguage
                         parts[i] = String.Format("{0}()", parts[i]);
                         i--;
                         methodSearchDone = true;
+                        partFound = true;
                     }
 
                     // collect the matched symbol
                     if (partFound && matchedSymbol != null)
                         result.Add(matchedSymbol);
-                    else if (matchedSymbol == null)
+                    else if (!partFound)
                         return null;
                 }
             }
@@ -1329,17 +1334,19 @@ namespace SalesForceLanguage
             }
 
             // filter out methods based on visibility
-            for (int i = 0; i < result.Count; i++)
+            if (isExternal)
             {
-
-                if (result[i] is ModifiedSymbol)
+                for (int i = 0; i < result.Count; i++)
                 {
-                    SymbolModifier modifier = (result[i] as ModifiedSymbol).Modifier;
-                    if ((modifier.HasFlag(SymbolModifier.Static) && !isTypeReference) ||
-                        (!modifier.HasFlag(SymbolModifier.Static) && isTypeReference))
+                    if (result[i] is ModifiedSymbol)
                     {
-                        result.RemoveAt(i);
-                        i--;
+                        SymbolModifier modifier = (result[i] as ModifiedSymbol).Modifier;
+                        if ((modifier.HasFlag(SymbolModifier.Static) && !isTypeReference) ||
+                            (!modifier.HasFlag(SymbolModifier.Static) && isTypeReference))
+                        {
+                            result.RemoveAt(i);
+                            i--;
+                        }
                     }
                 }
             }
