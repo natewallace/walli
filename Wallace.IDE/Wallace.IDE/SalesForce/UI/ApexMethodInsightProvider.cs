@@ -34,7 +34,7 @@ namespace Wallace.IDE.SalesForce.UI
     /// <summary>
     /// Used to display insight tooltip for method parameters.
     /// </summary>
-    public class MethodInsightProvider : IOverloadProvider
+    public class ApexMethodInsightProvider : IOverloadProvider
     {
         #region Fields
 
@@ -66,7 +66,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// Constructor.
         /// </summary>
         /// <param name="methods">The methods to display insight for.</param>
-        public MethodInsightProvider(Method[] methods)
+        public ApexMethodInsightProvider(Method[] methods)
         {
             _methods = methods ?? new Method[0];
             SelectedIndex = 0;

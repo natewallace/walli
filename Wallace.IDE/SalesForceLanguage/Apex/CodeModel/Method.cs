@@ -120,7 +120,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             sb.AppendFormat("{0} ", Type);
             sb.AppendFormat("{0}(", Name);
             foreach (Parameter p in Parameters)
-                sb.AppendFormat("{0} {1}, ", p.Type, p.Name);
+                sb.AppendFormat("{0} {1}, ", p.FullType, p.Name);
             if (Parameters.Length > 0)
                 sb.Length = sb.Length - 2;
             sb.Append(")");
@@ -138,7 +138,7 @@ namespace SalesForceLanguage.Apex.CodeModel
 
             sb.AppendFormat("{0}(", Name);
             foreach (Parameter p in Parameters)
-                sb.AppendFormat("{0} {1}, ", p.Type, p.Name);
+                sb.AppendFormat("{0} {1}, ", p.FullType, p.Name);
             if (Parameters.Length > 0)
                 sb.Length = sb.Length - 2;
             sb.Append(")");

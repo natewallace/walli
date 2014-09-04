@@ -148,7 +148,7 @@
       <DependentUpon>EnterValueWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\ITextEditorView.cs" />
-    <Compile Include="SalesForce\UI\MethodInsightProvider.cs" />
+    <Compile Include="SalesForce\UI\ApexMethodInsightProvider.cs" />
     <Compile Include="SalesForce\UI\NewTriggerWindow.xaml.cs">
       <DependentUpon>NewTriggerWindow.xaml</DependentUpon>
     </Compile>

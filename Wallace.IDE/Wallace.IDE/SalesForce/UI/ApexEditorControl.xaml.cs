@@ -503,7 +503,7 @@ namespace Wallace.IDE.SalesForce.UI
 
                 _insightWindow = new OverloadInsightWindow(textEditor.TextArea);
                 _insightWindow.Style = null;
-                _insightWindow.Provider = new MethodInsightProvider(methods);
+                _insightWindow.Provider = new ApexMethodInsightProvider(methods);
 
                 _insightWindow.Show();
                 _insightWindow.Closed += delegate { _insightWindow = null; };

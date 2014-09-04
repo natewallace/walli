@@ -735,6 +735,13 @@ namespace SalesForceLanguage
                                 }
                                 break;
 
+                            case Tokens.SEPARATOR_DOT:
+                                if (openTemplate > 0)
+                                {
+                                    templateBuilder.Append(lexer.yytext);
+                                }
+                                break;
+
                             case Tokens.IDENTIFIER:
                                 if (openTemplate > 0)
                                 {
@@ -780,18 +787,25 @@ namespace SalesForceLanguage
             List<string> parts = new List<string>(GetLineParts(text));
             for (int i = 0; i < parts.Count; i++)
             {
-                if (parts[i].EndsWith("[]"))
+                parts[i] = parts[i].ToLower();
+
+                // remove generic symbols
+                if (parts[i] != "this" && _genericCompletions.Any(s => s.Id == parts[i]))
+                {
+                    parts.RemoveAt(i);
+                    i--;
+                }
+                // replace list indexer with it's method counterpart
+                else if (parts[i].EndsWith("[]"))
                 {
                     int index = i;
                     while (parts[index].EndsWith("[]"))
                     {
-                        parts[index] = parts[index].Substring(0, parts[index].Length - 2).ToLower();
+                        parts[index] = parts[index].Substring(0, parts[index].Length - 2);
                         parts.Insert(index + 1, "get()");
                         i++;
                     }
                 }
-                else
-                    parts[i] = parts[i].ToLower();
             }
 
             // match parts to types
@@ -1020,26 +1034,15 @@ namespace SalesForceLanguage
                 char prevChar = (char)text.ReadByte();
                 if (Char.IsLetterOrDigit(prevChar) || prevChar == '_' || prevChar == '\'' || prevChar == '.')
                     return new Symbol[0];
-
-                // get the word directly before the insertion point
-                string[] parts = GetLineParts(text);
-                StringBuilder wordBuilder = new StringBuilder();
-                foreach (string part in parts)
-                    wordBuilder.AppendFormat("{0}.", part);
-                if (wordBuilder.Length > 0)
-                    wordBuilder.Length--;
-                word = wordBuilder.ToString();
             }
 
-            // don't do code completions for text that:
-            // immediately follows a type,
-            // immediately follows certain keywords.
-            if (!String.IsNullOrWhiteSpace(word))
+            // process the words
+            string[] parts = GetLineParts(text);
+            if (parts != null && parts.Length > 0)
             {
-                if (_language.GetSymbols(word) != null)
-                    return new Symbol[0];
-
-                switch (word)
+                // check the last word
+                string lastWord = parts[parts.Length - 1];
+                switch (lastWord)
                 {
                     case "abstract":
                     case "delete":
@@ -1071,6 +1074,66 @@ namespace SalesForceLanguage
                     default:
                         if (_genericCompletions.Any(s => s.Id == word))
                             return new Symbol[0];
+                        break;
+                }
+
+                // check for a type starting at the end
+                StringBuilder typeBuilder = new StringBuilder();
+                bool done = false;
+                for (int i = parts.Length - 1; i > -1; i--)
+                {
+                    switch (parts[i])
+                    {
+                        case "abstract":
+                        case "delete":
+                        case "extends":
+                        case "final":
+                        case "global":
+                        case "implements":
+                        case "insert":
+                        case "merge":
+                        case "new":
+                        case "override":
+                        case "private":
+                        case "protected":
+                        case "public":
+                        case "return":
+                        case "static":
+                        case "testmethod":
+                        case "throw":
+                        case "transient":
+                        case "undelete":
+                        case "update":
+                        case "upsert":
+                        case "virtual":
+                        case "webservice":
+                        case "with sharing":
+                        case "without sharing":
+                            done = true;
+                            break;
+
+                        default:
+                            if (_genericCompletions.Any(s => s.Id == parts[i]))
+                            {
+                                if (i == parts.Length - 1)
+                                    return new Symbol[0];
+                                else
+                                    done = true;
+                            }
+                            else
+                            {
+                                if (typeBuilder.Length == 0)
+                                    typeBuilder.Append(parts[i]);
+                                else
+                                    typeBuilder.Insert(0, String.Format("{0}.", parts[i]));
+
+                                if (_language.GetSymbols(typeBuilder.ToString()) != null)
+                                    return new Symbol[0];
+                            }
+                            break;
+                    }
+
+                    if (done)
                         break;
                 }
             }
