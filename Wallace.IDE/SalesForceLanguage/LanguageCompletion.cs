@@ -808,6 +808,10 @@ namespace SalesForceLanguage
                 }
             }
 
+            // tack on method symbol to last part when specified
+            if (includeIncompleteMethods && parts.Count > 0)
+                parts[parts.Count - 1] = String.Format("{0}()", parts[parts.Count - 1]);
+
             // match parts to types
             SymbolTable classSymbol = _language.GetSymbols(className);
             TypedSymbol matchedSymbol = null;
@@ -816,7 +820,6 @@ namespace SalesForceLanguage
             if (classSymbol != null)
             {
                 bool typeSearchDone = false;
-                bool methodSearchDone = false;
 
                 for (int i = 0; i < parts.Count; i++)
                 {
@@ -997,22 +1000,10 @@ namespace SalesForceLanguage
                         typeSearchDone = true;
                     }
 
-                    // check for incomplete method
-                    if (!partFound &&
-                        includeIncompleteMethods &&
-                        !methodSearchDone &&
-                        i == parts.Count - 1)
-                    {
-                        parts[i] = String.Format("{0}()", parts[i]);
-                        i--;
-                        methodSearchDone = true;
-                        partFound = true;
-                    }
-
                     // collect the matched symbol
                     if (partFound && matchedSymbol != null)
                         result.Add(matchedSymbol);
-                    else if (!partFound)
+                    else if (matchedSymbol == null)
                         return null;
                 }
             }
