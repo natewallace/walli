@@ -98,6 +98,7 @@
     <Compile Include="SalesForce\Function\NewClassFunction.cs" />
     <Compile Include="SalesForce\Function\NewPackageFunction.cs" />
     <Compile Include="SalesForce\Function\NewTriggerFunction.cs" />
+    <Compile Include="SalesForce\Function\OpenSalesForceWebBrowserFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshFolderFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\ReloadSymbolsFunction.cs" />
@@ -562,6 +563,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Event.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WebBrowser.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

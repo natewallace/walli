@@ -121,6 +121,18 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// A uri that can be used to login to the salesforce website using this session.
+        /// </summary>
+        public string WebsiteAutoLoginUri
+        {
+            get
+            {
+                Uri uri = new Uri(_session.serverUrl);
+                return String.Format("https://{0}/secur/frontdoor.jsp?sid={1}", uri.Host, _session.sessionId);
+            }
+        }
+
+        /// <summary>
         /// Used to create Partner client channels.
         /// </summary>
         private ConfigurationChannelFactory<SalesForceAPI.Partner.Soap> PartnerClientFactory

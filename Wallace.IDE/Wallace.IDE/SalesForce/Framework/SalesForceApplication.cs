@@ -97,8 +97,12 @@ namespace Wallace.IDE.SalesForce.Framework
             //App.Instance.Menu.AddFunction(newPackageFunction, "NEWSALESFORCE");
             //App.Instance.RegisterFunction(newPackageFunction);
 
+            OpenSalesForceWebBrowserFunction webBrowser = new OpenSalesForceWebBrowserFunction();
+            App.Instance.Menu.AddFunction(webBrowser, "PROJECT");
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(webBrowser));
+            App.Instance.ToolBar.AddFunction(webBrowser);
+
             DataEditFunction dataEdit = new DataEditFunction();
-            App.Instance.ToolBar.AddFunction(new FunctionSeparator(dataEdit));
             App.Instance.ToolBar.AddFunction(dataEdit);
             App.Instance.Menu.AddFunction(dataEdit, "PROJECT");
 

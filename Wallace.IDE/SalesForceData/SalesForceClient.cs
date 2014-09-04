@@ -197,6 +197,16 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Get a uri that a user can use to login to salesforce through their browser using the current session id.
+        /// </summary>
+        /// <returns>A uri that a user can use to login to salesforce through their browser using the current session id.</returns>
+        public string GetWebsiteAutoLoginUri()
+        {
+            InitClients();
+            return _session.WebsiteAutoLoginUri;
+        }
+
+        /// <summary>
         /// Start tests for a given class.
         /// </summary>
         /// <param name="names">The names of the classes to start tests for.</param>
