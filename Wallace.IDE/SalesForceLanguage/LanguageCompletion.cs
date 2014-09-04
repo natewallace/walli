@@ -785,6 +785,11 @@ namespace SalesForceLanguage
 
             // get parts and do some pre-processing
             List<string> parts = new List<string>(GetLineParts(text));
+
+            // tack on method symbol to last part when specified
+            if (includeIncompleteMethods && parts.Count > 0)
+                parts[parts.Count - 1] = String.Format("{0}()", parts[parts.Count - 1]);
+
             for (int i = 0; i < parts.Count; i++)
             {
                 parts[i] = parts[i].ToLower();
@@ -807,10 +812,6 @@ namespace SalesForceLanguage
                     }
                 }
             }
-
-            // tack on method symbol to last part when specified
-            if (includeIncompleteMethods && parts.Count > 0)
-                parts[parts.Count - 1] = String.Format("{0}()", parts[parts.Count - 1]);
 
             // match parts to types
             SymbolTable classSymbol = _language.GetSymbols(className);
