@@ -790,7 +790,7 @@ namespace SalesForceLanguage
                 parts[i] = parts[i].ToLower();
 
                 // remove generic symbols
-                if (parts[i] != "this" && _genericCompletions.Any(s => s.Id == parts[i]))
+                if (parts[i] != "this" && parts[i] != "super" && _genericCompletions.Any(s => s.Id == parts[i]))
                 {
                     parts.RemoveAt(i);
                     i--;
@@ -858,6 +858,12 @@ namespace SalesForceLanguage
                             if (part == "this")
                             {
                                 matchedSymbol = new Field(new TextPosition(0, 0), "this", null, SymbolModifier.None, classSymbol.FullType);
+                                partFound = true;
+                            }
+                            // super keyword
+                            else if (part == "super")
+                            {
+                                matchedSymbol = new Field(new TextPosition(0, 0), "super", null, SymbolModifier.None, classSymbol.Extends);
                                 partFound = true;
                             }
                             else
@@ -1216,7 +1222,17 @@ namespace SalesForceLanguage
             if (typeSymbol == null)
                 return result.ToArray();
 
-            bool isExternal = (classSymbol.Id != symbol.Id);
+            // determine if the symbol is an external reference or not
+            bool isExternal = true;
+            SymbolTable classCheck = classSymbol;
+            while (classCheck != null)
+            {
+                isExternal = (classCheck.Id == symbol.Id);
+                if (!isExternal)
+                    break;
+
+                classCheck = _language.GetSymbols(classCheck.Extends);
+            }
 
             // build the results
             result.AddRange(GetFields(typeSymbol, isExternal));
