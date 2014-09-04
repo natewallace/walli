@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-  <Product Id="1F29EE89-6D6E-4363-A180-781DE041D516"
+  <Product Id="A73108C7-9FFA-4DE9-8136-22D69E321429"
            UpgradeCode="E333820A-5B39-44CF-81A0-BF56B02AEBF2"
-           Version="0.1.0.0"
+           Version="0.2.0.0"
            Language="1033"
            Name="Walli"
            Manufacturer="natewallace@gmail.com">
 
     <Package InstallerVersion="300" Compressed="yes" />
-    <Media Id="1" Cabinet="Walli.cab" EmbedCab="yes" />
+    <Media Id="1" Cabinet="Walli.cab" EmbedCab="yes" />    
 
     <Icon Id="AppIcon.ico" SourceFile="..\Wallace.IDE\AppIcon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
 
+    <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+    
     <!-- Define the directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
