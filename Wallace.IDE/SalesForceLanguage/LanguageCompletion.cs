@@ -789,10 +789,16 @@ namespace SalesForceLanguage
             // tack on method symbol to last part when specified
             if (includeIncompleteMethods && parts.Count > 0)
                 parts[parts.Count - 1] = String.Format("{0}()", parts[parts.Count - 1]);
+            
+            bool isNewStatement = false;
 
             for (int i = 0; i < parts.Count; i++)
             {
                 parts[i] = parts[i].ToLower();
+
+                // check for new statement
+                if (parts[i] == "new")
+                    isNewStatement = true;
 
                 // remove generic symbols
                 if (parts[i] != "this" && 
@@ -822,7 +828,7 @@ namespace SalesForceLanguage
             }
 
             // check for constructor first
-            if (parts.Count > 0)
+            if (isNewStatement && parts.Count > 0)
             {
                 StringBuilder constructorBuilder = new StringBuilder();
                 foreach (string part in parts)
@@ -831,12 +837,14 @@ namespace SalesForceLanguage
                 if (constructorBuilder.Length > 0)
                 {
                     constructorBuilder.Length = constructorBuilder.Length - 1;
-                    if (constructorBuilder.ToString().EndsWith("()"))
+                    if (includeIncompleteMethods || constructorBuilder.ToString().EndsWith("()"))
+                    {
                         constructorBuilder.Length = constructorBuilder.Length - 2;
 
-                    SymbolTable constructorClass = _language.GetSymbols(constructorBuilder.ToString());
-                    if (constructorClass != null)
-                        return new Symbol[] { constructorClass, new Constructor(new TextPosition(0,0), constructorClass.Type, null, SymbolModifier.Public, null) };
+                        SymbolTable constructorClass = _language.GetSymbols(constructorBuilder.ToString());
+                        if (constructorClass != null)
+                            return new Symbol[] { constructorClass, new Constructor(new TextPosition(0, 0), constructorClass.Type, null, SymbolModifier.Public, null) };
+                    }
                 }
             }
 
