@@ -48,6 +48,14 @@
 			public String getSummary();
 		}
 
+		public enum Severity {
+			CONFIRM,
+			ERROR,
+			FATAL,
+			INFO,
+			WARNING
+		}
+
 		public class StandardController {
 			public StandardController(SObject controllerSObject);
 			public Void addFields(List<String> fieldNames);

@@ -47,10 +47,9 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="location">Location.</param>
         /// <param name="name">Name.</param>
         /// <param name="span">Span.</param>
-        /// <param name="modifier">Modifier.</param>
         /// <param name="type">Type.</param>
-        public Parameter(TextPosition location, string name, TextSpan span, SymbolModifier modifier, string type)
-            : base(location, name, span, modifier, type)
+        public Parameter(TextPosition location, string name, TextSpan span, string type)
+            : base(location, name, span, SymbolModifier.Private, type)
         {
         }
 

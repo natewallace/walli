@@ -180,7 +180,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             {
                 List<Parameter> parameters = new List<Parameter>();
                 foreach (Parameter p in c.Parameters)
-                    parameters.Add(new Parameter(p.Location, p.Name, p.Span, p.Modifier, ResolveType(p.Type, symbol.TemplateParameters)));
+                    parameters.Add(new Parameter(p.Location, p.Name, p.Span, ResolveType(p.Type, symbol.TemplateParameters)));
 
                 constructors.Add(new Constructor(c.Location, c.Name, c.Span, c.Modifier, parameters.ToArray()));
             }
@@ -196,7 +196,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             {
                 List<Parameter> parameters = new List<Parameter>();
                 foreach (Parameter p in m.Parameters)
-                    parameters.Add(new Parameter(p.Location, p.Name, p.Span, p.Modifier, ResolveType(p.Type, symbol.TemplateParameters)));
+                    parameters.Add(new Parameter(p.Location, p.Name, p.Span, ResolveType(p.Type, symbol.TemplateParameters)));
 
                 methods.Add(new Method(m.Location, m.Name, m.Span, m.Modifier, ResolveType(m.Type, symbol.TemplateParameters), parameters.ToArray()));
             }

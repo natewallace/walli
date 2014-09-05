@@ -587,7 +587,8 @@ boolean_expression:
 statement:
 	declaration_statement |
 	embedded_statement |
-	error SEPARATOR_SEMICOLON { Error(); } ;
+	error { Error(); } |
+	error { Error(); } ;
 
 embedded_statement:
 	block |
@@ -794,8 +795,8 @@ class_member_declaration:
 	constructor_declaration |
 	static_constructor_declaration |
 	type_declaration |
-	error SEPARATOR_SEMICOLON { Error(); } |
-	error SEPARATOR_BRACE_RIGHT { Error(); } ;
+	error { Error(); } |
+	error { Error(); } ;
 
 field_declaration:
 	           modifiers type variable_declarators SEPARATOR_SEMICOLON |

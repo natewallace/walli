@@ -79,8 +79,10 @@ namespace Wallace.IDE.SalesForce.UI
                         sb.Append(' ');
                         document.Insert(line.Offset, sb.ToString());
                     }
-                    // check for opening block of code
-                    else if (previousLineText.Trim().EndsWith("{"))
+                    // check for opening block of code or opening if type statement
+                    else if (previousLineText.Trim().EndsWith("{") || 
+                             previousLineText.Trim().EndsWith(")") ||
+                             previousLineText.Trim().EndsWith("else"))
                     {
                         StringBuilder sb = new StringBuilder();
                         bool done = false;

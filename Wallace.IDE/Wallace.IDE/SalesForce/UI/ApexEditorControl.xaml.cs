@@ -112,6 +112,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private ParseResult _parseData;
 
+        /// <summary>
+        /// Holds the last text that was entered.
+        /// </summary>
+        private string _lastTextEntered;
+
         #endregion
 
         #region Constructors
@@ -152,6 +157,8 @@ namespace Wallace.IDE.SalesForce.UI
 
             _suspendNavigation = false;
             _suspendParse = false;
+
+            _lastTextEntered = null;
 
             _redrawTimer = new Timer();
             _redrawTimer.Interval = 750;
@@ -1014,6 +1021,10 @@ namespace Wallace.IDE.SalesForce.UI
                 }
                 else if (_completionWindow == null && e.Text.Length == 1 && Char.IsLetter(e.Text[0]))
                 {
+                    // do an immediate parse after entering newlines to insure correct spans for members
+                    if ((e.Text != "\r\n" && e.Text != "\n") && (_lastTextEntered == "\r\n" || _lastTextEntered == "\n"))
+                        ParseText(Text);
+
                     // show completions
                     ShowCodeCompletions(LanguageManager.Completion.GetCodeCompletionsLetter(
                         new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset),
@@ -1025,6 +1036,8 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 App.HandleException(err);
             }
+
+            _lastTextEntered = e.Text;
         }
 
         #endregion

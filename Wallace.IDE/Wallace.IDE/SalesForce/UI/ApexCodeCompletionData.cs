@@ -71,7 +71,7 @@ namespace Wallace.IDE.SalesForce.UI
         {
             ModifiedSymbol modifiedSymbol = symbol as ModifiedSymbol;
 
-            if (symbol is Field)
+            if (symbol is Field || symbol is Parameter)
             {
                 if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Final))
                 {

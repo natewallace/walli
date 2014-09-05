@@ -209,7 +209,6 @@ namespace SalesForceLanguage.Apex.Parser
                     new TextPosition(node.TextSpan),
                     node.Nodes[1].Nodes[0].GetLeavesDisplayText(),
                     null,
-                    SymbolModifier.Private,
                     node.Nodes[0].GetLeavesDisplayText()));
             }
 

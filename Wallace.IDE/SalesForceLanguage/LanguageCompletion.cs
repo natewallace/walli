@@ -795,7 +795,15 @@ namespace SalesForceLanguage
                 parts[i] = parts[i].ToLower();
 
                 // remove generic symbols
-                if (parts[i] != "this" && parts[i] != "super" && _genericCompletions.Any(s => s.Id == parts[i]))
+                if (parts[i] != "this" && 
+                    parts[i] != "super" && 
+                    _genericCompletions.Any(s => s.Id == parts[i]))
+                {
+                    parts.RemoveAt(i);
+                    i--;
+                }
+                // remove if statements
+                else if (parts[i] == "if()")
                 {
                     parts.RemoveAt(i);
                     i--;
@@ -810,6 +818,25 @@ namespace SalesForceLanguage
                         parts.Insert(index + 1, "get()");
                         i++;
                     }
+                }
+            }
+
+            // check for constructor first
+            if (parts.Count > 0)
+            {
+                StringBuilder constructorBuilder = new StringBuilder();
+                foreach (string part in parts)
+                    constructorBuilder.AppendFormat("{0}.", part);
+
+                if (constructorBuilder.Length > 0)
+                {
+                    constructorBuilder.Length = constructorBuilder.Length - 1;
+                    if (constructorBuilder.ToString().EndsWith("()"))
+                        constructorBuilder.Length = constructorBuilder.Length - 2;
+
+                    SymbolTable constructorClass = _language.GetSymbols(constructorBuilder.ToString());
+                    if (constructorClass != null)
+                        return new Symbol[] { constructorClass, new Constructor(new TextPosition(0,0), constructorClass.Type, null, SymbolModifier.Public, null) };
                 }
             }
 
@@ -892,6 +919,28 @@ namespace SalesForceLanguage
                                         }
 
                                         break;
+                                    }
+                                }
+
+                                // look for constructor parameters
+                                if (!partFound)
+                                {
+                                    foreach (Constructor constructor in classSymbol.Constructors)
+                                    {
+                                        if (constructor.Contains(position))
+                                        {
+                                            foreach (Parameter parameter in constructor.Parameters)
+                                            {
+                                                if (parameter.Id == part)
+                                                {
+                                                    matchedSymbol = parameter;
+                                                    partFound = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            break;
+                                        }
                                     }
                                 }
 
@@ -1167,6 +1216,31 @@ namespace SalesForceLanguage
                     }
                 }
 
+                // add parameters from current method or constructor
+                bool containerFound = false;
+                foreach (Method m in classSymbol.Methods)
+                {
+                    if (m.Contains(position))
+                    {
+                        result.AddRange(m.Parameters);
+                        containerFound = true;
+                        break;
+                    }
+                }
+
+                if (!containerFound)
+                {
+                    foreach (Constructor c in classSymbol.Constructors)
+                    {
+                        if (c.Contains(position))
+                        {
+                            result.AddRange(c.Parameters);
+                            containerFound = true;
+                            break;
+                        }
+                    }
+                }
+
                 // add local members
                 result.AddRange(GetFields(classSymbol, false));
                 result.AddRange(GetProperties(classSymbol, false));
@@ -1212,7 +1286,9 @@ namespace SalesForceLanguage
             else
             {
                 isTypeReference = false;
-                if (symbol is TypedSymbol)
+                if (symbol is Constructor && matchedSymbols[0] is SymbolTable)
+                    typeSymbol = matchedSymbols[0] as SymbolTable;
+                else if (symbol is TypedSymbol)
                     typeSymbol = _language.GetSymbols((symbol as TypedSymbol).FullType);
             }
 
@@ -1298,9 +1374,13 @@ namespace SalesForceLanguage
             }
             else
             {
-                if (matchedSymbols[matchedSymbols.Length - 2] is TypedSymbol)
+                if (matchedSymbols[matchedSymbols.Length - 2] is SymbolTable)
+                    parent = matchedSymbols[matchedSymbols.Length - 2] as SymbolTable;
+                else if (matchedSymbols[matchedSymbols.Length - 2] is TypedSymbol)
                     parent = _language.GetSymbols((matchedSymbols[matchedSymbols.Length - 2] as TypedSymbol).FullType);
-                isTypeReference = (matchedSymbols[matchedSymbols.Length - 2] is SymbolTable);
+
+                isTypeReference = !(matchedSymbols[matchedSymbols.Length - 1] is Constructor) &&
+                                  (matchedSymbols[matchedSymbols.Length - 2] is SymbolTable);
             }
 
             if (parent == null)
@@ -1311,18 +1391,36 @@ namespace SalesForceLanguage
             // build results
             HashSet<string> signatures = new HashSet<string>();
             SymbolTable currentClass = parent;
-            while (currentClass != null)
+
+            if (currentClass != null)
             {
-                foreach (Method m in currentClass.Methods)
+                // check for constructors
+                foreach (Constructor c in currentClass.Constructors)
                 {
-                    if (m.Id == method.Id && !signatures.Contains(m.Signature))
+                    if (c.Id == method.Id && !signatures.Contains(c.Signature))
                     {
-                        result.Add(m);
-                        signatures.Add(m.Signature);
+                        result.Add(c);
+                        signatures.Add(c.Signature);
                     }
                 }
 
-                currentClass = _language.GetSymbols(currentClass.Extends);
+                if (result.Count == 0)
+                {
+                    // check for methods
+                    while (currentClass != null)
+                    {
+                        foreach (Method m in currentClass.Methods)
+                        {
+                            if (m.Id == method.Id && !signatures.Contains(m.Signature))
+                            {
+                                result.Add(m);
+                                signatures.Add(m.Signature);
+                            }
+                        }
+
+                        currentClass = _language.GetSymbols(currentClass.Extends);
+                    }
+                }
             }
 
             // filter out methods based on visibility

@@ -54,8 +54,8 @@ namespace Wallace.Language.Apex.Tests
                 SymbolModifier.Public,
                 new Parameter[] 
                 { 
-                    new Parameter(new TextPosition(0,0), "one", null, SymbolModifier.Private, "string"), 
-                    new Parameter(new TextPosition(0,0), "two", null, SymbolModifier.Private, "integer")
+                    new Parameter(new TextPosition(0,0), "one", null, "string"), 
+                    new Parameter(new TextPosition(0,0), "two", null, "integer")
                 });
 
             Constructor constructorTwo = new Constructor(
@@ -65,8 +65,8 @@ namespace Wallace.Language.Apex.Tests
                 SymbolModifier.Public,
                 new Parameter[] 
                 { 
-                    new Parameter(new TextPosition(0,0), "num", null, SymbolModifier.Private, "integer"), 
-                    new Parameter(new TextPosition(0,0), "input", null, SymbolModifier.Private, "mytype")
+                    new Parameter(new TextPosition(0,0), "num", null, "integer"), 
+                    new Parameter(new TextPosition(0,0), "input", null, "mytype")
                 });
 
             Property propertyOne = new Property(
@@ -91,8 +91,8 @@ namespace Wallace.Language.Apex.Tests
                 "mytype",
                 new Parameter[] 
                 { 
-                    new Parameter(new TextPosition(0,0), "onex", null, SymbolModifier.Private, "string"), 
-                    new Parameter(new TextPosition(0,0), "twox", null, SymbolModifier.Private, "integer")
+                    new Parameter(new TextPosition(0,0), "onex", null, "string"), 
+                    new Parameter(new TextPosition(0,0), "twox", null, "integer")
                 });
 
             Method methodTwo = new Method(
@@ -103,8 +103,8 @@ namespace Wallace.Language.Apex.Tests
                 "string",
                 new Parameter[] 
                 { 
-                    new Parameter(new TextPosition(0,0), "onex", null, SymbolModifier.Private, "string"), 
-                    new Parameter(new TextPosition(0,0), "twox", null, SymbolModifier.Private, "integer")
+                    new Parameter(new TextPosition(0,0), "onex", null, "string"), 
+                    new Parameter(new TextPosition(0,0), "twox", null, "integer")
                 });
 
             SymbolTable symbolTable = new SymbolTable(
