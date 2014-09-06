@@ -1014,7 +1014,7 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 if (_completionWindow != null && e.Text.Length > 0)
                 {
-                    if (!char.IsLetterOrDigit(e.Text[0]))
+                    if (!char.IsLetterOrDigit(e.Text[0]) && e.Text[0] != '_')
                     {
                         _completionWindow.CompletionList.RequestInsertion(e);
                     }

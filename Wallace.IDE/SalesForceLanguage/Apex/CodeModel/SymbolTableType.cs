@@ -17,6 +17,11 @@ namespace SalesForceLanguage.Apex.CodeModel
         Class,
 
         /// <summary>
+        /// A trigger definition.
+        /// </summary>
+        Trigger,
+
+        /// <summary>
         /// An interface definition.
         /// </summary>
         Interface,

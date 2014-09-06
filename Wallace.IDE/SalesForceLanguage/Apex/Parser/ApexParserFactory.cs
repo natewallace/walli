@@ -40,7 +40,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// <summary>
         /// Holds the local variable scopes that have been defined.
         /// </summary>
-        private List<VariableScope> _variableScopes;
+        private Stack<VariableScope> _variableScopes;
 
         /// <summary>
         /// Holds fields that have been defined.
@@ -241,7 +241,7 @@ namespace SalesForceLanguage.Apex.Parser
         /// </summary>
         public void Clear()
         {
-            _variableScopes = new List<VariableScope>();
+            _variableScopes = new Stack<VariableScope>();
             _variables = new Stack<Field>();
             _fields = new Stack<Field>();
             _enumFields = new Stack<Field>();
@@ -305,7 +305,7 @@ namespace SalesForceLanguage.Apex.Parser
                 // variable scope
                 case Tokens.grammar_block:
                 case Tokens.grammar_embedded_statement:
-                    _variableScopes.Add(new VariableScope(
+                    _variableScopes.Push(new VariableScope(
                         new TextSpan(node.TextSpan),
                         GetSymbols<Field>(node, _variables)));
 
@@ -460,6 +460,9 @@ namespace SalesForceLanguage.Apex.Parser
                         }
                     }
 
+                    List<VariableScope> classScopes = new List<VariableScope>();
+                    
+
                     _classes.Push(new SymbolTable(
                         new TextPosition(className.TextSpan),
                         className.GetLeavesDisplayText(),
@@ -467,7 +470,7 @@ namespace SalesForceLanguage.Apex.Parser
                         attributeList.ToArray(),
                         classVisibility,
                         SymbolTableType.Class,
-                        _variableScopes.ToArray(),
+                        GetSymbols<VariableScope>(node, _variableScopes),
                         GetSymbols<Field>(node, _fields),
                         GetSymbols<Constructor>(node, _constructors),
                         GetSymbols<Property>(node, _properties),
@@ -574,6 +577,29 @@ namespace SalesForceLanguage.Apex.Parser
                         null,
                         null));
 
+                    break;
+
+                // trigger
+                case Tokens.grammar_trigger_declaration:
+                    ApexSyntaxNode headerNode = node.GetChildNodeWithToken(Tokens.grammar_trigger_header);
+                    ApexSyntaxNode triggerNameNode = headerNode.Nodes[1];
+
+                    _classes.Push(new SymbolTable(
+                        new TextPosition(triggerNameNode.TextSpan),
+                        triggerNameNode.GetLeavesDisplayText(),
+                        new TextSpan(node.TextSpan),
+                        null,
+                        SymbolModifier.Private,
+                        SymbolTableType.Trigger,
+                        GetSymbols<VariableScope>(node, _variableScopes),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null));
+                    
                     break;
 
                 default:

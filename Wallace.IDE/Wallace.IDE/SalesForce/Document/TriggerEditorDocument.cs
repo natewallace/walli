@@ -68,6 +68,14 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Set the language manager on the view.
+        /// </summary>
+        protected override void OnViewCreated()
+        {
+            View.LanguageManager = Project.Language;
+        }
+
+        /// <summary>
         /// Handle name changes.
         /// </summary>
         public override void Save()

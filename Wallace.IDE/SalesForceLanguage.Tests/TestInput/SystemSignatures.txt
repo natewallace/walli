@@ -1,5 +1,20 @@
 ﻿public class Gen {
 
+	public class Trigger {
+		public static boolean isExecuting { get; set; }
+		public static boolean isInsert { get; set; }
+		public static boolean isUpdate { get; set; }
+		public static boolean isDelete { get; set; }
+		public static boolean isBefore { get; set; }
+		public static boolean isAfter { get; set; }
+		public static boolean isUndelete { get; set; }
+		public static List<sObject> new { get; set; }
+		public static Map<id, sObject> newMap { get; set; }
+		public static List<sObject> old { get; set; }
+		public static Map<id, sObject> oldMap { get; set; }
+		public static integer size { get; set; }
+	}
+
 	public class Answers {
 		public static ID[] findSimilar(Question q);
 		public static Void setBestReply(String questionId, String replyId);

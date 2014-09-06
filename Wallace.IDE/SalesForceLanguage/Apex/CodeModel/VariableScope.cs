@@ -25,7 +25,7 @@ namespace SalesForceLanguage.Apex.CodeModel
     /// <summary>
     /// A scoped collection of variables.
     /// </summary>
-    public class VariableScope
+    public class VariableScope : Symbol
     {
         #region Constructors
 
@@ -35,19 +35,14 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// <param name="span">Span.</param>
         /// <param name="variables">Variables.</param>
         public VariableScope(TextSpan span, Field[] variables)
+            : base(span.StartPosition, "scope", span)
         {
-            Span = span;
             Variables = variables ?? new Field[0];
         }
 
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// The span that makes up the scope of the variables.
-        /// </summary>
-        public TextSpan Span { get; private set; }
 
         /// <summary>
         /// The variables within the scope.

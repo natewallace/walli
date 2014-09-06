@@ -50,6 +50,11 @@ namespace SalesForceLanguage
         /// </summary>
         private Dictionary<string, SymbolTable> _classes;
 
+        /// <summary>
+        /// Holds all triggers that have been parsed.
+        /// </summary>
+        private Dictionary<string, SymbolTable> _triggers;
+
         #endregion
 
         #region Constructors
@@ -85,6 +90,7 @@ namespace SalesForceLanguage
         {
             SymbolsFolder = symbolsFolder;
             _classes = new Dictionary<string, SymbolTable>();
+            _triggers = new Dictionary<string, SymbolTable>();
             Completion = new LanguageCompletion(this);
         }
 
@@ -171,10 +177,12 @@ namespace SalesForceLanguage
             if (result != null)
                 return result;
 
+            type = type.ToLower();
+
             // check for inner class reference
             if (type.Contains('.'))
             {
-                string[] parts = type.ToLower().Split('.');
+                string[] parts = type.Split('.');
                 if (parts.Length > 0)
                 {
                     result = LookupSymbol(parts[0]);
@@ -202,6 +210,10 @@ namespace SalesForceLanguage
                     return result;
                 }
             }
+
+            // look for a trigger with the same name
+            if (_triggers.ContainsKey(type))
+                return _triggers[type];
 
             return null;
         }
@@ -245,6 +257,14 @@ namespace SalesForceLanguage
             {
                 foreach (SymbolTable st in symbols)
                 {
+                    // store triggers separate from classes
+                    if (st.TableType == SymbolTableType.Trigger)
+                    {
+                        _triggers.Remove(st.Id);
+                        _triggers.Add(st.Id, st);
+                        continue;
+                    }
+
                     // update symbols in memory
                     if (replace)
                     {

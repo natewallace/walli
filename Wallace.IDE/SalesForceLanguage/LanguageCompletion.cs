@@ -786,13 +786,26 @@ namespace SalesForceLanguage
             // get parts and do some pre-processing
             List<string> parts = new List<string>(GetLineParts(text));
 
+            // special process for triggers
+            if (parts.Count > 0 && (parts[0].ToLower() == "trigger" || parts[0].ToLower() == "system.trigger"))
+            {
+                SymbolTable trigger = _language.GetSymbols("trigger");
+                if (trigger != null)
+                {
+                    result.Add(trigger);
+
+                    if (parts.Count > 1 && parts[1].ToLower() == "new")
+                        result.Add(new Field(new TextPosition(0, 0), "new", null, SymbolModifier.Public | SymbolModifier.Static, "List<sObject>"));
+                }
+            }
+
             // tack on method symbol to last part when specified
             if (includeIncompleteMethods && parts.Count > 0)
                 parts[parts.Count - 1] = String.Format("{0}()", parts[parts.Count - 1]);
             
             bool isNewStatement = false;
 
-            for (int i = 0; i < parts.Count; i++)
+            for (int i = result.Count; i < parts.Count; i++)
             {
                 parts[i] = parts[i].ToLower();
 
@@ -802,7 +815,7 @@ namespace SalesForceLanguage
 
                 // remove generic symbols
                 if (parts[i] != "this" && 
-                    parts[i] != "super" && 
+                    parts[i] != "super" &&
                     _genericCompletions.Any(s => s.Id == parts[i]))
                 {
                     parts.RemoveAt(i);
@@ -827,8 +840,8 @@ namespace SalesForceLanguage
                 }
             }
 
-            // check for constructor first
-            if (isNewStatement && parts.Count > 0)
+            // check for constructor
+            if (result.Count == 0 && isNewStatement && parts.Count > 0)
             {
                 StringBuilder constructorBuilder = new StringBuilder();
                 foreach (string part in parts)
@@ -850,14 +863,14 @@ namespace SalesForceLanguage
 
             // match parts to types
             SymbolTable classSymbol = _language.GetSymbols(className);
-            TypedSymbol matchedSymbol = null;
-            bool partFound = false;
+            TypedSymbol matchedSymbol = (result.Count == 0) ? null : (TypedSymbol)result[result.Count - 1];
+            bool partFound = (matchedSymbol != null);
 
             if (classSymbol != null)
             {
                 bool typeSearchDone = false;
 
-                for (int i = 0; i < parts.Count; i++)
+                for (int i = result.Count; i < parts.Count; i++)
                 {
                     string part = parts[i];
                     partFound = false;
