@@ -1,0 +1,83 @@
+﻿<Window x:Class="Wallace.IDE.SalesForce.UI.NewPackageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Create Package" 
+        Height="250" 
+        Width="450"
+        MinHeight="200"
+        MinWidth="200"        
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Style="{StaticResource ChromeWindowStyle}"
+        Background="{StaticResource CaptionBackgroundBrush}">
+    <Border Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="5"
+                       Text="Manifest:"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold" />
+            
+            <TextBlock x:Name="textBlockManifest"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="5" />
+
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       Margin="5"
+                       Text="Is destructive:"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold" />
+
+            <CheckBox x:Name="checkBoxIsDestructive"
+                      Grid.Row="1"
+                      Grid.Column="1"
+                      VerticalAlignment="Center"
+                      Margin="5" />
+
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Margin="5"
+                       Text="Package name:"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold" />
+
+            <TextBox x:Name="textBoxName"
+                     Grid.Row="2"
+                     Grid.Column="1"
+                     Margin="5"
+                     MaxLength="255"/>
+
+            <StackPanel Grid.Row="3"
+                        Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom">
+
+                <Button Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonCreate_Click">Create</Button>
+
+                <Button Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonCancel_Click">Cancel</Button>
+
+            </StackPanel>
+            
+        </Grid>
+    </Border>
+</Window>

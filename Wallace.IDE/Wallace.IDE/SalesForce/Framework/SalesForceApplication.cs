@@ -92,11 +92,6 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(newComponentFunction, "NEWSALESFORCE");
             App.Instance.RegisterFunction(newComponentFunction);
 
-            //Planned for future release
-            //NewPackageFunction newPackageFunction = new NewPackageFunction();
-            //App.Instance.Menu.AddFunction(newPackageFunction, "NEWSALESFORCE");
-            //App.Instance.RegisterFunction(newPackageFunction);
-
             NewManifestFunction newManifestFunction = new NewManifestFunction();
             App.Instance.Menu.AddFunction(newManifestFunction, "NEWSALESFORCE");
             App.Instance.RegisterFunction(newManifestFunction);
@@ -140,6 +135,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveManifestFunction));
             App.Instance.ToolBar.AddFunction(saveManifestFunction);
             App.Instance.Menu.AddFunction(saveManifestFunction, "DOCUMENT");
+
+            NewPackageFunction newPackageFunction = new NewPackageFunction();
+            App.Instance.ToolBar.AddFunction(newPackageFunction);
+            App.Instance.Menu.AddFunction(newPackageFunction, "DOCUMENT");
 
             RefreshSourceFileFunction refreshDocumentFunction = new RefreshSourceFileFunction();
             App.Instance.ToolBar.AddFunction(refreshDocumentFunction);

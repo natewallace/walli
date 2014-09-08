@@ -23,6 +23,7 @@
 using System;
 using SalesForceData;
 using Wallace.IDE.Framework;
+using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Node;
 using Wallace.IDE.SalesForce.UI;
@@ -30,39 +31,61 @@ using Wallace.IDE.SalesForce.UI;
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Function that creates a new package.
+    /// Function that creates a new package from a manifest.
     /// </summary>
     public class NewPackageFunction : FunctionBase
     {
-        #region Methods
+        #region Properties
 
         /// <summary>
-        /// Set the header.
+        /// The current manifest document or null if there isn't one.
         /// </summary>
-        /// <param name="host">The type of host.</param>
-        /// <param name="presenter">The presenter to use.</param>
-        public override void Init(FunctionHost host, IFunctionPresenter presenter)
+        private ManifestEditorDocument CurrentDocument
         {
-            if (host == FunctionHost.Toolbar)
+            get
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "NewPackage.png");
-                presenter.ToolTip = "Create a new package.";
-            }
-            else
-            {
-                presenter.Header = "New package...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "NewPackage.png");
+                if (App.Instance.SalesForceApp.CurrentProject != null)
+                    return App.Instance.Content.ActiveDocument as ManifestEditorDocument;
+                else
+                    return null;
             }
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Update the visibility.
+        /// Set the visibility of the header.
         /// </summary>
         /// <param name="host">The type of host for this function.</param>
         /// <param name="presenter">The presenter to use when updating the view.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (App.Instance.SalesForceApp.CurrentProject != null);
+            bool canCreate = false;
+            bool isDirty = false;
+
+            if (CurrentDocument != null)
+            {
+                Manifest manifest = CurrentDocument.Manifest;
+                isDirty = CurrentDocument.IsDirty;
+
+                if (host == FunctionHost.Toolbar)
+                {
+                    presenter.Header = VisualHelper.CreateIconHeader(null, "NewPackage.png");
+                    presenter.ToolTip = "Create package.";
+                }
+                else
+                {
+                    presenter.Header = "Create package";
+                    presenter.Icon = VisualHelper.CreateIconHeader(null, "NewPackage.png");
+                }
+
+                canCreate = true;
+            }
+
+            IsVisible = canCreate;
+            IsEnabled = !isDirty;
         }
 
         /// <summary>
@@ -73,38 +96,24 @@ namespace Wallace.IDE.SalesForce.Function
             if (App.Instance.SalesForceApp.CurrentProject != null)
             {
                 Project project = App.Instance.SalesForceApp.CurrentProject;
-                DeployFolderNode deployNode = App.Instance.Navigation.GetNode<DeployFolderNode>();
 
-                EnterValueWindow dlg = new EnterValueWindow();
-                dlg.Title = "Create Package";
-                dlg.ActionLabel = "Enter Package Name:";
-                dlg.ActionLabel = "Create";
+                NewPackageWindow dlg = new NewPackageWindow();
                 if (App.ShowDialog(dlg))
                 {
-                    Package package = new Package(System.IO.Path.Combine(
-                        project.DeployFolder,
-                        String.Format("{0}.zip", dlg.EnteredValue)));
+                    //Manifest manifest = new Manifest(System.IO.Path.Combine(
+                    //    project.ManifestFolder,
+                    //    String.Format("{0}.manifest", dlg.EnteredValue)));
 
-                    PackageNode packageNode = new PackageNode(project, package);
+                    //if (App.Instance.SalesForceApp.CurrentProject.GetManifests().Contains(manifest))
+                    //    throw new Exception("There is already a manifest named: " + manifest.Name);
 
-                    int index = 0;
-                    foreach (INode node in deployNode.Presenter.Nodes)
-                    {
-                        if (node is PackageNode)
-                        {
-                            int result = package.CompareTo((node as PackageNode).Package);
-                            if (result == 0)
-                                throw new Exception("There is already a package named: " + package.Name);
-                            else if (result < 0)
-                                break;
-                        }
-                        index++;
-                    }
+                    //manifest.Save();
 
-                    deployNode.Presenter.Nodes.Insert(index, packageNode);
-                    deployNode.Presenter.Expand();
-                    deployNode.Presenter.NodeManager.ActiveNode = packageNode;
-                    packageNode.DoubleClick();
+                    //ManifestFolderNode manifestFolderNode = App.Instance.Navigation.GetNode<ManifestFolderNode>();
+                    //if (manifestFolderNode != null)
+                    //    manifestFolderNode.AddManifest(manifest);
+
+                    //App.Instance.Content.OpenDocument(new ManifestEditorDocument(project, manifest));
                 }
             }
         }
