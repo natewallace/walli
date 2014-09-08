@@ -947,9 +947,9 @@ namespace SalesForceData
                                     metadataWriter.Write(metadataValue);
                             }
 
-                            PackageManifest manifest = new PackageManifest();
-                            manifest.AddGroup(new PackageManifestItemGroup(file.FileType.Name));
-                            manifest.Groups.ElementAt(0).AddItem(new PackageManifestItem(file.Name));
+                            Manifest manifest = new Manifest("package");
+                            manifest.AddGroup(new ManifestItemGroup(file.FileType.Name));
+                            manifest.Groups.ElementAt(0).AddItem(new ManifestItem(file.Name));
                             ZipArchiveEntry manifestEntry = zip.CreateEntry("package.xml");
                             using (Stream manifestWriter = manifestEntry.Open())
                                 manifest.Save(manifestWriter);
@@ -1156,16 +1156,16 @@ namespace SalesForceData
         /// </summary>
         /// <param name="manifest">The manifest that lists the files to download.</param>
         /// <returns>The downloaded source files in a zipped package.</returns>
-        public byte[] GetSourceFileContentAsPackage(PackageManifest manifest)
+        public byte[] GetSourceFileContentAsPackage(Manifest manifest)
         {
             if (manifest == null)
                 throw new ArgumentNullException("manifest");
 
             Dictionary<string, HashSet<string>> memberMap = new Dictionary<string, HashSet<string>>();
-            foreach (PackageManifestItemGroup group in manifest.Groups)
+            foreach (ManifestItemGroup group in manifest.Groups)
             {
                 HashSet<string> groupSet = new HashSet<string>();
-                foreach (PackageManifestItem item in group.Items)
+                foreach (ManifestItem item in group.Items)
                     groupSet.Add(item.Name);
                 memberMap.Add(group.Name, groupSet);
             }

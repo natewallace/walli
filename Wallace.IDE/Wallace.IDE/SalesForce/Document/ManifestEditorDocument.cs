@@ -36,31 +36,46 @@ namespace Wallace.IDE.SalesForce.Document
     /// <summary>
     /// Editor document for packages.
     /// </summary>
-    public class PackageEditorDocument : DocumentBase
+    public class ManifestEditorDocument : DocumentBase
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the IsDirty property.
+        /// </summary>
+        private bool _isDirty;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="project">Project.</param>
-        /// <param name="package">Package.</param>
-        public PackageEditorDocument(Project project, Package package)
+        /// <param name="manifest">Manifest.</param>
+        public ManifestEditorDocument(Project project, Manifest manifest)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
-            if (package == null)
-                throw new ArgumentNullException("package");
+            if (manifest == null)
+                throw new ArgumentNullException("manifest");
 
             Project = project;
-            Package = package;
-            Text = Package.Name;
+            Manifest = manifest;
+            Text = manifest.Name;
+            _isDirty = false;
 
-            View = new PackageEditorControl();
+            View = new ManifestEditorControl();
             View.ListDragOver += View_DragOver;
             View.ListDrop += View_Drop;
+            View.RemoveItemsClicked += View_RemoveItemsClicked;
 
             Files = new UniqueObservableCollection<SourceFile>();
+            foreach (ManifestItemGroup group in Manifest.Groups)
+                foreach (ManifestItem item in group.Items)
+                    Files.Add(new SourceFile(group.Name, item.Name));
+
             View.ItemsSource = Files;
             CollectionView cView = CollectionViewSource.GetDefaultView(View.ItemsSource) as CollectionView;
             cView.GroupDescriptions.Add(new PropertyGroupDescription("FileType"));
@@ -78,23 +93,58 @@ namespace Wallace.IDE.SalesForce.Document
         public Project Project { get; private set; }
 
         /// <summary>
-        /// The package being edited.
+        /// The manifest being edited.
         /// </summary>
-        public Package Package { get; private set; }
+        public Manifest Manifest { get; private set; }
 
         /// <summary>
         /// The view for this document.
         /// </summary>
-        private PackageEditorControl View { get; set; }
+        private ManifestEditorControl View { get; set; }
 
         /// <summary>
         /// Holds the files that are displayed.
         /// </summary>
         private ObservableCollection<SourceFile> Files { get; set; }
 
+        /// <summary>
+        /// Flag that indicates if there are unsaved changes.
+        /// </summary>
+        public bool IsDirty
+        {
+            get
+            {
+                return _isDirty;
+            }
+            set
+            {
+                if (_isDirty != value)
+                {
+                    _isDirty = value;
+                    Presenter.Header = _isDirty ? VisualHelper.CreateIconHeader(Manifest.Name, "Manifest.png", "*") :
+                                                  VisualHelper.CreateIconHeader(Manifest.Name, "Manifest.png");
+                    Presenter.ToolTip = Manifest.FileName;
+                    App.Instance.UpdateWorkspaces();
+                }
+            }
+        }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Save the manifest to file.
+        /// </summary>
+        public void Save()
+        {
+            Manifest.Clear();
+            foreach (SourceFile file in Files)
+                Manifest.AddItem(file);
+
+            Manifest.Save();
+            IsDirty = false;
+        }
 
         /// <summary>
         /// Set the title and view.
@@ -104,8 +154,8 @@ namespace Wallace.IDE.SalesForce.Document
         {
             if (isFirstUpdate)
             {
-                Presenter.Header = VisualHelper.CreateIconHeader(Package.Name, "Package.png");
-                Presenter.ToolTip = Package.LocalPath;
+                Presenter.Header = VisualHelper.CreateIconHeader(Manifest.Name, "Manifest.png");
+                Presenter.ToolTip = Manifest.FileName;
                 Presenter.Content = View;
             }
         }
@@ -117,12 +167,47 @@ namespace Wallace.IDE.SalesForce.Document
         /// <returns>true if this document represents the given entity.</returns>
         public override bool RepresentsEntity(object entity)
         {
-            return (Package.CompareTo(entity) == 0);
+            return Manifest.Equals(entity);
+        }
+
+        /// <summary>
+        /// Display warning if the document has unsaved changes.
+        /// </summary>
+        /// <returns>true if its ok to proceed with the closing.</returns>
+        public override bool Closing()
+        {
+            if (IsDirty)
+            {
+                return (App.MessageUser(
+                    "You have unsaved changes which will be lost.  Do you want to proceed?",
+                    "Data Loss",
+                    System.Windows.MessageBoxImage.Warning,
+                    new string[] { "Yes", "No" }) == "Yes");
+            }
+            else
+            {
+                return true;
+            }
         }
 
         #endregion
 
         #region Event Handlers
+
+        /// <summary>
+        /// Remove currently selected items.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_RemoveItemsClicked(object sender, EventArgs e)
+        {
+            object[] items = View.SelectedItems;
+            foreach (object item in items)
+                Files.Remove(item as SourceFile);
+
+            if (items.Length > 0)
+                IsDirty = true;
+        }
 
         /// <summary>
         /// Process the drag over event.
@@ -153,6 +238,8 @@ namespace Wallace.IDE.SalesForce.Document
                 foreach (SalesForceData.SourceFile file in files)
                     Files.Add(file);
             }
+
+            IsDirty = true;
         }
 
         #endregion

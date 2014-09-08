@@ -93,17 +93,17 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void DoubleClick()
         {
-            foreach (IDocument document in App.Instance.Content.OpenDocuments)
-            {
-                if (document is PackageEditorDocument && (document as PackageEditorDocument).Package.Equals(Package))
-                {
-                    App.Instance.Content.OpenDocument(document);
-                    return;
-                }                
-            }
+            //foreach (IDocument document in App.Instance.Content.OpenDocuments)
+            //{
+            //    if (document is ManifestEditorDocument && (document as ManifestEditorDocument).Package.Equals(Package))
+            //    {
+            //        App.Instance.Content.OpenDocument(document);
+            //        return;
+            //    }                
+            //}
 
-            PackageEditorDocument packageDocument = new PackageEditorDocument(Project, Package);
-            App.Instance.Content.OpenDocument(packageDocument);
+            //ManifestEditorDocument packageDocument = new ManifestEditorDocument(Project, Package);
+            //App.Instance.Content.OpenDocument(packageDocument);
         }
 
         /// <summary>

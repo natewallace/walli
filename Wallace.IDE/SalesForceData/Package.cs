@@ -39,39 +39,39 @@ namespace SalesForceData
         /// <param name="localPath">LocalPath.</param>
         public Package(string localPath)
         {
-            if (String.IsNullOrWhiteSpace(localPath))
-                throw new ArgumentException("localPath is null or empty.", "localPath");
+            //if (String.IsNullOrWhiteSpace(localPath))
+            //    throw new ArgumentException("localPath is null or empty.", "localPath");
 
-            LocalPath = localPath;
+            //LocalPath = localPath;
 
-            if (File.Exists(LocalPath))
-            {
-                using (FileStream fs = new FileStream(LocalPath, FileMode.Open))
-                {
-                    using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Read))
-                    {
-                        ZipArchiveEntry zipEntry = zip.GetEntry("destructiveChanges.xml");
-                        if (zipEntry == null)
-                        {
-                            IsDestructive = false;
-                            zipEntry = zip.GetEntry("package.xml");
-                        }
-                        else
-                        {
-                            IsDestructive = true;
-                        }
+            //if (File.Exists(LocalPath))
+            //{
+            //    using (FileStream fs = new FileStream(LocalPath, FileMode.Open))
+            //    {
+            //        using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Read))
+            //        {
+            //            ZipArchiveEntry zipEntry = zip.GetEntry("destructiveChanges.xml");
+            //            if (zipEntry == null)
+            //            {
+            //                IsDestructive = false;
+            //                zipEntry = zip.GetEntry("package.xml");
+            //            }
+            //            else
+            //            {
+            //                IsDestructive = true;
+            //            }
 
-                        using (Stream input = zipEntry.Open())
-                        {
-                            Manifest = PackageManifest.Load(input);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Manifest = new PackageManifest();
-            }
+            //            using (Stream input = zipEntry.Open())
+            //            {
+            //                Manifest = Manifest.Load(input, "package");
+            //            }
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    Manifest = new Manifest("Package");
+            //}
         }
 
         #endregion
@@ -94,7 +94,7 @@ namespace SalesForceData
         /// <summary>
         /// The manifest for this package.
         /// </summary>
-        public PackageManifest Manifest { get; private set; }
+        public Manifest Manifest { get; private set; }
 
         /// <summary>
         /// If true this is a destructive package.
@@ -141,7 +141,7 @@ namespace SalesForceData
                             Manifest.Save(output);
                         }
 
-                        PackageManifest empty = new PackageManifest();
+                        Manifest empty = new Manifest("package");
                         ZipArchiveEntry packageEntry = zip.CreateEntry("package.xml");
                         using (Stream packageOutput = packageEntry.Open())
                             empty.Save(packageOutput);

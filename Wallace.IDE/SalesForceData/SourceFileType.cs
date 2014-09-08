@@ -167,6 +167,28 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Compare this object to the other object.
+        /// </summary>
+        /// <param name="obj">The other object to compare with this object.</param>
+        /// <returns>true if the other object is logically equivalent to this object.</returns>
+        public override bool Equals(object obj)
+        {
+            return (CompareTo(obj) == 0);
+        }
+
+        /// <summary>
+        /// Get the hash code for this object.
+        /// </summary>
+        /// <returns>The hash code for this object.</returns>
+        public override int GetHashCode()
+        {
+            if (Name == null)
+                return 0;
+            else
+                return Name.ToLower().GetHashCode();
+        }
+
+        /// <summary>
         /// Compare two source file type objects.
         /// The comparison is done by evaulating the name.  null values will always follow source file types.
         /// </summary>

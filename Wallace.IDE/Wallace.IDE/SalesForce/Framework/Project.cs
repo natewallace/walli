@@ -108,6 +108,14 @@ namespace Wallace.IDE.SalesForce.Framework
             if (!Directory.Exists(DeployFolder))
                 Directory.CreateDirectory(DeployFolder);
 
+            ManifestFolder = Path.Combine(DeployFolder, "Manifest");
+            if (!Directory.Exists(ManifestFolder))
+                Directory.CreateDirectory(ManifestFolder);
+
+            PackageFolder = Path.Combine(DeployFolder, "Package");
+            if (!Directory.Exists(PackageFolder))
+                Directory.CreateDirectory(PackageFolder);
+
             SymbolsFolder = Path.Combine(ProjectFolder, "Symbols");
             if (!Directory.Exists(SymbolsFolder))
                 Directory.CreateDirectory(SymbolsFolder);
@@ -176,6 +184,16 @@ namespace Wallace.IDE.SalesForce.Framework
         /// The file path for the deploy folder of this project.
         /// </summary>
         public string DeployFolder { get; private set; }
+
+        /// <summary>
+        /// The file path for the manifest folder of this project.
+        /// </summary>
+        public string ManifestFolder { get; private set; }
+
+        /// <summary>
+        /// The file path for the package folder of this project.
+        /// </summary>
+        public string PackageFolder { get; private set; }
 
         /// <summary>
         /// The file path for the symbols folder of this project.
@@ -283,6 +301,19 @@ namespace Wallace.IDE.SalesForce.Framework
             }
 
             return project;
+        }
+
+        /// <summary>
+        /// Get the list of manifests for this project.
+        /// </summary>
+        /// <returns>The list of manifests for this project.</returns>
+        public Manifest[] GetManifests()
+        {
+            List<Manifest> result = new List<Manifest>();
+            foreach (string file in Directory.GetFiles(ManifestFolder))
+                result.Add(new Manifest(file));
+
+            return result.ToArray();
         }
 
         /// <summary>

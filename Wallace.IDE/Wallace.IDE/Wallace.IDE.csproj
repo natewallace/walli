@@ -77,7 +77,7 @@
     <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
     <Compile Include="SalesForce\Document\DataEditorDocument.cs" />
     <Compile Include="SalesForce\Document\ISourceFileEditorDocument.cs" />
-    <Compile Include="SalesForce\Document\PackageEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\ManifestEditorDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocumentBase.cs" />
     <Compile Include="SalesForce\Document\TestRunDocument.cs" />
@@ -91,8 +91,10 @@
     <Compile Include="SalesForce\Function\CloseAllDocumentsFunction.cs" />
     <Compile Include="SalesForce\Function\CloseDocumentFunction.cs" />
     <Compile Include="SalesForce\Function\CloseProjectFunction.cs" />
+    <Compile Include="SalesForce\Function\DeleteManifestFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
     <Compile Include="SalesForce\Function\NewComponentFunction.cs" />
+    <Compile Include="SalesForce\Function\NewManifestFunction.cs" />
     <Compile Include="SalesForce\Function\NewPageFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\NewClassFunction.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="SalesForce\Function\RefreshSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\ReloadSymbolsFunction.cs" />
     <Compile Include="SalesForce\Function\RunTestsFunction.cs" />
+    <Compile Include="SalesForce\Function\SaveManifestFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\PropertiesFunction.cs" />
     <Compile Include="SalesForce\Function\TestManagerFunction.cs" />
@@ -125,6 +128,8 @@
     <Compile Include="SalesForce\Node\ApexTriggerNode.cs" />
     <Compile Include="SalesForce\Node\DataFolderNode.cs" />
     <Compile Include="SalesForce\Node\DeployFolderNode.cs" />
+    <Compile Include="SalesForce\Node\ManifestFolderNode.cs" />
+    <Compile Include="SalesForce\Node\ManifestNode.cs" />
     <Compile Include="SalesForce\Node\PackageNode.cs" />
     <Compile Include="SalesForce\Node\SourceFolderNode.cs" />
     <Compile Include="SalesForce\UI\ApexCodeCompletionData.cs" />
@@ -153,8 +158,8 @@
     <Compile Include="SalesForce\UI\NewTriggerWindow.xaml.cs">
       <DependentUpon>NewTriggerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SalesForce\UI\PackageEditorControl.xaml.cs">
-      <DependentUpon>PackageEditorControl.xaml</DependentUpon>
+    <Compile Include="SalesForce\UI\ManifestEditorControl.xaml.cs">
+      <DependentUpon>ManifestEditorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\DocumentCharStream.cs" />
     <Compile Include="SalesForce\UI\SelectProjectWindow.xaml.cs">
@@ -267,7 +272,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SalesForce\UI\PackageEditorControl.xaml">
+    <Page Include="SalesForce\UI\ManifestEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -566,6 +571,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\WebBrowser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Manifest.png" />
+    <Resource Include="Resources\NewManifest.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

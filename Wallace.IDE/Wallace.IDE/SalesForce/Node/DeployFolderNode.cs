@@ -80,15 +80,21 @@ namespace Wallace.IDE.SalesForce.Node
         }
 
         /// <summary>
-        /// Setup context menu items.
+        /// Always returns true.
         /// </summary>
-        /// <returns>The menu items to display.</returns>
-        public override IFunction[] GetContextFunctions()
+        /// <returns>true.</returns>
+        public override bool HasChildren()
         {
-            return new IFunction[]
-            {
-                App.Instance.GetFunction<NewPackageFunction>()
-            };
+            return true;
+        }
+
+        /// <summary>
+        /// Get the children for this node.
+        /// </summary>
+        /// <returns>The children for this node.</returns>
+        public override INode[] GetChildren()
+        {
+            return new INode[] { new ManifestFolderNode(Project) };
         }
 
         #endregion

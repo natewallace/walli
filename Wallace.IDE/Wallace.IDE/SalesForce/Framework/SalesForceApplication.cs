@@ -97,6 +97,10 @@ namespace Wallace.IDE.SalesForce.Framework
             //App.Instance.Menu.AddFunction(newPackageFunction, "NEWSALESFORCE");
             //App.Instance.RegisterFunction(newPackageFunction);
 
+            NewManifestFunction newManifestFunction = new NewManifestFunction();
+            App.Instance.Menu.AddFunction(newManifestFunction, "NEWSALESFORCE");
+            App.Instance.RegisterFunction(newManifestFunction);
+
             OpenSalesForceWebBrowserFunction webBrowser = new OpenSalesForceWebBrowserFunction();
             App.Instance.Menu.AddFunction(webBrowser, "PROJECT");
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(webBrowser));
@@ -116,6 +120,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(deleteSourceFileFunction, "PROJECT");
             App.Instance.RegisterFunction(deleteSourceFileFunction);
 
+            DeleteManifestFunction deleteManifestFunction = new DeleteManifestFunction();
+            App.Instance.Menu.AddFunction(deleteManifestFunction, "PROJECT");
+            App.Instance.RegisterFunction(deleteManifestFunction);
+
             RefreshFolderFunction refreshFolderFunction = new RefreshFolderFunction();
             App.Instance.RegisterFunction(refreshFolderFunction);
 
@@ -127,6 +135,11 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSourceFileFunction));
             App.Instance.ToolBar.AddFunction(saveSourceFileFunction);
             App.Instance.Menu.AddFunction(saveSourceFileFunction, "DOCUMENT");
+
+            SaveManifestFunction saveManifestFunction = new SaveManifestFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveManifestFunction));
+            App.Instance.ToolBar.AddFunction(saveManifestFunction);
+            App.Instance.Menu.AddFunction(saveManifestFunction, "DOCUMENT");
 
             RefreshSourceFileFunction refreshDocumentFunction = new RefreshSourceFileFunction();
             App.Instance.ToolBar.AddFunction(refreshDocumentFunction);
@@ -231,8 +244,7 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.SessionTitle = project.Credential.Username;
             
             App.Instance.Navigation.Nodes.Add(new DataFolderNode(project));
-            //Planned for future release
-            //App.Instance.Navigation.Nodes.Add(new DeployFolderNode(project));
+            App.Instance.Navigation.Nodes.Add(new DeployFolderNode(project));
             App.Instance.Navigation.Nodes.Add(new SourceFolderNode(project));
 
             App.Instance.Menu.UpdateFunctions();

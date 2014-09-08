@@ -49,9 +49,9 @@
     <Compile Include="DataSelectResult.cs" />
     <Compile Include="FieldType.cs" />
     <Compile Include="Package.cs" />
-    <Compile Include="PackageManifest.cs" />
-    <Compile Include="PackageManifestItem.cs" />
-    <Compile Include="PackageManifestItemGroup.cs" />
+    <Compile Include="Manifest.cs" />
+    <Compile Include="ManifestItem.cs" />
+    <Compile Include="ManifestItemGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalesForceClient.cs" />
     <Compile Include="SalesForceCredential.cs" />
