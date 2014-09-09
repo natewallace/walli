@@ -96,7 +96,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             foreach (IDocument document in App.Instance.Content.OpenDocuments)
             {
-                if (document is ManifestEditorDocument && (document as PackageViewDocument).Package.Equals(Package))
+                if (document is PackageViewDocument && (document as PackageViewDocument).Package.Equals(Package))
                 {
                     App.Instance.Content.OpenDocument(document);
                     return;
