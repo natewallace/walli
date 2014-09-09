@@ -22,22 +22,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SalesForceData;
 using Wallace.IDE.Framework;
-using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
     /// <summary>
-    /// This node represents a manifest.
+    /// Folder node for packages.
     /// </summary>
-    public class ManifestNode : NodeBase
+    public class PackageFolderNode : NodeBase
     {
         #region Constructors
 
@@ -45,16 +42,12 @@ namespace Wallace.IDE.SalesForce.Node
         /// Constructor.
         /// </summary>
         /// <param name="project">Project.</param>
-        /// <param name="manifest">Manifest.</param>
-        public ManifestNode(Project project, Manifest manifest)
+        public PackageFolderNode(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
-            if (manifest == null)
-                throw new ArgumentNullException("manifest");
 
             Project = project;
-            Manifest = manifest;
         }
 
         #endregion
@@ -67,18 +60,13 @@ namespace Wallace.IDE.SalesForce.Node
         public Project Project { get; private set; }
 
         /// <summary>
-        /// The manifest for the node.
-        /// </summary>
-        public Manifest Manifest { get; private set; }
-
-        /// <summary>
         /// The text that represents this node.
         /// </summary>
         public override string Text
         {
             get
             {
-                return Manifest.Name;
+                return "Package";
             }
         }
 
@@ -91,49 +79,63 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void Init()
         {
-            Presenter.Header = VisualHelper.CreateIconHeader(Text, "Manifest.png");
+            Presenter.Header = VisualHelper.CreateIconHeader("Package", "FolderClosed.png");
+            Presenter.ExpandedHeader = VisualHelper.CreateIconHeader("Package", "FolderOpen.png");
         }
 
         /// <summary>
-        /// Open the manifest file.
+        /// Always returns true.
         /// </summary>
-        public override void DoubleClick()
+        /// <returns>true.</returns>
+        public override bool HasChildren()
         {
-            foreach (IDocument document in App.Instance.Content.OpenDocuments)
+            return true;
+        }
+
+        /// <summary>
+        /// Get the children for this node.
+        /// </summary>
+        /// <returns>The children for this node.</returns>
+        public override INode[] GetChildren()
+        {
+            List<INode> result = new List<INode>();
+            foreach (Package package in Project.GetPackages())
+                result.Add(new PackageNode(Project, package));
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Add a new node for the given package to this node.
+        /// </summary>
+        /// <param name="package">The package to add.</param>
+        /// <returns>The newly added node.</returns>
+        public PackageNode AddPackage(Package package)
+        {
+            if (package == null)
+                throw new ArgumentNullException("package");
+
+            PackageNode packageNode = new PackageNode(Project, package);
+
+            int index = 0;
+            foreach (INode node in Presenter.Nodes)
             {
-                if (document is ManifestEditorDocument && (document as ManifestEditorDocument).Manifest.Equals(Manifest))
+                if (node is PackageNode)
                 {
-                    App.Instance.Content.OpenDocument(document);
-                    return;
+                    int result = package.CompareTo((node as PackageNode).Package);
+                    if (result == 0)
+                        throw new Exception("There is already a package named: " + package.Name);
+                    else if (result < 0)
+                        break;
                 }
+                index++;
             }
 
-            ManifestEditorDocument manifestDocument = new ManifestEditorDocument(Project, Manifest);
-            App.Instance.Content.OpenDocument(manifestDocument);            
-        }
+            Presenter.Nodes.Insert(index, packageNode);
+            Presenter.Expand();
+            Presenter.NodeManager.ActiveNode = packageNode;
 
-        /// <summary>
-        /// If this node represents the given entity this method should return true.
-        /// </summary>
-        /// <param name="entity">The entity to check.</param>
-        /// <returns>true if this node represents the given entity.</returns>
-        public override bool RepresentsEntity(object entity)
-        {
-            return (Manifest.CompareTo(entity) == 0);
-        }
-
-        /// <summary>
-        /// Get functions that show up in the nodes context menu.
-        /// </summary>
-        /// <returns>Functions that show up in the nodes context menu.</returns>
-        public override IFunction[] GetContextFunctions()
-        {
-            return MergeFunctions(
-                base.GetContextFunctions(),
-                new IFunction[] 
-                {
-                    App.Instance.GetFunction<DeleteManifestFunction>()
-                });
+            return packageNode;
         }
 
         #endregion

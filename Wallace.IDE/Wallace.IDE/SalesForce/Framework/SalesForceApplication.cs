@@ -119,6 +119,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(deleteManifestFunction, "PROJECT");
             App.Instance.RegisterFunction(deleteManifestFunction);
 
+            DeletePackageFunction deletePackageFunction = new DeletePackageFunction();
+            App.Instance.Menu.AddFunction(deletePackageFunction, "PROJECT");
+            App.Instance.RegisterFunction(deletePackageFunction);
+
             RefreshFolderFunction refreshFolderFunction = new RefreshFolderFunction();
             App.Instance.RegisterFunction(refreshFolderFunction);
 

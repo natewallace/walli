@@ -100,6 +100,27 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Treat the enter key as an ok click.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void textBoxName_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    DialogResult = true;
+                    Close();
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
     }
 }

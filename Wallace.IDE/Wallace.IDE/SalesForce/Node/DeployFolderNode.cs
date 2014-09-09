@@ -94,7 +94,9 @@ namespace Wallace.IDE.SalesForce.Node
         /// <returns>The children for this node.</returns>
         public override INode[] GetChildren()
         {
-            return new INode[] { new ManifestFolderNode(Project) };
+            return new INode[] { 
+                new ManifestFolderNode(Project), 
+                new PackageFolderNode(Project) };
         }
 
         #endregion

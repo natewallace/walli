@@ -130,6 +130,20 @@ namespace SalesForceData
             }
         }
 
+        /// <summary>
+        /// Get the date the package was created.
+        /// </summary>
+        public DateTime CreatedDate
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(FileName) || !File.Exists(FileName))
+                    return DateTime.MinValue;
+
+                return File.GetCreationTime(FileName);
+            }
+        }
+
         #endregion
 
         #region Methods

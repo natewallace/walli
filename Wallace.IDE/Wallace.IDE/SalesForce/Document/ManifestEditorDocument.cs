@@ -88,7 +88,7 @@ namespace Wallace.IDE.SalesForce.Document
         #region Properties
 
         /// <summary>
-        /// The project the package belongs to.
+        /// The project the manifest belongs to.
         /// </summary>
         public Project Project { get; private set; }
 

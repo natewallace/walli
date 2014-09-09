@@ -25,6 +25,7 @@ using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
@@ -93,17 +94,17 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void DoubleClick()
         {
-            //foreach (IDocument document in App.Instance.Content.OpenDocuments)
-            //{
-            //    if (document is ManifestEditorDocument && (document as ManifestEditorDocument).Package.Equals(Package))
-            //    {
-            //        App.Instance.Content.OpenDocument(document);
-            //        return;
-            //    }                
-            //}
+            foreach (IDocument document in App.Instance.Content.OpenDocuments)
+            {
+                if (document is ManifestEditorDocument && (document as PackageViewDocument).Package.Equals(Package))
+                {
+                    App.Instance.Content.OpenDocument(document);
+                    return;
+                }
+            }
 
-            //ManifestEditorDocument packageDocument = new ManifestEditorDocument(Project, Package);
-            //App.Instance.Content.OpenDocument(packageDocument);
+            PackageViewDocument packageDocument = new PackageViewDocument(Project, Package);
+            App.Instance.Content.OpenDocument(packageDocument);     
         }
 
         /// <summary>
@@ -114,6 +115,20 @@ namespace Wallace.IDE.SalesForce.Node
         public override bool RepresentsEntity(object entity)
         {
             return (Package.CompareTo(entity) == 0);
+        }
+
+        /// <summary>
+        /// Get functions that show up in the nodes context menu.
+        /// </summary>
+        /// <returns>Functions that show up in the nodes context menu.</returns>
+        public override IFunction[] GetContextFunctions()
+        {
+            return MergeFunctions(
+                base.GetContextFunctions(),
+                new IFunction[] 
+                {
+                    App.Instance.GetFunction<DeletePackageFunction>()
+                });
         }
 
         #endregion

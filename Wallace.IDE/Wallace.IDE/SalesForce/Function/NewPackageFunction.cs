@@ -110,13 +110,13 @@ namespace Wallace.IDE.SalesForce.Function
                     {
                         Package package = new Package(fileName, dlg.IsPackageDestructive, manifest);
                         package.Save(project.Client);
+
+                        PackageFolderNode packageFolderNode = App.Instance.Navigation.GetNode<PackageFolderNode>();
+                        if (packageFolderNode != null)
+                            packageFolderNode.AddPackage(package);
+
+                        //App.Instance.Content.OpenDocument(new ManifestEditorDocument(project, manifest));
                     }
-
-                    //ManifestFolderNode manifestFolderNode = App.Instance.Navigation.GetNode<ManifestFolderNode>();
-                    //if (manifestFolderNode != null)
-                    //    manifestFolderNode.AddManifest(manifest);
-
-                    //App.Instance.Content.OpenDocument(new ManifestEditorDocument(project, manifest));
                 }
             }
         }
