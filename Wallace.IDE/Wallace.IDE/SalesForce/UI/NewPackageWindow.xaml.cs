@@ -31,6 +31,37 @@ namespace Wallace.IDE.SalesForce.UI
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// The manifest name displayed.
+        /// </summary>
+        public string PackageManifestName
+        {
+            get { return textBlockManifest.Text; }
+            set { textBlockManifest.Text = value; }
+        }
+
+        /// <summary>
+        /// The package name entered by the user.
+        /// </summary>
+        public string PackageName
+        {
+            get { return textBoxName.Text; }
+            set { textBoxName.Text = value; }
+        }
+
+        /// <summary>
+        /// Indicates if the user selected the destructive option.
+        /// </summary>
+        public bool IsPackageDestructive
+        {
+            get { return (checkBoxIsDestructive.IsChecked.HasValue && checkBoxIsDestructive.IsChecked.Value); }
+            set { checkBoxIsDestructive.IsChecked = value; }
+        }
+
+        #endregion
+
         #region Event Handlers
 
         /// <summary>

@@ -50,9 +50,6 @@ namespace SalesForceData
         /// <param name="fileName">FileName.</param>
         public Manifest(string fileName)
         {
-            if (String.IsNullOrWhiteSpace(fileName))
-                throw new ArgumentException("fileName is null or whitespace.", "fileName");
-
             FileName = fileName;
             Name = Path.GetFileNameWithoutExtension(FileName);
 
@@ -119,10 +116,15 @@ namespace SalesForceData
         /// </summary>
         /// <param name="input">The stream to read the input from.</param>
         /// <returns>The loaded manifest.</returns>
-        private void Load(System.IO.Stream input)
+        public void Load(System.IO.Stream input)
         {
             if (input == null)
                 throw new ArgumentNullException("input");
+
+            if (_groups == null)
+                _groups = new List<ManifestItemGroup>();
+            else
+                _groups.Clear();
 
             XmlDocument xml = new XmlDocument();
             xml.Load(input);
@@ -154,6 +156,9 @@ namespace SalesForceData
         /// </summary>
         public void Save()
         {
+            if (FileName == null)
+                throw new Exception("Manifest can't be saved using this method.  Use the Save(System.IO.Stream) method instead.");
+
             Load();
             using (Stream output = File.Open(FileName, FileMode.Create))
                 Save(output);

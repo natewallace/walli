@@ -317,6 +317,19 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
+        /// Get the list of packages for this project.
+        /// </summary>
+        /// <returns>The list of packages for this project.</returns>
+        public Package[] GetPackages()
+        {
+            List<Package> result = new List<Package>();
+            foreach (string file in Directory.GetFiles(PackageFolder))
+                result.Add(new Package(file));
+
+            return result.ToArray();
+        }
+
+        /// <summary>
         /// Calling this method will cancel the downloading of symbols.
         /// </summary>
         public void CancelLoadSymbolsAsync()

@@ -93,21 +93,24 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         public override void Execute()
         {
-            if (App.Instance.SalesForceApp.CurrentProject != null)
+            if (App.Instance.SalesForceApp.CurrentProject != null && CurrentDocument != null)
             {
                 Project project = App.Instance.SalesForceApp.CurrentProject;
+                Manifest manifest = CurrentDocument.Manifest;
 
                 NewPackageWindow dlg = new NewPackageWindow();
+                dlg.PackageManifestName = manifest.Name;
                 if (App.ShowDialog(dlg))
                 {
-                    //Manifest manifest = new Manifest(System.IO.Path.Combine(
-                    //    project.ManifestFolder,
-                    //    String.Format("{0}.manifest", dlg.EnteredValue)));
+                    string fileName = System.IO.Path.Combine(project.PackageFolder, String.Format("{0}.zip", dlg.PackageName));
+                    if (System.IO.File.Exists(fileName))
+                        throw new Exception("A package with the given name already exists: " + dlg.PackageName);
 
-                    //if (App.Instance.SalesForceApp.CurrentProject.GetManifests().Contains(manifest))
-                    //    throw new Exception("There is already a manifest named: " + manifest.Name);
-
-                    //manifest.Save();
+                    using (App.Wait("Creating package"))
+                    {
+                        Package package = new Package(fileName, dlg.IsPackageDestructive, manifest);
+                        package.Save(project.Client);
+                    }
 
                     //ManifestFolderNode manifestFolderNode = App.Instance.Navigation.GetNode<ManifestFolderNode>();
                     //if (manifestFolderNode != null)
