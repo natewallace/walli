@@ -75,6 +75,7 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.TextArea.SelectionBorder = null;
             textEditor.TextArea.SelectionForeground = null;
             textEditor.TextArea.TextEntered += TextArea_TextEntered;
+            textEditor.TextArea.TextEntering += TextArea_TextEntering;
 
             _searchPanel = SearchPanel.Install(textEditor.TextArea);
             _searchPanel.MarkerBrush = Brushes.DarkOrange;
@@ -309,6 +310,31 @@ namespace Wallace.IDE.SalesForce.UI
                     }
                 }
                 
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Do insertions when certain characters are entered.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void TextArea_TextEntering(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            try
+            {
+                if (_completionWindow != null && e.Text.Length > 0)
+                {
+                    if (!char.IsLetterOrDigit(e.Text[0]) && 
+                        e.Text[0] != '_' &&
+                        e.Text[0] != ':')
+                    {
+                        _completionWindow.CompletionList.RequestInsertion(e);
+                    }
+                }
             }
             catch (Exception err)
             {
