@@ -311,6 +311,44 @@ namespace SalesForceLanguage.Apex.Parser
 
                     break;
 
+                // for statement
+                case Tokens.grammar_for_statement:
+                    ApexSyntaxNode initNode = node.GetChildNodeWithToken(Tokens.grammar_for_initializer);
+                    if (initNode != null)
+                    {
+                        ApexSyntaxNode varInitNode = node.GetChildNodeWithToken(Tokens.grammar_local_variable_declaration);
+                        if (varInitNode != null)
+                        {
+                            List<Field> varFields = new List<Field>();
+                            ApexSyntaxNode[] varNodes = varInitNode.GetNodesWithToken(Tokens.grammar_local_variable_declaration);
+                            foreach (ApexSyntaxNode varNode in varNodes)
+                            {
+                                ApexSyntaxNode varTypeNode = varNode.GetChildNodeWithToken(Tokens.grammar_type);
+                                string varTypeName = varTypeNode.GetLeavesDisplayText();
+
+                                ApexSyntaxNode varNamesNode = varNode.GetChildNodeWithToken(Tokens.grammar_local_variable_declarators);
+                                foreach (ApexSyntaxNode varNameNode in varNamesNode.GetNodesWithToken(Tokens.grammar_local_variable_declarator))
+                                {
+                                    varFields.Add(new Field(
+                                        new TextPosition(varNameNode.TextSpan),
+                                        varNameNode.GetLeavesDisplayText(),
+                                        null,
+                                        SymbolModifier.Private,
+                                        varTypeName));
+                                }
+                            }
+
+                            if (varFields.Count > 0)
+                            {
+                                _variableScopes.Push(new VariableScope(
+                                    new TextSpan(node.TextSpan),
+                                    varFields.ToArray()));
+                            }
+                        }
+                    }
+
+                    break;
+
                 // field
                 case Tokens.grammar_field_declaration:
                     SymbolModifier fieldVisibility = GetModifiers(node.GetNodesWithToken(Tokens.grammar_modifier));
