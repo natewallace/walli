@@ -1107,6 +1107,8 @@ namespace SalesForceLanguage
                 char prevChar = (char)text.ReadByte();
                 if (Char.IsLetterOrDigit(prevChar) || prevChar == '_' || prevChar == '\'' || prevChar == '.')
                     return new Symbol[0];
+                if (prevChar == '[')
+                    isOpenBracket = true;
             }
 
             // process the words
