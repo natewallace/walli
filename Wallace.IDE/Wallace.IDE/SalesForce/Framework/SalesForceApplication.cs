@@ -140,6 +140,11 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(saveManifestFunction);
             App.Instance.Menu.AddFunction(saveManifestFunction, "DOCUMENT");
 
+            AddFileToManifestFunction addFileManifestFunction = new AddFileToManifestFunction();
+            App.Instance.ToolBar.AddFunction(addFileManifestFunction);
+            App.Instance.Menu.AddFunction(addFileManifestFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(addFileManifestFunction);
+
             NewPackageFunction newPackageFunction = new NewPackageFunction();
             App.Instance.ToolBar.AddFunction(newPackageFunction);
             App.Instance.Menu.AddFunction(newPackageFunction, "DOCUMENT");

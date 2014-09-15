@@ -57,19 +57,21 @@ namespace Wallace.IDE.SalesForce.Function
         #region Methods
 
         /// <summary>
-        /// 
+        /// Set the visibility of the header.
         /// </summary>
-        /// <param name="host"></param>
-        /// <param name="presenter"></param>
+        /// <param name="host">The type of host for this function.</param>
+        /// <param name="presenter">The presenter to use when updating the view.</param>
         public override void Init(FunctionHost host, IFunctionPresenter presenter)
         {
             if (host == FunctionHost.Toolbar)
             {
-
+                presenter.Header = VisualHelper.CreateIconHeader(null, "AddFileToManifest.png");
+                presenter.ToolTip = "Add a manual entry to the manifest...";
             }
             else
             {
-
+                presenter.Header = "Add manual entry...";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "AddFileToManifest.png");
             }
         }
 
