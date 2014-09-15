@@ -134,6 +134,19 @@ namespace Wallace.IDE.SalesForce.Document
         #region Methods
 
         /// <summary>
+        /// Add the given file to the manifest.
+        /// </summary>
+        /// <param name="file">The file to add.</param>
+        public void AddFile(SourceFile file)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            Files.Add(file);
+            IsDirty = true;
+        }
+
+        /// <summary>
         /// Save the manifest to file.
         /// </summary>
         public void Save()

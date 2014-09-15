@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
+using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
 {
@@ -90,7 +91,22 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         public override void Execute()
         {
-            
+            EnterValueWindow dlg = new EnterValueWindow();
+            dlg.Title = "Manually Enter File";
+            dlg.InputLabel = "Enter category and API name separated by a slash\n (for example: ApexClass/BranchController):";
+            dlg.ActionLabel = "Add";
+            if (App.ShowDialog(dlg))
+            {
+                if (String.IsNullOrWhiteSpace(dlg.EnteredValue))
+                    throw new Exception("You must enter a category and API name to create a manual file entry.");
+
+                string[] parts = dlg.EnteredValue.Split(new char[] { '/' });
+                if (parts.Length != 2)
+                    throw new Exception("Invalid entry.  You must enter a category and API name in the format CATEGORY/API_NAME.");
+
+                if (CurrentDocument != null)
+                    CurrentDocument.AddFile(new SourceFile(parts[0], parts[1]));
+            }
         }
 
         #endregion
