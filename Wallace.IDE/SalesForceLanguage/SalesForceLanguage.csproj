@@ -89,8 +89,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(ProjectDir)lib\gppg.exe" /gplex /out:"$(ProjectDir)Apex\Parser\ApexParser.cs" "$(ProjectDir)\Apex\Apex.y"
-"$(ProjectDir)lib\Gplex.exe" /out:"$(ProjectDir)Apex\Parser\ApexLexer.cs" "$(ProjectDir)Apex\Apex.lex"</PreBuildEvent>
+    <PreBuildEvent>"$(ProjectDir)lib\gppg.exe" /gplex /no-info /out:"$(ProjectDir)Apex\Parser\ApexParser.cs" "$(ProjectDir)\Apex\Apex.y"
+"$(ProjectDir)lib\Gplex.exe" /noinfo /out:"$(ProjectDir)Apex\Parser\ApexLexer.cs" "$(ProjectDir)Apex\Apex.lex"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

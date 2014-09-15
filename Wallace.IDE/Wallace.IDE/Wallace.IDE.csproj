@@ -182,6 +182,9 @@
       <DependentUpon>PropertiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Framework\UI\TreeViewMultiSelectItem.cs" />
+    <Compile Include="SalesForce\UI\SourceReportControl.xaml.cs">
+      <DependentUpon>SourceReportControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\TestManagerWindow.xaml.cs">
       <DependentUpon>TestManagerWindow.xaml</DependentUpon>
     </Compile>
@@ -306,6 +309,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\PropertiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\SourceReportControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
