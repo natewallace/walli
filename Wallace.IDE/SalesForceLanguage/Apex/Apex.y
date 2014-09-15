@@ -310,6 +310,7 @@ identifier:
 non_reserved_identifier:
     KEYWORD_AFTER |
     KEYWORD_BEFORE |
+	KEYWORD_CLASS |
     KEYWORD_GET |
     KEYWORD_SET |
     KEYWORD_TRIGGER |

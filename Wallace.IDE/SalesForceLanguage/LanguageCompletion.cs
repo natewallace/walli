@@ -882,7 +882,7 @@ namespace SalesForceLanguage
                         SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.FullType);
                         while (externalClass != null && !partFound)
                         {
-                            foreach (Method m in externalClass.Methods)
+                            foreach (Method m in GetMethods(externalClass, false))
                             {
                                 if (m.Id == methodName)
                                 {
@@ -995,7 +995,7 @@ namespace SalesForceLanguage
                             // look for fields
                             if (!partFound)
                             {
-                                foreach (Field field in externalClass.Fields)
+                                foreach (Field field in GetFields(externalClass, false))
                                 {
                                     if (field.Id == part)
                                     {
@@ -1009,7 +1009,7 @@ namespace SalesForceLanguage
                             // look for properties
                             if (!partFound)
                             {
-                                foreach (Property property in externalClass.Properties)
+                                foreach (Property property in GetProperties(externalClass, false))
                                 {
                                     if (property.Id == part)
                                     {
@@ -1323,7 +1323,7 @@ namespace SalesForceLanguage
             SymbolTable classCheck = classSymbol;
             while (classCheck != null)
             {
-                isExternal = (classCheck.Id == symbol.Id);
+                isExternal = (classCheck.Id != symbol.Id);
                 if (!isExternal)
                     break;
 
@@ -1503,7 +1503,7 @@ namespace SalesForceLanguage
 
             foreach (Field field in symbolTable.Fields)
             {
-                if (field.Modifier.HasFlag(modifiers))
+                if ((modifiers & field.Modifier) > 0)
                     result.Add(field);
             }
 
@@ -1546,7 +1546,7 @@ namespace SalesForceLanguage
 
             foreach (Property property in symbolTable.Properties)
             {
-                if (property.Modifier.HasFlag(modifiers))
+                if ((modifiers & property.Modifier) > 0)
                     result.Add(property);
             }
 
@@ -1593,7 +1593,7 @@ namespace SalesForceLanguage
 
             foreach (Method method in symbolTable.Methods)
             {
-                if (((int)method.Modifier & (int)modifiers) > 0)
+                if ((method.Modifier & modifiers) > 0)
                     result.Add(method);
             }
 

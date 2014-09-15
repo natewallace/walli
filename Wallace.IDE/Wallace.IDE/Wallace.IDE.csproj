@@ -88,6 +88,7 @@
     <Compile Include="SalesForce\Framework\Project.cs" />
     <Compile Include="SalesForce\Framework\SalesForceApplication.cs" />
     <Compile Include="SalesForce\Framework\SecureStringUtility.cs" />
+    <Compile Include="SalesForce\Function\AddFileToManifestFunction.cs" />
     <Compile Include="SalesForce\Function\ApexDocumentationFunction.cs" />
     <Compile Include="SalesForce\Function\CloseAllDocumentsFunction.cs" />
     <Compile Include="SalesForce\Function\CloseDocumentFunction.cs" />

@@ -3553,6 +3553,13 @@
 		}
 	}
 
+	public class SObjectType {
+		public Schema.DescribeSObjectResult getDescribe();
+		public sObject newSObject();
+		public sObject newSObject(ID Id);
+		public sObject newSObject(ID recordTypeId, Boolean loadDefaults);
+	}
+
 	public class Search {
 		public static sObject[] query(String query);
 	}
@@ -3655,6 +3662,8 @@
 		public sObject putSObject(String fieldName, sObject value);
 		public sObject putSObject(Schema.sObjectType fieldName, sObject value);
 		public Void setOptions(database.DMLOptions DMLOptions);
+
+		public static SObjectType SObjectType { get; set; }
 	}
 
 	public class StaticResourceCalloutMock {
