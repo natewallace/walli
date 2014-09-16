@@ -78,6 +78,7 @@
     <Compile Include="SalesForce\Document\DataEditorDocument.cs" />
     <Compile Include="SalesForce\Document\ISourceFileEditorDocument.cs" />
     <Compile Include="SalesForce\Document\ManifestEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\PackageDeployToProjectStatusDocument.cs" />
     <Compile Include="SalesForce\Document\PackageViewDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocumentBase.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="SalesForce\Function\DeleteManifestFunction.cs" />
     <Compile Include="SalesForce\Function\DeletePackageFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
+    <Compile Include="SalesForce\Function\DeployPackageFunction.cs" />
     <Compile Include="SalesForce\Function\NewComponentFunction.cs" />
     <Compile Include="SalesForce\Function\NewManifestFunction.cs" />
     <Compile Include="SalesForce\Function\NewPageFunction.cs" />
@@ -169,6 +171,12 @@
       <DependentUpon>ManifestEditorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\DocumentCharStream.cs" />
+    <Compile Include="SalesForce\UI\PackageDeployStatusControl.xaml.cs">
+      <DependentUpon>PackageDeployStatusControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\PackageDeployWindow.xaml.cs">
+      <DependentUpon>PackageDeployWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\PackageViewControl.xaml.cs">
       <DependentUpon>PackageViewControl.xaml</DependentUpon>
     </Compile>
@@ -290,6 +298,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\ManifestEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\PackageDeployStatusControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\PackageDeployWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

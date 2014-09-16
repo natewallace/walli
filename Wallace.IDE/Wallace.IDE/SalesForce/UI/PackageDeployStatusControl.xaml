@@ -1,0 +1,163 @@
+﻿<UserControl x:Class="Wallace.IDE.SalesForce.UI.PackageDeployStatusControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Details"
+                   Grid.Row="0"
+                   Grid.Column="0" 
+                   Margin="5,5,5,0"
+                   Foreground="Black"
+                   FontSize="15"
+                   FontWeight="Bold"/>
+        
+        <Grid Grid.Row="1"
+              Grid.Column="0"
+              Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="2"
+                       Foreground="Black"
+                       Text="Status:" />
+            
+            <TextBlock x:Name="textBlockStatus"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="2"
+                       Foreground="Black"
+                       FontWeight="Bold"
+                       Text="Value" />
+
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       Margin="2"
+                       Foreground="Black"
+                       Text="Package:" />
+
+            <TextBlock x:Name="textBlockPackage"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       Margin="2"
+                       Foreground="Black"
+                       Text="Value" />
+
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Margin="2"
+                       Foreground="Black"
+                       Text="Target:" />
+
+            <TextBlock x:Name="textBlockTarget"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       Margin="2"
+                       Foreground="Black"
+                       Text="Value" />
+
+            <TextBlock x:Name="textBlockNotes"
+                       Grid.Row="3"
+                       Grid.Column="1"
+                       Margin="2"
+                       Foreground="Black"
+                       Text="Value" />
+
+        </Grid>
+            
+        <TextBlock Text="Components"
+                   Grid.Row="2"
+                   Grid.Column="0" 
+                   Margin="5,5,5,0"
+                   Foreground="Black"
+                   FontSize="15"
+                   FontWeight="Bold"/>
+        
+        <ProgressBar x:Name="progressBarComponents"
+                     Grid.Row="3"
+                     Grid.Column="0"
+                     Height="30"
+                     Margin="5"
+                     Minimum="0"
+                     Maximum="100"
+                     Background="White"/>
+        
+        <TextBlock x:Name="textBlockProgressComponents"
+                   Foreground="Black"
+                   Grid.Row="4"
+                   Grid.Column="0"
+                   Margin="5,0,5,5"
+                   Text="Progress" />
+
+        <TextBlock x:Name="textBlockHeaderTests"
+                   Text="Tests"
+                   Grid.Row="5"
+                   Grid.Column="0" 
+                   Margin="5,10,5,0"
+                   Foreground="Black"
+                   FontSize="15"
+                   FontWeight="Bold"/>
+
+        <ProgressBar x:Name="progressBarTests"
+                     Grid.Row="6"
+                     Grid.Column="0"
+                     Height="30"
+                     Margin="5"
+                     Minimum="0"
+                     Maximum="100"
+                     Value="0"
+                     Background="White"/>
+
+        <TextBlock x:Name="textBlockProgressTests"
+                   Foreground="Black"
+                   Grid.Row="7"
+                   Grid.Column="0"
+                   Margin="5,0,5,5"
+                   Text="Progress" />
+
+        <TextBlock Text="Results"
+                   Grid.Row="8"
+                   Grid.Column="0" 
+                   Margin="5,10,5,0"
+                   Foreground="Black"
+                   FontSize="15"
+                   FontWeight="Bold"/>
+
+        <ScrollViewer Grid.Row="9"
+                      Grid.Column="0"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Visible"
+                      Margin="5,0,5,0">
+            <TextBox x:Name="textBoxResults"
+                     IsReadOnly="True"
+                     BorderThickness="0"
+                     TextWrapping="NoWrap"
+                     FontFamily="Consolas" />
+        </ScrollViewer>
+    </Grid>
+</UserControl>

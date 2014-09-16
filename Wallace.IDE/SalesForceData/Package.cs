@@ -263,6 +263,18 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Copy the package into a byte array.
+        /// </summary>
+        /// <returns>The package as a byte array.</returns>
+        public byte[] ToByteArray()
+        {
+            if (!File.Exists(FileName))
+                throw new Exception("The package hasn't been saved yet.");
+
+            return File.ReadAllBytes(FileName);
+        }
+
+        /// <summary>
         /// Check for logical equality.
         /// </summary>
         /// <param name="obj">The object to compare with this one.</param>

@@ -149,6 +149,12 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(newPackageFunction);
             App.Instance.Menu.AddFunction(newPackageFunction, "DOCUMENT");
 
+            DeployPackageFunction deployPackageFunction = new DeployPackageFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(deployPackageFunction));
+            App.Instance.ToolBar.AddFunction(deployPackageFunction);
+            App.Instance.Menu.AddFunction(deployPackageFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(deployPackageFunction);
+
             RefreshSourceFileFunction refreshDocumentFunction = new RefreshSourceFileFunction();
             App.Instance.ToolBar.AddFunction(refreshDocumentFunction);
             App.Instance.Menu.AddFunction(refreshDocumentFunction, "DOCUMENT");

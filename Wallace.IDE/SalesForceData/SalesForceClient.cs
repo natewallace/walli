@@ -207,6 +207,57 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Deploy a package.
+        /// </summary>
+        /// <param name="package">The package to deploy.</param>
+        /// <param name="checkOnly">When true only a deployment check is performed.</param>
+        /// <param name="runAllTests">When true all tests are run.</param>
+        /// <returns>The id of the deployment that was started.</returns>
+        public string DeployPackage(Package package, bool checkOnly, bool runAllTests)
+        {
+            if (package == null)
+                throw new ArgumentNullException("package");
+
+            InitClients();
+
+            SalesForceAPI.Metadata.deployRequest deployRequest = new SalesForceAPI.Metadata.deployRequest(
+                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
+                null,
+                null,
+                package.ToByteArray(),
+                new SalesForceAPI.Metadata.DeployOptions()
+                {
+                    checkOnly = checkOnly,
+                    runAllTests = runAllTests,
+                    singlePackage = true,
+                    rollbackOnError = true
+                });
+
+            return _metadataClient.deploy(deployRequest).result.id;
+        }
+
+        /// <summary>
+        /// Check the status of a package deployment.
+        /// </summary>
+        /// <param name="id">The id of the package deployment that was returned in a call to DeployPackage.</param>
+        /// <returns>The current package deployment status.</returns>
+        public PackageDeployResult CheckPackageDeploy(string id)
+        {
+            if (String.IsNullOrWhiteSpace(id))
+                throw new ArgumentException("id is null or whitespace.", "id");
+
+            InitClients();
+
+            SalesForceAPI.Metadata.checkDeployStatusRequest checkRequest = new SalesForceAPI.Metadata.checkDeployStatusRequest(
+                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
+                null,
+                id,
+                true);
+
+            return new PackageDeployResult(_metadataClient.checkDeployStatus(checkRequest).result);            
+        }
+
+        /// <summary>
         /// Start tests for a given class.
         /// </summary>
         /// <param name="names">The names of the classes to start tests for.</param>
