@@ -155,6 +155,9 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(deployPackageFunction, "DOCUMENT");
             App.Instance.RegisterFunction(deployPackageFunction);
 
+            CopyPackageDeployResultsFunction copyPackageResultsFunction = new CopyPackageDeployResultsFunction();
+            App.Instance.Menu.AddFunction(copyPackageResultsFunction, "DOCUMENT");
+
             RefreshSourceFileFunction refreshDocumentFunction = new RefreshSourceFileFunction();
             App.Instance.ToolBar.AddFunction(refreshDocumentFunction);
             App.Instance.Menu.AddFunction(refreshDocumentFunction, "DOCUMENT");

@@ -125,6 +125,14 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         private PackageDeployStatusControl View { get; set; }
 
+        /// <summary>
+        /// The package deployment results as text.
+        /// </summary>
+        public string PackageDeployResultText
+        {
+            get { return View.ResultText; }
+        }
+
         #endregion
 
         #region Methods
