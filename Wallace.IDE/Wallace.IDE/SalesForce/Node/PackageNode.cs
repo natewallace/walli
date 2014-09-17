@@ -132,6 +132,17 @@ namespace Wallace.IDE.SalesForce.Node
                 });
         }
 
+        /// <summary>
+        /// Allow package to be exported by drag and drop.
+        /// </summary>
+        public override void DragStart()
+        {
+            Presenter.DoDragDrop(
+                System.Windows.DataFormats.FileDrop, 
+                new string[] { Package.FileName }, 
+                System.Windows.DragDropEffects.Copy);
+        }
+
         #endregion
     }
 }

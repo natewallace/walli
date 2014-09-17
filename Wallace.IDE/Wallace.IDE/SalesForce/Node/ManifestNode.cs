@@ -136,6 +136,17 @@ namespace Wallace.IDE.SalesForce.Node
                 });
         }
 
+        /// <summary>
+        /// Allow manifest to be exported by drag and drop.
+        /// </summary>
+        public override void DragStart()
+        {
+            Presenter.DoDragDrop(
+                System.Windows.DataFormats.FileDrop,
+                new string[] { Manifest.FileName },
+                System.Windows.DragDropEffects.Copy);
+        }
+
         #endregion
     }
 }
