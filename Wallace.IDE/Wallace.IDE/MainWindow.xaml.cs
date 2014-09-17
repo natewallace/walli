@@ -25,6 +25,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Wallace.IDE.Framework;
+using Wallace.IDE.Framework.UI;
 
 namespace Wallace.IDE
 {
@@ -60,6 +61,8 @@ namespace Wallace.IDE
             _isNavigationHidden = true;
             IsNavigationHidden = false;
             SessionTitle = null;
+
+            updateNotice.Visibility = UpdateNoticeControl.IsUpdateAvailable() ? Visibility.Visible : Visibility.Collapsed;
         }
 
         #endregion
@@ -77,6 +80,13 @@ namespace Wallace.IDE
             }
             set
             {
+                // remove update notice when something gets opened
+                if (updateNotice != null && value != null)
+                {
+                    gridMain.Children.Remove(updateNotice);
+                    updateNotice = null;
+                }
+
                 textBlockTitle.Text = value;
 
                 StringBuilder sb = new StringBuilder("Walli");

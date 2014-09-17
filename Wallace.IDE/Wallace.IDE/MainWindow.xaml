@@ -92,6 +92,14 @@
                       VerticalAlignment="Stretch"
                       Width="5" />
 
+        <!-- Upgrade notice -->
+        <localUI:UpdateNoticeControl x:Name="updateNotice"
+                                     Grid.Row="2"
+                                     Grid.RowSpan="2"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="3"
+                                     Visibility="Collapsed" />
+        
         <!-- ******************* 
              Documents tab control
              ******************* -->
