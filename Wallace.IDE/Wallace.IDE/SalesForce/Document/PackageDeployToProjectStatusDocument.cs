@@ -336,6 +336,7 @@ namespace Wallace.IDE.SalesForce.Document
             else
             {
                 IsDeploymentRunning = false;
+                App.Instance.UpdateWorkspaces();
             }
         }
 
