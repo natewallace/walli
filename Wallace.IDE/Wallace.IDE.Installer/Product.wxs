@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-  <Product Id="A73108C7-9FFA-4DE9-8136-22D69E321429"
+  <Product Id="1E923E8A-75AA-4C37-A9A9-DD8CED62E9E9"
            UpgradeCode="E333820A-5B39-44CF-81A0-BF56B02AEBF2"
-           Version="0.2.0.0"
+           Version="0.3.0.0"
            Language="1033"
            Name="Walli"
            Manufacturer="natewallace@gmail.com">
