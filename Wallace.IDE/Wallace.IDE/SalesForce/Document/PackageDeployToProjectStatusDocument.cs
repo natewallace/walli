@@ -88,6 +88,7 @@ namespace Wallace.IDE.SalesForce.Document
 
             View = new PackageDeployStatusControl();
 
+            IsDeploymentRunning = true;
             UpdateStatus(Project.Client.CheckPackageDeploy(DeployId));
         }
 
@@ -133,6 +134,11 @@ namespace Wallace.IDE.SalesForce.Document
             get { return View.ResultText; }
         }
 
+        /// <summary>
+        /// Flag that indicates if a deployment is running.
+        /// </summary>
+        public bool IsDeploymentRunning { get; private set; }
+
         #endregion
 
         #region Methods
@@ -162,12 +168,43 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Warn user about closing document when a deployment is still running.
+        /// </summary>
+        /// <returns>true if it's ok to close this document, false if it isn't.</returns>
+        public override bool Closing()
+        {
+            if (IsDeploymentRunning)
+            {
+                return (App.MessageUser("A deployment is still running.  Are you sure you want to close this document?",
+                                        "Close",
+                                        System.Windows.MessageBoxImage.Warning,
+                                        new string[] { "Yes", "No" }) == "Yes");
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Dispose of the project.
         /// </summary>
         public override void Closed()
         {
             Project.Dispose();
             Project = null;
+        }
+
+        /// <summary>
+        /// Cancel the deployment.
+        /// </summary>
+        public void CancelDeployment()
+        {
+            if (IsDeploymentRunning)
+            {
+                Project.Client.CancelPackageDeploy(DeployId);
+                IsDeploymentRunning = false;
+                View.StatusText = "Canceling";
+                App.Instance.UpdateWorkspaces();
+            }
         }
 
         /// <summary>
@@ -193,7 +230,7 @@ namespace Wallace.IDE.SalesForce.Document
             else
             {
                 // in progress
-                if (result.ComponentsPassCount + result.ComponentsFailCount < result.ComponentsTotalCount)
+                if (!result.DeploymentComplete && result.ComponentsPassCount + result.ComponentsFailCount < result.ComponentsTotalCount)
                 {
                     View.ComponentProgressMaximum = result.ComponentsTotalCount;
                     View.ComponentProgressValue = result.ComponentsPassCount + result.ComponentsFailCount;
@@ -215,7 +252,7 @@ namespace Wallace.IDE.SalesForce.Document
                         View.ComponentProgressForeground = System.Windows.Media.Brushes.Red;
                         View.ComponentProgressBackground = System.Windows.Media.Brushes.Red;
                     }
-                    else
+                    else if (result.ComponentsPassCount > 0)
                     {
                         View.ComponentProgressForeground = System.Windows.Media.Brushes.Green;
                         View.ComponentProgressBackground = System.Windows.Media.Brushes.Green;
@@ -248,7 +285,7 @@ namespace Wallace.IDE.SalesForce.Document
                 else
                 {
                     // in progress
-                    if (result.TestsPassCount + result.TestsFailCount < result.TestsTotalCount)
+                    if (!result.DeploymentComplete && result.TestsPassCount + result.TestsFailCount < result.TestsTotalCount)
                     {
                         View.TestProgressMaximum = result.TestsTotalCount;
                         View.TestProgressValue = result.TestsPassCount + result.TestsFailCount;
@@ -270,7 +307,7 @@ namespace Wallace.IDE.SalesForce.Document
                             View.TestProgressForeground = System.Windows.Media.Brushes.Red;
                             View.TestProgressBackground = System.Windows.Media.Brushes.Red;
                         }
-                        else
+                        else if (result.TestsPassCount > 0)
                         {
                             View.TestProgressForeground = System.Windows.Media.Brushes.Green;
                             View.TestProgressBackground = System.Windows.Media.Brushes.Green;
@@ -295,6 +332,10 @@ namespace Wallace.IDE.SalesForce.Document
                     _refreshTimer.Interval = TimeSpan.FromSeconds(30).TotalMilliseconds;
 
                 _refreshTimer.Start();
+            }
+            else
+            {
+                IsDeploymentRunning = false;
             }
         }
 

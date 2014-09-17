@@ -258,6 +258,23 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Cancel the deployment of a package.
+        /// </summary>
+        /// <param name="id">The id of the deployment to cancel.</param>
+        public void CancelPackageDeploy(string id)
+        {
+            if (String.IsNullOrWhiteSpace(id))
+                throw new ArgumentException("id is null or whitespace.", "id");
+
+            InitClients();
+
+            _metadataClient.cancelDeploy(new SalesForceAPI.Metadata.cancelDeployRequest(
+                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
+                null,
+                id));
+        }
+
+        /// <summary>
         /// Start tests for a given class.
         /// </summary>
         /// <param name="names">The names of the classes to start tests for.</param>
