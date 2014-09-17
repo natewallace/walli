@@ -103,9 +103,6 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.Targets.Add(
                     "SalesForce Project",
                     Project.Projects);
-                dlg.Targets.Add(
-                    "Git Repository",
-                    new string[] { "Test 1", "Test 2" });
 
                 // target type options
                 dlg.TargetTypeOptions.Add(
@@ -120,7 +117,6 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.TargetTypes = new string[]
                 {
                     "SalesForce Project",
-                    "Git Repository"
                 };
                 dlg.SelectedTargetType = "SalesForce Project";
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="Cpt7HE5dA5QxrqzNbeh0SsAj22g=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="BozFpGV1wHsZ4LK2LvStRIfv3H4=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="MetadataBinding">
       <properties>
@@ -221,10 +221,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="MetadataPort" contract="SalesForceAPI.Metadata.MetadataPortType" bindingType="basicHttpBinding" address="https://cs15.salesforce.com/services/Soap/m/29.0" bindingConfiguration="MetadataBinding">
+    <endpoint name="Metadata" contract="SalesForceAPI.Metadata.MetadataPortType" bindingType="basicHttpBinding" address="https://cs15.salesforce.com/services/Soap/m/32.0" bindingConfiguration="MetadataBinding">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>https://cs15.salesforce.com/services/Soap/m/29.0</serializedValue>
+          <serializedValue>https://cs15.salesforce.com/services/Soap/m/32.0</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -296,7 +296,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>MetadataPort</serializedValue>
+          <serializedValue>Metadata</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

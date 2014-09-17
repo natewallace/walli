@@ -254,7 +254,7 @@ namespace SalesForceData
                 id,
                 true);
 
-            return new PackageDeployResult(_metadataClient.checkDeployStatus(checkRequest).result);            
+            return new PackageDeployResult(_metadataClient.checkDeployStatus(checkRequest).result);  
         }
 
         /// <summary>

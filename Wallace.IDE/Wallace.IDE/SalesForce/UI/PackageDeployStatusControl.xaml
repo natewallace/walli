@@ -152,7 +152,8 @@
                       Grid.Column="0"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Visible"
-                      Margin="5,0,5,0">
+                      Margin="5,0,5,0"
+                      Padding="0,5,0,0">
             <TextBox x:Name="textBoxResults"
                      IsReadOnly="True"
                      BorderThickness="0"
