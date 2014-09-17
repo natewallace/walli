@@ -23,7 +23,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,6 +36,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace Wallace.IDE.Framework.UI
 {
@@ -75,11 +78,40 @@ namespace Wallace.IDE.Framework.UI
         /// <param name="state">Not used.</param>
         private void CheckForUpdate(object state)
         {
-            App.Instance.Dispatcher.Invoke(new Action(() =>
+            try
             {
-                Wallace.IDE.Properties.Settings.Default.LatestVersion = "0.1.0.0";
-                Wallace.IDE.Properties.Settings.Default.Save();
-            }));
+                using (WebClient client = new WebClient())
+                {
+                    string xml = client.DownloadString(Wallace.IDE.Properties.Settings.Default.LatestVersionEndpoint);
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.LoadXml(xml);
+                    XmlNodeList nodes = xmlDocument.SelectNodes("/rss/channel/item/title");
+                    foreach (XmlNode node in nodes)
+                    {
+                        if (node != null && node.InnerText != null && Regex.IsMatch(node.InnerText, "Release", RegexOptions.IgnoreCase))
+                        {
+                            Match match = Regex.Match(node.InnerText, "Walli[ ]+v[0-9]+.[0-9]+(.[0-9]+)?(.[0-9]+)?", RegexOptions.IgnoreCase);
+                            if (match != null)
+                            {
+                                string versionText = match.Value.Substring(match.Value.IndexOf("v", StringComparison.CurrentCultureIgnoreCase) + 1);
+                                Version version = new Version(versionText);
+
+                                App.Instance.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    Wallace.IDE.Properties.Settings.Default.LatestVersion = versionText;
+                                    Wallace.IDE.Properties.Settings.Default.Save();
+                                }));
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // ignore errors
+            }
         }
 
         #endregion
