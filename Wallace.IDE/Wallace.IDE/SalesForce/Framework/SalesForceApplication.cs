@@ -153,7 +153,6 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(deployPackageFunction));
             App.Instance.ToolBar.AddFunction(deployPackageFunction);
             App.Instance.Menu.AddFunction(deployPackageFunction, "DOCUMENT");
-            App.Instance.RegisterFunction(deployPackageFunction);
 
             CopyPackageDeployResultsFunction copyPackageResultsFunction = new CopyPackageDeployResultsFunction();
             App.Instance.Menu.AddFunction(copyPackageResultsFunction, "DOCUMENT");

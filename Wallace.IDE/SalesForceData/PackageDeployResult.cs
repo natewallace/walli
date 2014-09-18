@@ -131,7 +131,11 @@ namespace SalesForceData
                         sb.AppendLine();
                         sb.AppendFormat("      Error: {0}", failure.message);
                         sb.AppendLine();
-                        sb.AppendFormat("     Method: {0}.{1}", failure.name, failure.methodName);
+                        sb.AppendFormat("       Type: {0}", failure.type);
+                        sb.AppendLine();
+                        sb.AppendFormat("     Source: {0}.{1}", failure.name, failure.methodName);
+                        if (String.IsNullOrWhiteSpace(failure.methodName))
+                            sb.Length = sb.Length - 1;
                         sb.AppendLine();
                         sb.AppendFormat("Stack trace: {0}", (failure.stackTrace != null) ? failure.stackTrace.Replace("\n", Environment.NewLine + "             ") : String.Empty);
                         sb.AppendLine();

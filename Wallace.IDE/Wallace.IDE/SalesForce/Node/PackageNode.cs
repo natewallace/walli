@@ -127,7 +127,6 @@ namespace Wallace.IDE.SalesForce.Node
                 base.GetContextFunctions(),
                 new IFunction[] 
                 {
-                    App.Instance.GetFunction<DeployPackageFunction>(),
                     App.Instance.GetFunction<DeletePackageFunction>()
                 });
         }
