@@ -20,56 +20,49 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
-using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Wallace.IDE.SalesForce.Document
+namespace SalesForceData
 {
     /// <summary>
-    /// Document for generic source file edits.
+    /// A salesforce data element.
     /// </summary>
-    public class SourceFileEditorDocument : SourceFileEditorDocumentBase<SourceFileEditorControl>
+    public abstract class SourceFileDataElement<TType> where TType : class, new()
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="project">The project to edit the apex on.</param>
-        /// <param name="file">The file that is being edited.</param>
-        public SourceFileEditorDocument(Project project, SourceFile file)
-            : base(project, file)
+        protected SourceFileDataElement()
         {
+            Data = Activator.CreateInstance<TType>();
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="data">Data.</param>
+        protected SourceFileDataElement(TType data)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
+
+            Data = data;
         }
 
         #endregion
 
-        #region Methods
+        #region Properties
 
         /// <summary>
-        /// Load data if there is any and it's supported.
+        /// The underlying salesforce object.
         /// </summary>
-        /// <returns>The reload result.</returns>
-        public override bool Reload()
-        {
-            switch (File.FileType.Name)
-            {
-                case "Profile":
-                    ProfileData data = Project.Client.GetSourceFileData(File) as ProfileData;
-                    View.DataView = new ProfileEditorControl();
-                    View.IsTabStripVisible = true;
-                    View.IsDataVisible = true;
-                    break;
-
-                default:
-                    View.IsTabStripVisible = false;
-                    View.IsSourceVisible = true;
-                    break;
-            }
-
-            return base.Reload();
-        }
+        internal TType Data { get; private set; }
 
         #endregion
     }

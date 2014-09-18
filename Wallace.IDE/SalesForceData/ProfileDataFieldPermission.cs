@@ -20,55 +20,63 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
-using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Wallace.IDE.SalesForce.Document
+namespace SalesForceData
 {
     /// <summary>
-    /// Document for generic source file edits.
+    /// Field permission.
     /// </summary>
-    public class SourceFileEditorDocument : SourceFileEditorDocumentBase<SourceFileEditorControl>
+    public class ProfileDataFieldPermission : SourceFileDataElement<SalesForceAPI.Metadata.ProfileFieldLevelSecurity>
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="project">The project to edit the apex on.</param>
-        /// <param name="file">The file that is being edited.</param>
-        public SourceFileEditorDocument(Project project, SourceFile file)
-            : base(project, file)
+        /// <param name="data">The object to build this object from.</param>
+        internal ProfileDataFieldPermission(SalesForceAPI.Metadata.ProfileFieldLevelSecurity data)
+            : base(data)
         {
         }
 
         #endregion
 
-        #region Methods
+        #region Properties
 
         /// <summary>
-        /// Load data if there is any and it's supported.
+        /// The field name.
         /// </summary>
-        /// <returns>The reload result.</returns>
-        public override bool Reload()
+        public string FieldName
         {
-            switch (File.FileType.Name)
+            get { return Data.field; }
+            set { Data.field = value; }
+        }
+
+        /// <summary>
+        /// Indicates if the field can be edited.
+        /// </summary>
+        public bool Editable
+        {
+            get { return Data.editable; }
+            set { Data.editable = value; }
+        }
+
+        /// <summary>
+        /// Indicates if the field can be read.
+        /// </summary>
+        public bool Readable
+        {
+            get { return Data.readable; }
+            set
             {
-                case "Profile":
-                    ProfileData data = Project.Client.GetSourceFileData(File) as ProfileData;
-                    View.DataView = new ProfileEditorControl();
-                    View.IsTabStripVisible = true;
-                    View.IsDataVisible = true;
-                    break;
-
-                default:
-                    View.IsTabStripVisible = false;
-                    View.IsSourceVisible = true;
-                    break;
+                Data.readable = value;
+                Data.readableSpecified = true;
             }
-
-            return base.Reload();
         }
 
         #endregion

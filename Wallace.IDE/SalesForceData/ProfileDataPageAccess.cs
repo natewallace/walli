@@ -20,55 +20,50 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
-using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Wallace.IDE.SalesForce.Document
+namespace SalesForceData
 {
     /// <summary>
-    /// Document for generic source file edits.
+    /// Page access.
     /// </summary>
-    public class SourceFileEditorDocument : SourceFileEditorDocumentBase<SourceFileEditorControl>
+    public class ProfileDataPageAccess : SourceFileDataElement<SalesForceAPI.Metadata.ProfileApexPageAccess>
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="project">The project to edit the apex on.</param>
-        /// <param name="file">The file that is being edited.</param>
-        public SourceFileEditorDocument(Project project, SourceFile file)
-            : base(project, file)
+        /// <param name="data">The object to build this object from.</param>
+        internal ProfileDataPageAccess(SalesForceAPI.Metadata.ProfileApexPageAccess data)
+            : base(data)
         {
         }
 
         #endregion
 
-        #region Methods
+        #region Properties
 
         /// <summary>
-        /// Load data if there is any and it's supported.
+        /// The name of the page.
         /// </summary>
-        /// <returns>The reload result.</returns>
-        public override bool Reload()
+        public string PageName
         {
-            switch (File.FileType.Name)
-            {
-                case "Profile":
-                    ProfileData data = Project.Client.GetSourceFileData(File) as ProfileData;
-                    View.DataView = new ProfileEditorControl();
-                    View.IsTabStripVisible = true;
-                    View.IsDataVisible = true;
-                    break;
+            get { return Data.apexPage; }
+            set { Data.apexPage = value; }
+        }
 
-                default:
-                    View.IsTabStripVisible = false;
-                    View.IsSourceVisible = true;
-                    break;
-            }
-
-            return base.Reload();
+        /// <summary>
+        /// Indicates if the class is enabled.
+        /// </summary>
+        public bool Enabled
+        {
+            get { return Data.enabled; }
+            set { Data.enabled = value; }
         }
 
         #endregion

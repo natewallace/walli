@@ -67,6 +67,7 @@
     <Compile Include="Framework\Function\CloseAllDocumentsFunction.cs" />
     <Compile Include="Framework\FunctionSeparator.cs" />
     <Compile Include="Framework\Function\UserGuideFunction.cs" />
+    <Compile Include="Framework\UI\ChromeTab.cs" />
     <Compile Include="Framework\UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -184,6 +185,9 @@
     </Compile>
     <Compile Include="SalesForce\UI\PackageViewControl.xaml.cs">
       <DependentUpon>PackageViewControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\ProfileEditorControl.xaml.cs">
+      <DependentUpon>ProfileEditorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\SelectProjectWindow.xaml.cs">
       <DependentUpon>SelectProjectWindow.xaml</DependentUpon>
@@ -319,6 +323,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\PackageViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\ProfileEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

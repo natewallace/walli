@@ -457,6 +457,68 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Get the data for the given file.
+        /// </summary>
+        /// <param name="file">The file to get data for.</param>
+        /// <returns>The requested data or null if it isn't supported.</returns>
+        public SourceFileData GetSourceFileData(SourceFile file)
+        {
+            InitClients();
+
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            SalesForceAPI.Metadata.readMetadataRequest request = new SalesForceAPI.Metadata.readMetadataRequest(
+                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
+                null,
+                file.FileType.Name,
+                new string[] { file.Name });
+
+            SalesForceAPI.Metadata.readMetadataResponse response = _metadataClient.readMetadata(request);
+            if (response == null || response.result.Length != 1)
+                return null;
+
+            return SourceFileData.Create(file, response.result[0]);
+        }
+
+        /// <summary>
+        /// Save the source file data.
+        /// </summary>
+        /// <param name="data">The data to save.</param>
+        public void SaveSourceFileData(SourceFileData data)
+        {
+            InitClients();
+
+            if (data == null)
+                throw new ArgumentNullException("data");
+
+            SalesForceAPI.Metadata.updateMetadataRequest request = new SalesForceAPI.Metadata.updateMetadataRequest(
+                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
+                null,
+                new SalesForceAPI.Metadata.Metadata[] { data.GetMetadata() });
+
+            SalesForceAPI.Metadata.updateMetadataResponse response = _metadataClient.updateMetadata(request);
+            if (response != null && response.result != null && response.result.Length == 1)
+            {
+                if (!response.result[0].success)
+                {
+                    if (response.result[0].errors != null && response.result[0].errors.Length > 0)
+                    {
+                        StringBuilder msg = new StringBuilder();
+                        foreach (SalesForceAPI.Metadata.Error err in response.result[0].errors)
+                            msg.AppendLine(String.Format("{0}:{1}", err.statusCode, err.message));
+
+                        throw new Exception(msg.ToString());
+                    }
+                    else
+                    {
+                        throw new Exception("An unknown exception occured when trying to update MetaData.");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Get the content for the given source file.
         /// </summary>
         /// <param name="file">The file to get content for.</param>

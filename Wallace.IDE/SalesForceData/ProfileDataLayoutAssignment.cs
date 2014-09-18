@@ -20,55 +20,50 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
-using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Wallace.IDE.SalesForce.Document
+namespace SalesForceData
 {
     /// <summary>
-    /// Document for generic source file edits.
+    /// Layout assignement.
     /// </summary>
-    public class SourceFileEditorDocument : SourceFileEditorDocumentBase<SourceFileEditorControl>
+    public class ProfileDataLayoutAssignment : SourceFileDataElement<SalesForceAPI.Metadata.ProfileLayoutAssignment>
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="project">The project to edit the apex on.</param>
-        /// <param name="file">The file that is being edited.</param>
-        public SourceFileEditorDocument(Project project, SourceFile file)
-            : base(project, file)
+        /// <param name="data">The object to build this object from.</param>
+        internal ProfileDataLayoutAssignment(SalesForceAPI.Metadata.ProfileLayoutAssignment data)
+            : base(data)
         {
         }
 
         #endregion
 
-        #region Methods
+        #region Properties
 
         /// <summary>
-        /// Load data if there is any and it's supported.
+        /// The layout name.
         /// </summary>
-        /// <returns>The reload result.</returns>
-        public override bool Reload()
+        public string LayoutName
         {
-            switch (File.FileType.Name)
-            {
-                case "Profile":
-                    ProfileData data = Project.Client.GetSourceFileData(File) as ProfileData;
-                    View.DataView = new ProfileEditorControl();
-                    View.IsTabStripVisible = true;
-                    View.IsDataVisible = true;
-                    break;
+            get { return Data.layout; }
+            set { Data.layout = value; }
+        }
 
-                default:
-                    View.IsTabStripVisible = false;
-                    View.IsSourceVisible = true;
-                    break;
-            }
-
-            return base.Reload();
+        /// <summary>
+        /// The record type name.
+        /// </summary>
+        public string RecordTypeName
+        {
+            get { return Data.recordType; }
+            set { Data.recordType = value; }
         }
 
         #endregion

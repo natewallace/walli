@@ -20,55 +20,59 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
-using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Wallace.IDE.SalesForce.Document
+namespace SalesForceData
 {
     /// <summary>
-    /// Document for generic source file edits.
+    /// Application visibility.
     /// </summary>
-    public class SourceFileEditorDocument : SourceFileEditorDocumentBase<SourceFileEditorControl>
+    public class ProfileDataAppVisibility : SourceFileDataElement<SalesForceAPI.Metadata.ProfileApplicationVisibility>
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="project">The project to edit the apex on.</param>
-        /// <param name="file">The file that is being edited.</param>
-        public SourceFileEditorDocument(Project project, SourceFile file)
-            : base(project, file)
+        /// <param name="data">The object to build this object from.</param>
+        internal ProfileDataAppVisibility(SalesForceAPI.Metadata.ProfileApplicationVisibility data)
+            : base(data)
         {
         }
 
         #endregion
 
-        #region Methods
+        #region Properties
 
         /// <summary>
-        /// Load data if there is any and it's supported.
+        /// The application name.
         /// </summary>
-        /// <returns>The reload result.</returns>
-        public override bool Reload()
+        public string Application
         {
-            switch (File.FileType.Name)
-            {
-                case "Profile":
-                    ProfileData data = Project.Client.GetSourceFileData(File) as ProfileData;
-                    View.DataView = new ProfileEditorControl();
-                    View.IsTabStripVisible = true;
-                    View.IsDataVisible = true;
-                    break;
+            get { return Data.application; }
+            set { Data.application = value; }
+        }
 
-                default:
-                    View.IsTabStripVisible = false;
-                    View.IsSourceVisible = true;
-                    break;
-            }
+        /// <summary>
+        /// The default visibility.
+        /// </summary>
+        public bool DefaultVisible
+        {
+            get { return Data.@default; }
+            set { Data.@default = value; }
+        }
 
-            return base.Reload();
+        /// <summary>
+        /// The visibility.
+        /// </summary>
+        public bool Visible
+        {
+            get { return Data.visible; }
+            set { Data.visible = true; }
         }
 
         #endregion

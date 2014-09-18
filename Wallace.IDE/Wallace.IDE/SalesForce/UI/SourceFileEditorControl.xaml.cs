@@ -27,6 +27,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Search;
 using Wallace.IDE.Framework;
+using Wallace.IDE.Framework.UI;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -74,6 +75,48 @@ namespace Wallace.IDE.SalesForce.UI
         {
             get { return textEditor.Text; }
             set { textEditor.Text = value; }
+        }
+
+        /// <summary>
+        /// Indicates if the source view is visible.
+        /// </summary>
+        public bool IsSourceVisible
+        {
+            get { return tabItemSource.IsSelected; }
+            set { tabItemSource.IsSelected = value; }
+        }
+
+        /// <summary>
+        /// Indicates if the data view is visible.
+        /// </summary>
+        public bool IsDataVisible
+        {
+            get { return tabItemData.IsSelected; }
+            set { tabItemData.IsSelected = value; }
+        }
+
+        /// <summary>
+        /// Indicates if the tab strip is visible.
+        /// </summary>
+        public bool IsTabStripVisible
+        {
+            get { return ChromeTab.GetShowTabStrip(tabControlContent); }
+            set { ChromeTab.SetShowTabStrip(tabControlContent, value); }
+        }
+
+        /// <summary>
+        /// The data view.
+        /// </summary>
+        public object DataView
+        {
+            get
+            {
+                return tabItemData.Content;
+            }
+            set
+            {
+                tabItemData.Content = value;
+            }
         }
 
         #endregion

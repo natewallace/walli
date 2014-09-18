@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"   
+             xmlns:localUI="clr-namespace:Wallace.IDE.Framework.UI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -13,22 +14,36 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <avalonEdit:TextEditor x:Name="textEditor"
-                               Grid.Row="0"
-                               FontFamily="Consolas"
-                               FontSize="10pt"
-                               HorizontalScrollBarVisibility="Auto"
-                               VerticalScrollBarVisibility="Visible"
-                               ShowLineNumbers="True" 
-                               TextChanged="textEditor_TextChanged"
-                               UseLayoutRounding="True"
-                               SyntaxHighlighting="XML">
-            <avalonEdit:TextEditor.Options>
-                <avalonEdit:TextEditorOptions EnableHyperlinks="False" 
-                                              EnableEmailHyperlinks="False"/>
-            </avalonEdit:TextEditor.Options>
-        </avalonEdit:TextEditor>
-
+        <TabControl x:Name="tabControlContent"
+                    TabStripPlacement="Bottom"
+                    localUI:ChromeTab.ShowOverflowButton="False"
+                    localUI:ChromeTab.ShowTabStrip="False"
+                    Style="{StaticResource ChromeTabControlStyle}">
+            <TabItem x:Name="tabItemData"
+                     Header="Data"
+                     localUI:ChromeTab.ShowCloseButton="False">
+            </TabItem>
+            <TabItem x:Name="tabItemSource"
+                     Header="Source"
+                     localUI:ChromeTab.ShowCloseButton="False">
+                <avalonEdit:TextEditor x:Name="textEditor"
+                                       Grid.Row="0"
+                                       FontFamily="Consolas"
+                                       FontSize="10pt"
+                                       HorizontalScrollBarVisibility="Auto"
+                                       VerticalScrollBarVisibility="Visible"
+                                       ShowLineNumbers="True" 
+                                       TextChanged="textEditor_TextChanged"
+                                       UseLayoutRounding="True"
+                                       SyntaxHighlighting="XML">
+                    <avalonEdit:TextEditor.Options>
+                        <avalonEdit:TextEditorOptions EnableHyperlinks="False" 
+                                                      EnableEmailHyperlinks="False"/>
+                    </avalonEdit:TextEditor.Options>
+                </avalonEdit:TextEditor>
+            </TabItem>
+        </TabControl>
+        
         <ScrollViewer x:Name="scrollViewerErrors"
                       Grid.Row="1"
                       MinHeight="75"

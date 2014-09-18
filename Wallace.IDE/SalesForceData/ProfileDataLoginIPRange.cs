@@ -20,55 +20,59 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
-using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Wallace.IDE.SalesForce.Document
+namespace SalesForceData
 {
     /// <summary>
-    /// Document for generic source file edits.
+    /// IP range.
     /// </summary>
-    public class SourceFileEditorDocument : SourceFileEditorDocumentBase<SourceFileEditorControl>
+    public class ProfileDataLoginIPRange : SourceFileDataElement<SalesForceAPI.Metadata.ProfileLoginIpRange>
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="project">The project to edit the apex on.</param>
-        /// <param name="file">The file that is being edited.</param>
-        public SourceFileEditorDocument(Project project, SourceFile file)
-            : base(project, file)
+        /// <param name="data">The object to build this object from.</param>
+        internal ProfileDataLoginIPRange(SalesForceAPI.Metadata.ProfileLoginIpRange data)
+            : base(data)
         {
         }
 
         #endregion
 
-        #region Methods
+        #region Properties
 
         /// <summary>
-        /// Load data if there is any and it's supported.
+        /// Description.
         /// </summary>
-        /// <returns>The reload result.</returns>
-        public override bool Reload()
+        public string Description
         {
-            switch (File.FileType.Name)
-            {
-                case "Profile":
-                    ProfileData data = Project.Client.GetSourceFileData(File) as ProfileData;
-                    View.DataView = new ProfileEditorControl();
-                    View.IsTabStripVisible = true;
-                    View.IsDataVisible = true;
-                    break;
+            get { return Data.description; }
+            set { Data.description = value; }
+        }
 
-                default:
-                    View.IsTabStripVisible = false;
-                    View.IsSourceVisible = true;
-                    break;
-            }
+        /// <summary>
+        /// Start address.
+        /// </summary>
+        public string StartAddress
+        {
+            get { return Data.startAddress; }
+            set { Data.startAddress = value; }
+        }
 
-            return base.Reload();
+        /// <summary>
+        /// End address.
+        /// </summary>
+        public string EndAddress
+        {
+            get { return Data.endAddress; }
+            set { Data.endAddress = value; }
         }
 
         #endregion
