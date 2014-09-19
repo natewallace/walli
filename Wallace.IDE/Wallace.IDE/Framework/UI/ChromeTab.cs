@@ -22,7 +22,7 @@ namespace Wallace.IDE.Framework.UI
             "ShowOverflowButton",
             typeof(bool),
             typeof(ChromeTab),
-            new PropertyMetadata(true));
+            new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
 
         /// <summary>
         /// When set to false the close button will not be displayed.
@@ -31,7 +31,7 @@ namespace Wallace.IDE.Framework.UI
             "ShowCloseButton",
             typeof(bool),
             typeof(ChromeTab),
-            new PropertyMetadata(true));
+            new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
 
         /// <summary>
         /// When set to false the tab strip will not be displayed.
@@ -40,7 +40,7 @@ namespace Wallace.IDE.Framework.UI
             "ShowTabStrip",
             typeof(bool),
             typeof(ChromeTab),
-            new PropertyMetadata(true));
+            new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         /// <param name="target">The object to get the value for.</param>
         /// <returns>The requested value.</returns>
-        public static bool GetShowOverflowButton(UIElement target)
+        public static bool GetShowOverflowButton(DependencyObject target)
         {
             return (bool)target.GetValue(ShowOverflowButtonProperty);
         }
@@ -61,7 +61,7 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         /// <param name="target">The object to set the value for.</param>
         /// <param name="value">The value to set.</param>
-        public static void SetShowOverflowButton(UIElement target, bool value)
+        public static void SetShowOverflowButton(DependencyObject target, bool value)
         {
             target.SetValue(ShowOverflowButtonProperty, value);
         }
@@ -71,7 +71,7 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         /// <param name="target">The object to get the value for.</param>
         /// <returns>The requested value.</returns>
-        public static bool GetShowCloseButton(UIElement target)
+        public static bool GetShowCloseButton(DependencyObject target)
         {
             return (bool)target.GetValue(ShowCloseButtonProperty);
         }
@@ -81,7 +81,7 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         /// <param name="target">The object to set the value for.</param>
         /// <param name="value">The value to set.</param>
-        public static void SetShowCloseButton(UIElement target, bool value)
+        public static void SetShowCloseButton(DependencyObject target, bool value)
         {
             target.SetValue(ShowCloseButtonProperty, value);
         }
@@ -91,9 +91,9 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         /// <param name="target">The object to get the value for.</param>
         /// <returns>The requested value.</returns>
-        public static bool GetShowTabStrip(UIElement target)
+        public static bool GetShowTabStrip(DependencyObject target)
         {
-            return (bool)target.GetValue(ShowCloseButtonProperty);
+            return (bool)target.GetValue(ShowTabStripProperty);
         }
 
         /// <summary>
@@ -101,9 +101,9 @@ namespace Wallace.IDE.Framework.UI
         /// </summary>
         /// <param name="target">The object to set the value for.</param>
         /// <param name="value">The value to set.</param>
-        public static void SetShowTabStrip(UIElement target, bool value)
+        public static void SetShowTabStrip(DependencyObject target, bool value)
         {
-            target.SetValue(ShowCloseButtonProperty, value);
+            target.SetValue(ShowTabStripProperty, value);
         }
 
         #endregion

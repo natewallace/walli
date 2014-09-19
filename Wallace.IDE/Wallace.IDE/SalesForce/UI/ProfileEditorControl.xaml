@@ -7,7 +7,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TabControl TabStripPlacement="Left"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock x:Name="textBlockTitle"
+                   Grid.Row="0"
+                   Margin="5"
+                   Text="Profile" />
+        
+        <TabControl Grid.Row="1"
+                    TabStripPlacement="Left"
                     localUI:ChromeTab.ShowOverflowButton="False"
                     Style="{StaticResource ChromeTabControlStyle}">
             <TabItem Header="Application" localUI:ChromeTab.ShowCloseButton="False" />

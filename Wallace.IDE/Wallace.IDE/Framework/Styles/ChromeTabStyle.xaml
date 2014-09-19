@@ -154,14 +154,6 @@
                             <Setter Property="Foreground" Value="Gray" />
                             <Setter TargetName="Border" Property="BorderBrush" Value="Gray" />
                         </Trigger>
-                        <Trigger Property="localUI:ChromeTab.ShowOverflowButton" Value="false">
-                            <Setter TargetName="OverflowButton" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
-                        <Trigger Property="localUI:ChromeTab.ShowTabStrip" Value="False">
-                            <Setter TargetName="HeaderPanel" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="Border" Property="BorderThickness" Value="0,0,0,0" />
-                            <Setter TargetName="OverflowButton" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
                         <Trigger Property="TabStripPlacement" Value="Bottom">
                             <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="1" />
                             <Setter TargetName="OverflowButton" Property="Grid.Row" Value="1" />
@@ -183,6 +175,14 @@
                             <Setter TargetName="Border" Property="BorderThickness" Value="2,0,0,0" />
                             <Setter TargetName="HeaderPanel" Property="Orientation" Value="Vertical" />
                             <Setter TargetName="HeaderPanel" Property="Margin" Value="0,0,0,0" />
+                        </Trigger>
+                        <Trigger Property="localUI:ChromeTab.ShowOverflowButton" Value="false">
+                            <Setter TargetName="OverflowButton" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="localUI:ChromeTab.ShowTabStrip" Value="False">
+                            <Setter TargetName="HeaderPanel" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="0,0,0,0" />
+                            <Setter TargetName="OverflowButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
