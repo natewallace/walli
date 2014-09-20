@@ -125,7 +125,7 @@ namespace Wallace.IDE
 
             Menu = new MenuFunctionManager(_window.MainMenu);
             ToolBar = new ToolBarFunctionManager(_window.MainToolBar);
-            Navigation = new TreeViewNodeManager(_window.Nodes);
+            Navigation = new TabTreeNodeManager(_window.Nodes);
             Content = new TabControlDocumentManager(_window.Documents);
             SalesForceApp = new SalesForceApplication();
 

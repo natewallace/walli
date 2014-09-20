@@ -261,10 +261,10 @@ namespace Wallace.IDE.SalesForce.Framework
             // open the project
             CurrentProject = project;
             App.Instance.SessionTitle = project.Credential.Username;
-            
+
+            App.Instance.Navigation.Nodes.Add(new SourceFolderNode(project));
             App.Instance.Navigation.Nodes.Add(new DataFolderNode(project));
             App.Instance.Navigation.Nodes.Add(new DeployFolderNode(project));
-            App.Instance.Navigation.Nodes.Add(new SourceFolderNode(project));
 
             App.Instance.Menu.UpdateFunctions();
             App.Instance.ToolBar.UpdateFunctions();

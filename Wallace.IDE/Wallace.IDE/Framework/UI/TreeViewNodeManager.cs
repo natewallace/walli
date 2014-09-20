@@ -794,7 +794,8 @@ namespace Wallace.IDE.Framework.UI
                 }
                 else
                 {
-                    (Host.SelectedItem as TreeViewItem).IsSelected = false;
+                    if (Host.SelectedItem != null)
+                        (Host.SelectedItem as TreeViewItem).IsSelected = false;
                 }
             }
         }

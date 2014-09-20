@@ -120,7 +120,7 @@ namespace Wallace.IDE
                     {
                         _lastNavigationWidth = gridMain.ColumnDefinitions[0].ActualWidth;
                         gridSplitterMain.Visibility = Visibility.Collapsed;
-                        nodesTreeView.Visibility = Visibility.Collapsed;
+                        nodesTabTree.Visibility = Visibility.Collapsed;
                         textBlockTitle.Visibility = Visibility.Collapsed;
                         borderNavigation.BorderThickness = new Thickness(1);
                         buttonHideNavigation.Content = VisualHelper.CreateIconHeader(null, "PinAlt.png", new Thickness(1));
@@ -133,7 +133,7 @@ namespace Wallace.IDE
                         buttonHideNavigation.ToolTip = "Hide";
                         borderNavigation.BorderThickness = new Thickness(1, 1, 1, 0);
                         textBlockTitle.Visibility = Visibility.Visible;
-                        nodesTreeView.Visibility = Visibility.Visible;
+                        nodesTabTree.Visibility = Visibility.Visible;
                         gridSplitterMain.Visibility = Visibility.Visible;
                         gridMain.ColumnDefinitions[0].Width = new GridLength(_lastNavigationWidth);
                     }
@@ -158,11 +158,11 @@ namespace Wallace.IDE
         }
 
         /// <summary>
-        /// The tree view used to display nodes.
+        /// The tab control used to display nodes.
         /// </summary>
-        public TreeView Nodes
+        public TabControl Nodes
         {
-            get { return nodesTreeView; }
+            get { return nodesTabTree; }
         }
 
         /// <summary>

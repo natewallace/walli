@@ -71,6 +71,7 @@
     <Compile Include="Framework\UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Framework\UI\TabTreeNodeManager.cs" />
     <Compile Include="Framework\UI\UniqueObservableCollection.cs" />
     <Compile Include="Framework\UI\UpdateNoticeControl.xaml.cs">
       <DependentUpon>UpdateNoticeControl.xaml</DependentUpon>

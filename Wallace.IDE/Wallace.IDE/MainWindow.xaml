@@ -73,9 +73,12 @@
             </Border>
 
             <!-- ******************* 
-             Project navigation tree view 
+             Project navigation view 
              ******************* -->
-            <TreeView x:Name="nodesTreeView" />
+            <TabControl x:Name="nodesTabTree"
+                        TabStripPlacement="Bottom"
+                        localUI:ChromeTab.ShowOverflowButton="False"
+                        Style="{StaticResource ChromeTabControlStyle}" />
 
         </DockPanel>        
 
