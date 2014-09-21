@@ -62,7 +62,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             get
             {
-                return "Deploy";
+                return "Deploy ";
             }
         }
 

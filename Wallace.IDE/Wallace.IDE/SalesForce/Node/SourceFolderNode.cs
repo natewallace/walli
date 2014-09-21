@@ -64,7 +64,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             get
             {
-                return "Source";
+                return "Source ";
             }
         }
 

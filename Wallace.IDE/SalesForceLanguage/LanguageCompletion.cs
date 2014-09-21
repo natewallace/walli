@@ -592,7 +592,6 @@ namespace SalesForceLanguage
                         case '-':
                         case '+':
                         case '*':
-                        case '/':
                         case ':':
                         case '&':
                         case '|':
@@ -601,6 +600,21 @@ namespace SalesForceLanguage
                         case '?':
                             if (openDelimiterCount == 0)
                                 stop = true;
+                            break;
+
+                        // special case for inline comments
+                        case '/':
+                            if (openDelimiterCount == 0)
+                            {
+                                stop = true;
+                                if (text.Position > 1)
+                                {
+                                    text.Position = text.Position - 2;
+                                    c = (char)text.ReadByte();
+                                    if (c == '/')
+                                        lineBuilder.Insert(0, "//");
+                                }
+                            }
                             break;
 
                         default:

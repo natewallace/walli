@@ -20,10 +20,10 @@
 		public static Void setBestReply(String questionId, String replyId);
 	}
 
-	public class ApexPages {
+	public class ApexPages extends System.PageReference {
 		public Void addMessage(ApexPages.Message msg);
 		public Void addMessages(Exception ex);
-		public static System.PageReference currentPage();
+		public static System.ApexPages currentPage();
 		public ApexPages.Message[] getMessages();
 		public Boolean hasMessages();
 		public Boolean hasMessages(ApexPages.Severity sev);
