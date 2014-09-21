@@ -17,13 +17,14 @@
         <TabControl x:Name="tabControlContent"
                     TabStripPlacement="Bottom"
                     localUI:ChromeTab.ShowOverflowButton="False"
-                    Style="{StaticResource ChromeTabControlStyle}">
+                    Style="{StaticResource ChromeTabControlStyle}"
+                    SelectionChanged="tabControlContent_SelectionChanged">
             <TabItem x:Name="tabItemData"
-                     Header="Data"
+                     Header="Editor "
                      localUI:ChromeTab.ShowCloseButton="False">
             </TabItem>
             <TabItem x:Name="tabItemSource"
-                     Header="Source"
+                     Header="Source "
                      localUI:ChromeTab.ShowCloseButton="False">
                 <avalonEdit:TextEditor x:Name="textEditor"
                                        Grid.Row="0"

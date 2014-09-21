@@ -109,6 +109,13 @@ namespace Wallace.IDE.Framework.UI
         private void RemoveAllManagers()
         {
             List<INode> nodes = new List<INode>(Nodes);
+            foreach (TabItem item in _tabControl.Items)
+            {
+                INodeManager manager = item.Tag as INodeManager;
+                if (manager.Nodes.Count > 0)
+                    nodes.Add(manager.Nodes[0]);
+            }
+
             foreach (INode node in nodes)
                 RemoveManager(node);
         }

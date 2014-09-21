@@ -21,6 +21,8 @@
  */
 
 using SalesForceData;
+using System;
+using System.Threading.Tasks;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.UI;
 
@@ -41,6 +43,7 @@ namespace Wallace.IDE.SalesForce.Document
         public SourceFileEditorDocument(Project project, SourceFile file)
             : base(project, file)
         {
+            View.ViewChanged += View_ViewChanged;
         }
 
         #endregion
@@ -53,22 +56,64 @@ namespace Wallace.IDE.SalesForce.Document
         /// <returns>The reload result.</returns>
         public override bool Reload()
         {
+            // start loading data right away
+            Task<SourceFileData> dataTask = null;
             switch (File.FileType.Name)
             {
                 case "Profile":
-                    ProfileData data = Project.Client.GetSourceFileData(File) as ProfileData;
-                    View.DataView = new ProfileEditorControl();
-                    View.IsTabStripVisible = true;
-                    View.IsDataVisible = true;
+                    dataTask = Task.Run<SourceFileData>(() => Project.Client.GetSourceFileData(File));
                     break;
 
                 default:
-                    View.IsTabStripVisible = false;
-                    View.IsSourceVisible = true;
                     break;
             }
 
-            return base.Reload();
+            // do load of source
+            bool proceed = base.Reload();
+
+            if (proceed)
+            {
+                // wait for data to load
+                if (dataTask != null)
+                {
+                    dataTask.Wait(System.TimeSpan.FromMinutes(1));
+                    if (dataTask.Exception != null)
+                        throw new Exception(dataTask.Exception.Message, dataTask.Exception);
+
+                    if (dataTask.Result is ProfileData)
+                    {
+                        View.DataView = new ProfileEditorControl(dataTask.Result as ProfileData);
+                    }
+
+                    View.IsTabStripVisible = true;
+                    View.IsDataVisible = true;
+                }
+                else
+                {
+                    View.IsTabStripVisible = false;
+                    View.IsSourceVisible = true;
+                }
+            }
+
+            return proceed;
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Update the document IsTextVisible property.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_ViewChanged(object sender, EventArgs e)
+        {
+            if (IsTextVisible != View.IsSourceVisible)
+            {
+                IsTextVisible = View.IsSourceVisible;
+                App.Instance.UpdateWorkspaces();
+            }
         }
 
         #endregion

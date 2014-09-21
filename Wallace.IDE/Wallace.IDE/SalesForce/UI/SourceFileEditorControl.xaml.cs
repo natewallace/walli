@@ -231,6 +231,16 @@ namespace Wallace.IDE.SalesForce.UI
                 TextChanged(this, e);
         }
 
+        /// <summary>
+        /// Raises the ViewChanged event.
+        /// </summary>
+        /// <param name="e">Event arguments.</param>
+        protected virtual void OnViewChanged(EventArgs e)
+        {
+            if (ViewChanged != null)
+                ViewChanged(this, e);
+        }
+
         #endregion
 
         #region Event Handlers
@@ -252,6 +262,23 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Raises the ViewChanged event.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void tabControlContent_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                OnViewChanged(EventArgs.Empty);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
 
         #region Events
@@ -260,6 +287,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the text has been changed.
         /// </summary>
         public event EventHandler TextChanged;
+
+        /// <summary>
+        /// Raised when the user changes between the Source and Data views.
+        /// </summary>
+        public event EventHandler ViewChanged;
 
         #endregion
     }

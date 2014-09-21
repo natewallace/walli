@@ -70,6 +70,7 @@ namespace Wallace.IDE.SalesForce.Document
 
             _isDirty = false;
             Text = File.Name;
+            IsTextVisible = true;
 
             View = Activator.CreateInstance<TView>();
             OnViewCreated();
@@ -100,6 +101,11 @@ namespace Wallace.IDE.SalesForce.Document
         /// The control that is used for display.
         /// </summary>
         protected TView View { get; set; }
+
+        /// <summary>
+        /// Returns false when a text document isn't displaying it's text.
+        /// </summary>
+        public bool IsTextVisible { get; protected set; }
 
         /// <summary>
         /// Flag that indicates if there are unsaved changes.

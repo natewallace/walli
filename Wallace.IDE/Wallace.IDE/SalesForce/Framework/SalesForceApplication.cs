@@ -162,10 +162,10 @@ namespace Wallace.IDE.SalesForce.Framework
 
             RefreshSourceFileFunction refreshDocumentFunction = new RefreshSourceFileFunction();
             App.Instance.ToolBar.AddFunction(refreshDocumentFunction);
-            App.Instance.Menu.AddFunction(refreshDocumentFunction, "DOCUMENT");
-            App.Instance.Menu.AddFunction(new FunctionSeparator(refreshDocumentFunction), "DOCUMENT");
+            App.Instance.Menu.AddFunction(refreshDocumentFunction, "DOCUMENT");            
 
             TextUndoFunction undoTextFunction = new TextUndoFunction();
+            App.Instance.Menu.AddFunction(new FunctionSeparator(undoTextFunction), "DOCUMENT");
             App.Instance.Menu.AddFunction(undoTextFunction, "DOCUMENT");
 
             TextRedoFunction redoTextFunction = new TextRedoFunction();

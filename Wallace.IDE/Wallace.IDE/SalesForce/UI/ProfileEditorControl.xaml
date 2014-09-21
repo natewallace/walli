@@ -10,29 +10,68 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
         <TextBlock x:Name="textBlockTitle"
                    Grid.Row="0"
-                   Margin="5"
-                   Text="Profile" />
+                   Margin="0,5,5,5"
+                   FontWeight="Bold"
+                   Foreground="Black"
+                   Text="Profile Editor" />
         
         <TabControl Grid.Row="1"
                     TabStripPlacement="Left"
                     localUI:ChromeTab.ShowOverflowButton="False"
                     Style="{StaticResource ChromeTabControlStyle}">
-            <TabItem Header="Application" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="Class" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="External" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="Field" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="Layout" localUI:ChromeTab.ShowCloseButton="False" />
+            
+            <TabControl.Resources>
+                <Style TargetType="{x:Type DataGrid}">
+                    <Setter Property="Margin" Value="5,0,0,0" />
+                    <Setter Property="RowHeaderWidth" Value="0" />
+                    <Setter Property="HorizontalGridLinesBrush" Value="Gray" />
+                    <Setter Property="VerticalGridLinesBrush" Value="Gray" />
+                </Style>
+            </TabControl.Resources>
+            
+            <TabItem Header="Application" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridApplication" />
+            </TabItem>
+            <TabItem Header="Class" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridClass" />
+            </TabItem>
+            <TabItem Header="External" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridExternal" />
+            </TabItem>
+            <TabItem Header="Field" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridField" />
+            </TabItem>
+            <TabItem Header="Layout" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridLayout" />
+            </TabItem>
             <TabItem Header="Login" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="Object" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="Page" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="Profile" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="RecordType" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="User" localUI:ChromeTab.ShowCloseButton="False" />
-            <TabItem Header="Tab" localUI:ChromeTab.ShowCloseButton="False" />
+            <TabItem Header="Object" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridObject" />
+            </TabItem>
+            <TabItem Header="Page" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridPage" />
+            </TabItem>
+            <TabItem Header="Profile" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridProfile" />
+            </TabItem>
+            <TabItem Header="RecordType" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridRecordType" />
+            </TabItem>
+            <TabItem Header="User" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridUser" />
+            </TabItem>
+            <TabItem Header="Tab" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridTab" />
+            </TabItem>
         </TabControl>
+        
+        <Border Grid.Row="2"
+                Grid.Column="0"
+                Height="5" />
     </Grid>
 </UserControl>
