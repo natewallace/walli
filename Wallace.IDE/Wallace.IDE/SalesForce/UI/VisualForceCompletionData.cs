@@ -79,14 +79,13 @@ namespace Wallace.IDE.SalesForce.UI
         {
             if (_isTag)
             {
-                textArea.Document.Replace(completionSegment, String.Format("{0}>", Text));
+                textArea.Document.Replace(completionSegment, Text);
             }
             else
             {
                 textArea.Document.Replace(completionSegment, String.Format("{0}=\"\"", Text));
+                textArea.Caret.Offset = textArea.Caret.Offset - 1;
             }
-
-            textArea.Caret.Offset = textArea.Caret.Offset - 1;
         }
 
         /// <summary>

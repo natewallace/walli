@@ -302,6 +302,10 @@ namespace Wallace.IDE.SalesForce.UI
                                 new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset)),
                                 true);
                         }
+                        else
+                        {
+                            _completionWindow.Close();
+                        }
                     }
                     // close window
                     else if (e.Text == ">" || e.Text == " ")

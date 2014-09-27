@@ -171,6 +171,9 @@
     <Compile Include="SalesForce\UI\NewPackageWindow.xaml.cs">
       <DependentUpon>NewPackageWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\UI\NewReportWindow.xaml.cs">
+      <DependentUpon>NewReportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\NewTriggerWindow.xaml.cs">
       <DependentUpon>NewTriggerWindow.xaml</DependentUpon>
     </Compile>
@@ -304,6 +307,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\NewPackageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\NewReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

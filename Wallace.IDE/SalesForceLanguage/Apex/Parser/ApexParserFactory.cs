@@ -349,6 +349,42 @@ namespace SalesForceLanguage.Apex.Parser
 
                     break;
 
+                // foreach statement
+                case Tokens.grammar_foreach_statement:
+                    _variableScopes.Push(new VariableScope(
+                        new TextSpan(node.TextSpan),
+                        new Field[] { new Field(
+                            new TextPosition(node.Nodes[3].TextSpan),
+                            node.Nodes[3].GetLeavesDisplayText(),
+                            null,
+                            SymbolModifier.Private,
+                            node.Nodes[2].GetLeavesDisplayText()) }));
+                    break;
+
+                // catch clause
+                case Tokens.grammar_specific_catch_clause:
+                    ApexSyntaxNode classTypeNode = node.GetChildNodeWithToken(Tokens.grammar_class_type);
+                    ApexSyntaxNode identifierNode = node.GetChildNodeWithToken(Tokens.grammar_identifier);
+                    if (classTypeNode != null && identifierNode != null)
+                    {
+                        _variableScopes.Push(new VariableScope(
+                            new TextSpan(node.TextSpan),
+                            new Field[] { new Field(
+                                new TextPosition(identifierNode.TextSpan),
+                                identifierNode.GetLeavesDisplayText(),
+                                null,
+                                SymbolModifier.Private,
+                                classTypeNode.GetLeavesDisplayText())}));
+
+
+                        _typeReferences.Add(new ReferenceTypeSymbol(
+                            new TextPosition(classTypeNode.TextSpan),
+                            classTypeNode.GetLeavesDisplayText(),
+                            null,
+                            new TextSpan[] { new TextSpan(classTypeNode.TextSpan) }));
+                    }
+                    break;
+
                 // field
                 case Tokens.grammar_field_declaration:
                     SymbolModifier fieldVisibility = GetModifiers(node.GetNodesWithToken(Tokens.grammar_modifier));
