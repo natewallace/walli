@@ -54,7 +54,6 @@ namespace SalesForceData
         public string FieldName
         {
             get { return Data.field; }
-            set { Data.field = value; }
         }
 
         /// <summary>
@@ -63,7 +62,11 @@ namespace SalesForceData
         public bool Editable
         {
             get { return Data.editable; }
-            set { Data.editable = value; }
+            set 
+            { 
+                Data.editable = value;
+                OnPropertyChanged("Editable");
+            }
         }
 
         /// <summary>
@@ -76,6 +79,7 @@ namespace SalesForceData
             {
                 Data.readable = value;
                 Data.readableSpecified = true;
+                OnPropertyChanged("Readable");
             }
         }
 

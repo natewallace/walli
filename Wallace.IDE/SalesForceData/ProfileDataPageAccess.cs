@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,10 +52,10 @@ namespace SalesForceData
         /// <summary>
         /// The name of the page.
         /// </summary>
+        [DisplayName("Page")]
         public string PageName
         {
             get { return Data.apexPage; }
-            set { Data.apexPage = value; }
         }
 
         /// <summary>
@@ -63,7 +64,11 @@ namespace SalesForceData
         public bool Enabled
         {
             get { return Data.enabled; }
-            set { Data.enabled = value; }
+            set 
+            { 
+                Data.enabled = value;
+                OnPropertyChanged("Enabled");
+            }
         }
 
         #endregion

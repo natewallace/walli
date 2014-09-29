@@ -61,7 +61,8 @@ namespace Wallace.IDE.SalesForce.Document
             switch (File.FileType.Name)
             {
                 case "Profile":
-                    dataTask = Task.Run<SourceFileData>(() => Project.Client.GetSourceFileData(File));
+                    // future enhancement
+                    //dataTask = Task.Run<SourceFileData>(() => Project.Client.GetSourceFileData(File));
                     break;
 
                 default:

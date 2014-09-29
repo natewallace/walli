@@ -31,42 +31,54 @@
                     <Setter Property="RowHeaderWidth" Value="0" />
                     <Setter Property="HorizontalGridLinesBrush" Value="Gray" />
                     <Setter Property="VerticalGridLinesBrush" Value="Gray" />
+                    <Setter Property="SelectionMode" Value="Single" />
+                    <Setter Property="SelectionUnit" Value="Cell" />
+                    <Setter Property="AlternationCount" Value="2" />
+                    <Setter Property="AlternatingRowBackground" Value="#F1F1F1" />
+                </Style>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="dataGrid_PreviewMouseLeftButtonDown" />
                 </Style>
             </TabControl.Resources>
             
             <TabItem Header="Application" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridApplication" />
+                <DataGrid x:Name="dataGridApplication" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="Class" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridClass" />
+                <DataGrid x:Name="dataGridClass" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="External" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridExternal" />
+                <DataGrid x:Name="dataGridExternal" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="Field" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridField" />
+                <DataGrid x:Name="dataGridField" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="Layout" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridLayout" />
+                <DataGrid x:Name="dataGridLayout" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
-            <TabItem Header="Login" localUI:ChromeTab.ShowCloseButton="False" />
+            <TabItem Header="Login Hours" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridLoginHours" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
+            </TabItem>
+            <TabItem Header="Login IP Ranges" localUI:ChromeTab.ShowCloseButton="False">
+                <DataGrid x:Name="dataGridLoginIPRanges" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
+            </TabItem>
             <TabItem Header="Object" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridObject" />
+                <DataGrid x:Name="dataGridObject" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="Page" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridPage" />
+                <DataGrid x:Name="dataGridPage" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="Profile" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridProfile" />
+                <DataGrid x:Name="dataGridProfile" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="RecordType" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridRecordType" />
+                <DataGrid x:Name="dataGridRecordType" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="User" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridUser" />
+                <DataGrid x:Name="dataGridUser" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
             <TabItem Header="Tab" localUI:ChromeTab.ShowCloseButton="False">
-                <DataGrid x:Name="dataGridTab" />
+                <DataGrid x:Name="dataGridTab" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn" />
             </TabItem>
         </TabControl>
         

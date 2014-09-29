@@ -23,6 +23,7 @@
 using SalesForceData;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,7 +96,8 @@ namespace Wallace.IDE.SalesForce.UI
                     dataGridExternal.ItemsSource = _profile.ExternalDataSourcePermissions;
                     dataGridField.ItemsSource = _profile.FieldPermissions;
                     dataGridLayout.ItemsSource = _profile.LayoutAssignments;
-                    //TODO: login
+                    dataGridLoginHours.ItemsSource = new ProfileDataLoginHours[] { _profile.LoginHours };
+                    dataGridLoginIPRanges.ItemsSource = _profile.LoginIPRanges;
                     dataGridObject.ItemsSource = _profile.ObjectPermissions;
                     dataGridPage.ItemsSource = _profile.PageAccess;
                     dataGridProfile.ItemsSource = _profile.ProfilePermissions;
@@ -110,7 +112,8 @@ namespace Wallace.IDE.SalesForce.UI
                     dataGridExternal.ItemsSource = null;
                     dataGridField.ItemsSource = null;
                     dataGridLayout.ItemsSource = null;
-                    //TODO: login
+                    dataGridLoginHours.ItemsSource = null;
+                    dataGridLoginIPRanges.ItemsSource = null;
                     dataGridObject.ItemsSource = null;
                     dataGridPage.ItemsSource = null;
                     dataGridProfile.ItemsSource = null;
@@ -118,6 +121,63 @@ namespace Wallace.IDE.SalesForce.UI
                     dataGridUser.ItemsSource = null;
                     dataGridTab.ItemsSource = null;
                 }
+            }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Enable editing on one click.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void dataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                DataGridCell cell = sender as DataGridCell;
+                if (cell != null && !cell.IsEditing)
+                {
+                    if (!cell.IsFocused)
+                        cell.Focus();
+                    if (!cell.IsSelected)
+                        cell.IsSelected = true;
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Set the column names when generated.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void dataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            try
+            {
+                // column name
+                if (e.PropertyDescriptor is PropertyDescriptor)
+                {
+                    DisplayNameAttribute att = (e.PropertyDescriptor as PropertyDescriptor).Attributes[typeof(DisplayNameAttribute)] as DisplayNameAttribute;
+                    if (att != null && att != DisplayNameAttribute.Default)
+                        e.Column.Header = att.DisplayName;
+                }
+
+                // column style for first column
+                if (e.Column is DataGridTextColumn && e.Column.IsReadOnly)
+                {
+                    (e.Column as DataGridTextColumn).FontWeight = FontWeights.Bold;
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
             }
         }
 

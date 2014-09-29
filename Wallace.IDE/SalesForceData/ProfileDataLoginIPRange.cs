@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,25 +55,39 @@ namespace SalesForceData
         public string Description
         {
             get { return Data.description; }
-            set { Data.description = value; }
+            set 
+            { 
+                Data.description = value;
+                OnPropertyChanged("Description");
+            }
         }
 
         /// <summary>
         /// Start address.
         /// </summary>
+        [DisplayName("Start Address")]
         public string StartAddress
         {
             get { return Data.startAddress; }
-            set { Data.startAddress = value; }
+            set 
+            { 
+                Data.startAddress = value;
+                OnPropertyChanged("StartAddress");
+            }
         }
 
         /// <summary>
         /// End address.
         /// </summary>
+        [DisplayName("End Address")]
         public string EndAddress
         {
             get { return Data.endAddress; }
-            set { Data.endAddress = value; }
+            set 
+            { 
+                Data.endAddress = value;
+                OnPropertyChanged("EndAddress");
+            }
         }
 
         #endregion

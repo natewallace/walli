@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,15 +52,16 @@ namespace SalesForceData
         /// <summary>
         /// The name of the object these permissions are for.
         /// </summary>
+        [DisplayName("Object")]
         public string ObjectName
         {
             get { return Data.@object; }
-            set { Data.@object = value; }
         }
 
         /// <summary>
         /// Allow creation of records.
         /// </summary>
+        [DisplayName("Create")]
         public bool AllowCreate
         {
             get { return Data.allowCreate; }
@@ -67,12 +69,14 @@ namespace SalesForceData
             { 
                 Data.allowCreate = value;
                 Data.allowCreateSpecified = true;
+                OnPropertyChanged("AllowCreate");
             }
         }
 
         /// <summary>
         /// Allow deletion of records.
         /// </summary>
+        [DisplayName("Delete")]
         public bool AllowDelete
         {
             get { return Data.allowDelete; }
@@ -80,12 +84,14 @@ namespace SalesForceData
             { 
                 Data.allowDelete = value;
                 Data.allowDeleteSpecified = true;
+                OnPropertyChanged("AllowDelete");
             }
         }
 
         /// <summary>
         /// Allow editing of records.
         /// </summary>
+        [DisplayName("Edit")]
         public bool AllowEdit
         {
             get { return Data.allowEdit; }
@@ -93,12 +99,14 @@ namespace SalesForceData
             {
                 Data.allowEdit = value;
                 Data.allowEditSpecified = true;
+                OnPropertyChanged("AllowEdit");
             }
         }
 
         /// <summary>
         /// Allow reading records.
         /// </summary>
+        [DisplayName("Read")]
         public bool AllowRead
         {
             get { return Data.allowRead; }
@@ -106,12 +114,14 @@ namespace SalesForceData
             {
                 Data.allowRead = value;
                 Data.allowReadSpecified = true;
+                OnPropertyChanged("AllowRead");
             }
         }
 
         /// <summary>
         /// Allow viewing of all records.
         /// </summary>
+        [DisplayName("View All")]
         public bool AllowViewAllRecords
         {
             get { return Data.viewAllRecords; }
@@ -119,12 +129,14 @@ namespace SalesForceData
             {
                 Data.viewAllRecords = value;
                 Data.viewAllRecordsSpecified = true;
+                OnPropertyChanged("AllowViewAllRecords");
             }
         }
 
         /// <summary>
         /// Allow modification to all records.
         /// </summary>
+        [DisplayName("Modify All")]
         public bool AllowModifyAllRecords
         {
             get { return Data.modifyAllRecords; }
@@ -132,6 +144,7 @@ namespace SalesForceData
             {
                 Data.modifyAllRecords = value;
                 Data.modifyAllRecordsSpecified = true;
+                OnPropertyChanged("AllowModifyAllRecords");
             }
         }
 

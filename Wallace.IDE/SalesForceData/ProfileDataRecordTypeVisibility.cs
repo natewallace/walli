@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,10 +74,15 @@ namespace SalesForceData
         /// <summary>
         /// Default visibility.
         /// </summary>
+        [DisplayName("Default")]
         public bool DefaultVisible
         {
             get { return Data.@default; }
-            set { Data.@default = value; }
+            set 
+            { 
+                Data.@default = value;
+                OnPropertyChanged("DefaultVisible");
+            }
         }
 
         /// <summary>
@@ -85,7 +91,11 @@ namespace SalesForceData
         public bool Visible
         {
             get { return Data.visible; }
-            set { Data.visible = value; }
+            set 
+            { 
+                Data.visible = value;
+                OnPropertyChanged("Visible");
+            }
         }
 
         #endregion

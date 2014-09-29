@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace SalesForceData
     /// <summary>
     /// A salesforce data element.
     /// </summary>
-    public abstract class SourceFileDataElement<TType> where TType : class, new()
+    public abstract class SourceFileDataElement<TType> : INotifyPropertyChanged where TType : class, new()
     {
         #region Constructors
 
@@ -63,6 +64,29 @@ namespace SalesForceData
         /// The underlying salesforce object.
         /// </summary>
         internal TType Data { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Raises the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that has been changed.</param>
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raised when a property is changed.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
     }

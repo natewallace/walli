@@ -54,7 +54,6 @@ namespace SalesForceData
         public string ClassName
         {
             get { return Data.apexClass; }
-            set { Data.apexClass = value; }
         }
 
         /// <summary>
@@ -63,7 +62,11 @@ namespace SalesForceData
         public bool Enabled
         {
             get { return Data.enabled; }
-            set { Data.enabled = value; }
+            set 
+            { 
+                Data.enabled = value;
+                OnPropertyChanged("Enabled");
+            }
         }
 
         #endregion

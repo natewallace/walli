@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,16 +55,20 @@ namespace SalesForceData
         public string LayoutName
         {
             get { return Data.layout; }
-            set { Data.layout = value; }
         }
 
         /// <summary>
         /// The record type name.
         /// </summary>
+        [DisplayName("Record Type")]
         public string RecordTypeName
         {
             get { return Data.recordType; }
-            set { Data.recordType = value; }
+            set 
+            { 
+                Data.recordType = value;
+                OnPropertyChanged("RecordTypeName");
+            }
         }
 
         #endregion

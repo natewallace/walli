@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,127 +60,197 @@ namespace SalesForceData
         /// <summary>
         /// Start time.
         /// </summary>
+        [DisplayName("Sunday Start")]
         public string SundayStart
         {
             get { return Data.sundayStart; }
-            set { Data.sundayStart = value; }
+            set 
+            { 
+                Data.sundayStart = value;
+                OnPropertyChanged("SundayStart");
+            }
         }
 
         /// <summary>
         /// End time.
         /// </summary>
+        [DisplayName("Sunday End")]
         public string SundayEnd
         {
             get { return Data.sundayEnd; }
-            set { Data.sundayEnd = value; }
+            set 
+            {
+                Data.sundayEnd = value;
+                OnPropertyChanged("SundayEnd");
+            }
         }
 
         /// <summary>
         /// Start time.
         /// </summary>
+        [DisplayName("Monday Start")]
         public string MondayStart
         {
             get { return Data.mondayStart; }
-            set { Data.mondayStart = value; }
+            set 
+            { 
+                Data.mondayStart = value;
+                OnPropertyChanged("MondayStart");
+            }
         }
 
         /// <summary>
         /// End time.
         /// </summary>
+        [DisplayName("Monday End")]
         public string MondayEnd
         {
             get { return Data.mondayEnd; }
-            set { Data.mondayEnd = value; }
+            set 
+            { 
+                Data.mondayEnd = value;
+                OnPropertyChanged("MondayEnd");
+            }
         }
 
         /// <summary>
         /// Start time.
         /// </summary>
+        [DisplayName("Tuesday Start")]
         public string TuesdayStart
         {
             get { return Data.tuesdayStart; }
-            set { Data.tuesdayStart = value; }
+            set 
+            { 
+                Data.tuesdayStart = value;
+                OnPropertyChanged("TuesdayStart");
+            }
         }
 
         /// <summary>
         /// End time.
         /// </summary>
+        [DisplayName("Tuesday End")]
         public string TuesdayEnd
         {
             get { return Data.tuesdayEnd; }
-            set { Data.tuesdayEnd = value; }
+            set 
+            { 
+                Data.tuesdayEnd = value;
+                OnPropertyChanged("TuesdayEnd");
+            }
         }
 
         /// <summary>
         /// Start time.
         /// </summary>
+        [DisplayName("Wednesday Start")]
         public string WednesdayStart
         {
             get { return Data.wednesdayStart; }
-            set { Data.wednesdayStart = value; }
+            set 
+            { 
+                Data.wednesdayStart = value;
+                OnPropertyChanged("WednesdayStart");
+            }
         }
 
         /// <summary>
         /// End time.
         /// </summary>
+        [DisplayName("Wednesday End")]
         public string WednesdayEnd
         {
             get { return Data.wednesdayEnd; }
-            set { Data.wednesdayEnd = value; }
+            set 
+            { 
+                Data.wednesdayEnd = value;
+                OnPropertyChanged("WednesdayEnd");
+            }
         }
 
         /// <summary>
         /// Start time.
         /// </summary>
+        [DisplayName("Thursday Start")]
         public string ThursdayStart
         {
             get { return Data.thursdayStart; }
-            set { Data.thursdayStart = value; }
+            set 
+            { 
+                Data.thursdayStart = value;
+                OnPropertyChanged("ThursdayStart");
+            }
         }
 
         /// <summary>
         /// End time.
         /// </summary>
+        [DisplayName("Thursday End")]
         public string ThursdayEnd
         {
             get { return Data.thursdayEnd; }
-            set { Data.thursdayEnd = value; }
+            set 
+            { 
+                Data.thursdayEnd = value;
+                OnPropertyChanged("ThursdayEnd");
+            }
         }
 
         /// <summary>
         /// Start time.
         /// </summary>
+        [DisplayName("Friday Start")]
         public string FridayStart
         {
             get { return Data.fridayStart; }
-            set { Data.fridayStart = value; }
+            set 
+            { 
+                Data.fridayStart = value;
+                OnPropertyChanged("FridayStart");
+            }
         }
 
         /// <summary>
         /// End time.
         /// </summary>
+        [DisplayName("Friday End")]
         public string FridayEnd
         {
             get { return Data.fridayEnd; }
-            set { Data.fridayEnd = value; }
+            set 
+            { 
+                Data.fridayEnd = value;
+                OnPropertyChanged("FridayEnd");
+            }
         }
 
         /// <summary>
         /// Start time.
         /// </summary>
+        [DisplayName("Saturday Start")]
         public string SaturdayStart
         {
             get { return Data.saturdayStart; }
-            set { Data.saturdayStart = value; }
+            set 
+            { 
+                Data.saturdayStart = value;
+                OnPropertyChanged("SaturdayStart");
+            }
         }
 
         /// <summary>
         /// End time.
         /// </summary>
+        [DisplayName("Saturday End")]
         public string SaturdayEnd
         {
             get { return Data.saturdayEnd; }
-            set { Data.saturdayEnd = value; }
+            set 
+            { 
+                Data.saturdayEnd = value;
+                OnPropertyChanged("SaturdayEnd");
+            }
         }
 
         #endregion
