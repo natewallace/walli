@@ -133,6 +133,7 @@ namespace Wallace.IDE.SalesForce.Node
             if (manifest == null)
                 throw new ArgumentNullException("manifest");
 
+            Presenter.Expand();
             ManifestNode manifestNode = new ManifestNode(Project, manifest);
 
             int index = 0;
@@ -142,15 +143,19 @@ namespace Wallace.IDE.SalesForce.Node
                 {
                     int result = manifest.CompareTo((node as ManifestNode).Manifest);
                     if (result == 0)
-                        throw new Exception("There is already a manifest named: " + manifest.Name);
+                    {
+                        Presenter.NodeManager.ActiveNode = node;
+                        return node as ManifestNode; // node is already present
+                    }
                     else if (result < 0)
+                    {
                         break;
+                    }
                 }
                 index++;
             }
 
             Presenter.Nodes.Insert(index, manifestNode);
-            Presenter.Expand();
             Presenter.NodeManager.ActiveNode = manifestNode;
 
             return manifestNode;

@@ -105,6 +105,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(dataEdit);
             App.Instance.Menu.AddFunction(dataEdit, "PROJECT");
 
+            NewReportFunction newReport = new NewReportFunction();
+            App.Instance.ToolBar.AddFunction(newReport);
+            App.Instance.Menu.AddFunction(newReport, "PROJECT");
+
             TestManagerFunction testManager = new TestManagerFunction();
             App.Instance.Menu.AddFunction(testManager, "PROJECT");
 
@@ -129,6 +133,11 @@ namespace Wallace.IDE.SalesForce.Framework
             PropertiesFunction propertiesSourceFileFunction = new PropertiesFunction();
             App.Instance.Menu.AddFunction(propertiesSourceFileFunction, "PROJECT");
             App.Instance.RegisterFunction(propertiesSourceFileFunction);
+
+            NewManifestFromReportFunction manifestReport = new NewManifestFromReportFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(manifestReport));
+            App.Instance.ToolBar.AddFunction(manifestReport);
+            App.Instance.Menu.AddFunction(manifestReport, "DOCUMENT");
 
             SaveSourceFileFunction saveSourceFileFunction = new SaveSourceFileFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSourceFileFunction));

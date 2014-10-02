@@ -80,7 +80,7 @@ namespace SalesForceData
             }
 
             ChangedById = data.Rows[0]["CreatedById"] as string;
-            ChangedOn = DateTime.Parse(data.Rows[0]["CreatedDate"] as string);
+            ChangedOn = DateTime.Parse(data.Rows[0]["CreatedDate"] as string).ToLocalTime();
             CreatedById = ChangedById;
             CreatedOn = ChangedOn;
             Children = new SourceFile[0];
@@ -109,10 +109,10 @@ namespace SalesForceData
             Parent = null;
             ChangedById = fileProperties.lastModifiedById ?? String.Empty;
             ChangedByName = fileProperties.lastModifiedByName;
-            ChangedOn = fileProperties.lastModifiedDate;
+            ChangedOn = fileProperties.lastModifiedDate.ToLocalTime();
             CreatedById = fileProperties.createdById ?? String.Empty;
             CreatedByName = fileProperties.createdByName;
-            CreatedOn = fileProperties.createdDate;
+            CreatedOn = fileProperties.createdDate.ToLocalTime();
             Children = new SourceFile[0];
             State = GetState(fileProperties);
 

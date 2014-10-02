@@ -85,13 +85,16 @@
     <Compile Include="SalesForce\Document\ManifestEditorDocument.cs" />
     <Compile Include="SalesForce\Document\PackageDeployToProjectStatusDocument.cs" />
     <Compile Include="SalesForce\Document\PackageViewDocument.cs" />
+    <Compile Include="SalesForce\Document\ReportDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocument.cs" />
     <Compile Include="SalesForce\Document\SourceFileEditorDocumentBase.cs" />
     <Compile Include="SalesForce\Document\TestRunDocument.cs" />
     <Compile Include="SalesForce\Document\TriggerEditorDocument.cs" />
     <Compile Include="SalesForce\Document\VisualForceEditorDocument.cs" />
     <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
+    <Compile Include="SalesForce\Framework\IReportFilter.cs" />
     <Compile Include="SalesForce\Framework\Project.cs" />
+    <Compile Include="SalesForce\Framework\ReportFilterUserDate.cs" />
     <Compile Include="SalesForce\Framework\SalesForceApplication.cs" />
     <Compile Include="SalesForce\Framework\SecureStringUtility.cs" />
     <Compile Include="SalesForce\Function\AddFileToManifestFunction.cs" />
@@ -106,11 +109,13 @@
     <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
     <Compile Include="SalesForce\Function\DeployPackageFunction.cs" />
     <Compile Include="SalesForce\Function\NewComponentFunction.cs" />
+    <Compile Include="SalesForce\Function\NewManifestFromReportFunction.cs" />
     <Compile Include="SalesForce\Function\NewManifestFunction.cs" />
     <Compile Include="SalesForce\Function\NewPageFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\NewClassFunction.cs" />
     <Compile Include="SalesForce\Function\NewPackageFunction.cs" />
+    <Compile Include="SalesForce\Function\NewReportFunction.cs" />
     <Compile Include="SalesForce\Function\NewTriggerFunction.cs" />
     <Compile Include="SalesForce\Function\OpenSalesForceWebBrowserFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshFolderFunction.cs" />
@@ -192,6 +197,9 @@
     </Compile>
     <Compile Include="SalesForce\UI\ProfileEditorControl.xaml.cs">
       <DependentUpon>ProfileEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\ReportControl.xaml.cs">
+      <DependentUpon>ReportControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\SelectProjectWindow.xaml.cs">
       <DependentUpon>SelectProjectWindow.xaml</DependentUpon>
@@ -335,6 +343,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\ProfileEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\ReportControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -650,6 +662,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\UpdateIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ManifestFromReport.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

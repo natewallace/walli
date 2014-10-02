@@ -115,6 +115,7 @@ namespace Wallace.IDE.SalesForce.Node
             if (package == null)
                 throw new ArgumentNullException("package");
 
+            Presenter.Expand();
             PackageNode packageNode = new PackageNode(Project, package);
 
             int index = 0;
@@ -124,15 +125,19 @@ namespace Wallace.IDE.SalesForce.Node
                 {
                     int result = package.CompareTo((node as PackageNode).Package);
                     if (result == 0)
-                        throw new Exception("There is already a package named: " + package.Name);
+                    {
+                        Presenter.NodeManager.ActiveNode = node;
+                        return node as PackageNode; // node is already present
+                    }
                     else if (result < 0)
+                    {
                         break;
+                    }
                 }
                 index++;
             }
 
-            Presenter.Nodes.Insert(index, packageNode);
-            Presenter.Expand();
+            Presenter.Nodes.Insert(index, packageNode);            
             Presenter.NodeManager.ActiveNode = packageNode;
 
             return packageNode;
