@@ -89,7 +89,7 @@ namespace Wallace.IDE.SalesForce.Function
         }
 
         /// <summary>
-        /// Opens a new data edit view.
+        /// Opens a new package view.
         /// </summary>
         public override void Execute()
         {
@@ -114,6 +114,8 @@ namespace Wallace.IDE.SalesForce.Function
                         PackageFolderNode packageFolderNode = App.Instance.Navigation.GetNode<PackageFolderNode>();
                         if (packageFolderNode != null)
                             packageFolderNode.AddPackage(package);
+
+                        App.Instance.Content.OpenDocument(new PackageViewDocument(project, package));
                     }
                 }
             }

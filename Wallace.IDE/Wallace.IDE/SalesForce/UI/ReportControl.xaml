@@ -6,23 +6,31 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type DataGridCell}">
+                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="dataGrid_PreviewMouseLeftButtonDown" />
+            </Style>
+        </Grid.Resources>
+        
         <DataGrid x:Name="dataGridFiles"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True"
                   RowHeaderWidth="0"
                   HorizontalGridLinesBrush="Gray"
                   VerticalGridLinesBrush="Gray"
+                  SelectionMode="Single"
+                  SelectionUnit="Cell"
                   AlternationCount="2"
                   AlternatingRowBackground="#F1F1F1">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Type" Binding="{Binding FileType}" />
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Change By" Binding="{Binding ChangedByName}" />
-                <DataGridTextColumn Header="Changed On" Binding="{Binding ChangedOn}" />
-                <DataGridTextColumn Header="Created By" Binding="{Binding CreatedByName}" />
-                <DataGridTextColumn Header="Created On" Binding="{Binding CreatedOn}" />
-                <DataGridTextColumn Header="File" Binding="{Binding FileName}" />
-                <DataGridTextColumn Header="State" Binding="{Binding State}" />
+                <DataGridCheckBoxColumn Header="Select" Binding="{Binding IsSelected}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding FileType}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Change By" Binding="{Binding ChangedByName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Changed On" Binding="{Binding ChangedOn}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Created By" Binding="{Binding CreatedByName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Created On" Binding="{Binding CreatedOn}" IsReadOnly="True" />
+                <DataGridTextColumn Header="File" Binding="{Binding FileName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="State" Binding="{Binding State}" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

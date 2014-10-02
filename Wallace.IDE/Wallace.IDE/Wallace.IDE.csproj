@@ -201,6 +201,7 @@
     <Compile Include="SalesForce\UI\ReportControl.xaml.cs">
       <DependentUpon>ReportControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\UI\ReportItem.cs" />
     <Compile Include="SalesForce\UI\SelectProjectWindow.xaml.cs">
       <DependentUpon>SelectProjectWindow.xaml</DependentUpon>
     </Compile>

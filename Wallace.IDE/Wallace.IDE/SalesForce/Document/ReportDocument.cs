@@ -67,6 +67,17 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         public SourceFile[] ReportItems { get; private set; }
 
+        /// <summary>
+        /// The currently selected items in the report.
+        /// </summary>
+        public SourceFile[] SelectedReportItems
+        {
+            get
+            {
+                return View.SelectedReportItems.ToArray();
+            }
+        }
+
         #endregion
 
         #region Methods

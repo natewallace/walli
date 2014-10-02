@@ -69,7 +69,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "ManifestFromReport.png");
-                presenter.ToolTip = "Create a new manifest from the report.";
+                presenter.ToolTip = "Create a new manifest from the selected report items.";
             }
             else
             {
@@ -110,7 +110,7 @@ namespace Wallace.IDE.SalesForce.Function
                     if (App.Instance.SalesForceApp.CurrentProject.GetManifests().Contains(manifest))
                         throw new Exception("There is already a manifest named: " + manifest.Name);
 
-                    foreach (SourceFile file in CurrentDocument.ReportItems)
+                    foreach (SourceFile file in CurrentDocument.SelectedReportItems)
                         manifest.AddItem(file);
                     manifest.Save();
 

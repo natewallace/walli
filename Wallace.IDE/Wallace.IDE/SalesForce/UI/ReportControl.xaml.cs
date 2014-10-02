@@ -35,6 +35,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SalesForceData;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -56,10 +57,84 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The displayed report items.
         /// </summary>
-        public IEnumerable ReportItems
+        public IEnumerable<SourceFile> ReportItems
         {
-            get { return dataGridFiles.ItemsSource; }
-            set { dataGridFiles.ItemsSource = value; }
+            get 
+            {
+                List<SourceFile> result = new List<SourceFile>();
+
+                IEnumerable<ReportItem> items = dataGridFiles.ItemsSource as IEnumerable<ReportItem>;
+                if (items != null)
+                    foreach (ReportItem item in items)
+                        result.Add(item.File);
+
+                return result; 
+            }
+            set 
+            {
+                if (value == null)
+                {
+                    dataGridFiles.ItemsSource = null;
+                }
+                else
+                {
+                    List<ReportItem> items = new List<ReportItem>();
+                    foreach (SourceFile file in value)
+                        items.Add(new ReportItem(file));
+
+                    dataGridFiles.ItemsSource = items;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the currently selected report items.
+        /// </summary>
+        public IEnumerable<SourceFile> SelectedReportItems
+        {
+            get
+            {
+                List<SourceFile> result = new List<SourceFile>();
+
+                IEnumerable<ReportItem> items = dataGridFiles.ItemsSource as IEnumerable<ReportItem>;
+                if (items != null)
+                {
+                    dataGridFiles.CommitEdit(DataGridEditingUnit.Row, true);
+                    foreach (ReportItem item in items)
+                        if (item.IsSelected)
+                            result.Add(item.File);
+                }
+
+                return result; 
+            }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Enable editing on one click.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void dataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                DataGridCell cell = sender as DataGridCell;
+                if (cell != null && !cell.IsEditing)
+                {
+                    if (!cell.IsFocused)
+                        cell.Focus();
+                    if (!cell.IsSelected)
+                        cell.IsSelected = true;
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
         }
 
         #endregion
