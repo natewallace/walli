@@ -19,11 +19,6 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Enter criteria to generate a new report"
-                   Grid.Column="0"
-                   Grid.Row="0"
-                   Margin="5" />
-
             <TabControl Grid.Column="0"
                     Grid.Row="1">
                 <TabItem x:Name="tabItemBasic"
