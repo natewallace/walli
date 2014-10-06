@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Checkpoint.cs" />
+    <Compile Include="CheckpointScriptType.cs" />
     <Compile Include="DataSelectResult.cs" />
     <Compile Include="FieldType.cs" />
     <Compile Include="Package.cs" />

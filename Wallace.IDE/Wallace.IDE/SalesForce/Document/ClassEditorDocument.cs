@@ -23,6 +23,7 @@
 using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 using Wallace.IDE.SalesForce.Node;
 using Wallace.IDE.SalesForce.UI;
 
@@ -44,6 +45,7 @@ namespace Wallace.IDE.SalesForce.Document
             : base(project, classFile)
         {
             View.ParseDataChanged += View_ParseDataChanged;
+            View.MarginDoubleClick += View_MarginDoubleClick;
         }
 
         #endregion
@@ -148,6 +150,16 @@ namespace Wallace.IDE.SalesForce.Document
         private void View_ParseDataChanged(object sender, System.EventArgs e)
         {
             App.Instance.UpdateWorkspaces();
+        }
+
+        /// <summary>
+        /// Create a new checkpoint when a user clicks in the margin.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_MarginDoubleClick(object sender, System.EventArgs e)
+        {
+            App.Instance.GetFunction<NewCheckpointFunction>().Execute();
         }
 
         #endregion

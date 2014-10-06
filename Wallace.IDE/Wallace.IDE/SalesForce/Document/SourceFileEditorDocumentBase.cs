@@ -108,6 +108,14 @@ namespace Wallace.IDE.SalesForce.Document
         public bool IsTextVisible { get; protected set; }
 
         /// <summary>
+        /// Gets the current line number
+        /// </summary>
+        public int CurrentLineNumber
+        {
+            get { return View.CurrentLineNumber; }
+        }
+
+        /// <summary>
         /// Flag that indicates if there are unsaved changes.
         /// </summary>
         public bool IsDirty

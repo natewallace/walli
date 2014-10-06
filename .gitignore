@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.gitignore
+/Wallace.IDE/*/bin
+/Wallace.IDE/*/obj
+/Wallace.IDE/*.suo

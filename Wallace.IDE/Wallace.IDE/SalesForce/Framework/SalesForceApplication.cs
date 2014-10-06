@@ -201,6 +201,11 @@ namespace Wallace.IDE.SalesForce.Framework
             TextSearchFunction searchTextFunction = new TextSearchFunction();
             App.Instance.Menu.AddFunction(searchTextFunction, "DOCUMENT");
 
+            NewCheckpointFunction newCheckpointFunction = new NewCheckpointFunction();
+            App.Instance.Menu.AddFunction(newCheckpointFunction, "DOCUMENT");
+            App.Instance.ToolBar.AddFunction(newCheckpointFunction);
+            App.Instance.RegisterFunction(newCheckpointFunction);
+
             RunTestsFunction runTestsFunction = new RunTestsFunction();
             App.Instance.Menu.AddFunction(runTestsFunction, "DOCUMENT");
             App.Instance.ToolBar.AddFunction(runTestsFunction);

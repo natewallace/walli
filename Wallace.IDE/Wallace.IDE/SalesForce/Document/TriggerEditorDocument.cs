@@ -23,6 +23,7 @@
 using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 using Wallace.IDE.SalesForce.Node;
 using Wallace.IDE.SalesForce.UI;
 
@@ -43,6 +44,7 @@ namespace Wallace.IDE.SalesForce.Document
         public TriggerEditorDocument(Project project, SourceFile apexFile)
             : base(project, apexFile)
         {
+            View.MarginDoubleClick += View_MarginDoubleClick;
         }
 
         #endregion
@@ -101,6 +103,20 @@ namespace Wallace.IDE.SalesForce.Document
                 node.Presenter.Remove();
                 App.Instance.Navigation.GetNode<ApexTriggerFolderNode>().AddApexTrigger(File);
             }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Create a new checkpoint when a user clicks in the margin.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_MarginDoubleClick(object sender, System.EventArgs e)
+        {
+            App.Instance.GetFunction<NewCheckpointFunction>().Execute();
         }
 
         #endregion

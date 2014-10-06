@@ -78,6 +78,17 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// The current line number that the caret is on.
+        /// </summary>
+        public int CurrentLineNumber
+        {
+            get
+            {
+                return textEditor.Document.GetLineByOffset(textEditor.CaretOffset).LineNumber;
+            }
+        }
+
+        /// <summary>
         /// Indicates if the source view is visible.
         /// </summary>
         public bool IsSourceVisible

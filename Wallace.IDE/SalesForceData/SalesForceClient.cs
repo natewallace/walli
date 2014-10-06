@@ -207,6 +207,206 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Delete a checkpoint.
+        /// </summary>
+        /// <param name="checkpoint">The checkpoint to delete.</param>
+        public void DeleteCheckpoint(Checkpoint checkpoint)
+        {
+            if (checkpoint == null)
+                throw new ArgumentNullException("checkpoint");
+
+            InitClients();
+
+            SalesForceAPI.Tooling.deleteResponse response = _toolingClient.delete(new SalesForceAPI.Tooling.deleteRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                new string[] { checkpoint.Id }));
+
+            if (response != null && response.result != null && response.result.Length == 1)
+            {
+                if (!response.result[0].success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    if (response.result[0].errors != null)
+                        foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
+                            sb.AppendLine(err.message);
+
+                    throw new Exception("Couldn't create checkpoint: \r\n" + sb.ToString());
+                }
+            }
+            else
+            {
+                throw new Exception("Couldn't create checkpoint: Invalid response received.");
+            }
+        }
+
+        /// <summary>
+        /// Save changes made to a checkpoint.
+        /// </summary>
+        /// <param name="checkpoint">The checkpoint to save.</param>
+        public void SaveCheckpoint(Checkpoint checkpoint)
+        {
+            if (checkpoint == null)
+                throw new ArgumentNullException("checkpoint");
+
+            InitClients();
+
+            SalesForceAPI.Tooling.updateResponse response = _toolingClient.update(new SalesForceAPI.Tooling.updateRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                new SalesForceAPI.Tooling.sObject[] { checkpoint.ToAction() }));
+
+            if (response != null && response.result != null && response.result.Length == 1)
+            {
+                if (!response.result[0].success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    if (response.result[0].errors != null)
+                        foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
+                            sb.AppendLine(err.message);
+
+                    throw new Exception("Couldn't create checkpoint: \r\n" + sb.ToString());
+                }
+            }
+            else
+            {
+                throw new Exception("Couldn't create checkpoint: Invalid response received.");
+            }
+        }
+
+        /// <summary>
+        /// Get checkpoints that have been created.
+        /// </summary>
+        /// <returns>Existing checkpoints.</returns>
+        public Checkpoint[] GetCheckpoints()
+        {
+            InitClients();
+
+            SalesForceAPI.Tooling.queryResponse response = _toolingClient.query(new SalesForceAPI.Tooling.queryRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                String.Format("SELECT Id, ActionScript, ActionScriptType, ExecutableEntityId, ExpirationDate, IsDumpingHeap, Iteration, Line, ScopeId FROM ApexExecutionOverlayAction WHERE ScopeId = '{0}'", _session.UserId)));
+
+            List<Checkpoint> result = new List<Checkpoint>();
+            if (response.result.records != null)
+            {
+                // get file names
+                Dictionary<string, string> idToFileNameMap = new Dictionary<string, string>();
+                foreach (SalesForceAPI.Tooling.sObject record in response.result.records)
+                    idToFileNameMap.Add(
+                        (record as SalesForceAPI.Tooling.ApexExecutionOverlayAction).ExecutableEntityId,
+                        String.Empty);
+
+                DataSelectResult names = DataSelect(String.Format(
+                    "SELECT Id, Name FROM ApexClass WHERE Id IN ('{0}')", 
+                    String.Join("','", idToFileNameMap.Keys)));
+                foreach (DataRow row in names.Data.Rows)
+                {
+                    idToFileNameMap.Remove(row["Id"] as string);
+                    idToFileNameMap.Add(row["Id"] as string, row["Name"] as string);
+                }
+
+                names = DataSelect(String.Format(
+                    "SELECT Id, Name FROM ApexTrigger WHERE Id IN ('{0}')",
+                    String.Join("','", idToFileNameMap.Keys)));
+                foreach (DataRow row in names.Data.Rows)
+                {
+                    idToFileNameMap.Remove(row["Id"] as string);
+                    idToFileNameMap.Add(row["Id"] as string, row["Name"] as string);
+                }
+
+                // create checkpoints
+                foreach (SalesForceAPI.Tooling.sObject record in response.result.records)
+                    result.Add(new Checkpoint(
+                        record as SalesForceAPI.Tooling.ApexExecutionOverlayAction,
+                        idToFileNameMap[(record as SalesForceAPI.Tooling.ApexExecutionOverlayAction).ExecutableEntityId]));
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Create a new checkpoint.
+        /// </summary>
+        /// <param name="file">The file to create a checkpoint in.</param>
+        /// <param name="lineNumber">The line number in the file to create the checkpoint for.</param>
+        /// <param name="iteration">The number of iterations before the checkpoint is processed.</param>
+        /// <param name="isHeapDump">If true a heap dump will be collected with the checkpoint.</param>
+        /// <param name="script">An optional script to run with the checkpoint.</param>
+        /// <param name="scriptType">The type of script specified.</param>
+        /// <returns>The newly created checkpoint.</returns>
+        public Checkpoint CreateCheckpoint(
+            SourceFile file, 
+            int lineNumber, 
+            int iteration, 
+            bool isHeapDump, 
+            string script, 
+            CheckpointScriptType scriptType)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            InitClients();
+
+            // get record id
+            string entityId = null;
+            switch (file.FileType.Name)
+            {
+                case "ApexClass":
+                case "ApexTrigger":
+                    DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}'", file.FileType.Name, file.Name));
+                    if (objectQueryResult.Data.Rows.Count > 0)
+                        entityId = objectQueryResult.Data.Rows[0]["id"] as string;
+                    break;
+
+                default:
+                    throw new Exception("Unsupported type: " + file.FileType.Name);
+            }
+
+            if (entityId == null)
+                throw new Exception("Couldn't get id for: " + file.Name);
+
+            SalesForceAPI.Tooling.ApexExecutionOverlayAction action = new SalesForceAPI.Tooling.ApexExecutionOverlayAction();
+            action.ActionScript = script;
+            action.ActionScriptType = scriptType.ToString();
+            action.ExecutableEntityId = entityId;
+            action.ExpirationDate = DateTime.Now.AddDays(1);
+            action.ExpirationDateSpecified = true;
+            action.IsDumpingHeap = isHeapDump;
+            action.IsDumpingHeapSpecified = true;
+            action.Iteration = iteration;
+            action.IterationSpecified = true;
+            action.Line = lineNumber;
+            action.LineSpecified = true;
+            action.ScopeId = _session.UserId;
+
+            SalesForceAPI.Tooling.createResponse response = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                new SalesForceAPI.Tooling.sObject[] 
+                {
+                    action
+                }));
+
+            if (response != null && response.result != null && response.result.Length == 1)
+            {
+                if (!response.result[0].success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    if (response.result[0].errors != null)
+                        foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
+                            sb.AppendLine(err.message);
+
+                    throw new Exception("Couldn't create checkpoint: \r\n" + sb.ToString());
+                }
+            }
+            else
+            {
+                throw new Exception("Couldn't create checkpoint: Invalid response received.");
+            }
+
+            action.Id = response.result[0].id;
+
+            return new Checkpoint(action, file.Name);
+        }
+
+        /// <summary>
         /// Deploy a package.
         /// </summary>
         /// <param name="package">The package to deploy.</param>

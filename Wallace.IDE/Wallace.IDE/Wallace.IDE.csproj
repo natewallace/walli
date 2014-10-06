@@ -108,6 +108,7 @@
     <Compile Include="SalesForce\Function\DeletePackageFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
     <Compile Include="SalesForce\Function\DeployPackageFunction.cs" />
+    <Compile Include="SalesForce\Function\NewCheckpointFunction.cs" />
     <Compile Include="SalesForce\Function\NewComponentFunction.cs" />
     <Compile Include="SalesForce\Function\NewManifestFromReportFunction.cs" />
     <Compile Include="SalesForce\Function\NewManifestFunction.cs" />
@@ -173,6 +174,9 @@
     </Compile>
     <Compile Include="SalesForce\UI\ITextEditorView.cs" />
     <Compile Include="SalesForce\UI\ApexMethodInsightProvider.cs" />
+    <Compile Include="SalesForce\UI\NewCheckpointWindow.xaml.cs">
+      <DependentUpon>NewCheckpointWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\NewPackageWindow.xaml.cs">
       <DependentUpon>NewPackageWindow.xaml</DependentUpon>
     </Compile>
@@ -312,6 +316,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\EnterValueWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\NewCheckpointWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -669,6 +677,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ManifestFromReport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Checkpoint.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

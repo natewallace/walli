@@ -35,6 +35,11 @@ namespace Wallace.IDE.SalesForce.Document
         bool IsTextVisible { get; }
 
         /// <summary>
+        /// Gets the current line number.
+        /// </summary>
+        int CurrentLineNumber { get; }
+
+        /// <summary>
         /// Flag that indicates if there are unsaved changes.
         /// </summary>
         bool IsDirty { get; }

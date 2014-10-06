@@ -149,6 +149,12 @@ namespace Wallace.IDE.SalesForce.UI
 
             textEditor.TextArea.IndentationStrategy = new ApexIndentationStrategy();
 
+            foreach (UIElement marginElement in textEditor.TextArea.LeftMargins)
+            {
+                if (marginElement is ICSharpCode.AvalonEdit.Editing.LineNumberMargin)
+                    marginElement.PreviewMouseLeftButtonDown += marginElement_PreviewMouseLeftButtonDown;
+            }
+
             _searchPanel = SearchPanel.Install(textEditor.TextArea);
             _searchPanel.MarkerBrush = Brushes.DarkOrange;
             _toolTip = new ToolTip();
@@ -225,6 +231,17 @@ namespace Wallace.IDE.SalesForce.UI
                     SetNavigationClasses(null);
                     UpdateNavigation();
                 }
+            }
+        }
+
+        /// <summary>
+        /// The current line number that the caret is on.
+        /// </summary>
+        public int CurrentLineNumber
+        {
+            get
+            {
+                return textEditor.Document.GetLineByOffset(textEditor.CaretOffset).LineNumber;
             }
         }
 
@@ -701,6 +718,16 @@ namespace Wallace.IDE.SalesForce.UI
                 ParseDataChanged(this, e);
         }
 
+        /// <summary>
+        /// Raises the MarginDoubleClick event.
+        /// </summary>
+        /// <param name="e">Event arguments.</param>
+        protected virtual void OnMarginDoubleClick(EventArgs e)
+        {
+            if (MarginDoubleClick != null)
+                MarginDoubleClick(this, e);
+        }
+
         #endregion
 
         #region Event Handlers
@@ -1040,6 +1067,28 @@ namespace Wallace.IDE.SalesForce.UI
             _lastTextEntered = e.Text;
         }
 
+        /// <summary>
+        /// Raise the MarginDoubleClick event.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void marginElement_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (e.ClickCount == 2)
+                {
+                    if (textEditor.CaretOffset > 0)
+                        textEditor.CaretOffset = textEditor.CaretOffset - 1;
+                    OnMarginDoubleClick(EventArgs.Empty);
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
 
         #region Events
@@ -1053,6 +1102,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the parse data has been changed.
         /// </summary>
         public event EventHandler ParseDataChanged;
+
+        /// <summary>
+        /// Raised when the user double clicks in the margin.
+        /// </summary>
+        public event EventHandler MarginDoubleClick;
 
         #endregion
     }

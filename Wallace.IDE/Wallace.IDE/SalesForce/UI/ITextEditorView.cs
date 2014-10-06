@@ -36,6 +36,11 @@ namespace Wallace.IDE.SalesForce.UI
         string Text { get; set; }
 
         /// <summary>
+        /// The current line number that the caret is on.
+        /// </summary>
+        int CurrentLineNumber { get; }
+
+        /// <summary>
         /// Set errors that are displayed.
         /// </summary>
         /// <param name="errors">The errors to display.  Null or an empty collection clears all errors.</param>

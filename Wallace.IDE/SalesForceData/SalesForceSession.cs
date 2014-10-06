@@ -121,6 +121,17 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// The id of the user that is logged in.
+        /// </summary>
+        public string UserId
+        {
+            get
+            {
+                return _session.userId;
+            }
+        }
+
+        /// <summary>
         /// A uri that can be used to login to the salesforce website using this session.
         /// </summary>
         public string WebsiteAutoLoginUri
