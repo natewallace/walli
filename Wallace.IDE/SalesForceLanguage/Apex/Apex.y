@@ -446,8 +446,6 @@ predefined_type:
 invocation_expression:
 	primary_expression SEPARATOR_PARENTHESES_LEFT argument_list SEPARATOR_PARENTHESES_RIGHT |
 	primary_expression SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT |
-	primary_expression SEPARATOR_PARENTHESES_LEFT argument_list SEPARATOR_PARENTHESES_RIGHT block |
-	primary_expression SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT block |
 	KEYWORD_SUPER SEPARATOR_PARENTHESES_LEFT argument_list SEPARATOR_PARENTHESES_RIGHT |
 	KEYWORD_SUPER SEPARATOR_PARENTHESES_LEFT SEPARATOR_PARENTHESES_RIGHT ;
 
@@ -631,7 +629,8 @@ local_variable_initializer:
 	array_initializer ;
 
 expression_statement:
-	statement_expression SEPARATOR_SEMICOLON ;
+	statement_expression SEPARATOR_SEMICOLON |
+	statement_expression block;
 
 statement_expression:
 	invocation_expression |
