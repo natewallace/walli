@@ -107,31 +107,31 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         public override void Execute()
         {
-            SourceFile file = CurrentFile;
-            int lineNumber = CurrentLineNumber;
-            Project project = App.Instance.SalesForceApp.CurrentProject;
+            //SourceFile file = CurrentFile;
+            //int lineNumber = CurrentLineNumber;
+            //Project project = App.Instance.SalesForceApp.CurrentProject;
 
-            if (file != null && project != null)
-            {
-                EditCheckpointWindow dlg = new EditCheckpointWindow();
-                dlg.Title = "New Checkpoint";
-                dlg.ActionText = "Create";
-                dlg.FileName = file.Name;
-                dlg.LineNumber = lineNumber.ToString();
-                if (App.ShowDialog(dlg))
-                {
-                    using (App.Wait("Create checkpoint"))
-                    {
-                        Checkpoint checkpoint = project.Client.CreateCheckpoint(
-                            file,
-                            lineNumber,
-                            dlg.Iteration,
-                            dlg.HeapDump,
-                            dlg.Script,
-                            dlg.ScriptType);
-                    }
-                }
-            }
+            //if (file != null && project != null)
+            //{
+            //    EditCheckpointWindow dlg = new EditCheckpointWindow();
+            //    dlg.Title = "New Checkpoint";
+            //    dlg.ActionText = "Create";
+            //    dlg.FileName = file.Name;
+            //    dlg.LineNumber = lineNumber.ToString();
+            //    if (App.ShowDialog(dlg))
+            //    {
+            //        using (App.Wait("Create checkpoint"))
+            //        {
+            //            Checkpoint checkpoint = project.Client.CreateCheckpoint(
+            //                file,
+            //                lineNumber,
+            //                dlg.Iteration,
+            //                dlg.HeapDump,
+            //                dlg.Script,
+            //                dlg.ScriptType);
+            //        }
+            //    }
+            //}
         }
 
         #endregion

@@ -134,9 +134,9 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(propertiesSourceFileFunction, "PROJECT");
             App.Instance.RegisterFunction(propertiesSourceFileFunction);
 
-            ViewCheckpointsFunction viewCheckpointsFunction = new ViewCheckpointsFunction();
-            App.Instance.Menu.AddFunction(viewCheckpointsFunction, "PROJECT");
-            App.Instance.ToolBar.AddFunction(viewCheckpointsFunction);
+            //ViewCheckpointsFunction viewCheckpointsFunction = new ViewCheckpointsFunction();
+            //App.Instance.Menu.AddFunction(viewCheckpointsFunction, "PROJECT");
+            //App.Instance.ToolBar.AddFunction(viewCheckpointsFunction);
 
             NewManifestFromReportFunction manifestReport = new NewManifestFromReportFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(manifestReport));
@@ -206,8 +206,8 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(searchTextFunction, "DOCUMENT");
 
             NewCheckpointFunction newCheckpointFunction = new NewCheckpointFunction();
-            App.Instance.Menu.AddFunction(newCheckpointFunction, "DOCUMENT");
-            App.Instance.ToolBar.AddFunction(newCheckpointFunction);
+            //App.Instance.Menu.AddFunction(newCheckpointFunction, "DOCUMENT");
+            //App.Instance.ToolBar.AddFunction(newCheckpointFunction);
             App.Instance.RegisterFunction(newCheckpointFunction);
 
             RunTestsFunction runTestsFunction = new RunTestsFunction();
