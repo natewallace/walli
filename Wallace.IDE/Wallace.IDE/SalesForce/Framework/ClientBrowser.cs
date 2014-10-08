@@ -48,7 +48,7 @@ namespace Wallace.IDE.SalesForce.Framework
         /// <summary>
         /// Supports the GetDefaultBrowser method.
         /// </summary>
-        private static ClientBrowser _defaultBrowser = new ClientBrowser("Default", null, null);
+        private static ClientBrowser _defaultBrowser = null;
 
         #endregion
 
@@ -122,6 +122,36 @@ namespace Wallace.IDE.SalesForce.Framework
         /// <returns>The default browser.</returns>
         public static ClientBrowser GetDefaultBrowser()
         {
+            if (_defaultBrowser == null)
+            {
+                string name = null;
+
+                using (RegistryKey userChoice = Registry.CurrentUser.OpenSubKey(@"Software\Clients\StartMenuInternet"))
+                    if (userChoice != null)
+                        name = userChoice.GetValue(null) as string;
+
+                if (name == null)
+                {
+                    using (RegistryKey userChoice = Registry.LocalMachine.OpenSubKey(@"Software\Clients\StartMenuInternet"))
+                        if (userChoice != null)
+                            name = userChoice.GetValue(null) as string;
+                }
+
+                foreach (ClientBrowser browser in GetInstalledBrowsers())
+                {
+                    if (browser.Name == name)
+                    {
+                        _defaultBrowser = browser;
+                        break;
+                    }
+                }
+
+                if (_defaultBrowser == null)
+                {
+                    _defaultBrowser = new ClientBrowser("Default Browser", null, null);
+                }
+            }
+
             return _defaultBrowser;
         }
 
