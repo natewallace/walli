@@ -113,7 +113,9 @@ namespace Wallace.IDE.SalesForce.Function
 
             if (file != null && project != null)
             {
-                NewCheckpointWindow dlg = new NewCheckpointWindow();
+                EditCheckpointWindow dlg = new EditCheckpointWindow();
+                dlg.Title = "New Checkpoint";
+                dlg.ActionText = "Create";
                 dlg.FileName = file.Name;
                 dlg.LineNumber = lineNumber.ToString();
                 if (App.ShowDialog(dlg))

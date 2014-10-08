@@ -134,6 +134,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(propertiesSourceFileFunction, "PROJECT");
             App.Instance.RegisterFunction(propertiesSourceFileFunction);
 
+            ViewCheckpointsFunction viewCheckpointsFunction = new ViewCheckpointsFunction();
+            App.Instance.Menu.AddFunction(viewCheckpointsFunction, "PROJECT");
+            App.Instance.ToolBar.AddFunction(viewCheckpointsFunction);
+
             NewManifestFromReportFunction manifestReport = new NewManifestFromReportFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(manifestReport));
             App.Instance.ToolBar.AddFunction(manifestReport);

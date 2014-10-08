@@ -90,6 +90,7 @@
     <Compile Include="SalesForce\Document\SourceFileEditorDocumentBase.cs" />
     <Compile Include="SalesForce\Document\TestRunDocument.cs" />
     <Compile Include="SalesForce\Document\TriggerEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\ViewCheckpointsDocument.cs" />
     <Compile Include="SalesForce\Document\VisualForceEditorDocument.cs" />
     <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
     <Compile Include="SalesForce\Framework\IReportFilter.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="SalesForce\Function\TextSearchFunction.cs" />
     <Compile Include="SalesForce\Function\TextSelectAllFunction.cs" />
     <Compile Include="SalesForce\Function\TextUndoFunction.cs" />
+    <Compile Include="SalesForce\Function\ViewCheckpointsFunction.cs" />
     <Compile Include="SalesForce\Node\ApexClassFolderNode.cs" />
     <Compile Include="SalesForce\Node\ApexClassNode.cs" />
     <Compile Include="SalesForce\Node\ApexComponentFolderNode.cs" />
@@ -174,8 +176,8 @@
     </Compile>
     <Compile Include="SalesForce\UI\ITextEditorView.cs" />
     <Compile Include="SalesForce\UI\ApexMethodInsightProvider.cs" />
-    <Compile Include="SalesForce\UI\NewCheckpointWindow.xaml.cs">
-      <DependentUpon>NewCheckpointWindow.xaml</DependentUpon>
+    <Compile Include="SalesForce\UI\EditCheckpointWindow.xaml.cs">
+      <DependentUpon>EditCheckpointWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\NewPackageWindow.xaml.cs">
       <DependentUpon>NewPackageWindow.xaml</DependentUpon>
@@ -228,6 +230,9 @@
     </Compile>
     <Compile Include="SalesForce\UI\TestRunItemResultStatusIconConverter.cs" />
     <Compile Include="SalesForce\UI\TestRunItemStatusIconConverter.cs" />
+    <Compile Include="SalesForce\UI\ViewCheckpointItemControl.xaml.cs">
+      <DependentUpon>ViewCheckpointItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\VisualForceCompletionData.cs" />
     <Compile Include="SalesForce\UI\VisualForceEditorControl.xaml.cs">
       <DependentUpon>VisualForceEditorControl.xaml</DependentUpon>
@@ -319,7 +324,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SalesForce\UI\NewCheckpointWindow.xaml">
+    <Page Include="SalesForce\UI\EditCheckpointWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -386,6 +391,10 @@
     <Page Include="SalesForce\UI\TestRunControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\ViewCheckpointItemControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SalesForce\UI\VisualForceEditorControl.xaml">
       <SubType>Designer</SubType>
@@ -680,6 +689,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Checkpoint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Checkpoints.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

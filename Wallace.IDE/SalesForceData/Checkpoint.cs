@@ -71,9 +71,26 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// The id of the entity the checkpoint is in.
+        /// </summary>
+        internal string EntityId
+        {
+            get { return _action.ExecutableEntityId; }
+        }
+
+        /// <summary>
         /// The name of the file the checkpoint is in.
         /// </summary>
         public string FileName { get; private set; }
+
+        /// <summary>
+        /// Indicates if a heap dump will be captured.
+        /// </summary>
+        public bool HeapDump
+        {
+            get { return _action.IsDumpingHeap.Value; }
+            set { _action.IsDumpingHeap = value; }
+        }
 
         /// <summary>
         /// A script that is executed when the checkpoint is hit.
@@ -139,6 +156,18 @@ namespace SalesForceData
         internal SalesForceAPI.Tooling.ApexExecutionOverlayAction ToAction()
         {
             return _action;
+        }
+
+        /// <summary>
+        /// Set the underlying salesforce object.
+        /// </summary>
+        /// <param name="action">The underlying salesforce object to set.</param>
+        internal void Update(SalesForceAPI.Tooling.ApexExecutionOverlayAction action)
+        {
+            if (action == null)
+                throw new ArgumentNullException("action");
+
+            _action = action;
         }
 
         #endregion

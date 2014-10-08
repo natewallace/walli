@@ -18,14 +18,14 @@ namespace Wallace.IDE.SalesForce.UI
     /// <summary>
     /// Interaction logic for NewCheckpointWindow.xaml
     /// </summary>
-    public partial class NewCheckpointWindow : Window
+    public partial class EditCheckpointWindow : Window
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public NewCheckpointWindow()
+        public EditCheckpointWindow()
         {
             InitializeComponent();
         }
@@ -88,6 +88,15 @@ namespace Wallace.IDE.SalesForce.UI
             set { textBoxScript.Text = value; }
         }
 
+        /// <summary>
+        /// The text that appears in the action button.
+        /// </summary>
+        public string ActionText
+        {
+            get { return buttonCreate.Content as string; }
+            set { buttonCreate.Content = value; }
+        }
+        
         #endregion
 
         #region Event Handlers

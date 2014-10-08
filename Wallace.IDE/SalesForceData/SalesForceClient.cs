@@ -240,39 +240,6 @@ namespace SalesForceData
         }
 
         /// <summary>
-        /// Save changes made to a checkpoint.
-        /// </summary>
-        /// <param name="checkpoint">The checkpoint to save.</param>
-        public void SaveCheckpoint(Checkpoint checkpoint)
-        {
-            if (checkpoint == null)
-                throw new ArgumentNullException("checkpoint");
-
-            InitClients();
-
-            SalesForceAPI.Tooling.updateResponse response = _toolingClient.update(new SalesForceAPI.Tooling.updateRequest(
-                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                new SalesForceAPI.Tooling.sObject[] { checkpoint.ToAction() }));
-
-            if (response != null && response.result != null && response.result.Length == 1)
-            {
-                if (!response.result[0].success)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    if (response.result[0].errors != null)
-                        foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
-                            sb.AppendLine(err.message);
-
-                    throw new Exception("Couldn't create checkpoint: \r\n" + sb.ToString());
-                }
-            }
-            else
-            {
-                throw new Exception("Couldn't create checkpoint: Invalid response received.");
-            }
-        }
-
-        /// <summary>
         /// Get checkpoints that have been created.
         /// </summary>
         /// <returns>Existing checkpoints.</returns>
@@ -290,9 +257,10 @@ namespace SalesForceData
                 // get file names
                 Dictionary<string, string> idToFileNameMap = new Dictionary<string, string>();
                 foreach (SalesForceAPI.Tooling.sObject record in response.result.records)
-                    idToFileNameMap.Add(
-                        (record as SalesForceAPI.Tooling.ApexExecutionOverlayAction).ExecutableEntityId,
-                        String.Empty);
+                    if (!idToFileNameMap.ContainsKey((record as SalesForceAPI.Tooling.ApexExecutionOverlayAction).ExecutableEntityId))
+                        idToFileNameMap.Add(
+                            (record as SalesForceAPI.Tooling.ApexExecutionOverlayAction).ExecutableEntityId,
+                            String.Empty);
 
                 DataSelectResult names = DataSelect(String.Format(
                     "SELECT Id, Name FROM ApexClass WHERE Id IN ('{0}')", 
@@ -333,11 +301,11 @@ namespace SalesForceData
         /// <param name="scriptType">The type of script specified.</param>
         /// <returns>The newly created checkpoint.</returns>
         public Checkpoint CreateCheckpoint(
-            SourceFile file, 
-            int lineNumber, 
-            int iteration, 
-            bool isHeapDump, 
-            string script, 
+            SourceFile file,
+            int lineNumber,
+            int iteration,
+            bool isHeapDump,
+            string script,
             CheckpointScriptType scriptType)
         {
             if (file == null)
@@ -362,6 +330,41 @@ namespace SalesForceData
 
             if (entityId == null)
                 throw new Exception("Couldn't get id for: " + file.Name);
+
+            return CreateCheckpoint(
+                entityId,
+                file.Name,
+                lineNumber,
+                iteration,
+                isHeapDump,
+                script,
+                scriptType);
+        }
+
+        /// <summary>
+        /// Create a new checkpoint.
+        /// </summary>
+        /// <param name="entityId">The id of the file to create a checkpoint in.</param>
+        /// <param name="fileName">The name of the file to create a checkpoint in.</param>
+        /// <param name="lineNumber">The line number in the file to create the checkpoint for.</param>
+        /// <param name="iteration">The number of iterations before the checkpoint is processed.</param>
+        /// <param name="isHeapDump">If true a heap dump will be collected with the checkpoint.</param>
+        /// <param name="script">An optional script to run with the checkpoint.</param>
+        /// <param name="scriptType">The type of script specified.</param>
+        /// <returns>The newly created checkpoint.</returns>
+        private Checkpoint CreateCheckpoint(
+            string entityId,
+            string fileName,
+            int lineNumber, 
+            int iteration, 
+            bool isHeapDump, 
+            string script, 
+            CheckpointScriptType scriptType)
+        {
+            if (entityId == null)
+                throw new ArgumentNullException("entityId");
+
+            InitClients();
 
             SalesForceAPI.Tooling.ApexExecutionOverlayAction action = new SalesForceAPI.Tooling.ApexExecutionOverlayAction();
             action.ActionScript = script;
@@ -403,7 +406,29 @@ namespace SalesForceData
 
             action.Id = response.result[0].id;
 
-            return new Checkpoint(action, file.Name);
+            return new Checkpoint(action, fileName);
+        }
+
+        /// <summary>
+        /// Save the changes made to the checkpoint.
+        /// </summary>
+        /// <param name="checkpoint">The checkpoint to update.</param>
+        public void SaveCheckpoint(Checkpoint checkpoint)
+        {
+            if (checkpoint == null)
+                throw new ArgumentNullException("checkpoint");
+
+            DeleteCheckpoint(checkpoint);
+            Checkpoint c = CreateCheckpoint(
+                checkpoint.EntityId,
+                checkpoint.FileName,
+                checkpoint.LineNumber,
+                checkpoint.Iteration,
+                checkpoint.HeapDump,
+                checkpoint.Script,
+                checkpoint.ScriptType);
+
+            checkpoint.Update(c.ToAction());
         }
 
         /// <summary>
