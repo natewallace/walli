@@ -31,7 +31,7 @@ namespace Wallace.IDE.SalesForce.Function
     /// <summary>
     /// Open the salesforce web browser.
     /// </summary>
-    public class OpenSalesForceWebBrowserFunction : FunctionBase
+    public class OpenWebBrowserFunction : FunctionBase
     {
         #region Constructors
 
@@ -39,7 +39,7 @@ namespace Wallace.IDE.SalesForce.Function
         /// Constructor.
         /// </summary>
         /// <param name="browser"></param>
-        public OpenSalesForceWebBrowserFunction(ClientBrowser browser)
+        public OpenWebBrowserFunction(ClientBrowser browser)
         {
             if (browser == null)
                 throw new ArgumentNullException("browser");

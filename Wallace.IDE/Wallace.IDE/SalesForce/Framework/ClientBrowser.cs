@@ -38,6 +38,20 @@ namespace Wallace.IDE.SalesForce.Framework
     /// </summary>
     public class ClientBrowser
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the GetInstalledBrowsers method.
+        /// </summary>
+        private static ClientBrowser[] _browsers = null;
+
+        /// <summary>
+        /// Supports the GetDefaultBrowser method.
+        /// </summary>
+        private static ClientBrowser _defaultBrowser = new ClientBrowser("Default", null, null);
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -89,50 +103,75 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
+        /// Get the browser with the given name.
+        /// </summary>
+        /// <param name="name">The name of the browser to get.</param>
+        /// <returns>The requested browser or null if it doesn't exist.</returns>
+        public static ClientBrowser GetBrowser(string name)
+        {
+            foreach (ClientBrowser b in GetInstalledBrowsers())
+                if (b.Name == name)
+                    return b;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the default browser.
+        /// </summary>
+        /// <returns>The default browser.</returns>
+        public static ClientBrowser GetDefaultBrowser()
+        {
+            return _defaultBrowser;
+        }
+
+        /// <summary>
         /// Get the browsers that are installed on the machine.
         /// </summary>
         /// <returns>The locally installed browsers.</returns>
         public static ClientBrowser[] GetInstalledBrowsers()
         {
-            List<ClientBrowser> result = new List<ClientBrowser>();
-
-            using (RegistryKey clients = Registry.LocalMachine.OpenSubKey(@"Software\Clients\StartMenuInternet"))
+            if (_browsers == null)
             {
-                if (clients != null)
+                List<ClientBrowser> result = new List<ClientBrowser>();
+
+                using (RegistryKey clients = Registry.LocalMachine.OpenSubKey(@"Software\Clients\StartMenuInternet"))
                 {
-                    string[] names = clients.GetSubKeyNames();
-                    foreach (string name in names)
+                    if (clients != null)
                     {
-                        string browserPath = null;
-                        Icon browserIcon = null;
-
-                        using (RegistryKey browser = clients.OpenSubKey(name))
+                        string[] names = clients.GetSubKeyNames();
+                        foreach (string name in names)
                         {
-                            using (RegistryKey path = browser.OpenSubKey(@"shell\open\command"))
-                                browserPath = path.GetValue(null) as string;
+                            string browserPath = null;
+                            Icon browserIcon = null;
 
-                            using (RegistryKey icon = browser.OpenSubKey("DefaultIcon"))
+                            using (RegistryKey browser = clients.OpenSubKey(name))
                             {
-                                string iconPath = icon.GetValue(null) as string;
-                                if (iconPath != null)
+                                using (RegistryKey path = browser.OpenSubKey(@"shell\open\command"))
+                                    browserPath = path.GetValue(null) as string;
+
+                                using (RegistryKey icon = browser.OpenSubKey("DefaultIcon"))
                                 {
-                                    string[] iconPathParts = iconPath.Split(new char[] { ',' });
-                                    if (iconPathParts.Length > 0)
-                                        browserIcon = Icon.ExtractAssociatedIcon(iconPathParts[0]);
+                                    string iconPath = icon.GetValue(null) as string;
+                                    if (iconPath != null)
+                                    {
+                                        string[] iconPathParts = iconPath.Split(new char[] { ',' });
+                                        if (iconPathParts.Length > 0)
+                                            browserIcon = Icon.ExtractAssociatedIcon(iconPathParts[0]);
+                                    }
                                 }
                             }
-                        }
 
-                        if (browserPath != null)
-                            result.Add(new ClientBrowser(name, browserPath, browserIcon));
+                            if (browserPath != null)
+                                result.Add(new ClientBrowser(name, browserPath, browserIcon));
+                        }
                     }
                 }
+
+                _browsers = result.ToArray();
             }
 
-            if (result.Count == 0)
-                result.Add(new ClientBrowser("Default", null, null));
-
-            return result.ToArray();
+            return _browsers;
         }
 
         #endregion

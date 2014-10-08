@@ -120,7 +120,8 @@
     <Compile Include="SalesForce\Function\NewPackageFunction.cs" />
     <Compile Include="SalesForce\Function\NewReportFunction.cs" />
     <Compile Include="SalesForce\Function\NewTriggerFunction.cs" />
-    <Compile Include="SalesForce\Function\OpenSalesForceWebBrowserFunction.cs" />
+    <Compile Include="SalesForce\Function\OpenRecentWebBrowserFunction.cs" />
+    <Compile Include="SalesForce\Function\OpenWebBrowserFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshFolderFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\ReloadSymbolsFunction.cs" />
