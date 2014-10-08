@@ -46,7 +46,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "Test.png");
-                presenter.ToolTip = "Open the test manager.";
+                presenter.ToolTip = "Test manager...";
             }
             else
             {

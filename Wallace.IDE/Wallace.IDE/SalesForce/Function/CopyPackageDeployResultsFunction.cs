@@ -65,7 +65,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "Copy.png");
-                presenter.ToolTip = "Copy package deployment results to clipboard.";
+                presenter.ToolTip = "Copy results to clipboard";
             }
             else
             {

@@ -73,11 +73,11 @@ namespace Wallace.IDE.SalesForce.Function
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "NewPackage.png");
-                    presenter.ToolTip = "Create package.";
+                    presenter.ToolTip = "New package";
                 }
                 else
                 {
-                    presenter.Header = "Create package";
+                    presenter.Header = "New package";
                     presenter.Icon = VisualHelper.CreateIconHeader(null, "NewPackage.png");
                 }
 

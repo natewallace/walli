@@ -152,6 +152,15 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Get the user id of the currently logged on user.
+        /// </summary>
+        /// <returns>The id of the user that is currently logged on.</returns>
+        public string GetUserId()
+        {
+            return _session.UserId;
+        }
+
+        /// <summary>
         /// Open and immediately close a salesforce connection using the credential.  If a failure occurs
         /// an exception is thrown.
         /// </summary>

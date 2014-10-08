@@ -50,7 +50,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "Report.png");
-                presenter.ToolTip = "Generate a new report.";
+                presenter.ToolTip = "New report...";
             }
             else
             {
@@ -76,13 +76,33 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (App.Instance.SalesForceApp.CurrentProject != null)
             {
+                // setup type names
+                SourceFileType[] types = null;
+                using (App.Wait("Getting types"))
+                    types = App.Instance.SalesForceApp.CurrentProject.Client.GetSourceFileTypes();
+
+                List<string> typeNames = new List<string>();
+                foreach (SourceFileType sft in types)
+                    typeNames.Add(sft.Name);
+                typeNames.Sort();
+
                 NewReportWindow dlg = new NewReportWindow();
                 dlg.Project = App.Instance.SalesForceApp.CurrentProject;
+                dlg.Exclusions = typeNames.ToArray();
+
                 if (App.ShowDialog(dlg))
                 {
                     using (App.Wait("Creating report"))
                     {
-                        SourceFile[] allFiles = dlg.Project.Client.GetSourceFiles(dlg.Project.Client.GetSourceFileTypes(), true);
+                        string[] exclusions = dlg.SelectedExclusions;
+                        List<SourceFileType> typeList = new List<SourceFileType>();
+                        foreach (SourceFileType sft in types)
+                            if (!exclusions.Contains(sft.Name))
+                                typeList.Add(sft);
+
+                        SourceFile[] allFiles = dlg.Project.Client.GetSourceFiles(
+                            typeList.ToArray(),
+                            true);
                         SourceFile[] filteredFiles = dlg.ReportFilter.Filter(allFiles);
                         ReportDocument document = new ReportDocument(filteredFiles);
                         App.Instance.Content.OpenDocument(document);

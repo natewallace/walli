@@ -67,6 +67,104 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         public IReportFilter ReportFilter { get; private set; }
 
+        /// <summary>
+        /// Exclusions the user can choose from.
+        /// </summary>
+        public string[] Exclusions
+        {
+            get
+            {
+                List<string> result = new List<string>();
+                foreach (object item in buttonExclude.ContextMenu.Items)
+                {
+                    if (item is MenuItem)
+                    {
+                        MenuItem mi = item as MenuItem;
+                        string header = mi.Header as string;
+                        if (header != "Select All" && header != "Select None" && header != "Close")
+                            result.Add(header);
+                    }
+                }
+
+                return result.ToArray();
+            }
+            set
+            {
+                buttonExclude.ContextMenu.Items.Clear();
+
+                MenuItem selectAll = new MenuItem();
+                selectAll.Header = "Select All";
+                selectAll.StaysOpenOnClick = true;
+                buttonExclude.ContextMenu.Items.Add(selectAll);
+
+                MenuItem selectNone = new MenuItem();
+                selectNone.Header = "Select None";
+                selectNone.StaysOpenOnClick = true;
+                buttonExclude.ContextMenu.Items.Add(selectNone);
+
+                MenuItem close = new MenuItem();
+                close.Header = "Close";
+                close.StaysOpenOnClick = true;
+                buttonExclude.ContextMenu.Items.Add(close);
+
+                buttonExclude.ContextMenu.Items.Add(new Separator());
+
+                if (value != null)
+                {
+                    foreach (string exlude in value)
+                    {
+                        MenuItem item = new MenuItem();
+                        item.Header = exlude;
+                        item.IsCheckable = true;
+                        item.StaysOpenOnClick = true;
+
+                        buttonExclude.ContextMenu.Items.Add(item);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// The selected exclusions.
+        /// </summary>
+        public string[] SelectedExclusions
+        {
+            get
+            {
+                List<string> result = new List<string>();
+                foreach (object item in buttonExclude.ContextMenu.Items)
+                {
+                    if (item is MenuItem)
+                    {
+                        MenuItem mi = item as MenuItem;
+                        string header = mi.Header as string;
+                        if (mi.IsChecked)
+                            result.Add(header);
+                    }
+                }
+
+                return result.ToArray();
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Update the state of the UI.
+        /// </summary>
+        private void UpdateState()
+        {
+            int count = SelectedExclusions.Length;
+            if (count == 0)
+                textBlockExclude.Text = "No Exclusions";
+            else if (count == 1)
+                textBlockExclude.Text = "1 Exclusion";
+            else
+                textBlockExclude.Text = String.Format("{0} Exclusions", count);
+        }
+
         #endregion
 
         #region Event Handlers
@@ -85,16 +183,18 @@ namespace Wallace.IDE.SalesForce.UI
 
                 if (tabItemBasic.IsSelected)
                 {
-                    // get user id
-                    DataSelectResult user = Project.Client.DataSelect(String.Format("SELECT Id FROM User WHERE Username = '{0}'", Project.Credential.Username));
-                    string userId = null;
-                    if (user.Data != null && user.Data.Rows.Count > 0)
-                        userId = user.Data.Rows[0]["Id"] as string;
+                    string userId = Project.Client.GetUserId();
 
                     if (radioButtonBasicUserModifiedToday.IsChecked.Value)
                         ReportFilter = new ReportFilterUserDate(userId, DateTime.Today);
                     else if (radioButtonBasicUserModifiedWeek.IsChecked.Value)
                         ReportFilter = new ReportFilterUserDate(userId, DateTime.Today.AddDays(-7));
+                    else if (radioButtonBasicUserModifiedAll.IsChecked.Value)
+                        ReportFilter = new ReportFilterUserDate(userId, DateTime.MinValue);
+                    else if (radioButtonBasicUserAnyModifiedToday.IsChecked.Value)
+                        ReportFilter = new ReportFilterUserDate("*", DateTime.Today);
+                    else if (radioButtonBasicUserAnyModifiedWeek.IsChecked.Value)
+                        ReportFilter = new ReportFilterUserDate("*", DateTime.Today.AddDays(-7));
                     else
                         throw new Exception("No report selected.");
                 }
@@ -124,6 +224,91 @@ namespace Wallace.IDE.SalesForce.UI
                 DialogResult = false;
                 ReportFilter = null;
                 Close();
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Show or hide the context menu.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonExclude_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                buttonExclude.ContextMenu.IsEnabled = true;
+                buttonExclude.ContextMenu.PlacementTarget = buttonExclude;
+                buttonExclude.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                buttonExclude.ContextMenu.IsOpen = true;
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Update UI state.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonExclude_CheckedChange(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UpdateState();
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Close, Check or Uncheck all.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void ContextMenu_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MenuItem item = e.Source as MenuItem;
+                if (item != null)
+                {
+                    string header = item.Header as string;
+                    switch (header)
+                    {
+                        case "Select All":
+                            foreach (object obj in buttonExclude.ContextMenu.Items)
+                            {
+                                MenuItem mi = obj as MenuItem;
+                                if (mi != null && mi.IsCheckable)
+                                    mi.IsChecked = true;
+                            }
+                            break;
+
+                        case "Select None":
+                            foreach (object obj in buttonExclude.ContextMenu.Items)
+                            {
+                                MenuItem mi = obj as MenuItem;
+                                if (mi != null && mi.IsCheckable)
+                                    mi.IsChecked = false;
+                            }
+                            break;
+
+                        case "Close":
+                            buttonExclude.ContextMenu.IsOpen = false;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
             }
             catch (Exception err)
             {

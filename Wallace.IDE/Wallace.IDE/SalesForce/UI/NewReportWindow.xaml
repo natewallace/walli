@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:localUI="clr-namespace:Wallace.IDE.Framework.UI"
         Title="New Report"
-        Height="300" 
+        Height="400" 
         Width="550"
         MinHeight="200"
         MinWidth="200"        
@@ -17,6 +17,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TabControl Grid.Column="0"
@@ -29,7 +30,7 @@
                                    Margin="5"
                                    Foreground="Black" />
                         <RadioButton x:Name="radioButtonBasicUserModifiedToday" 
-                                     Margin="5"
+                                     Margin="5,20,5,5"
                                      IsChecked="True">
                             Files I have modified today.
                         </RadioButton>
@@ -37,14 +38,54 @@
                                      Margin="5">
                             Files I have modified this week.
                         </RadioButton>
+                        <RadioButton x:Name="radioButtonBasicUserModifiedAll" 
+                                     Margin="5">
+                            Files I have modified at any point.
+                        </RadioButton>
+                        <RadioButton x:Name="radioButtonBasicUserAnyModifiedToday" 
+                                     Margin="5,20,5,5">
+                            Files that have been modified today.
+                        </RadioButton>
+                        <RadioButton x:Name="radioButtonBasicUserAnyModifiedWeek" 
+                                     Margin="5">
+                            Files that have been modified this week.
+                        </RadioButton>
                     </StackPanel>
                 </TabItem>
+                <!--
                 <TabItem Header="Advanced "
                      localUI:ChromeTab.ShowCloseButton="False">
                 </TabItem>
+                -->
             </TabControl>
 
             <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        Margin="0,5,0,5">
+                <TextBlock Text="Exclude:" 
+                           FontWeight="Bold"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center"
+                           Margin="0,0,5,0"/>
+
+                <Button x:Name="buttonExclude"
+                        Click="buttonExclude_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="textBlockExclude" Text="No Exclusions"/>
+                            <Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="6" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>
+                        </StackPanel>
+                    </Button.Content>
+                    <Button.ContextMenu>
+                        <ContextMenu MenuItem.Checked="buttonExclude_CheckedChange"
+                                     MenuItem.Unchecked="buttonExclude_CheckedChange"
+                                     MenuItem.Click="ContextMenu_Click"/>
+                    </Button.ContextMenu>
+                </Button>
+                
+            </StackPanel>
+            
+            <StackPanel Grid.Row="3"
                     Grid.Column="0"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"

@@ -43,7 +43,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "OpenProject.png");
-                presenter.ToolTip = "Open an existing project...";
+                presenter.ToolTip = "Open project...";
             }
             else
             {

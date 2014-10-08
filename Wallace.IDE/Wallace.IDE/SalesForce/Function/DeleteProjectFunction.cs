@@ -44,7 +44,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "Delete.png");
-                presenter.ToolTip = "Delete an existing project...";
+                presenter.ToolTip = "Delete project...";
             }
             else
             {

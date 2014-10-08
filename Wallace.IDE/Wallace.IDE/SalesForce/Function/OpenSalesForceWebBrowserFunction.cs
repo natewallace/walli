@@ -41,7 +41,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "WebBrowser.png");
-                presenter.ToolTip = "Open web browser.";
+                presenter.ToolTip = "Open web browser";
             }
             else
             {

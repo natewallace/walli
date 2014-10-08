@@ -47,7 +47,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "Empty.png");
-                presenter.ToolTip = "Reload the symbols for this project.";
+                presenter.ToolTip = "Reload symbols";
             }
             else
             {

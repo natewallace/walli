@@ -47,7 +47,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "NewDocumentTrigger.png");
-                presenter.ToolTip = "Create a new apex trigger.";
+                presenter.ToolTip = "New trigger...";
             }
             else
             {

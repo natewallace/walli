@@ -79,7 +79,7 @@ namespace Wallace.IDE.SalesForce.Framework
 
             foreach (SourceFile file in files)
             {
-                if (file.ChangedById == _userId && file.ChangedOn >= _date)
+                if ((_userId == "*" || file.ChangedById == _userId) && file.ChangedOn >= _date)
                     result.Add(file);
 
                 foreach (SourceFile child in file.Children)

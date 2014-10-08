@@ -67,7 +67,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "AddFileToManifest.png");
-                presenter.ToolTip = "Add a manual entry to the manifest...";
+                presenter.ToolTip = "Add manual entry...";
             }
             else
             {

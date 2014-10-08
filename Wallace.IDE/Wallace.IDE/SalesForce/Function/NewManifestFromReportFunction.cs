@@ -69,7 +69,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "ManifestFromReport.png");
-                presenter.ToolTip = "Create a new manifest from the selected report items.";
+                presenter.ToolTip = "New manifest from report...";
             }
             else
             {

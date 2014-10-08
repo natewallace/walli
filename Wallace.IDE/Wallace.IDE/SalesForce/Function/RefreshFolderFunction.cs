@@ -45,7 +45,7 @@ namespace Wallace.IDE.SalesForce.Function
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "Refresh.png");
-                    presenter.ToolTip = "Refresh the contents of this folder.";
+                    presenter.ToolTip = "Refresh folder";
                 }
                 else
                 {

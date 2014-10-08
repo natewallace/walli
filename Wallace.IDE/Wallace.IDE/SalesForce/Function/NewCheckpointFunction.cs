@@ -86,11 +86,11 @@ namespace Wallace.IDE.SalesForce.Function
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "Checkpoint.png");
-                    presenter.ToolTip = "Create checkpoint...";
+                    presenter.ToolTip = "New checkpoint...";
                 }
                 else
                 {
-                    presenter.Header = "Create checkpoint...";
+                    presenter.Header = "New checkpoint...";
                     presenter.Icon = VisualHelper.CreateIconHeader(null, "Checkpoint.png");
                 }
 

@@ -43,7 +43,7 @@ namespace Wallace.IDE.SalesForce.Function
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "Copy.png");
-                    presenter.ToolTip = "Copy.";
+                    presenter.ToolTip = "Copy";
                 }
                 else
                 {

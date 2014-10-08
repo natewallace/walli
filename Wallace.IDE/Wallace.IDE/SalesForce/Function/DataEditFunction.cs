@@ -42,7 +42,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "Table.png");
-                presenter.ToolTip = "Open data query tool.";
+                presenter.ToolTip = "Data query tool";
             }
             else
             {
