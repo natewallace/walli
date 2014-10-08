@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SalesForceLanguage
 {
@@ -767,6 +768,23 @@ namespace SalesForceLanguage
                                 }
                                 break;
 
+                            case Tokens.SOQL:
+                            case Tokens.SOSL:
+                                if (lexer.yylval.Text != null)
+                                {
+                                    Match match = Regex.Match(lexer.yylval.Text, "FROM[ \t\n\r]+[A-Za-z_0-9]+", RegexOptions.IgnoreCase);
+                                    if (match != null)
+                                    {
+                                        int index = match.Value.IndexOfAny(new char[] { ' ', '\t', '\n', '\r' });
+                                        if (index != -1)
+                                        {
+                                            parts.Add("_select");
+                                            parts.Add(match.Value.Substring(index).Trim());
+                                        }
+                                    }
+                                }
+                                break;
+
                             default:
                                 if (openTemplate > 0)
                                 {
@@ -889,8 +907,20 @@ namespace SalesForceLanguage
                     string part = parts[i];
                     partFound = false;
 
+                    // SOQL or SOSL part
+                    if (parts[i] == "_select" && i + 1 < parts.Count)
+                    {
+                        i++;
+                        matchedSymbol = new Field(
+                            new TextPosition(0, 0),
+                            "soql",
+                            null,
+                            SymbolModifier.Public | SymbolModifier.Static,
+                            String.Format("{0}[]", parts[1]));
+                        partFound = true;
+                    }
                     // method
-                    if (parts[i].EndsWith("()"))
+                    else if (parts[i].EndsWith("()"))
                     {
                         string methodName = part.Substring(0, part.IndexOf('('));
                         SymbolTable externalClass = (i == 0) ? classSymbol : _language.GetSymbols(matchedSymbol.FullType);

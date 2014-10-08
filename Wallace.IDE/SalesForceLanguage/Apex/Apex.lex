@@ -224,15 +224,15 @@ WithoutSharing 			WITHOUT{WhiteSpace}*SHARING
 <SOQL> {
 	{StringDelimiter}	{ PushState(STRING, Tokens.LITERAL_STRING, true); }
 	\[					{ PushState(INNER_BRACKET, Tokens.WHITESPACE, true); }
-	[^\]\[]				{ }
-	\]					{ if (PopState()) return GetCurrentToken(); }
+	[^\]\[]				{ UpdateState(); }
+	\]					{ UpdateState(); if (PopState()) return GetCurrentToken(); }
 }
 
 <SOSL> {
 	{StringDelimiter}	{ PushState(STRING, Tokens.LITERAL_STRING, true); }
 	\[					{ PushState(INNER_BRACKET, Tokens.WHITESPACE, true); }
-	[^\]\[]				{ }
-	\]					{ if (PopState()) return GetCurrentToken(); }
+	[^\]\[]				{ UpdateState(); }
+	\]					{ UpdateState(); if (PopState()) return GetCurrentToken(); }
 }
 
 <INNER_BRACKET> {
