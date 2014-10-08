@@ -20,7 +20,11 @@
  * THE SOFTWARE.
  */
 
+using System;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using Wallace.IDE.Framework;
+using Wallace.IDE.SalesForce.Framework;
 
 namespace Wallace.IDE.SalesForce.Function
 {
@@ -29,6 +33,31 @@ namespace Wallace.IDE.SalesForce.Function
     /// </summary>
     public class OpenSalesForceWebBrowserFunction : FunctionBase
     {
+        #region Constructors
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="browser"></param>
+        public OpenSalesForceWebBrowserFunction(ClientBrowser browser)
+        {
+            if (browser == null)
+                throw new ArgumentNullException("browser");
+
+            Browser = browser;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The browser that will be used.
+        /// </summary>
+        public ClientBrowser Browser { get; private set; }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -38,15 +67,33 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use.</param>
         public override void Init(FunctionHost host, IFunctionPresenter presenter)
         {
-            if (host == FunctionHost.Toolbar)
+            // setup image
+            Image image = new Image();
+            image.Height = 16;
+            image.Width = 16;
+
+            if (Browser.Image == null)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "WebBrowser.png");
-                presenter.ToolTip = "Open web browser";
+                image.Source = VisualHelper.LoadBitmap("WebBrowser.png");
             }
             else
             {
-                presenter.Header = "Open web browser";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "WebBrowser.png");
+                image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+                    Browser.Image.Handle,
+                    System.Windows.Int32Rect.Empty,
+                    System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+            }
+
+            // setup presenter
+            if (host == FunctionHost.Toolbar)
+            {
+                presenter.Header = image;
+                presenter.ToolTip = String.Format("Open {0}", Browser.Name);
+            }
+            else
+            {
+                presenter.Header = String.Format("Open {0}", Browser.Name);
+                presenter.Icon = image;
             }
         }
 
@@ -70,7 +117,12 @@ namespace Wallace.IDE.SalesForce.Function
                 try
                 {
                     using (App.Wait("Opening SalesForce browser..."))
-                        System.Diagnostics.Process.Start(App.Instance.SalesForceApp.CurrentProject.Client.GetWebsiteAutoLoginUri());
+                        Browser.OpenUrl(App.Instance.SalesForceApp.CurrentProject.Client.GetWebsiteAutoLoginUri());
+
+                    Properties.Settings.Default.LastWebBrowser = Browser.Name;
+                    Properties.Settings.Default.Save();
+
+                    App.Instance.UpdateWorkspaces();
                 }
                 catch
                 {

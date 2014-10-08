@@ -96,10 +96,12 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(newManifestFunction, "NEWSALESFORCE");
             App.Instance.RegisterFunction(newManifestFunction);
 
-            OpenSalesForceWebBrowserFunction webBrowser = new OpenSalesForceWebBrowserFunction();
-            App.Instance.Menu.AddFunction(webBrowser, "PROJECT");
-            App.Instance.ToolBar.AddFunction(new FunctionSeparator(webBrowser));
-            App.Instance.ToolBar.AddFunction(webBrowser);
+            App.Instance.Menu.AddFunction(new FunctionGrouping("Open Web Browser", "Open Web Browser", true), "PROJECT");
+            foreach (ClientBrowser cb in ClientBrowser.GetInstalledBrowsers())
+            {
+                OpenSalesForceWebBrowserFunction webBrowser = new OpenSalesForceWebBrowserFunction(cb);
+                App.Instance.Menu.AddFunction(webBrowser, "Open Web Browser");
+            }
 
             DataEditFunction dataEdit = new DataEditFunction();
             App.Instance.ToolBar.AddFunction(dataEdit);

@@ -36,6 +36,9 @@ namespace Wallace.IDE.Framework
     {
         #region Fields
 
+        /// <summary>
+        /// Holds images that have been loaded.
+        /// </summary>
         private static Dictionary<string, BitmapImage> _imageMap = new Dictionary<string, BitmapImage>();
 
         #endregion

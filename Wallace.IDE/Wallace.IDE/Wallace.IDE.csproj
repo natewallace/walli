@@ -92,6 +92,7 @@
     <Compile Include="SalesForce\Document\TriggerEditorDocument.cs" />
     <Compile Include="SalesForce\Document\ViewCheckpointsDocument.cs" />
     <Compile Include="SalesForce\Document\VisualForceEditorDocument.cs" />
+    <Compile Include="SalesForce\Framework\ClientBrowser.cs" />
     <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
     <Compile Include="SalesForce\Framework\IReportFilter.cs" />
     <Compile Include="SalesForce\Framework\Project.cs" />

@@ -11,5 +11,8 @@
     <Setting Name="LatestVersionEndpoint" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://walli.codeplex.com/project/feeds/rss?ProjectRSSFeed=codeplex%3a%2f%2frelease%2fwalli</Value>
     </Setting>
+    <Setting Name="LastWebBrowser" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
