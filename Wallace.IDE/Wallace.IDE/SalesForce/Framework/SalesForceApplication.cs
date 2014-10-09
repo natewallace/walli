@@ -159,12 +159,13 @@ namespace Wallace.IDE.SalesForce.Framework
             SaveSourceFileFunction saveSourceFileFunction = new SaveSourceFileFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSourceFileFunction));
             App.Instance.ToolBar.AddFunction(saveSourceFileFunction);
-            App.Instance.Menu.AddFunction(saveSourceFileFunction, "DOCUMENT");
+            App.Instance.Menu.AddFunction(saveSourceFileFunction, "DOCUMENT");            
 
             SaveManifestFunction saveManifestFunction = new SaveManifestFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveManifestFunction));
             App.Instance.ToolBar.AddFunction(saveManifestFunction);
             App.Instance.Menu.AddFunction(saveManifestFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(saveManifestFunction);
 
             AddFileToManifestFunction addFileManifestFunction = new AddFileToManifestFunction();
             App.Instance.ToolBar.AddFunction(addFileManifestFunction);

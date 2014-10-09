@@ -28,7 +28,8 @@
                   AllowDrop="True"
                   DragOver="listViewItems_DragOver"
                   Drop="listViewItems_Drop"
-                  KeyDown="listViewItems_KeyDown">
+                  KeyDown="listViewItems_KeyDown"
+                  PreviewKeyDown="listViewItems_PreviewKeyDown">
             
             <ListView.Resources>
                 <Style TargetType="{x:Type GridViewColumnHeader}">

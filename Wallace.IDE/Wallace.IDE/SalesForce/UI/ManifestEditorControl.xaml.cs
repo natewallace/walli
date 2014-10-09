@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -200,6 +201,34 @@ namespace Wallace.IDE.SalesForce.UI
 
                     default:
                         break;
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Do a save when Ctrl+S is keyed.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void listViewItems_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            try
+            {
+                if (System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
+                {
+                    switch (e.Key)
+                    {
+                        case System.Windows.Input.Key.S:
+                            App.Instance.GetFunction<SaveManifestFunction>().Execute();
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
             }
             catch (Exception err)

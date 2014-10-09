@@ -80,6 +80,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     presenter.Header = String.Format("Save {0}", manifest.Name);
                     presenter.Icon = VisualHelper.CreateIconHeader(null, "Save.png");
+                    presenter.InputGestureText = "Ctrl+S";
                 }
 
                 canSave = true;
