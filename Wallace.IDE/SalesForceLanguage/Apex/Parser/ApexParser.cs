@@ -2,7 +2,7 @@
 // Copyright (c) Wayne Kelly, QUT 2005-2010
 // (see accompanying GPPGcopyright.rtf)
 
-// Input file <C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 10/8/2014 7:23:06 PM>
+// Input file <C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y - 10/8/2014 12:07:28 PM>
 
 // options: lines gplex
 
@@ -1427,19 +1427,19 @@ public partial class ApexParser: ShiftReduceParser<ApexSyntaxNode, ApexTextSpan>
     switch (action)
     {
       case 181: // statement -> error
-#line 589 "C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 589 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { Error(); }
         break;
       case 182: // statement -> error
-#line 590 "C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 590 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { Error(); }
         break;
       case 304: // class_member_declaration -> error
-#line 798 "C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 798 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { Error(); }
         break;
       case 305: // class_member_declaration -> error
-#line 799 "C:\Users\Nate\Source\Repos\walli\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
+#line 799 "C:\Users\DUX07\Source\Repos\CodePlex\Wallace.IDE\SalesForceLanguage\\Apex\Apex.y"
 { Error(); }
         break;
     }

@@ -31,7 +31,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using Wallace.IDE.Framework;
 
-namespace Wallace.IDE.SalesForce.Framework
+namespace Wallace.IDE.Framework
 {
     /// <summary>
     /// A locally installed browser.

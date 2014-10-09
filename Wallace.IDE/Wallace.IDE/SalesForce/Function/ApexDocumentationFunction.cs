@@ -49,7 +49,7 @@ namespace Wallace.IDE.SalesForce.Function
             try
             {
                 using (App.Wait("Opening apex reference..."))
-                    System.Diagnostics.Process.Start("http://www.salesforce.com/us/developer/docs/apexcode/index_Left.htm");
+                    ClientBrowser.GetDefaultBrowser().OpenUrl("http://www.salesforce.com/us/developer/docs/apexcode/index_Left.htm");
             }
             catch
             {
