@@ -1221,16 +1221,31 @@ namespace Wallace.IDE.Framework.UI
         }
 
         /// <summary>
-        /// Perform search using text entered by user.
+        /// Perform search using text entered by user or execute double click if a carriage return is typed.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
         private void Host_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            _searchTimer.Stop();
-            _searchTextBuilder.Append(e.Text);
-            SearchNodes(_searchTextBuilder.ToString());
-            _searchTimer.Start();
+            try
+            {
+                if (e.Text == "\r")
+                {
+                    if (ActiveNode != null)
+                        ActiveNode.DoubleClick();
+                }
+                else
+                {
+                    _searchTimer.Stop();
+                    _searchTextBuilder.Append(e.Text);
+                    SearchNodes(_searchTextBuilder.ToString());
+                    _searchTimer.Start();
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
         }
 
         /// <summary>
