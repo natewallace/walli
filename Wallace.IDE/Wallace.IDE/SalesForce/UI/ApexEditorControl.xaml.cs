@@ -429,6 +429,16 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Fold or unfold all foldings in the document.
+        /// </summary>
+        /// <param name="isFolded">If true all foldings are folded.  If false, all foldings are unfolded.</param>
+        public void FoldAll(bool isFolded)
+        {
+            foreach (FoldingSection folding in _foldingManager.AllFoldings)
+                folding.IsFolded = isFolded;
+        }
+
+        /// <summary>
         /// Copy selected text to the clipboard.
         /// </summary>
         public void CopyText()

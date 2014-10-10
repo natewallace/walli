@@ -219,6 +219,9 @@ namespace Wallace.IDE.SalesForce.Framework
             TextSearchFunction searchTextFunction = new TextSearchFunction();
             App.Instance.Menu.AddFunction(searchTextFunction, "DOCUMENT");
 
+            FoldAllToggleFunction foldAllFunction = new FoldAllToggleFunction();
+            App.Instance.Menu.AddFunction(foldAllFunction, "DOCUMENT");
+
             NewCheckpointFunction newCheckpointFunction = new NewCheckpointFunction();
             //App.Instance.Menu.AddFunction(newCheckpointFunction, "DOCUMENT");
             //App.Instance.ToolBar.AddFunction(newCheckpointFunction);

@@ -70,7 +70,7 @@ namespace Wallace.IDE.SalesForce.UI
                         int index =  startRegion.Value.IndexOf("//region", StringComparison.CurrentCultureIgnoreCase);
                         index += 8;
                         if (index < startRegion.Value.Length)
-                            folding.Name = String.Format(" {0} ", startRegion.Value.Substring(index).Trim());
+                            folding.Name = String.Format("{0}", startRegion.Value.Substring(index).Trim());
 
                         result.Add(folding);
                     }

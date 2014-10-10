@@ -34,6 +34,15 @@ namespace Wallace.IDE.SalesForce.Document
     /// </summary>
     public class TriggerEditorDocument : SourceFileEditorDocumentBase<ApexEditorControl>
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the FoldAllToggle property.
+        /// </summary>
+        private bool _foldAllToggle;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -45,6 +54,26 @@ namespace Wallace.IDE.SalesForce.Document
             : base(project, apexFile)
         {
             View.MarginDoubleClick += View_MarginDoubleClick;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Get/Set the toggle property that folds or unfolds all folding sections.
+        /// </summary>
+        public bool FoldAllToggle
+        {
+            get
+            {
+                return _foldAllToggle;
+            }
+            set
+            {
+                _foldAllToggle = value;
+                View.FoldAll(_foldAllToggle);
+            }
         }
 
         #endregion
