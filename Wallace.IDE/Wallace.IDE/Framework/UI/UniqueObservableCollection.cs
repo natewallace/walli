@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using System;
 using System.Collections.ObjectModel;
 
 namespace Wallace.IDE.Framework.UI
@@ -41,8 +42,18 @@ namespace Wallace.IDE.Framework.UI
         {
             // prevent duplicates
             foreach (TType i in Items)
-                if (i.Equals(item))
-                    return;
+            {
+                if (i is IComparable)
+                {
+                    if ((i as IComparable).CompareTo(item) == 0)
+                        return;
+                }
+                else
+                {
+                    if (i.Equals(item))
+                        return;
+                }
+            }
 
             base.InsertItem(index, item);
         }
