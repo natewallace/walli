@@ -99,6 +99,7 @@
     <Compile Include="SalesForce\Framework\ReportFilterUserDate.cs" />
     <Compile Include="SalesForce\Framework\SalesForceApplication.cs" />
     <Compile Include="SalesForce\Framework\SecureStringUtility.cs" />
+    <Compile Include="SalesForce\Function\AddCommentFunction.cs" />
     <Compile Include="SalesForce\Function\AddFileToManifestFunction.cs" />
     <Compile Include="SalesForce\Function\ApexDocumentationFunction.cs" />
     <Compile Include="SalesForce\Function\CancelDeployPackageFunction.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="SalesForce\Function\RefreshFolderFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\ReloadSymbolsFunction.cs" />
+    <Compile Include="SalesForce\Function\RemoveCommentFunction.cs" />
     <Compile Include="SalesForce\Function\RunTestsFunction.cs" />
     <Compile Include="SalesForce\Function\SaveManifestFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
@@ -700,6 +702,12 @@
   <ItemGroup>
     <Resource Include="Resources\FoldCollapse.png" />
     <Resource Include="Resources\FoldExpand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AddComment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\RemoveComment.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

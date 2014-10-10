@@ -210,7 +210,15 @@ namespace Wallace.IDE.SalesForce.Framework
 
             TextPasteFunction pasteTextFunction = new TextPasteFunction();
             App.Instance.Menu.AddFunction(pasteTextFunction, "DOCUMENT");
-            App.Instance.Menu.AddFunction(new FunctionSeparator(pasteTextFunction), "DOCUMENT");
+
+            AddCommentFunction addCommentFunction = new AddCommentFunction();
+            App.Instance.Menu.AddFunction(new FunctionSeparator(addCommentFunction), "DOCUMENT");
+            App.Instance.Menu.AddFunction(addCommentFunction, "DOCUMENT");
+            App.Instance.ToolBar.AddFunction(addCommentFunction);
+
+            RemoveCommentFunction removeCommentFunction = new RemoveCommentFunction();
+            App.Instance.Menu.AddFunction(removeCommentFunction, "DOCUMENT");
+            App.Instance.ToolBar.AddFunction(removeCommentFunction);
 
             TextGoToLineFunction goToLineFunction = new TextGoToLineFunction();
             App.Instance.RegisterFunction(goToLineFunction);

@@ -439,6 +439,138 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Comment or uncomment the currently selected text.
+        /// </summary>
+        /// <param name="flag">If true the selected text is commented.  If false the selected text is uncommented.</param>
+        public void CommentSelectedText(bool flag)
+        {
+            if (textEditor.SelectionLength > 0)
+            {
+                // get selected lines
+                List<DocumentLine> lines = new List<DocumentLine>();
+                lines.Add(textEditor.Document.GetLineByOffset(textEditor.SelectionStart));
+                DocumentLine lastLine = textEditor.Document.GetLineByOffset(textEditor.SelectionStart + textEditor.SelectionLength);
+                if (lastLine.LineNumber != lines[0].LineNumber)
+                {
+                    for (int i = lines[0].LineNumber + 1; i < lastLine.LineNumber; i++)
+                        lines.Add(textEditor.Document.GetLineByNumber(i));
+
+                    lines.Add(lastLine);
+                }
+
+                // add comment
+                if (flag)
+                {
+                    // find the line that is left most and normalize whitespace
+                    int leftMostPaddingCount = -1;
+                    for (int i = 0; i < lines.Count; i++)
+                    {
+                        DocumentLine line = lines[i];
+                        string text = textEditor.Document.GetText(line.Offset, line.Length);
+
+                        // throw out empty lines
+                        if (String.IsNullOrWhiteSpace(text))
+                        {
+                            lines.RemoveAt(i);
+                            i--;
+                            continue;
+                        }
+
+                        // get left padding
+                        StringBuilder actualPadding = new StringBuilder();
+                        StringBuilder normPadding = new StringBuilder();
+
+                        bool stop = false;
+                        foreach (char c in text)
+                        {
+                            switch (c)
+                            {
+                                case ' ':
+                                    actualPadding.Append(' ');
+                                    normPadding.Append(' ');
+                                    break;
+
+                                case '\t':
+                                    actualPadding.Append(' ');
+                                    for (int j = 0; j < textEditor.Options.IndentationSize; j++)
+                                        normPadding.Append(' ');
+                                    break;
+
+                                default:
+                                    stop = true;
+                                    break;
+                            }
+
+                            if (stop)
+                                break;
+                        }
+
+                        if (actualPadding.Length != normPadding.Length)
+                            textEditor.Document.Replace(
+                                line.Offset,
+                                actualPadding.Length,
+                                normPadding.ToString());
+
+                        if (leftMostPaddingCount == -1 || normPadding.Length < leftMostPaddingCount)
+                            leftMostPaddingCount = normPadding.Length;
+                    }
+
+                    // apply comment to lines
+                    foreach (DocumentLine line in lines)
+                        textEditor.Document.Insert(line.Offset + leftMostPaddingCount, "//");
+                }
+                // remove comment
+                else
+                {
+                    foreach (DocumentLine line in lines)
+                    {
+                        string text = textEditor.Document.GetText(line.Offset, line.Length);
+                        int index = -1;
+                        char previousChar = '\0';
+
+                        bool stop = false;
+                        for (int i = 0; i < text.Length; i++)
+                        {
+                            switch (text[i])
+                            {
+                                case ' ':
+                                case '\t':
+                                    break;
+
+                                case '/':
+                                    if (previousChar == '/')
+                                    {
+                                        index = i - 1;
+                                        stop = true;
+                                    }
+                                    else
+                                    {
+                                        previousChar = '/';
+                                    }
+                                    break;
+
+                                default:
+                                    stop = true;
+                                    break;
+                            }
+
+                            if (stop == true)
+                                break;
+                        }
+
+                        if (index != -1)
+                        {
+                            textEditor.Document.Replace(
+                                line.Offset + index,
+                                2,
+                                String.Empty);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Copy selected text to the clipboard.
         /// </summary>
         public void CopyText()

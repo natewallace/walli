@@ -134,6 +134,15 @@ namespace Wallace.IDE.SalesForce.Document
             }
         }
 
+        /// <summary>
+        /// Comment or uncomment the currently selected text.
+        /// </summary>
+        /// <param name="flag">If true the selected text is commented.  If false the selected text is uncommented.</param>
+        public void CommentSelectedText(bool flag)
+        {
+            View.CommentSelectedText(flag);
+        }
+
         #endregion
 
         #region Event Handlers
