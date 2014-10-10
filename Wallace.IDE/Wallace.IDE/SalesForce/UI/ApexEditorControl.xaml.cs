@@ -34,6 +34,7 @@ using System.Windows.Resources;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
@@ -117,6 +118,16 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private string _lastTextEntered;
 
+        /// <summary>
+        /// Folding manager used with editor.
+        /// </summary>
+        private FoldingManager _foldingManager;
+
+        /// <summary>
+        /// Folding strategy used with the editor.
+        /// </summary>
+        private ApexFoldingStrategy _foldingStrategy;
+
         #endregion
 
         #region Constructors
@@ -148,6 +159,9 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.TextArea.SelectionForeground = null;
 
             textEditor.TextArea.IndentationStrategy = new ApexIndentationStrategy();
+
+            _foldingManager = FoldingManager.Install(textEditor.TextArea);
+            _foldingStrategy = new ApexFoldingStrategy();
 
             foreach (UIElement marginElement in textEditor.TextArea.LeftMargins)
             {
@@ -225,6 +239,8 @@ namespace Wallace.IDE.SalesForce.UI
                 _suspendParse = true;
                 textEditor.Text = value;
                 _suspendParse = false;
+
+                _foldingStrategy.UpdateFoldings(_foldingManager, textEditor.Document);
 
                 if (IsNavigationVisible)
                 {
@@ -357,11 +373,13 @@ namespace Wallace.IDE.SalesForce.UI
         #region Methods
 
         /// <summary>
-        /// Parse the current text and update navigation.
+        /// Parse the current text and update navigation and foldings.
         /// </summary>
         private void UpdateView()
         {
             ParseText(Text);
+
+            _foldingStrategy.UpdateFoldings(_foldingManager, textEditor.Document);
 
             textEditor.TextArea.TextView.Redraw();
 

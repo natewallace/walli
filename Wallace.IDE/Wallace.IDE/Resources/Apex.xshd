@@ -12,6 +12,8 @@
   <Color name="Alert" foreground="Red" fontWeight="bold" />
   <Color name="Warning" foreground="#EEE0E000" fontWeight="bold" />
   <Color name="Delimiter" foreground="Black" />
+  <Color name="Region" foreground="Blue" />
+  <Color name="RegionName" foreground="Black" />
 
   <!-- Comment markers -->
   <RuleSet name="CommentMarkers" ignoreCase="true">
@@ -27,9 +29,34 @@
     </Keywords>
 
   </RuleSet>
+  
+  <!-- Region name -->
+  <RuleSet name="RegionName" ignoreCase="true">
+    
+    <Span color="RegionName">
+      <Begin>.</Begin>
+    </Span>
+    
+  </RuleSet>
 
   <!-- Main ruleset -->
   <RuleSet ignoreCase="true">
+    
+    <!-- Start region -->
+    <Span color="Region">
+      <Begin>//region</Begin>
+      <RuleSet>
+        <Import ruleSet="RegionName" />
+      </RuleSet>
+    </Span>
+    
+    <!-- End region -->
+    <Span color="Region">
+      <Begin>//endregion</Begin>
+      <RuleSet>
+        <Import ruleSet="RegionName" />
+      </RuleSet>      
+    </Span>
 
     <!-- Line comment -->
     <Span color="Comment">
