@@ -159,7 +159,12 @@ namespace Wallace.IDE.SalesForce.Framework
             SaveSourceFileFunction saveSourceFileFunction = new SaveSourceFileFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSourceFileFunction));
             App.Instance.ToolBar.AddFunction(saveSourceFileFunction);
-            App.Instance.Menu.AddFunction(saveSourceFileFunction, "DOCUMENT");            
+            App.Instance.Menu.AddFunction(saveSourceFileFunction, "DOCUMENT");
+
+            SaveSourceFileDataFunction saveSourceFileDataFunction = new SaveSourceFileDataFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSourceFileDataFunction));
+            App.Instance.ToolBar.AddFunction(saveSourceFileDataFunction);
+            App.Instance.Menu.AddFunction(saveSourceFileDataFunction, "DOCUMENT");
 
             SaveManifestFunction saveManifestFunction = new SaveManifestFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveManifestFunction));
@@ -189,7 +194,15 @@ namespace Wallace.IDE.SalesForce.Framework
 
             RefreshSourceFileFunction refreshDocumentFunction = new RefreshSourceFileFunction();
             App.Instance.ToolBar.AddFunction(refreshDocumentFunction);
-            App.Instance.Menu.AddFunction(refreshDocumentFunction, "DOCUMENT");            
+            App.Instance.Menu.AddFunction(refreshDocumentFunction, "DOCUMENT");
+
+            ExportSourceFileDataFunction exportDataFunction = new ExportSourceFileDataFunction();
+            App.Instance.ToolBar.AddFunction(exportDataFunction);
+            App.Instance.Menu.AddFunction(exportDataFunction, "DOCUMENT");
+
+            ImportSourceFileDataFunction importDataFunction = new ImportSourceFileDataFunction();
+            App.Instance.ToolBar.AddFunction(importDataFunction);
+            App.Instance.Menu.AddFunction(importDataFunction, "DOCUMENT");
 
             TextUndoFunction undoTextFunction = new TextUndoFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(undoTextFunction), "DOCUMENT");

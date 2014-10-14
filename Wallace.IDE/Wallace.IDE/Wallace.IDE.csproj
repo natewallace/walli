@@ -111,7 +111,9 @@
     <Compile Include="SalesForce\Function\DeletePackageFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
     <Compile Include="SalesForce\Function\DeployPackageFunction.cs" />
+    <Compile Include="SalesForce\Function\ExportSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\FoldAllToggleFunction.cs" />
+    <Compile Include="SalesForce\Function\ImportSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\NewCheckpointFunction.cs" />
     <Compile Include="SalesForce\Function\NewComponentFunction.cs" />
     <Compile Include="SalesForce\Function\NewManifestFromReportFunction.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="SalesForce\Function\RemoveCommentFunction.cs" />
     <Compile Include="SalesForce\Function\RunTestsFunction.cs" />
     <Compile Include="SalesForce\Function\SaveManifestFunction.cs" />
+    <Compile Include="SalesForce\Function\SaveSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\PropertiesFunction.cs" />
     <Compile Include="SalesForce\Function\TestManagerFunction.cs" />
@@ -708,6 +711,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\RemoveComment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ExportDocument.png" />
+    <Resource Include="Resources\ImportDocument.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

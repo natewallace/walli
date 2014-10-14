@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,6 +91,18 @@ namespace SalesForceData
                     throw new Exception("Unsupported type: " + file.FileType.Name);
             }
         }
+
+        /// <summary>
+        /// Write the data out to the given stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        public abstract void WriteToStream(Stream stream);
+
+        /// <summary>
+        /// Read the data in from the given stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        public abstract void ReadFromStream(Stream stream);
 
         #endregion
     }

@@ -33,6 +33,15 @@ namespace Wallace.IDE.SalesForce.Document
     /// </summary>
     public class SourceFileEditorDocument : SourceFileEditorDocumentBase<SourceFileEditorControl>
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports Data property.
+        /// </summary>
+        private SourceFileData _data;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -44,6 +53,37 @@ namespace Wallace.IDE.SalesForce.Document
             : base(project, file)
         {
             View.ViewChanged += View_ViewChanged;
+        }
+
+        #endregion
+
+        #region Property
+
+        /// <summary>
+        /// The data for this object if there is any.
+        /// </summary>
+        public SourceFileData Data
+        {
+            get 
+            {
+                if (View.DataView is ProfileEditorControl)
+                    (View.DataView as ProfileEditorControl).CommitChanges();
+
+                return _data; 
+            }
+            set
+            {
+                _data = value;
+                if (_data is ProfileData)
+                    View.DataView = new ProfileEditorControl(_data as ProfileData);
+                else if (_data == null)
+                {
+                    if (View.DataView is ProfileEditorControl)
+                        (View.DataView as ProfileEditorControl).Profile = null;
+
+                    View.DataView = null;
+                }
+            }
         }
 
         #endregion
@@ -61,8 +101,7 @@ namespace Wallace.IDE.SalesForce.Document
             switch (File.FileType.Name)
             {
                 case "Profile":
-                    // future enhancement
-                    //dataTask = Task.Run<SourceFileData>(() => Project.Client.GetSourceFileData(File));
+                    dataTask = Task.Run<SourceFileData>(() => Project.Client.GetSourceFileData(File));
                     break;
 
                 default:
@@ -74,29 +113,71 @@ namespace Wallace.IDE.SalesForce.Document
 
             if (proceed)
             {
-                // wait for data to load
-                if (dataTask != null)
+                using (App.Wait("Refreshing data"))
                 {
-                    dataTask.Wait(System.TimeSpan.FromMinutes(1));
-                    if (dataTask.Exception != null)
-                        throw new Exception(dataTask.Exception.Message, dataTask.Exception);
-
-                    if (dataTask.Result is ProfileData)
+                    // wait for data to load
+                    if (dataTask != null)
                     {
-                        View.DataView = new ProfileEditorControl(dataTask.Result as ProfileData);
-                    }
+                        dataTask.Wait(System.TimeSpan.FromMinutes(1));
+                        if (dataTask.Exception != null)
+                            throw new Exception(dataTask.Exception.Message, dataTask.Exception);
 
-                    View.IsTabStripVisible = true;
-                    View.IsDataVisible = true;
-                }
-                else
-                {
-                    View.IsTabStripVisible = false;
-                    View.IsSourceVisible = true;
+                        Data = dataTask.Result;
+                        View.IsTabStripVisible = true;
+                        View.IsDataVisible = true;
+                    }
+                    else
+                    {
+                        View.IsTabStripVisible = false;
+                        View.IsSourceVisible = true;
+                    }
                 }
             }
 
             return proceed;
+        }
+
+        /// <summary>
+        /// Save the data object.
+        /// </summary>
+        public void SaveData()
+        {
+            if (Data != null)
+            {
+                using (App.Wait("Saving data"))
+                    Project.Client.SaveSourceFileData(Data);
+            }
+        }
+
+        /// <summary>
+        /// Export the data to the given file.
+        /// </summary>
+        /// <param name="file">The file to export the data to.</param>
+        public void ExportData(string file)
+        {
+            if (Data == null)
+                throw new Exception("There is no data to export.");
+
+            using (System.IO.Stream stream = System.IO.File.Open(file, System.IO.FileMode.Create))
+                Data.WriteToStream(stream);
+        }
+
+        /// <summary>
+        /// Import data from the given file.
+        /// </summary>
+        /// <param name="file">The file to import the data from.</param>
+        public void ImportData(string file)
+        {
+            if (Data == null)
+                throw new Exception("There is no data to import to.");
+
+            SourceFileData data = Data;
+            Data = null;
+
+            using (System.IO.Stream stream = System.IO.File.Open(file, System.IO.FileMode.Open))
+                data.ReadFromStream(stream);
+
+            Data = data;
         }
 
         #endregion

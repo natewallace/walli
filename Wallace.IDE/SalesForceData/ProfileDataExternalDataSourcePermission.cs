@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +52,7 @@ namespace SalesForceData
         /// <summary>
         /// The name.
         /// </summary>
+        [DisplayName("External Data Source")]
         public string ExternalDataSourceName
         {
             get { return Data.externalDataSource; }

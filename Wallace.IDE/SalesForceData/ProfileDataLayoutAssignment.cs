@@ -52,6 +52,7 @@ namespace SalesForceData
         /// <summary>
         /// The layout name.
         /// </summary>
+        [DisplayName("Layout")]
         public string LayoutName
         {
             get { return Data.layout; }

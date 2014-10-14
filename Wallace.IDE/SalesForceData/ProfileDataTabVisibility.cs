@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +52,7 @@ namespace SalesForceData
         /// <summary>
         /// The tab name.
         /// </summary>
+        [DisplayName("Tab")]
         public string TabName
         {
             get { return Data.tab; }

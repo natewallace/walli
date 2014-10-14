@@ -52,6 +52,7 @@ namespace SalesForceData
         /// <summary>
         /// Record type name.
         /// </summary>
+        [DisplayName("Record Type")]
         public string RecordTypeName
         {
             get { return Data.recordType; }
@@ -61,6 +62,7 @@ namespace SalesForceData
         /// <summary>
         /// Person account default.
         /// </summary>
+        [DisplayName("User Default")]
         public bool PersonAccountDefaultVisible
         {
             get { return Data.personAccountDefault; }

@@ -91,6 +91,8 @@ namespace Wallace.IDE.SalesForce.UI
                 _profile = value;
                 if (_profile != null)
                 {
+                    textBlockTitle.Text = _profile.Name;
+                    textBlockDescription.Text = _profile.Description;
                     dataGridApplication.ItemsSource = _profile.ApplicationVisibilities;
                     dataGridClass.ItemsSource = _profile.ClassAccess;
                     dataGridExternal.ItemsSource = _profile.ExternalDataSourcePermissions;
@@ -107,6 +109,8 @@ namespace Wallace.IDE.SalesForce.UI
                 }
                 else
                 {
+                    textBlockTitle.Text = null;
+                    textBlockDescription.Text = null;
                     dataGridApplication.ItemsSource = null;
                     dataGridClass.ItemsSource = null;
                     dataGridExternal.ItemsSource = null;
@@ -122,6 +126,30 @@ namespace Wallace.IDE.SalesForce.UI
                     dataGridTab.ItemsSource = null;
                 }
             }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Commit any changes that are currently pending.
+        /// </summary>
+        public void CommitChanges()
+        {
+            dataGridApplication.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridClass.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridExternal.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridField.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridLayout.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridLoginHours.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridLoginIPRanges.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridObject.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridPage.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridProfile.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridRecordType.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridUser.CommitEdit(DataGridEditingUnit.Row, true);
+            dataGridTab.CommitEdit(DataGridEditingUnit.Row, true);
         }
 
         #endregion
