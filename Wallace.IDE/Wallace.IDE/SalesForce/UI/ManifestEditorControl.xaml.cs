@@ -223,7 +223,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         /// <param name="sender">The object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
-        private void listViewItems_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void control_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             try
             {

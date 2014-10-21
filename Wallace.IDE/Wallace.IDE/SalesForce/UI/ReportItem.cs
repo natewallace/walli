@@ -115,7 +115,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         public string ChangedOn
         {
-            get { return File.ChangedOn.ToString(); }
+            get { return File.ChangedOn.ToString("MM/dd/yy HH:mm:ss tt"); }
         }
         
         /// <summary>
@@ -131,7 +131,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         public string CreatedOn
         {
-            get { return File.CreatedOn.ToString(); }
+            get { return File.CreatedOn.ToString("MM/dd/yy HH:mm:ss tt"); }
         }
                 
         /// <summary>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid PreviewKeyDown="control_PreviewKeyDown">
         <Grid.RowDefinitions>
             <RowDefinition Height="75" MinHeight="75" />
             <RowDefinition Height="Auto" />
@@ -57,8 +57,7 @@
                   AllowDrop="True"
                   DragOver="listViewItems_DragOver"
                   Drop="listViewItems_Drop"
-                  KeyDown="listViewItems_KeyDown"
-                  PreviewKeyDown="listViewItems_PreviewKeyDown">
+                  KeyDown="listViewItems_KeyDown">
             
             <ListView.Resources>
                 <Style TargetType="{x:Type GridViewColumnHeader}">
