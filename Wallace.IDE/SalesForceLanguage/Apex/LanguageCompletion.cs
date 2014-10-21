@@ -854,8 +854,9 @@ namespace SalesForceLanguage.Apex
                     parts.RemoveAt(i);
                     i--;
                 }
-                // remove if statements
-                else if (parts[i] == "if()")
+                // remove if and for statements
+                else if (parts[i] == "if()" ||
+                         parts[i] == "for()")
                 {
                     parts.RemoveAt(i);
                     i--;
