@@ -164,6 +164,14 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(manifestMergeReport);
             App.Instance.Menu.AddFunction(manifestMergeReport, "DOCUMENT");
 
+            SelectReportItemsNoneFunction selectNoneReportFunction = new SelectReportItemsNoneFunction();
+            App.Instance.ToolBar.AddFunction(selectNoneReportFunction);
+            App.Instance.Menu.AddFunction(selectNoneReportFunction, "DOCUMENT");
+
+            SelectReportItemsAllFunction selectAllReportFunction = new SelectReportItemsAllFunction();
+            App.Instance.ToolBar.AddFunction(selectAllReportFunction);
+            App.Instance.Menu.AddFunction(selectAllReportFunction, "DOCUMENT");
+
             SaveSourceFileFunction saveSourceFileFunction = new SaveSourceFileFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSourceFileFunction));
             App.Instance.ToolBar.AddFunction(saveSourceFileFunction);

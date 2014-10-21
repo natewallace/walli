@@ -137,6 +137,8 @@
     <Compile Include="SalesForce\Function\SaveSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\PropertiesFunction.cs" />
+    <Compile Include="SalesForce\Function\SelectReportItemsAllFunction.cs" />
+    <Compile Include="SalesForce\Function\SelectReportItemsNoneFunction.cs" />
     <Compile Include="SalesForce\Function\TestManagerFunction.cs" />
     <Compile Include="SalesForce\Function\TextCopyFunction.cs" />
     <Compile Include="SalesForce\Function\TextCutFunction.cs" />
@@ -233,9 +235,6 @@
       <DependentUpon>PropertiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Framework\UI\TreeViewMultiSelectItem.cs" />
-    <Compile Include="SalesForce\UI\SourceReportControl.xaml.cs">
-      <DependentUpon>SourceReportControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SalesForce\UI\TestManagerWindow.xaml.cs">
       <DependentUpon>TestManagerWindow.xaml</DependentUpon>
     </Compile>
@@ -395,10 +394,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\PropertiesWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SalesForce\UI\SourceReportControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -724,6 +719,10 @@
   <ItemGroup>
     <Resource Include="Resources\ExportDocument.png" />
     <Resource Include="Resources\ImportDocument.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\SelectAll.png" />
+    <Resource Include="Resources\SelectNone.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

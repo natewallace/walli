@@ -25,56 +25,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SalesForceData;
 using Wallace.IDE.Framework;
-using Wallace.IDE.SalesForce.UI;
+using Wallace.IDE.SalesForce.Document;
 
-namespace Wallace.IDE.SalesForce.Document
+namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Displays a report.
+    /// Select all items in the current report.
     /// </summary>
-    public class ReportDocument : DocumentBase
+    public class SelectReportItemsAllFunction : FunctionBase
     {
-        #region Constructors
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="reportItems">ReportItems.</param>
-        public ReportDocument(SourceFile[] reportItems)
-        {
-            if (reportItems == null)
-                throw new ArgumentNullException("reportItems");
-
-            ReportItems = reportItems;
-
-            View = new ReportControl();
-            View.ReportItems = ReportItems;
-        }
-
-        #endregion
-
         #region Properties
 
         /// <summary>
-        /// The view for this document.
+        /// The current manifest document or null if there isn't one.
         /// </summary>
-        private ReportControl View { get; set; }
-
-        /// <summary>
-        /// The items that make up the report.
-        /// </summary>
-        public SourceFile[] ReportItems { get; private set; }
-
-        /// <summary>
-        /// The currently selected items in the report.
-        /// </summary>
-        public SourceFile[] SelectedReportItems
+        private ReportDocument CurrentDocument
         {
             get
             {
-                return View.SelectedReportItems.ToArray();
+                if (App.Instance.SalesForceApp.CurrentProject != null)
+                    return App.Instance.Content.ActiveDocument as ReportDocument;
+                else
+                    return null;
             }
         }
 
@@ -83,31 +56,42 @@ namespace Wallace.IDE.SalesForce.Document
         #region Methods
 
         /// <summary>
-        /// Select all items in the document.
+        /// Set the header.
         /// </summary>
-        public void SelectAll()
+        /// <param name="host">The type of host.</param>
+        /// <param name="presenter">The presenter to use.</param>
+        public override void Init(FunctionHost host, IFunctionPresenter presenter)
         {
-            View.SelectAll();
-        }
-
-        /// <summary>
-        /// Unselect all items in the document.
-        /// </summary>
-        public void SelectNone()
-        {
-            View.SelectNone();
-        }
-
-        /// <summary>
-        /// Set the title and view.
-        /// </summary>
-        /// <param name="isFirstUpdate">true if this is the first update.</param>
-        public override void Update(bool isFirstUpdate)
-        {
-            if (isFirstUpdate)
+            if (host == FunctionHost.Toolbar)
             {
-                Presenter.Header = VisualHelper.CreateIconHeader("Report", "Report.png");
-                Presenter.Content = View;
+                presenter.Header = VisualHelper.CreateIconHeader(null, "SelectAll.png");
+                presenter.ToolTip = "Select All";
+            }
+            else
+            {
+                presenter.Header = "Select All";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "SelectAll.png");
+            }
+        }
+
+        /// <summary>
+        /// Update the visibility.
+        /// </summary>
+        /// <param name="host">The type of host for this function.</param>
+        /// <param name="presenter">The presenter to use when updating the view.</param>
+        public override void Update(FunctionHost host, IFunctionPresenter presenter)
+        {
+            IsVisible = (CurrentDocument != null);
+        }
+
+        /// <summary>
+        /// Select all items in the current report.
+        /// </summary>
+        public override void Execute()
+        {
+            if (CurrentDocument != null)
+            {
+                CurrentDocument.SelectAll();
             }
         }
 

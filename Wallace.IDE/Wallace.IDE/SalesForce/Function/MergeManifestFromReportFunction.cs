@@ -68,11 +68,11 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "MergeManifest.png");
-                presenter.ToolTip = "Merge report into manifest...";
+                presenter.ToolTip = "Merge selected report items into manifest...";
             }
             else
             {
-                presenter.Header = "Merge report into manifest...";
+                presenter.Header = "Merge selected report items into manifest...";
                 presenter.Icon = VisualHelper.CreateIconHeader(null, "MergeManifest.png");
             }
         }
@@ -88,7 +88,7 @@ namespace Wallace.IDE.SalesForce.Function
         }
 
         /// <summary>
-        /// Opens a new data edit view.
+        /// Merge selected report items into manifest.
         /// </summary>
         public override void Execute()
         {

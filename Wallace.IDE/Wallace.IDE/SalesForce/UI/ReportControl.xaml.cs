@@ -111,6 +111,32 @@ namespace Wallace.IDE.SalesForce.UI
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Select all items in the report.
+        /// </summary>
+        public void SelectAll()
+        {
+            IEnumerable<ReportItem> items = dataGridFiles.ItemsSource as IEnumerable<ReportItem>;
+            if (items != null)
+                foreach (ReportItem item in items)
+                    item.IsSelected = true;
+        }
+
+        /// <summary>
+        /// Unselect all items in the report.
+        /// </summary>
+        public void SelectNone()
+        {
+            IEnumerable<ReportItem> items = dataGridFiles.ItemsSource as IEnumerable<ReportItem>;
+            if (items != null)
+                foreach (ReportItem item in items)
+                    item.IsSelected = false;
+        }
+
+        #endregion
+
         #region Event Handlers
 
         /// <summary>

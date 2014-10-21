@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,8 +33,17 @@ namespace Wallace.IDE.SalesForce.UI
     /// <summary>
     /// A single report item in a report.
     /// </summary>
-    public class ReportItem
+    public class ReportItem : INotifyPropertyChanged
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the IsSelected property.
+        /// </summary>
+        private bool _isSelected;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -60,7 +70,21 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// Is set to true when selected by the user.
         /// </summary>
-        public bool IsSelected { get; set; }
+        public bool IsSelected 
+        {
+            get
+            {
+                return _isSelected;
+            }
+            set
+            {
+                if (value != _isSelected)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsSelected"));
+                }
+            }
+        }
 
         /// <summary>
         /// The file type.
@@ -125,6 +149,29 @@ namespace Wallace.IDE.SalesForce.UI
         {
             get { return File.State.ToString(); }
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Raises the PropertyChanged event.
+        /// </summary>
+        /// <param name="e">Arguments to pass with the event.</param>
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raised when a property is changed.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
     }
