@@ -289,6 +289,8 @@ namespace Wallace.IDE.SalesForce.Document
                 SalesForceData.SourceFile[] files = e.Data.GetData("SalesForceData.SourceFile[]") as SalesForceData.SourceFile[];
                 foreach (SalesForceData.SourceFile file in files)
                     Files.Add(file);
+
+                IsDirty = true;
             }
             else if (formats != null && formats.Contains("SalesForceData.Manifest[]"))
             {
@@ -298,16 +300,16 @@ namespace Wallace.IDE.SalesForce.Document
                     message = String.Format("Merge the {0} selected manifests with this one?", manifests.Length);
 
                 if (App.MessageUser(message,
-                                "Merge Manifests",
-                                System.Windows.MessageBoxImage.Question,
-                                new string[] { "Yes", "No" }) == "Yes")
+                                    "Merge Manifests",
+                                    System.Windows.MessageBoxImage.Question,
+                                    new string[] { "Yes", "No" }) == "Yes")
                 {
                     foreach (Manifest m in manifests)
                         Merge(m);
+
+                    IsDirty = true;
                 }
             }
-
-            IsDirty = true;
         }
 
         /// <summary>
