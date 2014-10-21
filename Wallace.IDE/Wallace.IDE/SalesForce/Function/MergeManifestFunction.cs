@@ -35,32 +35,32 @@ using Wallace.IDE.SalesForce.UI;
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Create a new manifest from a report.
+    /// Merge one manifest into another.
     /// </summary>
-    public class NewManifestFromReportFunction : FunctionBase
+    public class MergeManifestFunction : FunctionBase
     {
-        #region Properties
-
-        /// <summary>
-        /// The current manifest document or null if there isn't one.
-        /// </summary>
-        private ReportDocument CurrentDocument
-        {
-            get
-            {
-                if (App.Instance.SalesForceApp.CurrentProject != null)
-                    return App.Instance.Content.ActiveDocument as ReportDocument;
-                else
-                    return null;
-            }
-        }
-
-        #endregion
-
         #region Methods
 
         /// <summary>
-        /// Set the header.
+        /// Gets the currently selected manifest or null if there isn't one.
+        /// </summary>
+        /// <returns>The currently selected manifest or null if there isn't one.</returns>
+        private Manifest GetSelectedManifest()
+        {
+            if (App.Instance.SalesForceApp.CurrentProject != null &&
+                App.Instance.Navigation.SelectedNodes.Count == 1 &&
+                App.Instance.Navigation.SelectedNodes[0] is ManifestNode)
+            {
+                return (App.Instance.Navigation.SelectedNodes[0] as ManifestNode).Manifest;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Set the header .
         /// </summary>
         /// <param name="host">The type of host.</param>
         /// <param name="presenter">The presenter to use.</param>
@@ -68,57 +68,50 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "NewManifest.png");
-                presenter.ToolTip = "New manifest from report...";
+                presenter.Header = VisualHelper.CreateIconHeader(null, "MergeManifest.png");
+                presenter.ToolTip = "Merge Manifests...";
             }
             else
             {
-                presenter.Header = "New manifest from report...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "NewManifest.png");
-            }
+                presenter.Header = "Merge Manifests...";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "MergeManifest.png");
+            }           
         }
 
         /// <summary>
-        /// Update the visibility.
+        /// Set the header based on the currently selected manifest.
         /// </summary>
-        /// <param name="host">The type of host for this function.</param>
-        /// <param name="presenter">The presenter to use when updating the view.</param>
+        /// <param name="host">The type of host.</param>
+        /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (CurrentDocument != null);
+            IsVisible = (App.Instance.SalesForceApp.CurrentProject != null);
         }
 
         /// <summary>
-        /// Opens a new data edit view.
+        /// Merge manifests.
         /// </summary>
         public override void Execute()
         {
-            if (CurrentDocument != null)
+            Project project = App.Instance.SalesForceApp.CurrentProject;
+            if (project != null)
             {
-                Project project = App.Instance.SalesForceApp.CurrentProject;
+                Manifest[] manifests = project.GetManifests();
+                Manifest manifest = GetSelectedManifest();
 
-                EnterValueWindow dlg = new EnterValueWindow();
-                dlg.Title = "Create Manifest";
-                dlg.ActionLabel = "Enter Manifest Name:";
-                dlg.ActionLabel = "Create";
+                MergeManifestWindow dlg = new MergeManifestWindow();
+                dlg.ManifestSources = manifests;
+                dlg.ManifestTargets = manifests;
+                dlg.ManifestSource = GetSelectedManifest();
                 if (App.ShowDialog(dlg))
                 {
-                    Manifest manifest = new Manifest(System.IO.Path.Combine(
-                        project.ManifestFolder,
-                        String.Format("{0}.manifest", dlg.EnteredValue)));
+                    IDocument[] targetDocuments = App.Instance.Content.GetDocumentsByEntity(dlg.ManifestTarget);
+                    ManifestEditorDocument targetDocument = targetDocuments.FirstOrDefault(d => d is ManifestEditorDocument) as ManifestEditorDocument;
+                    if (targetDocument == null)
+                        targetDocument = new ManifestEditorDocument(project, dlg.ManifestTarget);
 
-                    if (App.Instance.SalesForceApp.CurrentProject.GetManifests().Contains(manifest))
-                        throw new Exception("There is already a manifest named: " + manifest.Name);
-
-                    foreach (SourceFile file in CurrentDocument.SelectedReportItems)
-                        manifest.AddItem(file);
-                    manifest.Save();
-
-                    ManifestFolderNode manifestFolderNode = App.Instance.Navigation.GetNode<ManifestFolderNode>();
-                    if (manifestFolderNode != null)
-                        manifestFolderNode.AddManifest(manifest);
-
-                    App.Instance.Content.OpenDocument(new ManifestEditorDocument(project, manifest));
+                    targetDocument.Merge(dlg.ManifestSource);
+                    App.Instance.Content.OpenDocument(targetDocument);
                 }
             }
         }

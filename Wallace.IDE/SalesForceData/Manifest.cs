@@ -87,6 +87,20 @@ namespace SalesForceData
         #region Methods
 
         /// <summary>
+        /// Merge the given manifest into this one.
+        /// </summary>
+        /// <param name="manifest">The manifest to merge with this one.</param>
+        public void Merge(Manifest manifest)
+        {
+            if (manifest == null)
+                throw new ArgumentNullException("manifest");
+
+            foreach (ManifestItemGroup group in manifest.Groups)
+                foreach (ManifestItem item in group.Items)
+                    this.AddItem(new SourceFile(group.Name, item.Name));
+        }
+
+        /// <summary>
         /// Delete this manifest.
         /// </summary>
         public void Delete()
@@ -314,6 +328,15 @@ namespace SalesForceData
                 return 0;
             else
                 return FileName.ToLower().GetHashCode();
+        }
+
+        /// <summary>
+        /// Returns the name of the manifest.
+        /// </summary>
+        /// <returns>The name of the manifest.</returns>
+        public override string ToString()
+        {
+            return Name;
         }
 
         #endregion

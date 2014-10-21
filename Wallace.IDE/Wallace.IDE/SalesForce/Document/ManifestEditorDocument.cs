@@ -121,9 +121,7 @@ namespace Wallace.IDE.SalesForce.Document
                 if (_isDirty != value)
                 {
                     _isDirty = value;
-                    Presenter.Header = _isDirty ? VisualHelper.CreateIconHeader(Manifest.Name, "Manifest.png", "*") :
-                                                  VisualHelper.CreateIconHeader(Manifest.Name, "Manifest.png");
-                    Presenter.ToolTip = Manifest.FileName;
+                    SetHeader();
                     App.Instance.UpdateWorkspaces();
                 }
             }
@@ -132,6 +130,33 @@ namespace Wallace.IDE.SalesForce.Document
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Set the header based on the current state.
+        /// </summary>
+        private void SetHeader()
+        {
+            if (Presenter != null)
+            {
+                Presenter.Header = _isDirty ? VisualHelper.CreateIconHeader(Manifest.Name, "Manifest.png", "*") :
+                                              VisualHelper.CreateIconHeader(Manifest.Name, "Manifest.png");
+                Presenter.ToolTip = Manifest.FileName;
+            }
+        }
+
+        /// <summary>
+        /// Merge in files from the given manifest.
+        /// </summary>
+        /// <param name="manifest">The manifest to merge with this one.</param>
+        public void Merge(Manifest manifest)
+        {
+            if (manifest == null)
+                throw new ArgumentNullException("manifest");
+
+            foreach (ManifestItemGroup group in manifest.Groups)
+                foreach (ManifestItem item in group.Items)
+                    AddFile(new SourceFile(group.Name, item.Name));
+        }
 
         /// <summary>
         /// Add the given file to the manifest.
@@ -167,8 +192,7 @@ namespace Wallace.IDE.SalesForce.Document
         {
             if (isFirstUpdate)
             {
-                Presenter.Header = VisualHelper.CreateIconHeader(Manifest.Name, "Manifest.png");
-                Presenter.ToolTip = Manifest.FileName;
+                SetHeader();
                 Presenter.Content = View;
             }
         }

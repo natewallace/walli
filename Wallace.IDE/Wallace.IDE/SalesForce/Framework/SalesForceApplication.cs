@@ -122,6 +122,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(newReport);
             App.Instance.Menu.AddFunction(newReport, "PROJECT");
 
+            MergeManifestFunction mergeManifestFunction = new MergeManifestFunction();
+            App.Instance.Menu.AddFunction(mergeManifestFunction, "PROJECT");
+            App.Instance.RegisterFunction(mergeManifestFunction);
+
             TestManagerFunction testManager = new TestManagerFunction();
             App.Instance.Menu.AddFunction(testManager, "PROJECT");
 
@@ -155,6 +159,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(manifestReport));
             App.Instance.ToolBar.AddFunction(manifestReport);
             App.Instance.Menu.AddFunction(manifestReport, "DOCUMENT");
+
+            MergeManifestFromReportFunction manifestMergeReport = new MergeManifestFromReportFunction();
+            App.Instance.ToolBar.AddFunction(manifestMergeReport);
+            App.Instance.Menu.AddFunction(manifestMergeReport, "DOCUMENT");
 
             SaveSourceFileFunction saveSourceFileFunction = new SaveSourceFileFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSourceFileFunction));

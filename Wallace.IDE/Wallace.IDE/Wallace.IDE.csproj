@@ -114,6 +114,8 @@
     <Compile Include="SalesForce\Function\ExportSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\FoldAllToggleFunction.cs" />
     <Compile Include="SalesForce\Function\ImportSourceFileDataFunction.cs" />
+    <Compile Include="SalesForce\Function\MergeManifestFromReportFunction.cs" />
+    <Compile Include="SalesForce\Function\MergeManifestFunction.cs" />
     <Compile Include="SalesForce\Function\NewCheckpointFunction.cs" />
     <Compile Include="SalesForce\Function\NewComponentFunction.cs" />
     <Compile Include="SalesForce\Function\NewManifestFromReportFunction.cs" />
@@ -187,6 +189,9 @@
     <Compile Include="SalesForce\UI\ApexMethodInsightProvider.cs" />
     <Compile Include="SalesForce\UI\EditCheckpointWindow.xaml.cs">
       <DependentUpon>EditCheckpointWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\MergeManifestWindow.xaml.cs">
+      <DependentUpon>MergeManifestWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\NewPackageWindow.xaml.cs">
       <DependentUpon>NewPackageWindow.xaml</DependentUpon>
@@ -334,6 +339,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\EditCheckpointWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\MergeManifestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -694,7 +703,7 @@
     <Resource Include="Resources\Report.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\ManifestFromReport.png" />
+    <Resource Include="Resources\MergeManifest.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Checkpoint.png" />

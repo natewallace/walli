@@ -132,6 +132,7 @@ namespace Wallace.IDE.SalesForce.Node
                 base.GetContextFunctions(),
                 new IFunction[] 
                 {
+                    App.Instance.GetFunction<MergeManifestFunction>(),
                     App.Instance.GetFunction<DeleteManifestFunction>()
                 });
         }

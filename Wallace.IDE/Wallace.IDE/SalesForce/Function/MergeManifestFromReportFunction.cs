@@ -29,15 +29,14 @@ using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.Node;
 using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Create a new manifest from a report.
+    /// Function to merge report items into a manifest.
     /// </summary>
-    public class NewManifestFromReportFunction : FunctionBase
+    public class MergeManifestFromReportFunction : FunctionBase
     {
         #region Properties
 
@@ -68,13 +67,13 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "NewManifest.png");
-                presenter.ToolTip = "New manifest from report...";
+                presenter.Header = VisualHelper.CreateIconHeader(null, "MergeManifest.png");
+                presenter.ToolTip = "Merge report into manifest...";
             }
             else
             {
-                presenter.Header = "New manifest from report...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "NewManifest.png");
+                presenter.Header = "Merge report into manifest...";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "MergeManifest.png");
             }
         }
 
@@ -97,28 +96,26 @@ namespace Wallace.IDE.SalesForce.Function
             {
                 Project project = App.Instance.SalesForceApp.CurrentProject;
 
-                EnterValueWindow dlg = new EnterValueWindow();
-                dlg.Title = "Create Manifest";
-                dlg.ActionLabel = "Enter Manifest Name:";
-                dlg.ActionLabel = "Create";
+                // create the source manifest
+                SourceFile[] files = CurrentDocument.SelectedReportItems;
+                Manifest manifest = new Manifest(String.Format("{0} files selected from report", files.Length));
+                foreach (SourceFile file in files)
+                    manifest.AddItem(file);
+
+                MergeManifestWindow dlg = new MergeManifestWindow();
+                dlg.ManifestSources = new Manifest[] { manifest };
+                dlg.ManifestSource = manifest;
+                dlg.ManifestTargets = project.GetManifests();
+
                 if (App.ShowDialog(dlg))
                 {
-                    Manifest manifest = new Manifest(System.IO.Path.Combine(
-                        project.ManifestFolder,
-                        String.Format("{0}.manifest", dlg.EnteredValue)));
+                    IDocument[] targetDocuments = App.Instance.Content.GetDocumentsByEntity(dlg.ManifestTarget);
+                    ManifestEditorDocument targetDocument = targetDocuments.FirstOrDefault(d => d is ManifestEditorDocument) as ManifestEditorDocument;
+                    if (targetDocument == null)
+                        targetDocument = new ManifestEditorDocument(project, dlg.ManifestTarget);
 
-                    if (App.Instance.SalesForceApp.CurrentProject.GetManifests().Contains(manifest))
-                        throw new Exception("There is already a manifest named: " + manifest.Name);
-
-                    foreach (SourceFile file in CurrentDocument.SelectedReportItems)
-                        manifest.AddItem(file);
-                    manifest.Save();
-
-                    ManifestFolderNode manifestFolderNode = App.Instance.Navigation.GetNode<ManifestFolderNode>();
-                    if (manifestFolderNode != null)
-                        manifestFolderNode.AddManifest(manifest);
-
-                    App.Instance.Content.OpenDocument(new ManifestEditorDocument(project, manifest));
+                    targetDocument.Merge(dlg.ManifestSource);
+                    App.Instance.Content.OpenDocument(targetDocument);
                 }
             }
         }
