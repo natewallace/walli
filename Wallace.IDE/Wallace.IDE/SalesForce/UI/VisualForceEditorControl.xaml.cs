@@ -31,6 +31,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 using SalesForceLanguage;
+using SalesForceLanguage.Apex;
 using Wallace.IDE.Framework;
 
 namespace Wallace.IDE.SalesForce.UI

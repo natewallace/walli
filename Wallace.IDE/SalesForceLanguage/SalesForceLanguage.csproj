@@ -49,7 +49,7 @@
     <Compile Include="Apex\CodeModel\SymbolTableType.cs" />
     <Compile Include="Apex\CodeModel\TypedSymbol.cs" />
     <Compile Include="Apex\CodeModel\VariableScope.cs" />
-    <Compile Include="LanguageCompletion.cs" />
+    <Compile Include="Apex\LanguageCompletion.cs" />
     <Compile Include="TextPosition.cs" />
     <Compile Include="Apex\CodeModel\Symbol.cs" />
     <Compile Include="Apex\CodeModel\SymbolTable.cs" />
@@ -71,7 +71,7 @@
     <Compile Include="Apex\Parser\ApexTextSpan.cs" />
     <Compile Include="LanguageError.cs" />
     <Compile Include="Apex\Parser\ApexParserFactory.cs" />
-    <Compile Include="LanguageManager.cs" />
+    <Compile Include="Apex\LanguageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Apex\Parser\Gppg\ShiftReduceParser.cs" />
     <Compile Include="TextSpan.cs" />

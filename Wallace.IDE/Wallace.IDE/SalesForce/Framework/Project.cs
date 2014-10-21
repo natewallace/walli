@@ -30,6 +30,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SalesForceData;
 using SalesForceLanguage;
+using SalesForceLanguage.Apex;
 using SalesForceLanguage.Apex.CodeModel;
 
 namespace Wallace.IDE.SalesForce.Framework

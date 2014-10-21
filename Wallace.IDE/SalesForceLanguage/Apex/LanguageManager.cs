@@ -27,11 +27,11 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using SalesForceLanguage.Apex;
+using SalesForceLanguage;
 using SalesForceLanguage.Apex.CodeModel;
 using SalesForceLanguage.Apex.Parser;
 
-namespace SalesForceLanguage
+namespace SalesForceLanguage.Apex
 {
     /// <summary>
     /// Class used to manage language functions.

@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using SalesForceLanguage;
 using SalesForceLanguage.Apex.CodeModel;
 using SalesForceLanguage.Apex.Parser;
 using System;
@@ -29,7 +30,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SalesForceLanguage
+namespace SalesForceLanguage.Apex
 {
     /// <summary>
     /// Used to do code completions.
