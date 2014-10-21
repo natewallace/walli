@@ -142,10 +142,34 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void DragStart()
         {
-            Presenter.DoDragDrop(
-                System.Windows.DataFormats.FileDrop,
-                new string[] { Manifest.FileName },
-                System.Windows.DragDropEffects.Copy);
+            // get selected manifests
+            List<Manifest> selectedManifests = new List<SalesForceData.Manifest>();
+            foreach (INode node in App.Instance.Navigation.SelectedNodes)
+            {
+                if (node is ManifestNode)
+                {
+                    selectedManifests.Add((node as ManifestNode).Manifest);
+                }
+                else
+                {
+                    selectedManifests = null;
+                    break;
+                }
+            }
+
+            // start drag operation with selected manifests
+            if (selectedManifests != null)
+            {
+                List<string> fileNames = new List<string>();
+                foreach (Manifest manifest in selectedManifests)
+                    fileNames.Add(manifest.FileName);
+
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
+                dataObject.SetData(System.Windows.DataFormats.FileDrop, fileNames.ToArray());
+                dataObject.SetData("SalesForceData.Manifest[]", selectedManifests.ToArray());
+
+                Presenter.DoDragDrop(dataObject, System.Windows.DragDropEffects.Copy);
+            }
         }
 
         #endregion

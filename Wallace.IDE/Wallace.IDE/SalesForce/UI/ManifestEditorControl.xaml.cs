@@ -49,6 +49,15 @@ namespace Wallace.IDE.SalesForce.UI
         #region Properties
 
         /// <summary>
+        /// A comment for the manifest.
+        /// </summary>
+        public string Comment
+        {
+            get { return textBoxComment.Text; }
+            set { textBoxComment.Text = value; }
+        }
+
+        /// <summary>
         /// The currently selected items.
         /// </summary>
         public object[] SelectedItems
@@ -237,6 +246,33 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Raises the CommentChanged event.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void textBoxComment_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                OnCommentChanged(EventArgs.Empty);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Raises the CommentChanged event.
+        /// </summary>
+        /// <param name="e">Arguments passed with the event.</param>
+        protected virtual void OnCommentChanged(EventArgs e)
+        {
+            if (CommentChanged != null)
+                CommentChanged(this, e);
+        }
+
         #endregion
 
         #region Events
@@ -255,6 +291,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when a Drop event occurs on the list in this view.
         /// </summary>
         public event DragEventHandler ListDrop;
+
+        /// <summary>
+        /// Raised when the comment has been changed.
+        /// </summary>
+        public event EventHandler CommentChanged;
 
         #endregion
     }

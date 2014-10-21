@@ -81,6 +81,9 @@ namespace Wallace.IDE.SalesForce.Document
             cView.GroupDescriptions.Add(new PropertyGroupDescription("FileType"));
             cView.SortDescriptions.Add(new SortDescription("FileType", ListSortDirection.Ascending));
             cView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+
+            View.Comment = Manifest.Comment;
+            View.CommentChanged += View_CommentChanged;
         }
 
         #endregion
@@ -180,6 +183,8 @@ namespace Wallace.IDE.SalesForce.Document
             foreach (SourceFile file in Files)
                 Manifest.AddItem(file);
 
+            Manifest.Comment = View.Comment;
+
             Manifest.Save();
             IsDirty = false;
         }
@@ -259,6 +264,16 @@ namespace Wallace.IDE.SalesForce.Document
                 e.Effects = System.Windows.DragDropEffects.Copy;
                 e.Handled = true;
             }
+            else if (formats != null && formats.Contains("SalesForceData.Manifest[]"))
+            {
+                e.Effects = System.Windows.DragDropEffects.Copy;
+                e.Handled = true;
+            }
+            else
+            {
+                e.Effects = System.Windows.DragDropEffects.None;
+                e.Handled = true;
+            }
         }
 
         /// <summary>
@@ -275,7 +290,33 @@ namespace Wallace.IDE.SalesForce.Document
                 foreach (SalesForceData.SourceFile file in files)
                     Files.Add(file);
             }
+            else if (formats != null && formats.Contains("SalesForceData.Manifest[]"))
+            {
+                Manifest[] manifests = e.Data.GetData("SalesForceData.Manifest[]") as Manifest[];
+                string message = "Merge the selected manifest with this one?";
+                if (manifests.Length > 1)
+                    message = String.Format("Merge the {0} selected manifests with this one?", manifests.Length);
 
+                if (App.MessageUser(message,
+                                "Merge Manifests",
+                                System.Windows.MessageBoxImage.Question,
+                                new string[] { "Yes", "No" }) == "Yes")
+                {
+                    foreach (Manifest m in manifests)
+                        Merge(m);
+                }
+            }
+
+            IsDirty = true;
+        }
+
+        /// <summary>
+        /// Set the document as Dirty when the comment has been changed.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_CommentChanged(object sender, EventArgs e)
+        {
             IsDirty = true;
         }
 

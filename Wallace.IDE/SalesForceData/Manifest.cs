@@ -71,6 +71,11 @@ namespace SalesForceData
         public string Name { get; private set; }
 
         /// <summary>
+        /// A comment saved with the manifest.
+        /// </summary>
+        public string Comment { get; set; }
+
+        /// <summary>
         /// The groups that belong to this manifest.
         /// </summary>
         public IReadOnlyCollection<ManifestItemGroup> Groups
@@ -143,6 +148,16 @@ namespace SalesForceData
             XmlDocument xml = new XmlDocument();
             xml.Load(input);
 
+            // look for comment
+            foreach (XmlNode node in xml.ChildNodes)
+            {
+                if (node.NodeType == XmlNodeType.Comment)
+                {
+                    Comment = node.Value;
+                    break;
+                }
+            }
+
             XmlNamespaceManager namespaces = new XmlNamespaceManager(xml.NameTable);
             namespaces.AddNamespace("ns", "http://soap.sforce.com/2006/04/metadata");
             XmlNodeList nodes = xml.SelectNodes("/ns:Package/ns:types", namespaces);
@@ -190,6 +205,11 @@ namespace SalesForceData
                 Encoding = Encoding.UTF8 }))
             {
                 xml.WriteStartDocument();
+
+                // comment
+                if (!String.IsNullOrWhiteSpace(Comment))
+                    xml.WriteComment(Comment);
+
                 xml.WriteStartElement("Package", "http://soap.sforce.com/2006/04/metadata");
 
                 // groups
