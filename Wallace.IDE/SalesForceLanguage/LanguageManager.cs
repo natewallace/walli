@@ -257,6 +257,9 @@ namespace SalesForceLanguage
             {
                 foreach (SymbolTable st in symbols)
                 {
+                    if (st == null)
+                        continue;
+
                     // store triggers separate from classes
                     if (st.TableType == SymbolTableType.Trigger)
                     {

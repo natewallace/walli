@@ -451,6 +451,7 @@ invocation_expression:
 
 element_access:
 	identifier SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT |
+	qualified_name SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT |
 	primary_no_array_creation_expression SEPARATOR_BRACKET_LEFT expression_list SEPARATOR_BRACKET_RIGHT ;
 
 expression_list:
