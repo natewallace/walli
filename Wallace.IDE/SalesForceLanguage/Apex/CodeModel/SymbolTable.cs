@@ -94,6 +94,17 @@ namespace SalesForceLanguage.Apex.CodeModel
             Extends = extends;
             Interfaces = interfaces ?? new string[0];
             InnerClasses = innerClasses ?? new SymbolTable[0];
+
+            // change class type to a namespace if the only thing in the class are inner classes
+            if (TableType == SymbolTableType.Class &&
+                InnerClasses.Length > 0 &&
+                Fields.Length == 0 &&
+                Constructors.Length == 0 &&
+                Properties.Length == 0 &&
+                Methods.Length == 0 &&
+                Interfaces.Length == 0 &&
+                String.IsNullOrWhiteSpace(Extends))
+                TableType = SymbolTableType.Namespace;
         }
 
         #endregion
