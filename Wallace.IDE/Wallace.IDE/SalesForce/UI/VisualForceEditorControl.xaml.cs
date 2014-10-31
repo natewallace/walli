@@ -98,6 +98,15 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// When true the view will be read only.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get { return textEditor.IsReadOnly; }
+            set { textEditor.IsReadOnly = value; }
+        }
+
+        /// <summary>
         /// The current line number that the caret is on.
         /// </summary>
         public int CurrentLineNumber

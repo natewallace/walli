@@ -251,6 +251,21 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Set to true to make the view read only.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get
+            {
+                return textEditor.IsReadOnly;
+            }
+            set
+            {
+                textEditor.IsReadOnly = value;
+            }
+        }
+
+        /// <summary>
         /// The current line number that the caret is on.
         /// </summary>
         public int CurrentLineNumber
@@ -444,6 +459,9 @@ namespace Wallace.IDE.SalesForce.UI
         /// <param name="flag">If true the selected text is commented.  If false the selected text is uncommented.</param>
         public void CommentSelectedText(bool flag)
         {
+            if (IsReadOnly)
+                return;
+
             if (textEditor.SelectionLength > 0)
             {
                 // get selected lines

@@ -36,7 +36,7 @@ namespace SalesForceData
         /// <param name="contentValue">ContentValue.</param>
         /// <param name="lastModifiedTimeStamp">LastModifiedTimeStamp.</param>
         public SourceFileContent(string contentType, string contentValue, string lastModifiedTimeStamp)
-            : this(contentType, contentValue, lastModifiedTimeStamp, null)
+            : this(contentType, contentValue, lastModifiedTimeStamp, null, false)
         {
         }
 
@@ -47,12 +47,14 @@ namespace SalesForceData
         /// <param name="contentValue">ContentValue.</param>
         /// <param name="lastModifiedTimeStamp">LastModifiedTimeStamp.</param>
         /// <param name="metadataValue">MetadataValue.</param>
-        public SourceFileContent(string contentType, string contentValue, string lastModifiedTimeStamp, string metadataValue)
+        /// <param name="isReadOnly">IsReadOnly.</param>
+        public SourceFileContent(string contentType, string contentValue, string lastModifiedTimeStamp, string metadataValue, bool isReadOnly)
         {
             ContentType = contentType;
             ContentValue = contentValue;
             LastModifiedTimeStamp = lastModifiedTimeStamp;
             MetadataValue = metadataValue;
+            IsReadOnly = isReadOnly;
         }
 
         #endregion
@@ -78,6 +80,11 @@ namespace SalesForceData
         /// The metadata that describes the content.
         /// </summary>
         public string MetadataValue { get; private set; }
+
+        /// <summary>
+        /// Indicates if the content is read only.
+        /// </summary>
+        public bool IsReadOnly { get; private set; }
 
         #endregion
     }

@@ -824,7 +824,9 @@ namespace SalesForceData
                     return new SourceFileContent(
                         file.FileType.Name,
                         body,
-                        lastModifiedDate);
+                        lastModifiedDate,
+                        null,
+                        isReadOnly);
 
                 case "ApexTrigger":
 
@@ -888,7 +890,8 @@ namespace SalesForceData
                                 file.FileType.Name, 
                                 text, 
                                 GetSourceFileContentLastModifiedTimeStamp(file),
-                                metadataText);
+                                metadataText,
+                                false);
                         }
                     }
             }

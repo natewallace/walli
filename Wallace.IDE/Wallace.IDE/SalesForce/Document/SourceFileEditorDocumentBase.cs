@@ -108,6 +108,21 @@ namespace Wallace.IDE.SalesForce.Document
         public bool IsTextVisible { get; protected set; }
 
         /// <summary>
+        /// When true the view will be read only.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get
+            {
+                return View.IsReadOnly;
+            }
+            set
+            {
+                View.IsReadOnly = value;
+            }
+        }
+
+        /// <summary>
         /// Gets the current line number
         /// </summary>
         public int CurrentLineNumber
@@ -296,6 +311,7 @@ namespace Wallace.IDE.SalesForce.Document
                 {
                     _serverContent = Project.Client.GetSourceFileContent(File);
                     View.Text = _serverContent.ContentValue;
+                    View.IsReadOnly = _serverContent.IsReadOnly;
                     IsDirty = false;
                 }
             }

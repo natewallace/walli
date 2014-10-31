@@ -36,6 +36,11 @@ namespace Wallace.IDE.SalesForce.UI
         string Text { get; set; }
 
         /// <summary>
+        /// When true the view will be read only.
+        /// </summary>
+        bool IsReadOnly { get; set; }
+
+        /// <summary>
         /// The current line number that the caret is on.
         /// </summary>
         int CurrentLineNumber { get; }
