@@ -687,8 +687,28 @@ namespace SalesForceData
                 case "ApexPage":
                 case "ApexComponent":
 
+                    // parse name for apex items
+                    string itemName = null;
+                    string namespacePrefix = null;
+
+                    string[] classNameParts = file.Name.Split(new string[] { "__" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (classNameParts.Length == 1)
+                    {
+                        itemName = classNameParts[0];
+                        namespacePrefix = GetOrgInfo().organizationNamespace;
+                    }
+                    else if (classNameParts.Length == 2)
+                    {
+                        itemName = classNameParts[1];
+                        namespacePrefix = classNameParts[0];
+                    }
+                    else
+                    {
+                        throw new Exception("Invalid class name: " + file.Name);
+                    }
+
                     // get record
-                    DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}'", file.FileType.Name, file.Name));
+                    DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}' AND NamespacePrefix = '{2}'", file.FileType.Name, itemName, namespacePrefix));
                     string objectId = null;
                     if (objectQueryResult.Data.Rows.Count > 0)
                         objectId = objectQueryResult.Data.Rows[0]["id"] as string;
@@ -1110,12 +1130,32 @@ namespace SalesForceData
             if (file == null)
                 throw new ArgumentNullException("file");
 
+            // parse name for apex items
+            string itemName = null;
+            string namespacePrefix = null;
+
+            string[] classNameParts = file.Name.Split(new string[] { "__" }, StringSplitOptions.RemoveEmptyEntries);
+            if (classNameParts.Length == 1)
+            {
+                itemName = classNameParts[0];
+                namespacePrefix = GetOrgInfo().organizationNamespace;
+            }
+            else if (classNameParts.Length == 2)
+            {
+                itemName = classNameParts[1];
+                namespacePrefix = classNameParts[0];
+            }
+            else
+            {
+                throw new Exception("Invalid class name: " + file.Name);
+            }
+
             switch (file.FileType.Name)
             {
                 case "ApexClass":
 
                     DataSelectResult classResult = DataSelect(String.Format(
-                        "SELECT LastModifiedDate FROM ApexClass WHERE Name = '{0}'", file.Name));
+                        "SELECT LastModifiedDate FROM ApexClass WHERE Name = '{0}' AND NamespacePrefix = '{1}'", itemName, namespacePrefix));
                     if (classResult.Data.Rows.Count == 0)
                         throw new Exception("Couldn't find apex class named: " + file.Name);
 
@@ -1124,7 +1164,7 @@ namespace SalesForceData
                 case "ApexTrigger":
 
                     DataSelectResult triggerResult = DataSelect(String.Format(
-                        "SELECT LastModifiedDate FROM ApexTrigger WHERE Name = '{0}'", file.Name));
+                        "SELECT LastModifiedDate FROM ApexTrigger WHERE Name = '{0}' AND NamespacePrefix = '{1}'", itemName, namespacePrefix));
                     if (triggerResult.Data.Rows.Count == 0)
                         throw new Exception("Couldn't find apex trigger named: " + file.Name);
 
@@ -1133,7 +1173,7 @@ namespace SalesForceData
                 case "ApexPage":
 
                     DataSelectResult pageResult = DataSelect(String.Format(
-                        "SELECT LastModifiedDate FROM ApexPage WHERE Name = '{0}'", file.Name));
+                        "SELECT LastModifiedDate FROM ApexPage WHERE Name = '{0}' AND NamespacePrefix = '{1}'", itemName, namespacePrefix));
                     if (pageResult.Data.Rows.Count == 0)
                         throw new Exception("Couldn't find apex page named: " + file.Name);
 
@@ -1142,7 +1182,7 @@ namespace SalesForceData
                 case "ApexComponent":
 
                     DataSelectResult componentResult = DataSelect(String.Format(
-                        "SELECT LastModifiedDate FROM ApexComponent WHERE Name = '{0}'", file.Name));
+                        "SELECT LastModifiedDate FROM ApexComponent WHERE Name = '{0}' AND NamespacePrefix = '{1}'", itemName, namespacePrefix));
                     if (componentResult.Data.Rows.Count == 0)
                         throw new Exception("Couldn't find apex component named: " + file.Name);
 
@@ -1198,7 +1238,7 @@ namespace SalesForceData
                 throw new Exception(sb.ToString());
             }
 
-            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexClass WHERE Name = '{0}'", name));
+            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexClass WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
             return new SourceFile(result.Data);
         }
 
@@ -1264,7 +1304,7 @@ namespace SalesForceData
                 throw new Exception(sb.ToString());
             }
 
-            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexTrigger WHERE Name = '{0}'", triggerName));
+            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexTrigger WHERE Name = '{0}' AND NamespacePrefix = '{1}'", triggerName, GetOrgInfo().organizationNamespace));
             return new SourceFile(result.Data);
         }
 
@@ -1303,7 +1343,7 @@ namespace SalesForceData
                 throw new Exception(sb.ToString());
             }
 
-            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexComponent WHERE Name = '{0}'", name));
+            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexComponent WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
             return new SourceFile(result.Data);
         }
 
@@ -1342,7 +1382,7 @@ namespace SalesForceData
                 throw new Exception(sb.ToString());
             }
 
-            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexPage WHERE Name = '{0}'", name));
+            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexPage WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
             return new SourceFile(result.Data);
         }
 
@@ -1378,8 +1418,28 @@ namespace SalesForceData
                 case "ApexTrigger":
                 case "ApexComponent":
 
-                    // get class record
-                    DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}'", file.FileType.Name, file.Name));
+                    // parse name for apex items
+                    string itemName = null;
+                    string namespacePrefix = null;
+
+                    string[] classNameParts = file.Name.Split(new string[] { "__" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (classNameParts.Length == 1)
+                    {
+                        itemName = classNameParts[0];
+                        namespacePrefix = GetOrgInfo().organizationNamespace;
+                    }
+                    else if (classNameParts.Length == 2)
+                    {
+                        itemName = classNameParts[1];
+                        namespacePrefix = classNameParts[0];
+                    }
+                    else
+                    {
+                        throw new Exception("Invalid class name: " + file.Name);
+                    }
+
+                    // get item record
+                    DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}' AND NamespacePrefix = '{2}'", file.FileType.Name, itemName, namespacePrefix));
                     string objectId = null;
                     if (objectQueryResult.Data.Rows.Count > 0)
                         objectId = objectQueryResult.Data.Rows[0]["id"] as string;

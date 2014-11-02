@@ -154,6 +154,7 @@
     <Compile Include="SalesForce\Node\ApexClassNode.cs" />
     <Compile Include="SalesForce\Node\ApexComponentFolderNode.cs" />
     <Compile Include="SalesForce\Node\ApexComponentNode.cs" />
+    <Compile Include="SalesForce\Node\ApexPackageFolderNode.cs" />
     <Compile Include="SalesForce\Node\ApexPageFolderNode.cs" />
     <Compile Include="SalesForce\Node\ApexPageNode.cs" />
     <Compile Include="SalesForce\Node\ApexTriggerFolderNode.cs" />

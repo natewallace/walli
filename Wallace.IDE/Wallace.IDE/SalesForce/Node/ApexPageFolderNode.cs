@@ -79,7 +79,7 @@ namespace Wallace.IDE.SalesForce.Node
                 {
                     ApexPageNode node = Presenter.Nodes[index] as ApexPageNode;
                     if (node == null)
-                        throw new Exception("Found node that isn't of type ApexPageNode in ApexPageFolderNode.");
+                        continue;
 
                     if (sourceFile.CompareTo(node.SourceFile) < 0)
                         break;
@@ -99,7 +99,11 @@ namespace Wallace.IDE.SalesForce.Node
             {
                 for (int i = 0; i < Presenter.Nodes.Count; i++)
                 {
-                    if ((Presenter.Nodes[i] as ApexPageNode).SourceFile.Equals(sourceFile))
+                    if (Presenter.Nodes[i] is ApexPackageFolderNode)
+                    {
+                        (Presenter.Nodes[i] as ApexPackageFolderNode).RemoveSourceFile(sourceFile);
+                    }
+                    else if (Presenter.Nodes[i] is ApexPageNode && (Presenter.Nodes[i] as ApexPageNode).SourceFile.Equals(sourceFile))
                     {
                         Presenter.Nodes.RemoveAt(i);
                         break;
@@ -115,7 +119,7 @@ namespace Wallace.IDE.SalesForce.Node
         public override INode[] GetChildren()
         {
             _isPagesLoaded = true;
-            return base.GetChildren();
+            return GroupNodesByPackage(base.GetChildren());
         }
 
         /// <summary>

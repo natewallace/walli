@@ -169,6 +169,50 @@ namespace Wallace.IDE.SalesForce.Node
             return nodes.ToArray();
         }
 
+        /// <summary>
+        /// Groupd the given nodes into packages.
+        /// </summary>
+        /// <param name="nodes">The nodes to group.</param>
+        /// <returns>The resulting nodes grouped by package.</returns>
+        protected INode[] GroupNodesByPackage(INode[] nodes)
+        {
+            if (nodes == null)
+                throw new ArgumentNullException("nodes");
+
+            List<INode> result = new List<INode>();
+            Dictionary<string, ApexPackageFolderNode> packageFolders = new Dictionary<string, ApexPackageFolderNode>();
+
+            // group nodes by namespace
+            foreach (INode node in nodes)
+            {
+                string[] parts = node.Text.Split(new string[] { "__" }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 1)
+                {
+                    result.Add(node);
+                }
+                else if (parts.Length == 2)
+                {
+                    ApexPackageFolderNode packageFolder = null;
+                    if (packageFolders.ContainsKey(parts[0]))
+                    {
+                        packageFolder = packageFolders[parts[0]];
+                    }
+                    else
+                    {
+                        packageFolder = new ApexPackageFolderNode(parts[0]);
+                        packageFolders.Add(parts[0], packageFolder);
+                    }
+
+                    packageFolder.PackageNodes.Add(node);
+                }
+            }
+
+            if (packageFolders.Count > 0)
+                result.InsertRange(0, packageFolders.Values.OrderBy(n => n.Text));
+
+            return result.ToArray();
+        }
+
         #endregion
     }
 }

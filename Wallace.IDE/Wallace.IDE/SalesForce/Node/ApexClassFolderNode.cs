@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
@@ -79,7 +80,7 @@ namespace Wallace.IDE.SalesForce.Node
                 {
                     ApexClassNode node = Presenter.Nodes[index] as ApexClassNode;
                     if (node == null)
-                        throw new Exception("Found node that isn't of type ApexClassNode in ApexClassFolderNode.");
+                        continue;
 
                     if (sourceFile.CompareTo(node.SourceFile) < 0)
                         break;
@@ -99,7 +100,11 @@ namespace Wallace.IDE.SalesForce.Node
             {
                 for (int i = 0; i < Presenter.Nodes.Count; i++)
                 {
-                    if ((Presenter.Nodes[i] as ApexClassNode).SourceFile.Equals(sourceFile))
+                    if (Presenter.Nodes[i] is ApexPackageFolderNode)
+                    {
+                        (Presenter.Nodes[i] as ApexPackageFolderNode).RemoveSourceFile(sourceFile);
+                    }
+                    else if (Presenter.Nodes[i] is ApexClassNode && (Presenter.Nodes[i] as ApexClassNode).SourceFile.Equals(sourceFile))
                     {
                         Presenter.Nodes.RemoveAt(i);
                         break;
@@ -115,7 +120,7 @@ namespace Wallace.IDE.SalesForce.Node
         public override INode[] GetChildren()
         {
             _isClassesLoaded = true;
-            return base.GetChildren();
+            return GroupNodesByPackage(base.GetChildren());
         }
 
         /// <summary>

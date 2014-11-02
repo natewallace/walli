@@ -79,7 +79,7 @@ namespace Wallace.IDE.SalesForce.Node
                 {
                     ApexTriggerNode node = Presenter.Nodes[index] as ApexTriggerNode;
                     if (node == null)
-                        throw new Exception("Found node that isn't of type ApexTriggerNode in ApexTriggerFolderNode.");
+                        continue;
 
                     if (sourceFile.CompareTo(node.SourceFile) < 0)
                         break;
@@ -99,7 +99,11 @@ namespace Wallace.IDE.SalesForce.Node
             {
                 for (int i = 0; i < Presenter.Nodes.Count; i++)
                 {
-                    if ((Presenter.Nodes[i] as ApexTriggerNode).SourceFile.Equals(sourceFile))
+                    if (Presenter.Nodes[i] is ApexPackageFolderNode)
+                    {
+                        (Presenter.Nodes[i] as ApexPackageFolderNode).RemoveSourceFile(sourceFile);
+                    }
+                    else if (Presenter.Nodes[i] is ApexTriggerNode && (Presenter.Nodes[i] as ApexTriggerNode).SourceFile.Equals(sourceFile))
                     {
                         Presenter.Nodes.RemoveAt(i);
                         break;
@@ -115,7 +119,7 @@ namespace Wallace.IDE.SalesForce.Node
         public override INode[] GetChildren()
         {
             _isTriggersLoaded = true;
-            return base.GetChildren();
+            return GroupNodesByPackage(base.GetChildren());
         }
 
         /// <summary>

@@ -79,7 +79,7 @@ namespace Wallace.IDE.SalesForce.Node
                 {
                     ApexComponentNode node = Presenter.Nodes[index] as ApexComponentNode;
                     if (node == null)
-                        throw new Exception("Found node that isn't of type ApexComponentNode in ApexComponentFolderNode.");
+                        continue;
 
                     if (sourceFile.CompareTo(node.SourceFile) < 0)
                         break;
@@ -99,7 +99,11 @@ namespace Wallace.IDE.SalesForce.Node
             {
                 for (int i = 0; i < Presenter.Nodes.Count; i++)
                 {
-                    if ((Presenter.Nodes[i] as ApexComponentNode).SourceFile.Equals(sourceFile))
+                    if (Presenter.Nodes[i] is ApexPackageFolderNode)
+                    {
+                        (Presenter.Nodes[i] as ApexPackageFolderNode).RemoveSourceFile(sourceFile);
+                    }
+                    else if (Presenter.Nodes[i] is ApexComponentNode && (Presenter.Nodes[i] as ApexComponentNode).SourceFile.Equals(sourceFile))
                     {
                         Presenter.Nodes.RemoveAt(i);
                         break;
@@ -115,7 +119,7 @@ namespace Wallace.IDE.SalesForce.Node
         public override INode[] GetChildren()
         {
             _isComponentsLoaded = true;
-            return base.GetChildren();
+            return GroupNodesByPackage(base.GetChildren());
         }
 
         /// <summary>
