@@ -70,6 +70,11 @@ namespace SalesForceData
         private SalesForceAPI.Tooling.SforceServicePortType _toolingClient;
 
         /// <summary>
+        /// Holds the org info.
+        /// </summary>
+        private SalesForceAPI.Metadata.DescribeMetadataResult _orgInfo;
+
+        /// <summary>
         /// The minimum version number of metadata retrieved.
         /// </summary>
         public static readonly double METADATA_VERSION = 31.0;
@@ -213,6 +218,31 @@ namespace SalesForceData
         {
             InitClients();
             return _session.WebsiteAutoLoginUri;
+        }
+
+        /// <summary>
+        /// Get the org info for this client.
+        /// </summary>
+        /// <returns></returns>
+        private SalesForceAPI.Metadata.DescribeMetadataResult GetOrgInfo()
+        {
+            InitClients();
+
+            if (_orgInfo == null)
+            {
+                SalesForceAPI.Metadata.describeMetadataRequest request = new SalesForceAPI.Metadata.describeMetadataRequest(
+                    new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
+                    null,
+                    METADATA_VERSION);
+
+                SalesForceAPI.Metadata.describeMetadataResponse response = _metadataClient.describeMetadata(request);
+                if (response == null || response.result == null)
+                    throw new Exception("Could not get organization info.");
+
+                _orgInfo = response.result;
+            }
+
+            return _orgInfo;
         }
 
         /// <summary>
@@ -775,7 +805,7 @@ namespace SalesForceData
                     if (classNameParts.Length == 1)
                     {
                         className = classNameParts[0];
-                        namespacePrefix = String.Empty;
+                        namespacePrefix = GetOrgInfo().organizationNamespace;
                     }
                     else if (classNameParts.Length == 2)
                     {
@@ -1751,17 +1781,10 @@ namespace SalesForceData
 
             HashSet<string> excludedSet = (excluded == null) ? new HashSet<string>() : new HashSet<string>(excluded);
 
-            SalesForceAPI.Metadata.describeMetadataRequest request = new SalesForceAPI.Metadata.describeMetadataRequest(
-                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
-                null,
-                METADATA_VERSION);
-
-            SalesForceAPI.Metadata.describeMetadataResponse response = _metadataClient.describeMetadata(request);
-
             List<SourceFileType> results = new List<SourceFileType>();
-            if (response != null && response.result != null && response.result.metadataObjects != null)
+            if (GetOrgInfo().metadataObjects != null)
             {
-                foreach (SalesForceAPI.Metadata.DescribeMetadataObject metadataObject in response.result.metadataObjects)
+                foreach (SalesForceAPI.Metadata.DescribeMetadataObject metadataObject in GetOrgInfo().metadataObjects)
                 {
                     if (metadataObject != null && !excludedSet.Contains(metadataObject.xmlName))
                         results.Add(new SourceFileType(metadataObject));

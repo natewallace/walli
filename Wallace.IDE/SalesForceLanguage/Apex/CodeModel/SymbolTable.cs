@@ -183,7 +183,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             List<Field> fields = new List<Field>();
             foreach (Field f in Fields)
             {
-                fields.Add(new Field(f.Location, f.Name, f.Span, f.Modifier, ResolveType(f.Type, f.TemplateParameters)));
+                fields.Add(new Field(f.Location, f.Name, f.Span, f.Modifier, ResolveType(f.Type, f.TemplateParameters), false));
             }
 
             List<Constructor> constructors = new List<Constructor>();

@@ -1087,6 +1087,7 @@ namespace Wallace.IDE.SalesForce.UI
                     TextViewPosition? position = textEditor.GetPositionFromPoint(e.GetPosition(textEditor));
                     if (position != null)
                     {
+                        // display error
                         if (ParseData.ErrorsByLine.ContainsKey(position.Value.Line))
                         {
                             foreach (LanguageError err in ParseData.ErrorsByLine[position.Value.Line])
@@ -1098,6 +1099,23 @@ namespace Wallace.IDE.SalesForce.UI
                                     _toolTip.IsOpen = true;
                                     e.Handled = true;
                                 }
+                            }
+                        }
+
+                        // display symbol description
+                        if (!e.Handled)
+                        {
+                            string description = _languageManager.Completion.GetSymbolDescriptionByPosition(
+                                new DocumentCharStream(textEditor.Document, textEditor.Document.GetOffset(position.Value.Location)),
+                                _className,
+                                new TextPosition(position.Value.Line, position.Value.Column));
+
+                            if (description != null)
+                            {
+                                _toolTip.PlacementTarget = this;
+                                _toolTip.Content = description;
+                                _toolTip.IsOpen = true;
+                                e.Handled = true;
                             }
                         }
                     }

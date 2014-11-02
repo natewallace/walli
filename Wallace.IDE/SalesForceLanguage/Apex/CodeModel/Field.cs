@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using System.Xml;
 namespace SalesForceLanguage.Apex.CodeModel
 {
     /// <summary>
@@ -49,9 +50,48 @@ namespace SalesForceLanguage.Apex.CodeModel
             string name, 
             TextSpan span,
             SymbolModifier modifier, 
-            string type)
+            string type,
+            bool isLocal)
             : base(location, name, span, modifier, type)
         {
+            IsLocal = isLocal;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// If this is a local variable then this property is true.  If it is a class member then this property is false.
+        /// </summary>
+        public bool IsLocal { get; private set; }
+
+        #endregion
+
+        #region IXmlSerializable Members
+
+        /// <summary>
+        /// Read in this object from the xml stream.
+        /// </summary>
+        /// <param name="reader">The xml stream to read from.</param>
+        public override void ReadXml(XmlReader reader)
+        {
+            base.ReadXml(reader);
+            string isLocalString = reader["isLocal"];
+            if (isLocalString != null)
+                IsLocal = bool.Parse(isLocalString);
+            else
+                IsLocal = false;
+        }
+
+        /// <summary>
+        /// Write this object out to an xml stream.
+        /// </summary>
+        /// <param name="writer">The xml stream to write to.</param>
+        public override void WriteXml(XmlWriter writer)
+        {
+            base.WriteXml(writer);
+            writer.WriteAttributeString("isLocal", IsLocal.ToString());
         }
 
         #endregion

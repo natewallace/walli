@@ -828,7 +828,7 @@ namespace SalesForceLanguage.Apex
                     result.Add(trigger);
 
                     if (parts.Count > 1 && parts[1].ToLower() == "new")
-                        result.Add(new Field(new TextPosition(0, 0), "new", null, SymbolModifier.Public | SymbolModifier.Static, "List<sObject>"));
+                        result.Add(new Field(new TextPosition(0, 0), "new", null, SymbolModifier.Public | SymbolModifier.Static, "List<sObject>", false));
                 }
             }
 
@@ -918,7 +918,8 @@ namespace SalesForceLanguage.Apex
                             "soql",
                             null,
                             SymbolModifier.Public | SymbolModifier.Static,
-                            String.Format("{0}[]", parts[1]));
+                            String.Format("{0}[]", parts[1]),
+                            true);
                         partFound = true;
                     }
                     // method
@@ -959,13 +960,13 @@ namespace SalesForceLanguage.Apex
                             // this keyword
                             if (part == "this")
                             {
-                                matchedSymbol = new Field(new TextPosition(0, 0), "this", null, SymbolModifier.None, classSymbol.FullType);
+                                matchedSymbol = new Field(new TextPosition(0, 0), "this", null, SymbolModifier.None, classSymbol.FullType, false);
                                 partFound = true;
                             }
                             // super keyword
                             else if (part == "super")
                             {
-                                matchedSymbol = new Field(new TextPosition(0, 0), "super", null, SymbolModifier.None, classSymbol.Extends);
+                                matchedSymbol = new Field(new TextPosition(0, 0), "super", null, SymbolModifier.None, classSymbol.Extends, false);
                                 partFound = true;
                             }
                             else
@@ -1317,6 +1318,77 @@ namespace SalesForceLanguage.Apex
             }
 
             return result.OrderBy(s => s.Name).ToArray();
+        }
+
+        /// <summary>
+        /// Get the symbol description for the given position.
+        /// </summary>
+        /// <param name="text">The text to look at.</param>
+        /// <param name="className">The name of the class the text is from.</param>
+        /// <param name="position">The position to get the symbol description for.</param>
+        /// <returns>The symbol description or null if there isn't one.</returns>
+        public string GetSymbolDescriptionByPosition(Stream text, string className, TextPosition position)
+        {
+            if (IsInToken(position, text, _tokensToIgnore))
+                return null;
+
+            // move position forward until a non identifier character is reached
+            int charByte = 0;
+            char charValue = ' ';
+            int column = position.Column;
+            while (charByte != -1)
+            {
+                charByte = text.ReadByte();
+                charValue = (char)charByte;
+
+                if (!Char.IsLetterOrDigit(charValue) && charValue != '_')
+                    break;
+
+                column++;
+            }
+            text.Position = text.Position - 1;
+            position = new TextPosition(position.Line, column);
+
+            // get class definition
+            SymbolTable classSymbol = _language.GetSymbols(className);
+            if (classSymbol == null)
+                return null;
+
+            // get symbol matches
+            Symbol[] matchedSymbols = MatchSymbols(text, className, position, false);
+            if (matchedSymbols == null || matchedSymbols.Length == 0)
+                return null;
+
+            // format result
+            Symbol symbol = matchedSymbols[matchedSymbols.Length - 1];
+            if (symbol is Method)
+            {
+                return (symbol as Method).Signature;
+            }
+            else if (symbol is Parameter)
+            {
+                return String.Format("(parameter) {0} {1}", (symbol as TypedSymbol).FullType, symbol.Name);
+            }
+            else if (symbol is Property)
+            {
+                return String.Format("(property) {0} {1}", (symbol as TypedSymbol).FullType, symbol.Name);
+            }
+            else if (symbol is Field)
+            {
+                Field f = symbol as Field;
+                if (f.IsLocal)
+                    return String.Format("(local variable) {0} {1}", f.FullType, f.Name);
+                else
+                    return String.Format("(field) {0} {1}", f.FullType, f.Name);
+            }
+            else if (symbol is TypedSymbol)
+            {
+                return String.Format("{0} {1}", (symbol as TypedSymbol).FullType, symbol.Name);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>

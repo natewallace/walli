@@ -156,7 +156,7 @@ namespace SalesForceLanguage.Apex
                     result = _predefinedClasses[type];
             }
 
-            if (typedSymbol.TemplateParameters.Length > 0)
+            if (result != null && typedSymbol.TemplateParameters.Length > 0)
                 return result.GenerateFromTemplate(typedSymbol);
             else
                 return result;

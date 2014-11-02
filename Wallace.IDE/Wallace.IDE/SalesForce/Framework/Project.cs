@@ -420,7 +420,8 @@ namespace Wallace.IDE.SalesForce.Framework
                     sObjectField.Name,
                     null,
                     SymbolModifier.Public,
-                    fieldType));
+                    fieldType,
+                    false));
 
                 // add reference field if appropriate
                 if (sObjectField.FieldType == FieldType.Reference &&
@@ -434,7 +435,8 @@ namespace Wallace.IDE.SalesForce.Framework
                             sObjectField.Name.Replace("__c", "__r"),
                             null,
                             SymbolModifier.Public,
-                            sObjectField.ReferenceTo[0]));
+                            sObjectField.ReferenceTo[0],
+                            false));
                     }
                     else if (sObjectField.Name.EndsWith("Id", StringComparison.CurrentCultureIgnoreCase))
                     {
@@ -443,7 +445,8 @@ namespace Wallace.IDE.SalesForce.Framework
                             sObjectField.Name.Substring(0, sObjectField.Name.Length - 2),
                             null,
                             SymbolModifier.Public,
-                            sObjectField.ReferenceTo[0]));
+                            sObjectField.ReferenceTo[0],
+                            false));
                     }
                 }
             }

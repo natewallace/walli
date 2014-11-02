@@ -297,7 +297,8 @@ namespace SalesForceLanguage.Apex.Parser
                             declarator.Nodes[0].GetLeavesDisplayText(),
                             null,
                             SymbolModifier.Private,
-                            variableType));
+                            variableType,
+                            true));
                     }
 
                     break;
@@ -334,7 +335,8 @@ namespace SalesForceLanguage.Apex.Parser
                                         varNameNode.GetLeavesDisplayText(),
                                         null,
                                         SymbolModifier.Private,
-                                        varTypeName));
+                                        varTypeName,
+                                        true));
                                 }
                             }
 
@@ -358,7 +360,8 @@ namespace SalesForceLanguage.Apex.Parser
                             node.Nodes[3].GetLeavesDisplayText(),
                             null,
                             SymbolModifier.Private,
-                            node.Nodes[2].GetLeavesDisplayText()) }));
+                            node.Nodes[2].GetLeavesDisplayText(),
+                            true) }));
                     break;
 
                 // catch clause
@@ -374,7 +377,8 @@ namespace SalesForceLanguage.Apex.Parser
                                 identifierNode.GetLeavesDisplayText(),
                                 null,
                                 SymbolModifier.Private,
-                                classTypeNode.GetLeavesDisplayText())}));
+                                classTypeNode.GetLeavesDisplayText(),
+                                true)}));
 
 
                         _typeReferences.Add(new ReferenceTypeSymbol(
@@ -398,7 +402,8 @@ namespace SalesForceLanguage.Apex.Parser
                             declarator.Nodes[0].GetLeavesDisplayText(),
                             null,
                             fieldVisibility,
-                            fieldType));
+                            fieldType,
+                            false));
                     }
 
                     break;
@@ -410,7 +415,8 @@ namespace SalesForceLanguage.Apex.Parser
                         node.GetLeavesDisplayText(),
                         null,
                         SymbolModifier.Final | SymbolModifier.Public | SymbolModifier.Static,
-                        "System.Object"));
+                        "System.Object",
+                        false));
 
                     break;
 
