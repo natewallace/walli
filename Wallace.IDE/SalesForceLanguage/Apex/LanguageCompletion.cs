@@ -1597,12 +1597,13 @@ namespace SalesForceLanguage.Apex
             if (isExternal)
             {
                 result.AddRange(symbolTable.GetFieldsWithModifiers(SymbolModifier.Public));
-                GetInheritedFields(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public, result);
+                result.AddRange(symbolTable.GetFieldsWithModifiers(SymbolModifier.Global));
+                GetInheritedFields(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Global, result);
             }
             else
             {
                 result.AddRange(symbolTable.Fields);
-                GetInheritedFields(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Protected, result);
+                GetInheritedFields(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Protected | SymbolModifier.Global, result);
             }
 
             return result.GroupBy(s => s.Name).Select(g => g.First()).ToList();
@@ -1640,12 +1641,13 @@ namespace SalesForceLanguage.Apex
             if (isExternal)
             {
                 result.AddRange(symbolTable.GetPropertiesWithModifiers(SymbolModifier.Public));
-                GetInheritedProperties(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public, result);
+                result.AddRange(symbolTable.GetPropertiesWithModifiers(SymbolModifier.Global));
+                GetInheritedProperties(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Global, result);
             }
             else
             {
                 result.AddRange(symbolTable.Properties);
-                GetInheritedProperties(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Protected, result);
+                GetInheritedProperties(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Protected | SymbolModifier.Global, result);
             }
 
             return result.GroupBy(s => s.Name).Select(g => g.First()).ToList();
@@ -1683,12 +1685,13 @@ namespace SalesForceLanguage.Apex
             if (isExternal)
             {
                 result.AddRange(symbolTable.GetMethodsWithModifiers(SymbolModifier.Public));
-                GetInheritedMethods(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public, result);
+                result.AddRange(symbolTable.GetMethodsWithModifiers(SymbolModifier.Global));
+                GetInheritedMethods(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Global, result);
             }
             else
             {
                 result.AddRange(symbolTable.Methods);
-                GetInheritedMethods(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Protected, result);
+                GetInheritedMethods(_language.GetSymbols(symbolTable.Extends), SymbolModifier.Public | SymbolModifier.Protected | SymbolModifier.Global, result);
             }
 
             if (symbolTable.TableType == SymbolTableType.Interface)
