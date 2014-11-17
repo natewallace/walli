@@ -111,6 +111,7 @@
     <Compile Include="SalesForce\Function\DeletePackageFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
     <Compile Include="SalesForce\Function\DeployPackageFunction.cs" />
+    <Compile Include="SalesForce\Function\ExportDataResultFunction.cs" />
     <Compile Include="SalesForce\Function\ExportSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\FoldAllToggleFunction.cs" />
     <Compile Include="SalesForce\Function\ImportSourceFileDataFunction.cs" />
@@ -724,6 +725,9 @@
   <ItemGroup>
     <Resource Include="Resources\SelectAll.png" />
     <Resource Include="Resources\SelectNone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ExportData.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

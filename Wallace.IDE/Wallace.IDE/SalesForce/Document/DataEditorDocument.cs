@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Text;
 using SalesForceData;
 using Wallace.IDE.Framework;
@@ -226,7 +227,100 @@ namespace Wallace.IDE.SalesForce.Document
                 View.IsNextVisible = DataResult.IsMore;
                 View.IsCommitEnabled = IsDataModified;
             }
-            
+
+        }
+
+        /// <summary>
+        /// Export the resulting data.
+        /// </summary>
+        public void ExportResult()
+        {
+            if (DataResult != null)
+            {
+                // ask user if they want to export all data if there is more than one page
+                bool allData = false;
+                if (DataResult.IsMore)
+                {
+                    allData = App.MessageUser(
+                        "Would you like to export all remaining data from your query or only the data that is currently displayed?",
+                        "Export Data",
+                        System.Windows.MessageBoxImage.Question,
+                        new string[] { "All data", "Currently displayed data" }) == "All data";
+                }
+
+                // get file name for export
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+                dlg.Filter = "CSV Files (*.csv)|*.csv";
+                dlg.Title = "Export data";
+                dlg.DefaultExt = "csv";
+                dlg.OverwritePrompt = true;
+
+                bool? dlgResult = dlg.ShowDialog();
+                if (dlgResult.HasValue && dlgResult.Value)
+                {
+                    using (StreamWriter writer = new StreamWriter(File.Open(dlg.FileName, FileMode.OpenOrCreate)))
+                    {
+                        // write column names
+                        for (int i = 0; i < DataResult.Data.Columns.Count; i++)
+                        {
+                            writer.Write(NormCSVText(DataResult.Data.Columns[i].ColumnName));
+                            if (i != DataResult.Data.Columns.Count - 1)
+                                writer.Write(",");
+                        }
+                        writer.WriteLine();
+
+                        DataSelectResult result = DataResult;
+                        while (result != null)
+                        {
+                            // write rows
+                            foreach (DataRow row in result.Data.Rows)
+                            {
+                                for (int i = 0; i < DataResult.Data.Columns.Count; i++)
+                                {
+                                    writer.Write(NormCSVText(row[i] as string));
+                                    if (i != DataResult.Data.Columns.Count - 1)
+                                        writer.Write(",");
+                                }
+                                writer.WriteLine();
+                            }
+
+                            // check for more data
+                            if (result.IsMore && allData)
+                                result = Project.Client.DataSelect(result);
+                            else
+                                result = null;
+                        }
+
+                        // close stream
+                        writer.Flush();
+                        writer.Close();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Normalize text to be written to a CSV file.
+        /// </summary>
+        /// <param name="text">The text to normalize.</param>
+        /// <returns>The normalized text.</returns>
+        private string NormCSVText(string text)
+        {
+            if (text == null)
+                return null;
+
+            if (!text.Contains(",") && !text.Contains("\""))
+                return text;
+
+            StringBuilder sb = new StringBuilder(text);
+            sb.Replace("\"", "\"\"");
+            if (text.Contains(","))
+            {
+                sb.Insert(0, "\"");
+                sb.Append("\"");
+            }
+
+            return sb.ToString();
         }
 
         #endregion

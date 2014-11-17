@@ -155,6 +155,11 @@ namespace Wallace.IDE.SalesForce.Framework
             //App.Instance.Menu.AddFunction(viewCheckpointsFunction, "PROJECT");
             //App.Instance.ToolBar.AddFunction(viewCheckpointsFunction);
 
+            ExportDataResultFunction exportData = new ExportDataResultFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(exportData));
+            App.Instance.ToolBar.AddFunction(exportData);
+            App.Instance.Menu.AddFunction(exportData, "DOCUMENT");
+
             NewManifestFromReportFunction manifestReport = new NewManifestFromReportFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(manifestReport));
             App.Instance.ToolBar.AddFunction(manifestReport);
@@ -356,7 +361,7 @@ namespace Wallace.IDE.SalesForce.Framework
                 {
                     App.Instance.Navigation.Nodes.Clear();
                     CurrentProject.Dispose();
-                    CurrentProject = null;                    
+                    CurrentProject = null;
                     App.Instance.SessionTitle = null;
                 }
                 else
