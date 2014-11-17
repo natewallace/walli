@@ -82,6 +82,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             Presenter.Header = VisualHelper.CreateIconHeader("Manifest", "FolderClosed.png");
             Presenter.ExpandedHeader = VisualHelper.CreateIconHeader("Manifest", "FolderOpen.png");
+            Presenter.AllowDrop = true;
         }
 
         /// <summary>
@@ -159,6 +160,87 @@ namespace Wallace.IDE.SalesForce.Node
             Presenter.NodeManager.ActiveNode = manifestNode;
 
             return manifestNode;
+        }
+
+        /// <summary>
+        /// Allow users to drop local manifest files into folder.
+        /// </summary>
+        /// <param name="e">The item being dragged.</param>
+        public override void DragOver(System.Windows.DragEventArgs e)
+        {
+            bool allAreManifests = true;
+
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                string[] fileNames = e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[];
+                if (fileNames != null)
+                {
+                    
+                    foreach (string fileName in fileNames)
+                    {
+                        string extension = System.IO.Path.GetExtension(fileName) ?? String.Empty;
+                        if (String.Compare(extension.ToUpper(), ".MANIFEST", true) != 0)
+                        {
+                            allAreManifests = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (allAreManifests)
+                e.Effects = System.Windows.DragDropEffects.Copy;
+            else
+                e.Effects = System.Windows.DragDropEffects.None;
+        }
+
+        /// <summary>
+        /// Process local manifest files that have been dropped into this folder.
+        /// </summary>
+        /// <param name="e">The item being dropped.</param>
+        public override void Drop(System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                string[] fileNames = e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[];
+                if (fileNames != null)
+                {
+                    HashSet<string> manifestFileNames = new HashSet<string>();
+                    foreach (Manifest m in Project.GetManifests())
+                        manifestFileNames.Add(m.FileName.ToLower());
+
+                    foreach (string fileName in fileNames)
+                    {
+                        string extension = System.IO.Path.GetExtension(fileName) ?? String.Empty;
+                        if (String.Compare(extension.ToUpper(), ".MANIFEST", true) == 0)
+                        {
+                            // make sure the name is unique
+                            int index = 0;
+                            string fileNameWithoutExt = System.IO.Path.GetFileNameWithoutExtension(fileName);
+                            string manifestFileName = System.IO.Path.Combine(
+                                Project.ManifestFolder, 
+                                System.IO.Path.GetFileName(fileName));
+
+                            while (manifestFileNames.Contains(manifestFileName.ToLower()))
+                            {
+                                index++;
+                                manifestFileName = System.IO.Path.Combine(
+                                    Project.ManifestFolder,
+                                    String.Format("{0}({1}).manifest", fileNameWithoutExt, index));
+                            }
+
+                            manifestFileNames.Add(manifestFileName.ToLower());
+
+                            // copy the file over
+                            System.IO.File.Copy(fileName, manifestFileName, false);
+                        }
+                    }
+
+                    // refresh the manifest folder
+                    App.Instance.Navigation.ActiveNode = this;
+                    App.Instance.GetFunction<RefreshFolderFunction>().Execute();
+                }
+            }            
         }
 
         #endregion

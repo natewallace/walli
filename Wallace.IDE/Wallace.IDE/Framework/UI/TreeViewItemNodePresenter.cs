@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
@@ -90,6 +91,10 @@ namespace Wallace.IDE.Framework.UI
             {
                 if (Nodes != null)
                     (Nodes as ObservableCollection<INode>).CollectionChanged -= TreeViewItemNodePresenter_NodesChanged;
+
+                Host.DragOver -= Host_DragOver;
+                Host.Drop -= Host_Drop;
+                
             }
         }
 
@@ -104,6 +109,9 @@ namespace Wallace.IDE.Framework.UI
             {
                 Nodes = new ObservableCollection<INode>();
                 (Nodes as ObservableCollection<INode>).CollectionChanged += TreeViewItemNodePresenter_NodesChanged;
+
+                Host.DragOver += Host_DragOver;
+                Host.Drop += Host_Drop;
             }
         }
 
@@ -179,6 +187,22 @@ namespace Wallace.IDE.Framework.UI
         }
 
         /// <summary>
+        /// Set to true if the node allows items to be dropped on it.
+        /// </summary>
+        public bool AllowDrop
+        {
+            get 
+            { 
+                return (Host == null) ? false : Host.AllowDrop; 
+            }
+            set
+            {
+                if (Host != null)
+                    Host.AllowDrop = value;
+            }
+        }
+
+        /// <summary>
         /// Start a drag drop operation.
         /// </summary>
         /// <param name="data">A data object that contains the data being dragged.</param>
@@ -239,6 +263,42 @@ namespace Wallace.IDE.Framework.UI
         {
             TreeViewNodeManager nodeManager = NodeManager as TreeViewNodeManager;
             nodeManager.HandleNodeCollectionChange(Host, this, e);
+        }
+
+        /// <summary>
+        /// Pass event to node.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void Host_DragOver(object sender, DragEventArgs e)
+        {
+            try
+            {
+                if (Host.Tag is INode)
+                    (Host.Tag as INode).DragOver(e);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Pass event to node.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void Host_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                if (Host.Tag is INode)
+                    (Host.Tag as INode).Drop(e);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
         }
 
         #endregion

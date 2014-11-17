@@ -56,6 +56,11 @@ namespace Wallace.IDE.Framework
         void Collapse();
 
         /// <summary>
+        /// Set to true if the node allows items to be dropped on it.
+        /// </summary>
+        bool AllowDrop { get; set; }
+
+        /// <summary>
         /// Start a drag drop operation.
         /// </summary>
         /// <param name="data">A data object that contains the data being dragged.</param>

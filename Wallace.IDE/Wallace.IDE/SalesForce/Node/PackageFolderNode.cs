@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
@@ -81,6 +82,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             Presenter.Header = VisualHelper.CreateIconHeader("Package", "FolderClosed.png");
             Presenter.ExpandedHeader = VisualHelper.CreateIconHeader("Package", "FolderOpen.png");
+            Presenter.AllowDrop = true;
         }
 
         /// <summary>
@@ -141,6 +143,87 @@ namespace Wallace.IDE.SalesForce.Node
             Presenter.NodeManager.ActiveNode = packageNode;
 
             return packageNode;
+        }
+
+        /// <summary>
+        /// Allow users to drop local package files into folder.
+        /// </summary>
+        /// <param name="e">The item being dragged.</param>
+        public override void DragOver(System.Windows.DragEventArgs e)
+        {
+            bool allArePackages = true;
+
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                string[] fileNames = e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[];
+                if (fileNames != null)
+                {
+
+                    foreach (string fileName in fileNames)
+                    {
+                        string extension = System.IO.Path.GetExtension(fileName) ?? String.Empty;
+                        if (String.Compare(extension.ToUpper(), ".ZIP", true) != 0)
+                        {
+                            allArePackages = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (allArePackages)
+                e.Effects = System.Windows.DragDropEffects.Copy;
+            else
+                e.Effects = System.Windows.DragDropEffects.None;
+        }
+
+        /// <summary>
+        /// Process local package files that have been dropped into this folder.
+        /// </summary>
+        /// <param name="e">The item being dropped.</param>
+        public override void Drop(System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                string[] fileNames = e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[];
+                if (fileNames != null)
+                {
+                    HashSet<string> packageFileNames = new HashSet<string>();
+                    foreach (Package p in Project.GetPackages())
+                        packageFileNames.Add(p.FileName.ToLower());
+
+                    foreach (string fileName in fileNames)
+                    {
+                        string extension = System.IO.Path.GetExtension(fileName) ?? String.Empty;
+                        if (String.Compare(extension.ToUpper(), ".ZIP", true) == 0)
+                        {
+                            // make sure the name is unique
+                            int index = 0;
+                            string fileNameWithoutExt = System.IO.Path.GetFileNameWithoutExtension(fileName);
+                            string packageFileName = System.IO.Path.Combine(
+                                Project.PackageFolder,
+                                System.IO.Path.GetFileName(fileName));
+
+                            while (packageFileNames.Contains(packageFileName.ToLower()))
+                            {
+                                index++;
+                                packageFileName = System.IO.Path.Combine(
+                                    Project.PackageFolder,
+                                    String.Format("{0}({1}).zip", fileNameWithoutExt, index));
+                            }
+
+                            packageFileNames.Add(packageFileName.ToLower());
+
+                            // copy the file over
+                            System.IO.File.Copy(fileName, packageFileName, false);
+                        }
+                    }
+
+                    // refresh the package folder
+                    App.Instance.Navigation.ActiveNode = this;
+                    App.Instance.GetFunction<RefreshFolderFunction>().Execute();
+                }
+            }
         }
 
         #endregion

@@ -63,6 +63,18 @@ namespace Wallace.IDE.Framework
         void DragStart();
 
         /// <summary>
+        /// This method is called when a drag drop item is dragged over this node.
+        /// </summary>
+        /// <param name="e">The drag drop item.</param>
+        void DragOver(System.Windows.DragEventArgs e);
+
+        /// <summary>
+        /// This method is called when a drag drop item is dropped over this node.
+        /// </summary>
+        /// <param name="e">The drag drop item that was dropped.</param>
+        void Drop(System.Windows.DragEventArgs e);
+
+        /// <summary>
         /// The UI will call this method to get items that should be displayed in a context menu for this node.
         /// </summary>
         /// <returns>The items that should be displayed in a context menu for this node.</returns>
