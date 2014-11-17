@@ -44,6 +44,11 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         private DataSelectResult _dataResult;
 
+        /// <summary>
+        /// Keeps track of the last enabled state of the ExecuteQuery method.
+        /// </summary>
+        private bool _lastIsExecuteQueryEnabledState;
+
         #endregion
 
         #region Constructors
@@ -59,11 +64,9 @@ namespace Wallace.IDE.SalesForce.Document
 
             Project = project;
             View = new DataEditControl();
-            View.ExecuteClick += DataEdit_ExecuteClick;
-            View.CommitClick += DataEdit_CommitClick;
             View.NextClick += DataEdit_NextClick;
             View.SOQLTextChanged += DataEdit_SOQLTextChanged;
-            View.IsExecuteEnabled = false;
+            View.PreviewKeyDown += DataEdit_PreviewKeyDown;
             DataResult = null;
 
             UpdateDataDisplay();
@@ -83,6 +86,22 @@ namespace Wallace.IDE.SalesForce.Document
         /// The control that is used for display.
         /// </summary>
         private DataEditControl View { get; set; }
+
+        /// <summary>
+        /// Indicates if the ExecuteQuery method can be called.
+        /// </summary>
+        public bool IsExecuteQueryEnabled
+        {
+            get { return !String.IsNullOrWhiteSpace(View.SOQLText); }
+        }
+
+        /// <summary>
+        /// Indicates if the CommitChanges method can be called.
+        /// </summary>
+        public bool IsCommitChangesEnabled
+        {
+            get { return IsDataModified; }
+        }
 
         /// <summary>
         /// The current data being displayed.
@@ -220,14 +239,124 @@ namespace Wallace.IDE.SalesForce.Document
             if (DataResult == null)
             {
                 View.IsNextVisible = false;
-                View.IsCommitEnabled = false;
             }
             else
             {
                 View.IsNextVisible = DataResult.IsMore;
-                View.IsCommitEnabled = IsDataModified;
             }
 
+            App.Instance.UpdateWorkspaces();
+        }
+
+        /// <summary>
+        /// Commit any changes that were made to the results.
+        /// </summary>
+        public void CommitChanges()
+        {
+            if (!IsCommitChangesEnabled)
+                return;
+
+            if (DataResult != null && DataResult.Data != null)
+            {
+                Dictionary<DataRow, DataRow> rowMap = new Dictionary<DataRow, DataRow>();
+
+                DataTable addTable = DataResult.Data.Clone();
+                DataTable updateTable = DataResult.Data.Clone();
+                DataTable deleteTable = DataResult.Data.Clone();
+
+                foreach (DataRow row in DataResult.Data.Rows)
+                {
+                    switch (row.RowState)
+                    {
+                        case DataRowState.Added:
+                            addTable.ImportRow(row);
+                            rowMap.Add(addTable.Rows[addTable.Rows.Count - 1], row);
+                            break;
+
+                        case DataRowState.Modified:
+                            updateTable.ImportRow(row);
+                            break;
+
+                        case DataRowState.Deleted:
+                            deleteTable.ImportRow(row);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                StringBuilder sb = new StringBuilder();
+                if (addTable.Rows.Count > 0)
+                    sb.AppendLine(String.Format("{0} record(s) will be added.", addTable.Rows.Count));
+                if (updateTable.Rows.Count > 0)
+                    sb.AppendLine(String.Format("{0} record(s) will be updated.", updateTable.Rows.Count));
+                if (deleteTable.Rows.Count > 0)
+                    sb.AppendLine(String.Format("{0} record(s) will be deleted.", deleteTable.Rows.Count));
+
+                if (sb.Length > 0)
+                {
+                    sb.Insert(0, String.Format("The following changes will be commited:{0}{0}", Environment.NewLine));
+                    sb.AppendLine();
+                    sb.AppendLine("Do you want to proceed?");
+
+                    if (App.MessageUser(sb.ToString(), "Confirm Commit", System.Windows.MessageBoxImage.Warning, new string[] { "Yes", "No" }) == "Yes")
+                    {
+                        try
+                        {
+                            using (App.Wait("Saving..."))
+                            {
+                                if (addTable.Rows.Count > 0)
+                                    Project.Client.DataInsert(addTable);
+                                if (updateTable.Rows.Count > 0)
+                                    Project.Client.DataUpdate(updateTable);
+                                if (deleteTable.Rows.Count > 0)
+                                    Project.Client.DataDelete(deleteTable);
+
+                                // set the id fields for adds
+                                foreach (DataRow row in addTable.Rows)
+                                {
+                                    DataRow originalRow = rowMap[row];
+                                    originalRow["Id"] = row["Id"];
+                                }
+
+                                DataResult.Data.AcceptChanges();
+                                UpdateDisplay();
+                            }
+                        }
+                        catch (Exception err)
+                        {
+                            App.HandleException(err);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Execute the currently entered query.
+        /// </summary>
+        public void ExecuteQuery()
+        {
+            if (!IsExecuteQueryEnabled)
+                return;
+
+            try
+            {
+                if (DataLossCheck())
+                {
+                    using (App.Wait("Executing query..."))
+                    {
+                        DataResult = Project.Client.DataSelect(View.SOQLText, true);
+                        UpdateDataDisplay();
+                        UpdateDisplay();
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                App.MessageUser(err.Message, "Error", System.Windows.MessageBoxImage.Error, new string[] { "OK" });
+            }
         }
 
         /// <summary>
@@ -328,112 +457,13 @@ namespace Wallace.IDE.SalesForce.Document
         #region Event Handlers
 
         /// <summary>
-        /// Execute the query and display the results.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void DataEdit_ExecuteClick(object sender, EventArgs e)
-        {
-            try
-            {
-                if (DataLossCheck())
-                {
-                    using (App.Wait("Executing query..."))
-                    {
-                        DataResult = Project.Client.DataSelect(View.SOQLText, true);
-                        UpdateDataDisplay();
-                        UpdateDisplay();
-                    }
-                }
-            }
-            catch (Exception err)
-            {
-                App.MessageUser(err.Message, "Error", System.Windows.MessageBoxImage.Error, new string[] { "OK" });
-            }
-        }
-
-        /// <summary>
         /// Commit changes to the database.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
         private void DataEdit_CommitClick(object sender, EventArgs e)
         {
-            if (DataResult != null && DataResult.Data != null)
-            {
-                Dictionary<DataRow, DataRow> rowMap = new Dictionary<DataRow, DataRow>();
-
-                DataTable addTable = DataResult.Data.Clone();
-                DataTable updateTable = DataResult.Data.Clone();
-                DataTable deleteTable = DataResult.Data.Clone();
-
-                foreach (DataRow row in DataResult.Data.Rows)
-                {
-                    switch (row.RowState)
-                    {
-                        case DataRowState.Added:
-                            addTable.ImportRow(row);
-                            rowMap.Add(addTable.Rows[addTable.Rows.Count - 1], row);
-                            break;
-
-                        case DataRowState.Modified:
-                            updateTable.ImportRow(row);
-                            break;
-
-                        case DataRowState.Deleted:
-                            deleteTable.ImportRow(row);
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                StringBuilder sb = new StringBuilder();
-                if (addTable.Rows.Count > 0)
-                    sb.AppendLine(String.Format("{0} record(s) will be added.", addTable.Rows.Count));
-                if (updateTable.Rows.Count > 0)
-                    sb.AppendLine(String.Format("{0} record(s) will be updated.", updateTable.Rows.Count));
-                if (deleteTable.Rows.Count > 0)
-                    sb.AppendLine(String.Format("{0} record(s) will be deleted.", deleteTable.Rows.Count));
-
-                if (sb.Length > 0)
-                {
-                    sb.Insert(0, String.Format("The following changes will be commited:{0}{0}", Environment.NewLine));
-                    sb.AppendLine();
-                    sb.AppendLine("Do you want to proceed?");
-
-                    if (App.MessageUser(sb.ToString(), "Confirm Commit", System.Windows.MessageBoxImage.Warning, new string[] { "Yes", "No" }) == "Yes")
-                    {
-                        try
-                        {
-                            using (App.Wait("Saving..."))
-                            {
-                                if (addTable.Rows.Count > 0)
-                                    Project.Client.DataInsert(addTable);
-                                if (updateTable.Rows.Count > 0)
-                                    Project.Client.DataUpdate(updateTable);
-                                if (deleteTable.Rows.Count > 0)
-                                    Project.Client.DataDelete(deleteTable);
-
-                                // set the id fields for adds
-                                foreach (DataRow row in addTable.Rows)
-                                {
-                                    DataRow originalRow = rowMap[row];
-                                    originalRow["Id"] = row["Id"];
-                                }
-
-                                DataResult.Data.AcceptChanges();
-                                UpdateDisplay();
-                            }
-                        }
-                        catch (Exception err)
-                        {
-                            App.HandleException(err);
-                        }
-                    }
-                }
-            }
+            CommitChanges();
         }
 
         /// <summary>
@@ -465,13 +495,54 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Process hot keys.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void DataEdit_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            try
+            {
+                switch (e.Key)
+                {
+                    case System.Windows.Input.Key.F5:
+                        ExecuteQuery();
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
+                {
+                    switch (e.Key)
+                    {
+                        case System.Windows.Input.Key.S:
+                            CommitChanges();
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
         /// Update the execute button.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
         private void DataEdit_SOQLTextChanged(object sender, EventArgs e)
         {
-            View.IsExecuteEnabled = !String.IsNullOrWhiteSpace(View.SOQLText);
+            if (_lastIsExecuteQueryEnabledState != IsExecuteQueryEnabled)
+                UpdateDisplay();
+
+            _lastIsExecuteQueryEnabledState = IsExecuteQueryEnabled;
         }
 
         /// <summary>

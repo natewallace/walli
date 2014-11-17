@@ -155,8 +155,16 @@ namespace Wallace.IDE.SalesForce.Framework
             //App.Instance.Menu.AddFunction(viewCheckpointsFunction, "PROJECT");
             //App.Instance.ToolBar.AddFunction(viewCheckpointsFunction);
 
+            ExecuteDataQueryFunction executeQueryFunction = new ExecuteDataQueryFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(executeQueryFunction));
+            App.Instance.ToolBar.AddFunction(executeQueryFunction);
+            App.Instance.Menu.AddFunction(executeQueryFunction, "DOCUMENT");
+
+            CommitDataChangesFunction commitDataFunction = new CommitDataChangesFunction();
+            App.Instance.ToolBar.AddFunction(commitDataFunction);
+            App.Instance.Menu.AddFunction(commitDataFunction, "DOCUMENT");
+
             ExportDataResultFunction exportData = new ExportDataResultFunction();
-            App.Instance.ToolBar.AddFunction(new FunctionSeparator(exportData));
             App.Instance.ToolBar.AddFunction(exportData);
             App.Instance.Menu.AddFunction(exportData, "DOCUMENT");
 

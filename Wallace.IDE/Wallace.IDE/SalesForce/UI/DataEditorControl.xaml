@@ -27,25 +27,11 @@
         <DockPanel Grid.Row="1"
                    LastChildFill="True">
 
-            <DockPanel DockPanel.Dock="Bottom"
-                       LastChildFill="False"
-                        Margin="0,0,0,5">
-                <Button x:Name="buttonExecute"
-                        Click="buttonExecute_Click"
-                        ToolTip="Execute the SOQL query that is entered above.">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/Run.png" Height="16" Width="16" />
-                        <TextBlock>Execute</TextBlock>
-                    </StackPanel>
-                </Button>
-            </DockPanel>
-
             <avalonEdit:TextEditor x:Name="textEditor"
                                    FontFamily="Consolas"
                                    FontSize="10pt"
                                    MinHeight="60"
                                    Margin="0,0,0,3"
-                                   KeyDown="textEditor_KeyDown" 
                                    HorizontalScrollBarVisibility="Auto"
                                    VerticalScrollBarVisibility="Auto"
                                    ShowLineNumbers="True"
@@ -96,15 +82,6 @@
         <DockPanel x:Name="dockPanelResultButtons"
                    Grid.Row="4"
                    LastChildFill="False">
-            <Button x:Name="buttonCommit"
-                    DockPanel.Dock="Left"
-                    ToolTip="Commit all changes that have been made to the data above."
-                    Click="buttonCommit_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/Resources/Save.png" Height="16" Width="16" />
-                    <TextBlock>Commit</TextBlock>
-                </StackPanel>
-            </Button>
             
             <Button x:Name="buttonNext"
                     DockPanel.Dock="Right"

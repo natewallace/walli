@@ -172,30 +172,12 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
-        /// Enable/Disable the commit function.
-        /// </summary>
-        public bool IsCommitEnabled
-        {
-            get { return buttonCommit.IsEnabled; }
-            set { buttonCommit.IsEnabled = value; }
-        }
-
-        /// <summary>
         /// Set the visibility of the next function.
         /// </summary>
         public bool IsNextVisible
         {
             get { return (buttonNext.Visibility == System.Windows.Visibility.Visible); }
             set { buttonNext.Visibility = value ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; }
-        }
-
-        /// <summary>
-        /// Enable/Disable the Execute button.
-        /// </summary>
-        public bool IsExecuteEnabled
-        {
-            get { return buttonExecute.IsEnabled; }
-            set { buttonExecute.IsEnabled = value; }
         }
 
         #endregion
@@ -208,26 +190,6 @@ namespace Wallace.IDE.SalesForce.UI
         public void FocusText()
         {
             textEditor.Focus();
-        }
-
-        /// <summary>
-        /// Raises the ExecuteClick event.
-        /// </summary>
-        /// <param name="e">Arguments to pass with the event.</param>
-        protected virtual void OnExecuteClick(EventArgs e)
-        {
-            if (ExecuteClick != null)
-                ExecuteClick(this, e);
-        }
-
-        /// <summary>
-        /// Raises the CommitClick event.
-        /// </summary>
-        /// <param name="e">Arguments to pass with the event.</param>
-        protected virtual void OnCommitClick(EventArgs e)
-        {
-            if (CommitClick != null)
-                CommitClick(this, e);
         }
 
         /// <summary>
@@ -255,16 +217,6 @@ namespace Wallace.IDE.SalesForce.UI
         #region Events
 
         /// <summary>
-        /// Raised when the user clicks the execute button.
-        /// </summary>
-        public event EventHandler ExecuteClick;
-
-        /// <summary>
-        /// Raised when the user clicks the commit button.
-        /// </summary>
-        public event EventHandler CommitClick;
-
-        /// <summary>
         /// Raised when the user clicks the next button.
         /// </summary>
         public event EventHandler NextClick;
@@ -279,40 +231,6 @@ namespace Wallace.IDE.SalesForce.UI
         #region Event Handlers
 
         /// <summary>
-        /// Raise the ExecuteClick event.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void buttonExecute_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                OnExecuteClick(EventArgs.Empty);
-            }
-            catch (Exception err)
-            {
-                App.HandleException(err);
-            }
-        }
-
-        /// <summary>
-        /// Raises the CommitClick event.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void buttonCommit_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                OnCommitClick(EventArgs.Empty);
-            }
-            catch (Exception err)
-            {
-                App.HandleException(err);
-            }
-        }
-
-        /// <summary>
         /// Raise the NextClick event.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
@@ -322,24 +240,6 @@ namespace Wallace.IDE.SalesForce.UI
             try
             {
                 OnNextClick(EventArgs.Empty);
-            }
-            catch (Exception err)
-            {
-                App.HandleException(err);
-            }
-        }
-
-        /// <summary>
-        /// Raise the ExecuteClick event when F5 key is pressed.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void textEditor_KeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.Key == Key.F5)
-                    OnExecuteClick(EventArgs.Empty);
             }
             catch (Exception err)
             {
