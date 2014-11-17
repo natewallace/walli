@@ -177,7 +177,7 @@ namespace Wallace.IDE.SalesForce.UI
         public bool IsNextVisible
         {
             get { return (buttonNext.Visibility == System.Windows.Visibility.Visible); }
-            set { buttonNext.Visibility = value ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; }
+            set { buttonNext.Visibility = value ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; }
         }
 
         #endregion

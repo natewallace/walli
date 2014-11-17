@@ -59,11 +59,11 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "ExportData.png");
-                presenter.ToolTip = "Export data";
+                presenter.ToolTip = "Export data results";
             }
             else
             {
-                presenter.Header = "Export data";
+                presenter.Header = "Export data results";
                 presenter.Icon = VisualHelper.CreateIconHeader(null, "ExportData.png");
             }
         }
@@ -76,6 +76,7 @@ namespace Wallace.IDE.SalesForce.Function
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
             IsVisible = (CurrentDocument != null);
+            IsEnabled = (CurrentDocument != null && CurrentDocument.IsExportDataResultEnabled);
         }
 
         /// <summary>

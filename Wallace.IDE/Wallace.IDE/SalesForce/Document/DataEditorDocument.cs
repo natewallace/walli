@@ -104,6 +104,14 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Indicates if the ExportDataResult method can be called.
+        /// </summary>
+        public bool IsExportDataResultEnabled
+        {
+            get { return (DataResult != null); }
+        }
+
+        /// <summary>
         /// The current data being displayed.
         /// </summary>
         private DataSelectResult DataResult
@@ -364,17 +372,25 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         public void ExportResult()
         {
+            if (!IsExportDataResultEnabled)
+                return;
+
             if (DataResult != null)
             {
                 // ask user if they want to export all data if there is more than one page
                 bool allData = false;
                 if (DataResult.IsMore)
                 {
-                    allData = App.MessageUser(
+                    string answer = App.MessageUser(
                         "Would you like to export all remaining data from your query or only the data that is currently displayed?",
                         "Export Data",
                         System.Windows.MessageBoxImage.Question,
-                        new string[] { "All data", "Currently displayed data" }) == "All data";
+                        new string[] { "All data", "Currently displayed data", "Cancel" });
+
+                    if (answer == "Cancel")
+                        return;
+
+                    allData = (answer == "All data");
                 }
 
                 // get file name for export
