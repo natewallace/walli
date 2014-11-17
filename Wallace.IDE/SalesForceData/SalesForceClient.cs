@@ -704,7 +704,8 @@ namespace SalesForceData
                     }
                     else
                     {
-                        throw new Exception("Invalid class name: " + file.Name);
+                        itemName = file.Name;
+                        namespacePrefix = GetOrgInfo().organizationNamespace;
                     }
 
                     // get record
@@ -831,7 +832,8 @@ namespace SalesForceData
             }
             else
             {
-                throw new Exception("Invalid class name: " + file.Name);
+                itemName = file.Name;
+                namespacePrefix = GetOrgInfo().organizationNamespace;
             }
 
             switch (file.FileType.Name)
@@ -1147,7 +1149,8 @@ namespace SalesForceData
             }
             else
             {
-                throw new Exception("Invalid class name: " + file.Name);
+                itemName = file.Name;
+                namespacePrefix = GetOrgInfo().organizationNamespace;
             }
 
             switch (file.FileType.Name)
@@ -1435,7 +1438,8 @@ namespace SalesForceData
                     }
                     else
                     {
-                        throw new Exception("Invalid class name: " + file.Name);
+                        itemName = file.Name;
+                        namespacePrefix = GetOrgInfo().organizationNamespace;
                     }
 
                     // get item record
