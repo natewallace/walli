@@ -67,7 +67,7 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void Init()
         {
-            switch (Unit.BaseEventType.ToUpper())
+            switch (Unit.EventType.ToUpper())
             {
                 case "METHOD":
                 case "CONSTRUCTOR":
@@ -79,8 +79,12 @@ namespace Wallace.IDE.SalesForce.Node
                     Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Namespace.png");
                     break;
 
+                case "USER_DEBUG":
+                    Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Comment.png");
+                    break;
+
                 default:
-                    if (Unit.BaseEventType.ToUpper().Contains("ERROR"))
+                    if (Unit.EventType.ToUpper().Contains("ERROR"))
                     {
                         Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Error.png");
                     }
