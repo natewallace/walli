@@ -87,6 +87,22 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         private LogViewerControl View { get; set; }
 
+        /// <summary>
+        /// The currently selected log.
+        /// </summary>
+        public Log SelectedLog
+        {
+            get { return View.SelectedLog; }
+        }
+
+        /// <summary>
+        /// The logs that are currently displayed.
+        /// </summary>
+        public IEnumerable<Log> Logs
+        {
+            get { return View.Logs; }
+        }
+
         #endregion
 
         #region Methods
@@ -121,6 +137,7 @@ namespace Wallace.IDE.SalesForce.Document
         {
             View.TracedEntity = Parameters.TracedEntityName;
             View.Logs = Project.Client.GetLogs(Parameters.TracedEntityId);
+            App.Instance.UpdateWorkspaces();
         }
 
         #endregion
@@ -152,6 +169,8 @@ namespace Wallace.IDE.SalesForce.Document
                         foreach (LogUnit unit in data.Units)
                             _logNodeManager.Nodes.Add(new LogUnitNode(unit));
                     }
+
+                    App.Instance.UpdateWorkspaces();
                 }
             }
             catch (Exception err)

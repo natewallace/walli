@@ -214,6 +214,24 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Raise the ViewClick event when a user double clicks a log paramter.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void listViewLogParameters_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (SelectedLogParameters != null)
+                    OnViewLogsClick(EventArgs.Empty);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
 
         #region Events

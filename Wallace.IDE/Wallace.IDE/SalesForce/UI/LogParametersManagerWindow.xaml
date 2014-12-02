@@ -26,7 +26,8 @@
             
             <ListView x:Name="listViewLogParameters"
                       Grid.Row="1"
-                      SelectionChanged="listViewLogParameters_SelectionChanged">
+                      SelectionChanged="listViewLogParameters_SelectionChanged"
+                      MouseDoubleClick="listViewLogParameters_MouseDoubleClick">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=TracedEntityName}"

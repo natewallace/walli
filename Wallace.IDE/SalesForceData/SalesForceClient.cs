@@ -496,6 +496,46 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Delete the given logs.
+        /// </summary>
+        /// <param name="logs">The logs to delete.</param>
+        public void DeleteLogs(IEnumerable<Log> logs)
+        {
+            if (logs == null)
+                throw new ArgumentNullException("logs");
+
+            InitClients();
+
+            List<string> logIds = new List<string>();
+            foreach (Log log in logs)
+                logIds.Add(log.Id);
+
+            SalesForceAPI.Tooling.deleteResponse response = _toolingClient.delete(new SalesForceAPI.Tooling.deleteRequest(
+                            new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                            logIds.ToArray()));
+
+            if (response != null && response.result != null)
+            {
+                foreach (SalesForceAPI.Tooling.DeleteResult result in response.result)
+                {
+                    if (!result.success)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        if (response.result[0].errors != null)
+                            foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
+                                sb.AppendLine(err.message);
+
+                        throw new Exception("Couldn't delete all logs: \r\n" + sb.ToString());
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Couldn't delete logs: Invalid response received.");
+            }
+        }
+
+        /// <summary>
         /// Get checkpoints that have been created.
         /// </summary>
         /// <returns>Existing checkpoints.</returns>

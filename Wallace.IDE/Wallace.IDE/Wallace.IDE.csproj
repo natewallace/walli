@@ -109,6 +109,8 @@
     <Compile Include="SalesForce\Function\CloseProjectFunction.cs" />
     <Compile Include="SalesForce\Function\CommitDataChangesFunction.cs" />
     <Compile Include="SalesForce\Function\CopyPackageDeployResultsFunction.cs" />
+    <Compile Include="SalesForce\Function\DeleteAllLogsFunction.cs" />
+    <Compile Include="SalesForce\Function\DeleteLogFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteManifestFunction.cs" />
     <Compile Include="SalesForce\Function\DeletePackageFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteProjectFunction.cs" />
@@ -758,6 +760,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\LogViewer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\DeleteLog.png" />
+    <Resource Include="Resources\DeleteLogAll.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

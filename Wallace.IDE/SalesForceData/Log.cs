@@ -45,7 +45,7 @@ namespace SalesForceData
                 throw new ArgumentNullException("log");
 
             Id = log.Id;
-            StartTime = log.StartTime.HasValue ? log.StartTime.Value : DateTime.MinValue;
+            StartTime = log.StartTime.HasValue ? log.StartTime.Value.ToLocalTime() : DateTime.MinValue;
             Duration = log.DurationMilliseconds.HasValue ? log.DurationMilliseconds.Value : 0;
             Operation = log.Operation;
             Status = log.Status;
