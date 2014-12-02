@@ -21,7 +21,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,16 +39,16 @@ using SalesForceData;
 namespace Wallace.IDE.SalesForce.UI
 {
     /// <summary>
-    /// Interaction logic for Report.xaml
+    /// Interaction logic for LogViewerControl.xaml
     /// </summary>
-    public partial class ReportControl : UserControl
+    public partial class LogViewerControl : UserControl
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ReportControl()
+        public LogViewerControl()
         {
             InitializeComponent();
         }
@@ -59,58 +58,65 @@ namespace Wallace.IDE.SalesForce.UI
         #region Properties
 
         /// <summary>
-        /// The displayed report items.
+        /// The traced entity.
         /// </summary>
-        public IEnumerable<SourceFile> ReportItems
+        public string TracedEntity
         {
-            get 
+            get { return textBlockEntity.Text; }
+            set { textBlockEntity.Text = value; }
+        }
+
+        /// <summary>
+        /// The displayed logs.
+        /// </summary>
+        public IEnumerable<Log> Logs
+        {
+            get
             {
-                List<SourceFile> result = new List<SourceFile>();
+                List<Log> result = new List<Log>();
 
-                IEnumerable<ReportItem> items = dataGridFiles.ItemsSource as IEnumerable<ReportItem>;
+                IEnumerable<Log> items = dataGridLogs.ItemsSource as IEnumerable<Log>;
                 if (items != null)
-                    foreach (ReportItem item in items)
-                        result.Add(item.File);
+                    foreach (Log item in items)
+                        result.Add(item);
 
-                return result; 
+                return result;
             }
-            set 
+            set
             {
                 if (value == null)
                 {
-                    dataGridFiles.ItemsSource = null;
+                    dataGridLogs.ItemsSource = null;
                 }
                 else
                 {
-                    List<ReportItem> items = new List<ReportItem>();
-                    foreach (SourceFile file in value)
-                        items.Add(new ReportItem(file));
+                    List<Log> items = new List<Log>();
+                    foreach (Log log in value)
+                        items.Add(log);
 
-                    dataGridFiles.ItemsSource = items;
+                    dataGridLogs.ItemsSource = items;
                 }
             }
         }
 
         /// <summary>
-        /// Get the currently selected report items.
+        /// The currently selected log.
         /// </summary>
-        public IEnumerable<SourceFile> SelectedReportItems
+        public Log SelectedLog
         {
             get
             {
-                List<SourceFile> result = new List<SourceFile>();
-
-                IEnumerable<ReportItem> items = dataGridFiles.ItemsSource as IEnumerable<ReportItem>;
-                if (items != null)
-                {
-                    dataGridFiles.CommitEdit(DataGridEditingUnit.Row, true);
-                    foreach (ReportItem item in items)
-                        if (item.IsSelected)
-                            result.Add(item.File);
-                }
-
-                return result; 
+                return dataGridLogs.SelectedItem as Log; 
             }
+        }
+
+        /// <summary>
+        /// The log content displayed.
+        /// </summary>
+        public string LogContent
+        {
+            get { return textEditor.Text; }
+            set { textEditor.Text = value; }
         }
 
         #endregion
@@ -118,25 +124,13 @@ namespace Wallace.IDE.SalesForce.UI
         #region Methods
 
         /// <summary>
-        /// Select all items in the report.
+        /// Raises the SelectedLogChanged event.
         /// </summary>
-        public void SelectAll()
+        /// <param name="e">Arguments to pass with the event.</param>
+        protected virtual void OnSelectedLogChanged(EventArgs e)
         {
-            IEnumerable<ReportItem> items = dataGridFiles.ItemsSource as IEnumerable<ReportItem>;
-            if (items != null)
-                foreach (ReportItem item in items)
-                    item.IsSelected = true;
-        }
-
-        /// <summary>
-        /// Unselect all items in the report.
-        /// </summary>
-        public void SelectNone()
-        {
-            IEnumerable<ReportItem> items = dataGridFiles.ItemsSource as IEnumerable<ReportItem>;
-            if (items != null)
-                foreach (ReportItem item in items)
-                    item.IsSelected = false;
+            if (SelectedLogChanged != null)
+                SelectedLogChanged(this, e);
         }
 
         #endregion
@@ -144,28 +138,30 @@ namespace Wallace.IDE.SalesForce.UI
         #region Event Handlers
 
         /// <summary>
-        /// Enable editing on one click.
+        /// Raises the SelectedLogChanged event.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
-        private void dataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void dataGridLogs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                DataGridCell cell = sender as DataGridCell;
-                if (cell != null && !cell.IsEditing)
-                {
-                    if (!cell.IsFocused)
-                        cell.Focus();
-                    if (!cell.IsSelected)
-                        cell.IsSelected = true;
-                }
+                OnSelectedLogChanged(EventArgs.Empty);
             }
             catch (Exception err)
             {
                 App.HandleException(err);
             }
         }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Raised when the selected log has changed.
+        /// </summary>
+        public event EventHandler SelectedLogChanged;
 
         #endregion
     }

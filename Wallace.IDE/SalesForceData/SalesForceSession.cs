@@ -22,6 +22,7 @@
 
 using System;
 using System.Configuration;
+using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
 
@@ -132,6 +133,17 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// The display name of the user that is logged in.
+        /// </summary>
+        public string UserName
+        {
+            get
+            {
+                return _session.userInfo.userFullName;
+            }
+        }
+
+        /// <summary>
         /// A uri that can be used to login to the salesforce website using this session.
         /// </summary>
         public string WebsiteAutoLoginUri
@@ -142,6 +154,11 @@ namespace SalesForceData
                 return String.Format("https://{0}/secur/frontdoor.jsp?sid={1}", uri.Host, _session.sessionId);
             }
         }
+
+        /// <summary>
+        /// The base url for rest calls.
+        /// </summary>
+        private string RestBaseUrl { get; set; }
 
         /// <summary>
         /// Used to create Partner client channels.
@@ -241,6 +258,8 @@ namespace SalesForceData
             MetadataClientFactory.Endpoint.Address = new System.ServiceModel.EndpointAddress(_session.metadataServerUrl);
             ApexClientFactory.Endpoint.Address = new System.ServiceModel.EndpointAddress(_session.serverUrl.Replace("/u/", "/s/"));
             ToolingClientFactory.Endpoint.Address = new System.ServiceModel.EndpointAddress(_session.serverUrl.Replace("/u/", "/T/"));
+
+            RestBaseUrl = String.Format("https://{0}/services/data/v32.0", new Uri(_session.serverUrl).Host);
         }
 
         /// <summary>
@@ -289,6 +308,36 @@ namespace SalesForceData
                 Login();
 
             return ToolingClientFactory.CreateChannel();
+        }
+
+        /// <summary>
+        /// Execute a rest call.
+        /// </summary>
+        /// <param name="path">The relative path for the rest call.</param>
+        /// <returns>The result from the call.</returns>
+        public string ExecuteRestCall(string path)
+        {
+            if (path == null)
+                path = String.Empty;
+            else
+                path = path.Trim();
+
+            string url = (!path.StartsWith("/") && !path.StartsWith("\\")) ?
+                String.Format("{0}/{1}", RestBaseUrl, path) :
+                String.Format("{0}{1}", RestBaseUrl, path);
+
+            HttpWebRequest request = WebRequest.CreateHttp(url);
+            request.Headers.Add("Authorization", String.Format("Bearer {0}", Id));
+
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+            if (response == null)
+                throw new Exception("Response was not of type HttpWebResponse");
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(String.Format("REST call failed: {0} {1}", response.StatusCode, response.StatusDescription));
+
+            using (System.IO.StreamReader reader = new System.IO.StreamReader(response.GetResponseStream()))
+                return reader.ReadToEnd();
         }
 
         /// <summary>

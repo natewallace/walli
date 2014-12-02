@@ -166,6 +166,15 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Get the user name of the currently logged on user.
+        /// </summary>
+        /// <returns>The name of the user that is currently logged on.</returns>
+        public string GetUserName()
+        {
+            return _session.UserName;
+        }
+
+        /// <summary>
         /// Open and immediately close a salesforce connection using the credential.  If a failure occurs
         /// an exception is thrown.
         /// </summary>
@@ -269,13 +278,221 @@ namespace SalesForceData
                         foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
                             sb.AppendLine(err.message);
 
-                    throw new Exception("Couldn't create checkpoint: \r\n" + sb.ToString());
+                    throw new Exception("Couldn't delete checkpoint: \r\n" + sb.ToString());
                 }
             }
             else
             {
-                throw new Exception("Couldn't create checkpoint: Invalid response received.");
+                throw new Exception("Couldn't delete checkpoint: Invalid response received.");
             }
+        }
+
+        /// <summary>
+        /// Get all of the log parameters that currently exist.
+        /// </summary>
+        /// <returns>The currently existing log parameters.</returns>
+        public LogParameters[] GetLogParameters()
+        {
+            InitClients();
+
+            SalesForceAPI.Tooling.queryResponse response = _toolingClient.query(new SalesForceAPI.Tooling.queryRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                String.Format("SELECT Id, ApexCode, ApexProfiling, Callout, Database, ExpirationDate, ScopeId, System, TracedEntityId, Validation, Visualforce, Workflow FROM TraceFlag WHERE ExpirationDate > {0}", DateTime.UtcNow.ToString("yyyy-MM-ddThh:mm:ssZ"))));
+
+            List<LogParameters> result = new List<LogParameters>();
+            if (response.result.records != null)
+            {
+                // get entity names
+                Dictionary<string, string> names = new Dictionary<string, string>();
+                foreach (SalesForceAPI.Tooling.TraceFlag traceFlag in response.result.records)
+                {
+                    if (traceFlag.ScopeId != null && !names.ContainsKey(traceFlag.ScopeId))
+                        names.Add(traceFlag.ScopeId, String.Empty);
+                    if (traceFlag.TracedEntityId != null && !names.ContainsKey(traceFlag.TracedEntityId))
+                        names.Add(traceFlag.TracedEntityId, String.Empty);
+                }
+
+                DataSelectResult nameData = DataSelectAll(String.Format(
+                    "SELECT Id, Name FROM User WHERE Id IN ('{0}')",
+                    String.Join("','", names.Keys)));
+                foreach (DataRow row in nameData.Data.Rows)
+                    names[row["Id"] as string] = String.Format("{0} (user)", row["Name"]);
+
+                nameData = DataSelectAll(String.Format(
+                    "SELECT Id, Name FROM ApexClass WHERE Id IN ('{0}')",
+                    String.Join("','", names.Keys)));
+                foreach (DataRow row in nameData.Data.Rows)
+                    names[row["Id"] as string] = String.Format("{0} (class)", row["Name"]);
+
+                nameData = DataSelectAll(String.Format(
+                    "SELECT Id, Name FROM ApexTrigger WHERE Id IN ('{0}')",
+                    String.Join("','", names.Keys)));
+                foreach (DataRow row in nameData.Data.Rows)
+                    names[row["Id"] as string] = String.Format("{0} (trigger)", row["Name"]);
+
+
+                // create log parameters
+                foreach (SalesForceAPI.Tooling.TraceFlag traceFlag in response.result.records)
+                    result.Add(new LogParameters(
+                        traceFlag,
+                        (traceFlag.ScopeId != null) ? names[traceFlag.ScopeId] : String.Empty,
+                        (traceFlag.TracedEntityId != null) ? names[traceFlag.TracedEntityId] : String.Empty));
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Delete the given log parameters.
+        /// </summary>
+        /// <param name="logParameters">The log parameters to delete.</param>
+        public void DeleteLogParameters(LogParameters logParameters)
+        {
+            if (logParameters == null)
+                throw new ArgumentNullException("logParameters");
+
+            if (String.IsNullOrWhiteSpace(logParameters.Id))
+                return;
+
+            InitClients();
+
+            SalesForceAPI.Tooling.deleteResponse response = _toolingClient.delete(new SalesForceAPI.Tooling.deleteRequest(
+                            new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                            new string[] { logParameters.Id }));
+
+            if (response != null && response.result != null && response.result.Length == 1)
+            {
+                if (!response.result[0].success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    if (response.result[0].errors != null)
+                        foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
+                            sb.AppendLine(err.message);
+
+                    throw new Exception("Couldn't delete checkpoint: \r\n" + sb.ToString());
+                }
+            }
+            else
+            {
+                throw new Exception("Couldn't delete checkpoint: Invalid response received.");
+            }
+        }
+
+        /// <summary>
+        /// Create new log parameters.
+        /// </summary>
+        /// <param name="traceEntityId">TraceEntityId.</param>
+        /// <param name="tracedEntityName">TracedEntityName.</param>
+        /// <param name="scopeId">ScopeId.</param>
+        /// <param name="scopeName">ScopeName.</param>
+        /// <param name="expirationDate">ExpirationDate.</param>
+        /// <param name="codeLevel">CodeLevel.</param>
+        /// <param name="visualForceLevel">VisualForceLevel.</param>
+        /// <param name="profilingLevel">ProfilingLevel.</param>
+        /// <param name="calloutLevel">CalloutLevel.</param>
+        /// <param name="databaseLevel">DatabaseLevel.</param>
+        /// <param name="systemLevel">SystemLevel.</param>
+        /// <param name="validationLevel">ValidationLevel.</param>
+        /// <param name="workflowLevel">WorkflowLevel.</param>
+        /// <returns>The newly created log parameters.</returns>
+        public LogParameters CreateLogParameters(
+            string traceEntityId,
+            string tracedEntityName,
+            string scopeId,
+            string scopeName,
+            DateTime expirationDate,
+            LogLevel codeLevel,
+            LogLevel visualForceLevel,
+            LogLevel profilingLevel,
+            LogLevel calloutLevel,
+            LogLevel databaseLevel,
+            LogLevel systemLevel,
+            LogLevel validationLevel,
+            LogLevel workflowLevel)
+        {
+            if (traceEntityId == null)
+                throw new ArgumentNullException("traceEntityId");
+
+            InitClients();
+
+            SalesForceAPI.Tooling.TraceFlag traceFlag = new SalesForceAPI.Tooling.TraceFlag();
+            traceFlag.ApexCode = codeLevel.ToString().ToUpper();
+            traceFlag.ApexProfiling = profilingLevel.ToString().ToUpper();
+            traceFlag.Callout = calloutLevel.ToString().ToUpper();
+            traceFlag.Database = databaseLevel.ToString().ToUpper();
+            traceFlag.ExpirationDate = expirationDate.ToUniversalTime();
+            traceFlag.ExpirationDateSpecified = true;
+            traceFlag.ScopeId = scopeId;
+            traceFlag.System = systemLevel.ToString().ToUpper();
+            traceFlag.TracedEntityId = traceEntityId;
+            traceFlag.Validation = validationLevel.ToString().ToUpper();
+            traceFlag.Visualforce = visualForceLevel.ToString().ToUpper();
+            traceFlag.Workflow = workflowLevel.ToString().ToUpper();
+
+            SalesForceAPI.Tooling.createResponse response = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                new SalesForceAPI.Tooling.sObject[] 
+                {
+                    traceFlag
+                }));
+
+            if (response != null && response.result != null && response.result.Length == 1)
+            {
+                if (!response.result[0].success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    if (response.result[0].errors != null)
+                        foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
+                            sb.AppendLine(err.message);
+
+                    throw new Exception("Couldn't create log parameters: \r\n" + sb.ToString());
+                }
+            }
+            else
+            {
+                throw new Exception("Couldn't create log parameters: Invalid response received.");
+            }
+
+            traceFlag.Id = response.result[0].id;
+
+            return new LogParameters(traceFlag, scopeName, tracedEntityName);
+        }
+
+        /// <summary>
+        /// Get the logs for the given user.
+        /// </summary>
+        /// <param name="userId">The id of the user to get logs for.</param>
+        /// <returns>The log for the given user.</returns>
+        public Log[] GetLogs(string userId)
+        {
+            InitClients();
+
+            SalesForceAPI.Tooling.queryResponse response = _toolingClient.query(new SalesForceAPI.Tooling.queryRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                String.Format("SELECT Id, StartTime, DurationMilliseconds, Operation, Status FROM ApexLog WHERE LogUserId = '{0}'", userId)));
+
+            List<Log> result = new List<Log>();
+            if (response.result.records != null)
+            {
+                // create logs
+                foreach (SalesForceAPI.Tooling.ApexLog log in response.result.records)
+                    result.Add(new Log(log));
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Get the content for the given log.
+        /// </summary>
+        /// <param name="log">The log to get the content for.</param>
+        /// <returns>The log content.</returns>
+        public string GetLogContent(Log log)
+        {
+            if (log == null)
+                throw new ArgumentNullException("log");
+
+            return _session.ExecuteRestCall(String.Format("/sobjects/ApexLog/{0}/Body/", log.Id));
         }
 
         /// <summary>

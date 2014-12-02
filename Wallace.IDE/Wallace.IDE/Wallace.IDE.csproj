@@ -82,6 +82,7 @@
     <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
     <Compile Include="SalesForce\Document\DataEditorDocument.cs" />
     <Compile Include="SalesForce\Document\ISourceFileEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\LogViewerDocument.cs" />
     <Compile Include="SalesForce\Document\ManifestEditorDocument.cs" />
     <Compile Include="SalesForce\Document\PackageDeployToProjectStatusDocument.cs" />
     <Compile Include="SalesForce\Document\PackageViewDocument.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="SalesForce\Function\ExportSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\FoldAllToggleFunction.cs" />
     <Compile Include="SalesForce\Function\ImportSourceFileDataFunction.cs" />
+    <Compile Include="SalesForce\Function\LogViewerFunction.cs" />
     <Compile Include="SalesForce\Function\MergeManifestFromReportFunction.cs" />
     <Compile Include="SalesForce\Function\MergeManifestFunction.cs" />
     <Compile Include="SalesForce\Function\NewCheckpointFunction.cs" />
@@ -196,8 +198,17 @@
     <Compile Include="SalesForce\UI\EditCheckpointWindow.xaml.cs">
       <DependentUpon>EditCheckpointWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\UI\LogParametersManagerWindow.xaml.cs">
+      <DependentUpon>LogParametersManagerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\LogViewerControl.xaml.cs">
+      <DependentUpon>LogViewerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\MergeManifestWindow.xaml.cs">
       <DependentUpon>MergeManifestWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\NewLogParametersWindow.xaml.cs">
+      <DependentUpon>NewLogParametersWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\NewPackageWindow.xaml.cs">
       <DependentUpon>NewPackageWindow.xaml</DependentUpon>
@@ -345,7 +356,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SalesForce\UI\LogParametersManagerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\LogViewerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SalesForce\UI\MergeManifestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\NewLogParametersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -730,6 +753,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ExportData.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\LogViewer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -129,6 +129,10 @@ namespace Wallace.IDE.SalesForce.Framework
             TestManagerFunction testManager = new TestManagerFunction();
             App.Instance.Menu.AddFunction(testManager, "PROJECT");
 
+            LogViewerFunction logViewerFunction = new LogViewerFunction();
+            App.Instance.Menu.AddFunction(logViewerFunction, "PROJECT");
+            App.Instance.ToolBar.AddFunction(logViewerFunction);
+
             ReloadSymbolsFunction reloadSymbols = new ReloadSymbolsFunction();
             App.Instance.Menu.AddFunction(reloadSymbols, "PROJECT");
 

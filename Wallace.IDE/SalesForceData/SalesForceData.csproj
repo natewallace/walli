@@ -51,6 +51,9 @@
     <Compile Include="CheckpointScriptType.cs" />
     <Compile Include="DataSelectResult.cs" />
     <Compile Include="FieldType.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="LogParameters.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Manifest.cs" />
     <Compile Include="ManifestItem.cs" />
