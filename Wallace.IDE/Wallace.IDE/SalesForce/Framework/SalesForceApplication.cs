@@ -285,6 +285,11 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(runTestsFunction, "DOCUMENT");
             App.Instance.ToolBar.AddFunction(runTestsFunction);
 
+            RefreshLogsFunction refreshLogsFunction = new RefreshLogsFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(refreshLogsFunction));
+            App.Instance.ToolBar.AddFunction(refreshLogsFunction);
+            App.Instance.Menu.AddFunction(refreshLogsFunction, "DOCUMENT");
+
             CloseDocumentFunction closeDocumentFunction = new CloseDocumentFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(closeDocumentFunction), "DOCUMENT");
             App.Instance.Menu.AddFunction(closeDocumentFunction, "DOCUMENT");

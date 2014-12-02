@@ -77,6 +77,11 @@
                     </avalonEdit:TextEditor.Options>
                 </avalonEdit:TextEditor>
             </TabItem>
+            <TabItem x:Name="tabItemLogData"
+                     Header="Data "
+                     localUI:ChromeTab.ShowCloseButton="False">
+                <TreeView x:Name="treeViewData" />
+            </TabItem>
         </TabControl>
 
     </Grid>

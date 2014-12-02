@@ -134,6 +134,7 @@
     <Compile Include="SalesForce\Function\OpenRecentWebBrowserFunction.cs" />
     <Compile Include="SalesForce\Function\OpenWebBrowserFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshFolderFunction.cs" />
+    <Compile Include="SalesForce\Function\RefreshLogsFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\ReloadSymbolsFunction.cs" />
     <Compile Include="SalesForce\Function\RemoveCommentFunction.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="SalesForce\Node\ApexTriggerNode.cs" />
     <Compile Include="SalesForce\Node\DataFolderNode.cs" />
     <Compile Include="SalesForce\Node\DeployFolderNode.cs" />
+    <Compile Include="SalesForce\Node\LogUnitNode.cs" />
     <Compile Include="SalesForce\Node\ManifestFolderNode.cs" />
     <Compile Include="SalesForce\Node\ManifestNode.cs" />
     <Compile Include="SalesForce\Node\PackageFolderNode.cs" />

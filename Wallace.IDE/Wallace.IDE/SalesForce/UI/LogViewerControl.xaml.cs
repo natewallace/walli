@@ -34,6 +34,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ICSharpCode.AvalonEdit.Search;
 using SalesForceData;
 
 namespace Wallace.IDE.SalesForce.UI
@@ -43,6 +44,15 @@ namespace Wallace.IDE.SalesForce.UI
     /// </summary>
     public partial class LogViewerControl : UserControl
     {
+        #region Fields
+
+        /// <summary>
+        /// The text search panel.
+        /// </summary>
+        private SearchPanel _searchPanel;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -51,6 +61,9 @@ namespace Wallace.IDE.SalesForce.UI
         public LogViewerControl()
         {
             InitializeComponent();
+
+            _searchPanel = SearchPanel.Install(textEditor.TextArea);
+            _searchPanel.MarkerBrush = Brushes.DarkOrange;
         }
 
         #endregion
@@ -113,15 +126,35 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The log content displayed.
         /// </summary>
-        public string LogContent
+        public string LogContentText
         {
             get { return textEditor.Text; }
             set { textEditor.Text = value; }
         }
 
+        /// <summary>
+        /// The tree view for log content data.
+        /// </summary>
+        public TreeView LogContentData
+        {
+            get { return treeViewData; }
+        }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Open the text search dialog.
+        /// </summary>
+        public void SearchText()
+        {
+            _searchPanel.Open();
+
+            Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                (Action)delegate { _searchPanel.Reactivate(); });
+        }
 
         /// <summary>
         /// Raises the SelectedLogChanged event.

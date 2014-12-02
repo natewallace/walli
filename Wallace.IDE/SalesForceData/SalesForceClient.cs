@@ -469,7 +469,7 @@ namespace SalesForceData
 
             SalesForceAPI.Tooling.queryResponse response = _toolingClient.query(new SalesForceAPI.Tooling.queryRequest(
                 new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                String.Format("SELECT Id, StartTime, DurationMilliseconds, Operation, Status FROM ApexLog WHERE LogUserId = '{0}'", userId)));
+                String.Format("SELECT Id, StartTime, DurationMilliseconds, Operation, Status FROM ApexLog WHERE LogUserId = '{0}' ORDER BY StartTime DESC", userId)));
 
             List<Log> result = new List<Log>();
             if (response.result.records != null)

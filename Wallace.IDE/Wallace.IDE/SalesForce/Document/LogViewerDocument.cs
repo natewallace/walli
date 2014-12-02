@@ -27,7 +27,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SalesForceData;
 using Wallace.IDE.Framework;
+using Wallace.IDE.Framework.UI;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Node;
 using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Document
@@ -37,6 +39,15 @@ namespace Wallace.IDE.SalesForce.Document
     /// </summary>
     public class LogViewerDocument : DocumentBase
     {
+        #region Fields
+
+        /// <summary>
+        /// Used to display a log as nodes in a tree.
+        /// </summary>
+        private INodeManager _logNodeManager;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -53,6 +64,7 @@ namespace Wallace.IDE.SalesForce.Document
             Project = project;
             View = new LogViewerControl();
             View.SelectedLogChanged += View_SelectedLogChanged;
+            _logNodeManager = new TreeViewNodeManager(View.LogContentData);
             Parameters = parameters;
         }
 
@@ -127,9 +139,19 @@ namespace Wallace.IDE.SalesForce.Document
                 using (App.Wait("Downloading log"))
                 {
                     if (View.SelectedLog == null)
-                        View.LogContent = String.Empty;
+                    {
+                        View.LogContentText = String.Empty;
+                        _logNodeManager.Nodes.Clear();
+                    }
                     else
-                        View.LogContent = Project.Client.GetLogContent(View.SelectedLog);
+                    {
+                        View.LogContentText = Project.Client.GetLogContent(View.SelectedLog);
+
+                        LogData data = new LogData(View.LogContentText);
+                        _logNodeManager.Nodes.Clear();
+                        foreach (LogUnit unit in data.Units)
+                            _logNodeManager.Nodes.Add(new LogUnitNode(unit));
+                    }
                 }
             }
             catch (Exception err)

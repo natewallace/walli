@@ -52,8 +52,10 @@
     <Compile Include="DataSelectResult.cs" />
     <Compile Include="FieldType.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogData.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogParameters.cs" />
+    <Compile Include="LogUnit.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Manifest.cs" />
     <Compile Include="ManifestItem.cs" />
