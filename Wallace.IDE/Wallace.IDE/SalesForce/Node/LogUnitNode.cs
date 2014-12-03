@@ -148,9 +148,7 @@ namespace Wallace.IDE.SalesForce.Node
         /// <returns>The functions for this node.</returns>
         public override IFunction[] GetContextFunctions()
         {
-            return MergeFunctions(
-                base.GetContextFunctions(),
-                new IFunction[] { App.Instance.GetFunction<SelectLogUnitLineFunction>() });
+            return new IFunction[] { App.Instance.GetFunction<SelectLogUnitLineFunction>() };
         }
 
         #endregion

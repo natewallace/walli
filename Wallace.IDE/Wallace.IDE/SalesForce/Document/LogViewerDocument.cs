@@ -142,7 +142,11 @@ namespace Wallace.IDE.SalesForce.Document
         /// <returns>true if this document represents the given entity.</returns>
         public override bool RepresentsEntity(object entity)
         {
-            return Parameters.Equals(entity);
+            LogParameters otherParameters = entity as LogParameters;
+            if (otherParameters == null)
+                return false;
+
+            return Parameters.TracedEntityId == otherParameters.TracedEntityId;
         }
 
         /// <summary>

@@ -33,6 +33,75 @@ namespace SalesForceData
     /// </summary>
     public class LogUnit
     {
+        #region Fields
+
+        /// <summary>
+        /// Events that are the start of a nested collection of log units.
+        /// </summary>
+        private static string[] START_EVENTS = new string[] 
+        {
+            "CODE_UNIT_STARTED",
+            "CONSTRUCTOR_ENTRY",
+            "CUMULATIVE_LIMIT_USAGE",
+            "CUMULATIVE_PROFILING_BEGIN",
+            "DML_BEGIN",
+            "EXECUTION_STARTED",
+            "FLOW_CREATE_INTERVIEW_BEGIN",
+            "FLOW_ELEMENT_BEGIN",
+            "FLOW_START_INTERVIEW_BEGIN",
+            "FLOW_START_INTERVIEWS_BEGIN",
+            "METHOD_ENTRY",
+            "QUERY_MORE_BEGIN",
+            "SOQL_EXECUTE_BEGIN",
+            "SOSL_EXECUTE_BEGIN",
+            "SYSTEM_CONSTRUCTOR_ENTRY",
+            "SYSTEM_METHOD_ENTRY",
+            "VARIABLE_SCOPE_BEGIN",
+            "VF_DESERIALIZE_VIEWSTATE_BEGIN",
+            "VF_EVALUATE_FORMULA_BEGIN",
+            "VF_SERIALIZE_VIEWSTATE_BEGIN",
+            "WF_ACTION",
+            "WF_CRITERIA_BEGIN",
+            "WF_FLOW_ACTION_BEGIN",
+            "WF_RULE_EVAL_BEGIN",
+        };
+
+        /// <summary>
+        /// Events that are the end of a nested collection of log units.
+        /// </summary>
+        private static string[] END_EVENTS = new string[]
+        {
+            "CODE_UNIT_FINISHED",
+            "CONSTRUCTOR_EXIT",
+            "CUMULATIVE_LIMIT_USAGE_END",
+            "CUMULATIVE_PROFILING_END",
+            "DML_END",
+            "EXECUTION_FINISHED",
+            "FLOW_BULK_ELEMENT_END",
+            "FLOW_CREATE_INTERVIEW_END",
+            "FLOW_ELEMENT_END",
+            "FLOW_START_INTERVIEW_END",
+            "FLOW_START_INTERVIEWS_END",
+            "METHOD_EXIT",
+            "QUERY_MORE_END",
+            "SOQL_EXECUTE_END",
+            "SOSL_EXECUTE_END",
+            "SYSTEM_CONSTRUCTOR_EXIT",
+            "SYSTEM_METHOD_EXIT",
+            "SYSTEM_MODE_EXIT",
+            "VARIABLE_SCOPE_END",
+            "VF_DESERIALIZE_VIEWSTATE_END",
+            "VF_EVALUATE_FORMULA_END",
+            "VF_SERIALIZE_VIEWSTATE_END",
+            "WF_ACTIONS_END",
+            "WF_CRITERIA_END",
+            "WF_FLOW_ACTION_END",
+            "WF_RULE_EVAL_END",
+            "WF_RULE_NOT_EVALUATED"
+        };
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -212,50 +281,63 @@ namespace SalesForceData
 
             // get base event type and start/end flags
             string baseEventType = eventType;
-            bool isStart = (eventType == "CUMULATIVE_LIMIT_USAGE");
-            bool isEnd = false;
-            int lastUnderscore = eventType.LastIndexOf('_');
-            if (lastUnderscore > 0)
+            bool isStart = START_EVENTS.Contains(eventType);
+            bool isEnd = END_EVENTS.Contains(eventType);
+
+            if (isStart && eventType != "WF_ACTION")
             {
-                baseEventType = eventType.Substring(0, lastUnderscore);
-                string lastWord = eventType.Substring(lastUnderscore + 1).ToUpper();
-                switch (lastWord)
-                {
-                    case "STARTED":
-                    case "START":
-                    case "ENTRY":
-                    case "BEGIN":
-                        isStart = true;
-                        break;
-
-                    case "FINISHED":
-                    case "FINISH":
-                    case "EXIT":
-                    case "END":
-                        isEnd = true;
-                        break;
-
-                    default:
-                        break;
-                }
+                int lastUnderscore = eventType.LastIndexOf('_');
+                if (lastUnderscore > 0)
+                    baseEventType = eventType.Substring(0, lastUnderscore);
             }
 
             // get detail if there is any
             string eventDetail = String.Empty;
-            if (eventType == "DML_BEGIN" && parts.Length > 3)
+            switch (eventType)
             {
-                eventDetail = String.Format(
-                    "{0}  {1}  {2}", 
-                    parts[parts.Length - 3],
-                    parts[parts.Length - 2],
-                    parts[parts.Length - 1]);
-            }
-            else if (parts.Length > 2)
-            {
-                eventDetail = parts[parts.Length - 1];
+                case "DML_BEGIN":
+                    eventDetail = FormatEventDetail(parts, 3, 4, 5);
+                    break;
+
+                case "WF_CRITERIA_BEGIN":
+                    eventDetail = FormatEventDetail(parts, 3);
+                    break;
+
+                case "WF_FORMULA":
+                    eventDetail = FormatEventDetail(parts, 2);
+                    break;
+
+                default:
+                    if (parts.Length > 2)
+                        eventDetail = parts[parts.Length - 1];
+                    break;
             }
 
             return new LogUnit(timestamp, eventType, eventDetail, baseEventType, isStart, isEnd, lineNumber);
+        }
+
+        /// <summary>
+        /// Format the parts for display.
+        /// </summary>
+        /// <param name="parts">The parts to format from.</param>
+        /// <param name="indices">The index of each part to use.</param>
+        /// <returns>The formated parts.</returns>
+        private static string FormatEventDetail(string[] parts, params int[] indices)
+        {
+            if (parts == null || indices == null || indices.Length == 0)
+                return String.Empty;
+
+            StringBuilder sb = new StringBuilder();
+            foreach (int index in indices)
+            {
+                if (index >= 0 && index < parts.Length)
+                    sb.AppendFormat("{0} | ", parts[index]);
+            }
+
+            if (sb.Length >= 3)
+                sb.Length = sb.Length - 3;
+
+            return sb.ToString();
         }
 
         /// <summary>
