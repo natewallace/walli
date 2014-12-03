@@ -24,9 +24,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SalesForceData;
 using Wallace.IDE.Framework;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
@@ -75,12 +77,29 @@ namespace Wallace.IDE.SalesForce.Node
                     break;
 
                 case "CODE_UNIT":
+                    if (Unit.EventDetail.StartsWith("Validation:"))
+                        Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Checkpoints.png");
+                    else if (Unit.EventDetail.StartsWith("Workflow:"))
+                        Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Workflow.png");
+                    else if (Unit.EventDetail.StartsWith("VF:"))
+                        Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "DocumentPage.png");
+                    else if (Regex.IsMatch(Unit.EventDetail, "^[^ ]+ on [^ ]+ trigger event .*"))
+                        Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "DocumentTrigger.png");
+                    else
+                        Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Namespace.png");
+                    break;
+
                 case "EXECUTION":
                     Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Namespace.png");
                     break;
 
                 case "USER_DEBUG":
                     Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Comment.png");
+                    break;
+
+                case "DML":
+                case "SOQL_EXECUTE":
+                    Presenter.Header = VisualHelper.CreateIconHeader(Unit.ToString(), "Table.png");
                     break;
 
                 default:
@@ -121,6 +140,17 @@ namespace Wallace.IDE.SalesForce.Node
                 result.Add(new LogUnitNode(child));
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Functions for this node.
+        /// </summary>
+        /// <returns>The functions for this node.</returns>
+        public override IFunction[] GetContextFunctions()
+        {
+            return MergeFunctions(
+                base.GetContextFunctions(),
+                new IFunction[] { App.Instance.GetFunction<SelectLogUnitLineFunction>() });
         }
 
         #endregion

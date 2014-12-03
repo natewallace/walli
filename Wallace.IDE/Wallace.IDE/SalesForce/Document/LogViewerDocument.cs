@@ -103,6 +103,21 @@ namespace Wallace.IDE.SalesForce.Document
             get { return View.Logs; }
         }
 
+        /// <summary>
+        /// The currently selected log unit if there is one.
+        /// </summary>
+        public LogUnit SelectedLogUnit
+        {
+            get
+            {
+                LogUnitNode node = _logNodeManager.ActiveNode as LogUnitNode;
+                if (node == null)
+                    return null;
+
+                return node.Unit;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -138,6 +153,18 @@ namespace Wallace.IDE.SalesForce.Document
             View.TracedEntity = Parameters.TracedEntityName;
             View.Logs = Project.Client.GetLogs(Parameters.TracedEntityId);
             App.Instance.UpdateWorkspaces();
+        }
+
+        /// <summary>
+        /// Select the text that corresponds to the given unit.
+        /// </summary>
+        /// <param name="unit">The unit to select the text for.</param>
+        public void SelectText(LogUnit unit)
+        {
+            if (unit == null)
+                throw new ArgumentNullException("unit");
+
+            View.SelectLine(unit.LineNumber);
         }
 
         #endregion

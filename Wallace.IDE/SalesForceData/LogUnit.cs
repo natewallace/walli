@@ -44,13 +44,15 @@ namespace SalesForceData
         /// <param name="baseEventType">BaseEventType.</param>
         /// <param name="isEventStart">IsEventStart.</param>
         /// <param name="isEventEnd">IsEventEnd.</param>
+        /// <param name="lineNumber">LineNumber.</param>
         public LogUnit(
             DateTime timeStamp, 
             string eventType, 
             string eventDetail,
             string baseEventType,
             bool isEventStart,
-            bool isEventEnd)
+            bool isEventEnd,
+            int lineNumber)
         {
             TimeStamp = timeStamp;
             EventType = eventType;
@@ -58,6 +60,7 @@ namespace SalesForceData
             BaseEventType = baseEventType;
             IsEventStart = isEventStart;
             IsEventEnd = isEventEnd;
+            LineNumber = lineNumber;
             Units = new LogUnit[0];
         }
 
@@ -70,6 +73,7 @@ namespace SalesForceData
         /// <param name="baseEventType">BaseEventType.</param>
         /// <param name="isEventStart">IsEventStart.</param>
         /// <param name="isEventEnd">IsEventEnd.</param>
+        /// <param name="lineNumber">LineNumber.</param>
         /// <param name="units">Units.</param>
         public LogUnit(
             DateTime timeStamp,
@@ -78,6 +82,7 @@ namespace SalesForceData
             string baseEventType,
             bool isEventStart,
             bool isEventEnd,
+            int lineNumber,
             LogUnit[] units)
         {
             TimeStamp = timeStamp;
@@ -86,6 +91,7 @@ namespace SalesForceData
             BaseEventType = baseEventType;
             IsEventStart = isEventStart;
             IsEventEnd = isEventEnd;
+            LineNumber = lineNumber;
             Units = units ?? new LogUnit[0];
         }
 
@@ -128,6 +134,11 @@ namespace SalesForceData
         /// </summary>
         public LogUnit[] Units { get; private set; }
 
+        /// <summary>
+        /// The line number that this unit starts on.  zero based.
+        /// </summary>
+        public int LineNumber { get; private set; }
+
         #endregion
 
         #region Methods
@@ -136,8 +147,9 @@ namespace SalesForceData
         /// Parse the given line and create a corresponding log unit.
         /// </summary>
         /// <param name="line">The line to parse.</param>
+        /// <param name="lineNumber">The number of the line.</param>
         /// <returns>The corresponding log unit or null if the line is not for a code unit.</returns>
-        public static LogUnit ParseLine(string line)
+        public static LogUnit ParseLine(string line, int lineNumber)
         {
             if (String.IsNullOrWhiteSpace(line))
                 return null;
@@ -152,11 +164,11 @@ namespace SalesForceData
                     string et = line.Substring(0, index);
                     string ed = line.Substring(index);
 
-                    return new LogUnit(DateTime.MinValue, et, ed, et, false, false);
+                    return new LogUnit(DateTime.MinValue, et, ed, et, false, false, lineNumber);
                 }
                 else
                 {
-                    return new LogUnit(DateTime.MinValue, line, String.Empty, line, false, false);
+                    return new LogUnit(DateTime.MinValue, line, String.Empty, line, false, false, lineNumber);
                 }
 
             }
@@ -169,11 +181,11 @@ namespace SalesForceData
                     string et = line.Substring(0, index);
                     string ed = line.Substring(index);
 
-                    return new LogUnit(DateTime.MinValue, et, ed, et, false, false);
+                    return new LogUnit(DateTime.MinValue, et, ed, et, false, false, lineNumber);
                 }
                 else
                 {
-                    return new LogUnit(DateTime.MinValue, line, String.Empty, line, false, false);
+                    return new LogUnit(DateTime.MinValue, line, String.Empty, line, false, false, lineNumber);
                 }
             }
 
@@ -229,9 +241,21 @@ namespace SalesForceData
             }
 
             // get detail if there is any
-            string eventDetail = (parts.Length > 2) ? parts[parts.Length - 1] : String.Empty;
+            string eventDetail = String.Empty;
+            if (eventType == "DML_BEGIN" && parts.Length > 3)
+            {
+                eventDetail = String.Format(
+                    "{0}  {1}  {2}", 
+                    parts[parts.Length - 3],
+                    parts[parts.Length - 2],
+                    parts[parts.Length - 1]);
+            }
+            else if (parts.Length > 2)
+            {
+                eventDetail = parts[parts.Length - 1];
+            }
 
-            return new LogUnit(timestamp, eventType, eventDetail, baseEventType, isStart, isEnd);
+            return new LogUnit(timestamp, eventType, eventDetail, baseEventType, isStart, isEnd, lineNumber);
         }
 
         /// <summary>

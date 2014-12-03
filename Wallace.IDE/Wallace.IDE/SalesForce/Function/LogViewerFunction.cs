@@ -149,6 +149,8 @@ namespace Wallace.IDE.SalesForce.Function
                     newDlg.Scope = String.Empty;
                     newDlg.ExpirationDate = DateTime.Now.AddDays(1);
                     newDlg.LogLevelCode = LogLevel.Info;
+                    newDlg.LogLevelProfiling = LogLevel.Info;
+                    newDlg.LogLevelDatabase = LogLevel.Info;
 
                     if (App.ShowDialog(newDlg))
                     {

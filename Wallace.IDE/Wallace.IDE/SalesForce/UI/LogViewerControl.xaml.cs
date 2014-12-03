@@ -157,6 +157,21 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Select the given line in the text view.
+        /// </summary>
+        /// <param name="lineNumber">The line number to select.  zero based.</param>
+        public void SelectLine(int lineNumber)
+        {
+            if (lineNumber >= 0 && lineNumber < textEditor.Document.Lines.Count)
+            {
+                ICSharpCode.AvalonEdit.Document.DocumentLine line = textEditor.Document.Lines[lineNumber];
+                textEditor.Select(line.Offset, line.Length);
+                tabControlContent.SelectedItem = tabItemLogText;
+                textEditor.ScrollToLine(lineNumber);
+            }
+        }
+
+        /// <summary>
         /// Raises the SelectedLogChanged event.
         /// </summary>
         /// <param name="e">Arguments to pass with the event.</param>

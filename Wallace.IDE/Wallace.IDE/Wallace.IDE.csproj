@@ -145,6 +145,7 @@
     <Compile Include="SalesForce\Function\SaveSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\PropertiesFunction.cs" />
+    <Compile Include="SalesForce\Function\SelectLogUnitLineFunction.cs" />
     <Compile Include="SalesForce\Function\SelectReportItemsAllFunction.cs" />
     <Compile Include="SalesForce\Function\SelectReportItemsNoneFunction.cs" />
     <Compile Include="SalesForce\Function\TestManagerFunction.cs" />
@@ -767,6 +768,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Comment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Workflow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

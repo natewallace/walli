@@ -298,6 +298,9 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(deleteAllLogsFunction);
             App.Instance.Menu.AddFunction(deleteAllLogsFunction, "DOCUMENT");
 
+            SelectLogUnitLineFunction selectLogUnitTextFunction = new SelectLogUnitLineFunction();
+            App.Instance.RegisterFunction(selectLogUnitTextFunction);
+
             CloseDocumentFunction closeDocumentFunction = new CloseDocumentFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(closeDocumentFunction), "DOCUMENT");
             App.Instance.Menu.AddFunction(closeDocumentFunction, "DOCUMENT");

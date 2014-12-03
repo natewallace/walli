@@ -54,9 +54,11 @@ namespace SalesForceData
             using (StringReader reader = new StringReader(logContent))
             {
                 string line = null;
+                int lineNumber = -1;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    LogUnit unit = LogUnit.ParseLine(line);
+                    lineNumber++;
+                    LogUnit unit = LogUnit.ParseLine(line, lineNumber);
                     if (unit != null)
                     {
                         if (unit.IsEventStart)
@@ -78,6 +80,7 @@ namespace SalesForceData
                                 parent.BaseEventType,
                                 false,
                                 false,
+                                parent.LineNumber,
                                 units.ToArray());
 
                             units = listStack.Pop();
@@ -92,6 +95,30 @@ namespace SalesForceData
                         }
                     }
                 }
+            }
+
+            // clear out stack if there any left
+            while (unitStack.Count > 0)
+            {
+                LogUnit parent = unitStack.Pop();
+                if (parent == null)
+                    return;
+
+                LogUnit u = new LogUnit(
+                    parent.TimeStamp,
+                    parent.BaseEventType,
+                    parent.EventDetail,
+                    parent.BaseEventType,
+                    false,
+                    false,
+                    parent.LineNumber,
+                    units.ToArray());
+
+                units = listStack.Pop();
+                if (units == null)
+                    return;
+
+                units.Add(u);
             }
 
             Units = units.ToArray();

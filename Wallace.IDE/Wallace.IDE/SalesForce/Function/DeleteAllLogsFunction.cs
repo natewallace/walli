@@ -75,7 +75,7 @@ namespace Wallace.IDE.SalesForce.Function
         {
             LogViewerDocument document = App.Instance.Content.ActiveDocument as LogViewerDocument;
 
-            if (document != null && document.Logs.Count() > 0 != null)
+            if (document != null && document.Logs.Count() > 0)
             {
                 if (App.MessageUser("Are you sure you want to delete all of the logs?",
                                     "Confirm delete",
