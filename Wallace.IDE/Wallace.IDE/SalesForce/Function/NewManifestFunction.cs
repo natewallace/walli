@@ -87,7 +87,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     Manifest manifest = new Manifest(System.IO.Path.Combine(
                         project.ManifestFolder,
-                        String.Format("{0}.manifest", dlg.EnteredValue)));
+                        String.Format("{0}.xml", dlg.EnteredValue)));
 
                     if (App.Instance.SalesForceApp.CurrentProject.GetManifests().Contains(manifest))
                         throw new Exception("There is already a manifest named: " + manifest.Name);

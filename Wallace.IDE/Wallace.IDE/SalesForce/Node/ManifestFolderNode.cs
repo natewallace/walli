@@ -163,32 +163,49 @@ namespace Wallace.IDE.SalesForce.Node
         }
 
         /// <summary>
-        /// Allow users to drop local manifest files into folder.
+        /// Check to see if a drag drop can be performed.
         /// </summary>
         /// <param name="e">The item being dragged.</param>
-        public override void DragOver(System.Windows.DragEventArgs e)
+        /// <returns>true if the drag drop can be performed, false if it can't.</returns>
+        private bool CanDrop(System.Windows.DragEventArgs e)
         {
-            bool allAreManifests = true;
+            bool canDrop = true;
 
             if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
                 string[] fileNames = e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[];
                 if (fileNames != null)
                 {
-                    
+
                     foreach (string fileName in fileNames)
                     {
-                        string extension = System.IO.Path.GetExtension(fileName) ?? String.Empty;
-                        if (String.Compare(extension.ToUpper(), ".MANIFEST", true) != 0)
+                        string directory = System.IO.Path.GetDirectoryName(fileName);
+                        canDrop = (directory != Project.ManifestFolder);
+
+                        if (canDrop)
                         {
-                            allAreManifests = false;
-                            break;
+                            string extension = System.IO.Path.GetExtension(fileName) ?? String.Empty;
+                            if (String.Compare(extension, ".MANIFEST", true) != 0 ||
+                                String.Compare(extension, ".XML", true) != 0)
+                            {
+                                canDrop = false;
+                                break;
+                            }
                         }
                     }
                 }
             }
 
-            if (allAreManifests)
+            return canDrop;
+        }
+
+        /// <summary>
+        /// Allow users to drop local manifest files into folder.
+        /// </summary>
+        /// <param name="e">The item being dragged.</param>
+        public override void DragOver(System.Windows.DragEventArgs e)
+        {
+            if (CanDrop(e))
                 e.Effects = System.Windows.DragDropEffects.Copy;
             else
                 e.Effects = System.Windows.DragDropEffects.None;
@@ -200,7 +217,7 @@ namespace Wallace.IDE.SalesForce.Node
         /// <param name="e">The item being dropped.</param>
         public override void Drop(System.Windows.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            if (CanDrop(e))
             {
                 string[] fileNames = e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[];
                 if (fileNames != null)
@@ -212,7 +229,8 @@ namespace Wallace.IDE.SalesForce.Node
                     foreach (string fileName in fileNames)
                     {
                         string extension = System.IO.Path.GetExtension(fileName) ?? String.Empty;
-                        if (String.Compare(extension.ToUpper(), ".MANIFEST", true) == 0)
+                        if (String.Compare(extension, ".MANIFEST", true) == 0 ||
+                            String.Compare(extension, ".XML", true) == 0)
                         {
                             // make sure the name is unique
                             int index = 0;
@@ -226,7 +244,7 @@ namespace Wallace.IDE.SalesForce.Node
                                 index++;
                                 manifestFileName = System.IO.Path.Combine(
                                     Project.ManifestFolder,
-                                    String.Format("{0}({1}).manifest", fileNameWithoutExt, index));
+                                    String.Format("{0}({1}).xml", fileNameWithoutExt, index));
                             }
 
                             manifestFileNames.Add(manifestFileName.ToLower());

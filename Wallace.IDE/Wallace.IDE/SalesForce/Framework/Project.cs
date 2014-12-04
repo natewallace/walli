@@ -112,6 +112,7 @@ namespace Wallace.IDE.SalesForce.Framework
             ManifestFolder = Path.Combine(DeployFolder, "Manifest");
             if (!Directory.Exists(ManifestFolder))
                 Directory.CreateDirectory(ManifestFolder);
+            UpgradeManifestFiles();
 
             PackageFolder = Path.Combine(DeployFolder, "Package");
             if (!Directory.Exists(PackageFolder))
@@ -229,6 +230,22 @@ namespace Wallace.IDE.SalesForce.Framework
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Manifest files used to have a .manifest extension.  They should now have a .xml extension.
+        /// This method will rename any files in the manifest file with the .manifest extension to have the .xml extension.
+        /// </summary>
+        private void UpgradeManifestFiles()
+        {
+            string[] files = Directory.GetFiles(ManifestFolder, "*.manifest");
+            foreach (string file in files)
+            {
+                string path = Path.GetDirectoryName(file);
+                string newName = Path.Combine(path, String.Format("{0}.xml", Path.GetFileNameWithoutExtension(file)));
+                if (!File.Exists(newName))
+                    File.Move(file, newName);
+            }
+        }
 
         /// <summary>
         /// Checks to see if a project with the given name already exists.
