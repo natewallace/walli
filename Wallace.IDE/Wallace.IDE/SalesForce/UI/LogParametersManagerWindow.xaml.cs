@@ -87,11 +87,13 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 buttonViewLogs.IsEnabled = true;
                 buttonDelete.IsEnabled = true;
+                buttonEdit.IsEnabled = true;
             }
             else
             {
                 buttonViewLogs.IsEnabled = false;
                 buttonDelete.IsEnabled = false;
+                buttonEdit.IsEnabled = false;
             }
         }
 
@@ -123,6 +125,16 @@ namespace Wallace.IDE.SalesForce.UI
         {
             if (ViewLogsClick != null)
                 ViewLogsClick(this, e);
+        }
+
+        /// <summary>
+        /// Raises the EditClick event.
+        /// </summary>
+        /// <param name="e">Arguments passed with the event.</param>
+        protected virtual void OnEditClick(EventArgs e)
+        {
+            if (EditClick != null)
+                EditClick(this, e);
         }
 
         #endregion
@@ -232,6 +244,23 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Raise the EditClick event.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonEdit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OnEditClick(EventArgs.Empty);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
 
         #region Events
@@ -250,6 +279,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the user clicks the view logs button.
         /// </summary>
         public event EventHandler ViewLogsClick;
+
+        /// <summary>
+        /// Raised when the user clicks the edit button.
+        /// </summary>
+        public event EventHandler EditClick;
 
         #endregion
     }

@@ -459,6 +459,42 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Update the given log parameters.
+        /// </summary>
+        /// <param name="logParameters">The parameters to update.</param>
+        public void UpdateLogParameters(LogParameters logParameters)
+        {
+            if (logParameters == null)
+                throw new ArgumentNullException("logParameters");
+
+            InitClients();
+
+            SalesForceAPI.Tooling.updateResponse response = _toolingClient.update(new SalesForceAPI.Tooling.updateRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                new SalesForceAPI.Tooling.sObject[] 
+                {
+                    logParameters.ToTraceFlag()
+                }));
+
+            if (response != null && response.result != null && response.result.Length == 1)
+            {
+                if (!response.result[0].success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    if (response.result[0].errors != null)
+                        foreach (SalesForceAPI.Tooling.Error err in response.result[0].errors)
+                            sb.AppendLine(err.message);
+
+                    throw new Exception("Couldn't update log parameters: \r\n" + sb.ToString());
+                }
+            }
+            else
+            {
+                throw new Exception("Couldn't update log parameters: Invalid response received.");
+            }
+        }
+
+        /// <summary>
         /// Get the logs for the given user.
         /// </summary>
         /// <param name="userId">The id of the user to get logs for.</param>

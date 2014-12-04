@@ -212,7 +212,8 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom">
 
-                <Button Margin="5"
+                <Button x:Name="buttonCreate"
+                        Margin="5"
                         Padding="10,5,10,5"
                         Click="buttonCreate_Click">Create</Button>
 

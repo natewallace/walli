@@ -53,7 +53,12 @@
                 <Button Margin="5"
                         Padding="10,5,10,5"
                         Click="buttonNew_Click">New...</Button>
-                
+
+                <Button x:Name="buttonEdit" 
+                        Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonEdit_Click">Edit...</Button>
+
                 <Button x:Name="buttonDelete"
                         Margin="5"
                         Padding="10,5,10,5"

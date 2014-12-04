@@ -83,12 +83,14 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.DeleteClick += DeleteLogParameters;
                 dlg.NewClick += NewLogParameters;
                 dlg.ViewLogsClick += ViewLogs;
+                dlg.EditClick += EditLogParameters;
 
                 App.ShowDialog(dlg);
 
                 dlg.DeleteClick -= DeleteLogParameters;
                 dlg.NewClick -= NewLogParameters;
                 dlg.ViewLogsClick -= ViewLogs;
+                dlg.EditClick -= EditLogParameters;
             }
         }
 
@@ -145,6 +147,8 @@ namespace Wallace.IDE.SalesForce.Function
                 if (App.Instance.SalesForceApp.CurrentProject != null && dlg != null)
                 {
                     NewLogParametersWindow newDlg = new NewLogParametersWindow();
+                    newDlg.Title = "New Log Parameters";
+                    newDlg.SaveButtonText = "Create";
                     newDlg.TracedEntity = String.Format("{0} (user)", App.Instance.SalesForceApp.CurrentProject.Client.GetUserName());
                     newDlg.Scope = String.Empty;
                     newDlg.ExpirationDate = DateTime.Now.AddDays(1);
@@ -174,6 +178,59 @@ namespace Wallace.IDE.SalesForce.Function
                             List<LogParameters> list = new List<LogParameters>(dlg.LogParameters);
                             list.Add(log);
                             dlg.LogParameters = list;
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Edit log parameters.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void EditLogParameters(object sender, EventArgs e)
+        {
+            try
+            {
+                LogParametersManagerWindow dlg = sender as LogParametersManagerWindow;
+                if (App.Instance.SalesForceApp.CurrentProject != null &&
+                    dlg != null &&
+                    dlg.SelectedLogParameters != null)
+                {
+                    NewLogParametersWindow editDlg = new NewLogParametersWindow();
+                    editDlg.Title = "Edit Log Parameters";
+                    editDlg.SaveButtonText = "Save";
+                    editDlg.TracedEntity = dlg.SelectedLogParameters.TracedEntityName;
+                    editDlg.Scope = dlg.SelectedLogParameters.ScopeName;
+                    editDlg.ExpirationDate = dlg.SelectedLogParameters.ExpirationDate;
+                    editDlg.LogLevelCallout = dlg.SelectedLogParameters.CalloutLevel;
+                    editDlg.LogLevelCode = dlg.SelectedLogParameters.CodeLevel;
+                    editDlg.LogLevelDatabase = dlg.SelectedLogParameters.DatabaseLevel;
+                    editDlg.LogLevelProfiling = dlg.SelectedLogParameters.ProfilingLevel;
+                    editDlg.LogLevelSystem = dlg.SelectedLogParameters.SystemLevel;
+                    editDlg.LogLevelValidation = dlg.SelectedLogParameters.ValidationLevel;
+                    editDlg.LogLevelVisualForce = dlg.SelectedLogParameters.VisualForceLevel;
+                    editDlg.LogLevelWorkflow = dlg.SelectedLogParameters.WorkflowLevel;
+
+                    if (App.ShowDialog(editDlg))
+                    {
+                        using (App.Wait("Updating Log Paramters"))
+                        {
+                            dlg.SelectedLogParameters.CalloutLevel = editDlg.LogLevelCallout;
+                            dlg.SelectedLogParameters.CodeLevel = editDlg.LogLevelCode;
+                            dlg.SelectedLogParameters.DatabaseLevel = editDlg.LogLevelDatabase;
+                            dlg.SelectedLogParameters.ProfilingLevel = editDlg.LogLevelProfiling;
+                            dlg.SelectedLogParameters.SystemLevel = editDlg.LogLevelSystem;
+                            dlg.SelectedLogParameters.ValidationLevel = editDlg.LogLevelValidation;
+                            dlg.SelectedLogParameters.VisualForceLevel = editDlg.LogLevelVisualForce;
+                            dlg.SelectedLogParameters.WorkflowLevel = editDlg.LogLevelWorkflow;
+
+                            App.Instance.SalesForceApp.CurrentProject.Client.UpdateLogParameters(dlg.SelectedLogParameters);
                         }
                     }
                 }

@@ -224,9 +224,38 @@ namespace SalesForceData
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Convert the given log level to the corresponding string.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        private string ConvertLogLevel(LogLevel value)
+        {
+            return value.ToString().ToUpper();
+        }
 
-        #region Methods
+        /// <summary>
+        /// Convert this object into a TraceFlag object.
+        /// </summary>
+        /// <returns>The converted object.</returns>
+        internal SalesForceData.SalesForceAPI.Tooling.TraceFlag ToTraceFlag()
+        {
+            SalesForceData.SalesForceAPI.Tooling.TraceFlag traceFlag = new SalesForceAPI.Tooling.TraceFlag();
+
+            traceFlag.Id = Id;
+            traceFlag.ExpirationDate = ExpirationDate.ToUniversalTime();
+            traceFlag.ExpirationDateSpecified = true;
+            traceFlag.ApexCode = ConvertLogLevel(CodeLevel);
+            traceFlag.ApexProfiling = ConvertLogLevel(ProfilingLevel);
+            traceFlag.Callout = ConvertLogLevel(CalloutLevel);
+            traceFlag.Database = ConvertLogLevel(DatabaseLevel);
+            traceFlag.System = ConvertLogLevel(SystemLevel);
+            traceFlag.Validation = ConvertLogLevel(ValidationLevel);
+            traceFlag.Visualforce = ConvertLogLevel(VisualForceLevel);
+            traceFlag.Workflow = ConvertLogLevel(WorkflowLevel);
+
+            return traceFlag;
+        }
 
         /// <summary>
         /// Equality is based on the id field.

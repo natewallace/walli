@@ -35,6 +35,15 @@ namespace Wallace.IDE.SalesForce.UI
         #region Properties
 
         /// <summary>
+        /// The text displayed in the save button.
+        /// </summary>
+        public string SaveButtonText
+        {
+            get { return buttonCreate.Content as string; }
+            set { buttonCreate.Content = value; }
+        }
+
+        /// <summary>
         /// The scope.
         /// </summary>
         public string Scope
