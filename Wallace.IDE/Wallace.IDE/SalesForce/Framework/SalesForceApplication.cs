@@ -290,6 +290,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(refreshLogsFunction);
             App.Instance.Menu.AddFunction(refreshLogsFunction, "DOCUMENT");
 
+            LogTextSearchFunction logSearchFunction = new LogTextSearchFunction();
+            App.Instance.Menu.AddFunction(logSearchFunction, "DOCUMENT");
+            App.Instance.ToolBar.AddFunction(logSearchFunction);
+
             DeleteLogFunction deleteLogFunction = new DeleteLogFunction();
             App.Instance.ToolBar.AddFunction(deleteLogFunction);
             App.Instance.Menu.AddFunction(deleteLogFunction, "DOCUMENT");

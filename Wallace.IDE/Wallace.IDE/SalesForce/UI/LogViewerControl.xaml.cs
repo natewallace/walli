@@ -149,6 +149,8 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         public void SearchText()
         {
+            tabControlContent.SelectedItem = tabItemLogText;
+
             _searchPanel.Open();
 
             Dispatcher.BeginInvoke(

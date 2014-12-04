@@ -171,6 +171,14 @@ namespace Wallace.IDE.SalesForce.Document
             View.SelectLine(unit.LineNumber);
         }
 
+        /// <summary>
+        /// Show the search dialog.
+        /// </summary>
+        public void SearchText()
+        {
+            View.SearchText();
+        }
+
         #endregion
 
         #region Event Handlers

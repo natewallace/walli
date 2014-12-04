@@ -120,6 +120,7 @@
     <Compile Include="SalesForce\Function\ExportSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\FoldAllToggleFunction.cs" />
     <Compile Include="SalesForce\Function\ImportSourceFileDataFunction.cs" />
+    <Compile Include="SalesForce\Function\LogTextSearchFunction.cs" />
     <Compile Include="SalesForce\Function\LogViewerFunction.cs" />
     <Compile Include="SalesForce\Function\MergeManifestFromReportFunction.cs" />
     <Compile Include="SalesForce\Function\MergeManifestFunction.cs" />

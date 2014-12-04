@@ -185,7 +185,7 @@ namespace Wallace.IDE.SalesForce.Node
                         if (canDrop)
                         {
                             string extension = System.IO.Path.GetExtension(fileName) ?? String.Empty;
-                            if (String.Compare(extension, ".MANIFEST", true) != 0 ||
+                            if (String.Compare(extension, ".MANIFEST", true) != 0 &&
                                 String.Compare(extension, ".XML", true) != 0)
                             {
                                 canDrop = false;
