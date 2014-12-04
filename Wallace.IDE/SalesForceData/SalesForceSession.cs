@@ -259,7 +259,7 @@ namespace SalesForceData
             ApexClientFactory.Endpoint.Address = new System.ServiceModel.EndpointAddress(_session.serverUrl.Replace("/u/", "/s/"));
             ToolingClientFactory.Endpoint.Address = new System.ServiceModel.EndpointAddress(_session.serverUrl.Replace("/u/", "/T/"));
 
-            RestBaseUrl = String.Format("https://{0}/services/data/v32.0", new Uri(_session.serverUrl).Host);
+            RestBaseUrl = String.Format("https://{0}/services/data/v{1:N1}", new Uri(_session.serverUrl).Host, SalesForceClient.METADATA_VERSION);
         }
 
         /// <summary>
