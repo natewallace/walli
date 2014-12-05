@@ -2244,6 +2244,10 @@ namespace SalesForceData
                     if (indexOfFirstSlash != indexOfLastSlash)
                         fileName = fileName.Substring(0, indexOfLastSlash);
 
+                    // fix for difference in workflow folder names
+                    if (fileName.StartsWith("workflows"))
+                        fileName = String.Format("Workflow{0}", fileName.Substring(9));
+
                     List<SalesForceAPI.Metadata.FileProperties> list = null;
                     if (!fileProperties.ContainsKey(fileName))
                     {
