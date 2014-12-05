@@ -140,11 +140,7 @@ namespace Wallace.IDE.SalesForce.UI
             InitializeComponent();
             SetErrors(null);
 
-            StreamResourceInfo info = Application.GetResourceStream(new Uri("Resources/Apex.xshd", UriKind.Relative));
-            using (System.Xml.XmlTextReader reader = new System.Xml.XmlTextReader(info.Stream))
-            {
-                textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            }
+            ApplyEditorSettings();
 
             _colorTransformer = new ApexDocumentColorizingTransformer();
             textEditor.TextArea.TextView.LineTransformers.Add(_colorTransformer);
@@ -386,6 +382,16 @@ namespace Wallace.IDE.SalesForce.UI
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Apply the editor settings as currently configured for the application.
+        /// </summary>
+        public void ApplyEditorSettings()
+        {
+            textEditor.SyntaxHighlighting = EditorSettings.ApexSettings.HighlightDefinition;
+            textEditor.FontFamily = EditorSettings.ApexSettings.FontFamily;
+            textEditor.FontSize = EditorSettings.ApexSettings.FontSize;
+        }
 
         /// <summary>
         /// Parse the current text and update navigation and foldings.

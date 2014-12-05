@@ -199,6 +199,7 @@
     <Compile Include="SalesForce\UI\EnterValueWindow.xaml.cs">
       <DependentUpon>EnterValueWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\UI\EditorSettings.cs" />
     <Compile Include="SalesForce\UI\ITextEditorView.cs" />
     <Compile Include="SalesForce\UI\ApexMethodInsightProvider.cs" />
     <Compile Include="SalesForce\UI\EditCheckpointWindow.xaml.cs">
