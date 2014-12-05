@@ -73,11 +73,17 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (App.Instance.SalesForceApp.CurrentProject != null)
             {
-                App.Instance.SalesForceApp.CurrentProject.ReloadSymbolsAsync();
-                foreach (IDocument document in App.Instance.Content.OpenDocuments)
+                if (App.MessageUser("Reloading symbols requires that all apex source code and sObject definitions be downloaded from the server.  This operation will run in the background and may take several mintues to complete.  Do you wish to continue?",
+                                    "Reload symbols",
+                                    System.Windows.MessageBoxImage.Warning,
+                                    new string[] { "Yes", "No" }) == "Yes")
                 {
-                    if (document is ClassEditorDocument)
-                        (document as ClassEditorDocument).Reload();
+                    App.Instance.SalesForceApp.CurrentProject.ReloadSymbolsAsync();
+                    foreach (IDocument document in App.Instance.Content.OpenDocuments)
+                    {
+                        if (document is ClassEditorDocument)
+                            (document as ClassEditorDocument).Reload();
+                    }
                 }
             }
         }
