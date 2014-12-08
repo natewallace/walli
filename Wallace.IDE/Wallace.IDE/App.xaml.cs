@@ -152,7 +152,8 @@ namespace Wallace.IDE
         /// </summary>
         private void InitializeFunctions()
         {
-            Menu.AddFunction(new FunctionGrouping("SYSTEM", "SYSTEM", false));
+            Menu.AddFunction(new FunctionGrouping("SYSTEM", "SYSTEM", false));            
+            Menu.AddFunction(new SettingsFunction(), "SYSTEM");
             Menu.AddFunction(new FunctionSeparator(), "SYSTEM");
             Menu.AddFunction(new ExitFunction(), "SYSTEM");
 
