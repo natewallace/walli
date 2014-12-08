@@ -103,6 +103,11 @@ namespace Wallace.IDE
         /// </summary>
         public SalesForceApplication SalesForceApp { get; private set; }
 
+        /// <summary>
+        /// The settings manager for the app.
+        /// </summary>
+        public ISettingsManager Settings { get; private set; }
+
         #endregion
 
         #region Methods

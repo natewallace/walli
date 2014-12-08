@@ -68,6 +68,8 @@
     <Compile Include="Framework\FunctionSeparator.cs" />
     <Compile Include="Framework\Function\SettingsFunction.cs" />
     <Compile Include="Framework\Function\UserGuideFunction.cs" />
+    <Compile Include="Framework\ISettings.cs" />
+    <Compile Include="Framework\ISettingsManager.cs" />
     <Compile Include="Framework\UI\ChromeTab.cs" />
     <Compile Include="Framework\UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
