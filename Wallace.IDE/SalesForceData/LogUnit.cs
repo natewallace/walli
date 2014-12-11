@@ -87,7 +87,6 @@ namespace SalesForceData
             "SOSL_EXECUTE_END",
             "SYSTEM_CONSTRUCTOR_EXIT",
             "SYSTEM_METHOD_EXIT",
-            "SYSTEM_MODE_EXIT",
             "VARIABLE_SCOPE_END",
             "VF_DESERIALIZE_VIEWSTATE_END",
             "VF_EVALUATE_FORMULA_END",
