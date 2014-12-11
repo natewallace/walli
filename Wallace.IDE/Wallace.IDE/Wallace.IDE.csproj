@@ -197,6 +197,9 @@
     <Compile Include="SalesForce\Node\DataObjectFieldNode.cs" />
     <Compile Include="SalesForce\Node\DataObjectNode.cs" />
     <Compile Include="SalesForce\Function\NewProjectFunction.cs" />
+    <Compile Include="SalesForce\UI\EditorSettingsControl.xaml.cs">
+      <DependentUpon>EditorSettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\EditSalesForceCredentialWindow.xaml.cs">
       <DependentUpon>EditSalesForceCredentialWindow.xaml</DependentUpon>
     </Compile>
@@ -358,6 +361,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\DataEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\EditorSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -527,7 +534,9 @@
     </None>
     <AppDesigner Include="Properties\" />
     <Resource Include="Resources\Apex.xshd" />
-    <Resource Include="Resources\VisualForce.xshd" />
+    <Resource Include="Resources\VisualForce.xshd">
+      <SubType>Designer</SubType>
+    </Resource>
     <None Include="SalesForceData.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

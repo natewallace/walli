@@ -45,5 +45,10 @@ namespace Wallace.IDE.Framework
         /// </summary>
         /// <returns>The view to display for the given settings.</returns>
         Control GetView();
+
+        /// <summary>
+        /// Save any changes that have been made in the view.
+        /// </summary>
+        void Save();
     }
 }
