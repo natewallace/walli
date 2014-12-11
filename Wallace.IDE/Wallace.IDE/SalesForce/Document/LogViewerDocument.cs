@@ -194,12 +194,10 @@ namespace Wallace.IDE.SalesForce.Document
             {
                 using (App.Wait("Downloading log"))
                 {
-                    if (View.SelectedLog == null)
-                    {
-                        View.LogContentText = String.Empty;
-                        _logNodeManager.Nodes.Clear();
-                    }
-                    else
+                    View.LogContentText = String.Empty;
+                    _logNodeManager.Nodes.Clear();
+
+                    if (View.SelectedLog != null)
                     {
                         View.LogContentText = Project.Client.GetLogContent(View.SelectedLog);
 

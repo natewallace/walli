@@ -304,6 +304,10 @@ namespace SalesForceData
                     eventDetail = FormatEventDetail(parts, 2);
                     break;
 
+                case "LIMIT_USAGE_FOR_NS":
+                    eventDetail = FormatEventDetail(parts, 2);
+                    break;
+
                 default:
                     if (parts.Length > 2)
                         eventDetail = parts[parts.Length - 1];
