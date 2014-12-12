@@ -130,7 +130,7 @@ namespace Wallace.IDE.SalesForce.Document
         {
             if (isFirstUpdate)
             {
-                Presenter.Header = VisualHelper.CreateIconHeader("Logs", "Report.png");
+                Presenter.Header = VisualHelper.CreateIconHeader("Logs", "Log.png");
                 Presenter.Content = View;
             }
         }
