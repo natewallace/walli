@@ -52,7 +52,7 @@ namespace Wallace.IDE.Framework.Function
         /// </summary>
         public override void Execute()
         {
-            App.ShowDialog(new SettingsWindow());
+            App.Instance.Settings.ShowManager();
         }
 
         #endregion

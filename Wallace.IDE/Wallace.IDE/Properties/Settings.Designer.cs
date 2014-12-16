@@ -71,5 +71,17 @@ namespace Wallace.IDE.Properties {
                 this["LastWebBrowser"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EditorSettingsApex {
+            get {
+                return ((string)(this["EditorSettingsApex"]));
+            }
+            set {
+                this["EditorSettingsApex"] = value;
+            }
+        }
     }
 }

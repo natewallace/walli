@@ -27,6 +27,7 @@ using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Function;
 using Wallace.IDE.SalesForce.Node;
 using Wallace.IDE.SalesForce.UI;
+using Wallace.IDE.SalesForce.Settings;
 
 namespace Wallace.IDE.SalesForce.Framework
 {
@@ -53,6 +54,14 @@ namespace Wallace.IDE.SalesForce.Framework
         public bool ApplicationClosing()
         {
             return CloseProject();
+        }
+
+        /// <summary>
+        /// Load all settings.
+        /// </summary>
+        public void LoadSettings()
+        {
+            App.Instance.Settings.RegisterSettings(new ApexEditorSettings());
         }
 
         /// <summary>

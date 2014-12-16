@@ -36,8 +36,12 @@ namespace Wallace.IDE.Framework
         /// <summary>
         /// Register the given settings for use in the manager.
         /// </summary>
-        /// <param name="path">The path for the view, separated by forward slashes.</param>
-        /// <param name="settings">The settings for the given path.</param>
-        void RegisterSettings(string path, ISettings settings);
+        /// <param name="settings">The settings to register.</param>
+        void RegisterSettings(ISettings settings);
+
+        /// <summary>
+        /// Show the manager.
+        /// </summary>
+        void ShowManager();
     }
 }

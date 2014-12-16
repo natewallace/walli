@@ -132,6 +132,7 @@ namespace Wallace.IDE
             ToolBar = new ToolBarFunctionManager(_window.MainToolBar);
             Navigation = new TabTreeNodeManager(_window.Nodes);
             Content = new TabControlDocumentManager(_window.Documents);
+            Settings = new SettingsManager();
             SalesForceApp = new SalesForceApplication();
 
             Navigation.ActiveNodeChanged += Navigation_ActiveNodeChanged;
@@ -170,6 +171,7 @@ namespace Wallace.IDE
             Menu.AddFunction(new UserGuideFunction(), "HELP");
             Menu.AddFunction(new AboutFunction(), "HELP");
 
+            SalesForceApp.LoadSettings();
             SalesForceApp.LoadFunctions();
         }
 

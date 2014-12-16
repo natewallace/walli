@@ -3,17 +3,17 @@
                   xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
 
   <!-- Colors -->
+  <Color name="Alert" foreground="Red" fontWeight="bold" />
+  <Color name="ApexKeyword" foreground="Blue" />
   <Color name="Comment" foreground="Green" />
+  <Color name="Delimiter" foreground="Black" />
   <Color name="DocComment" foreground="Gray" />
   <Color name="DocCommentText" foreground="Green" fontStyle="italic" />
-  <Color name="String" foreground="DarkRed" />
-  <Color name="ApexKeyword" foreground="Blue" />
-  <Color name="SOQLKeyword" foreground="Purple" />
-  <Color name="Alert" foreground="Red" fontWeight="bold" />
-  <Color name="Warning" foreground="#EEE0E000" fontWeight="bold" />
-  <Color name="Delimiter" foreground="Black" />
   <Color name="Region" foreground="Blue" />
   <Color name="RegionName" foreground="Black" />
+  <Color name="SOQLKeyword" foreground="Purple" />
+  <Color name="String" foreground="DarkRed" />  
+  <Color name="Warning" foreground="#EEE0E000" fontWeight="bold" />
 
   <!-- Comment markers -->
   <RuleSet name="CommentMarkers" ignoreCase="true">

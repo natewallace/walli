@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:localUI="clr-namespace:Wallace.IDE.Framework.UI"
         Title="Settings"
-        Height="400" 
-        Width="550"
+        Height="600" 
+        Width="800"
         MinHeight="200"
         MinWidth="200"        
         WindowStartupLocation="CenterOwner"
@@ -14,8 +14,8 @@
     <Border Margin="10">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
@@ -25,13 +25,13 @@
             <TreeView x:Name="treeViewCategories"
                       Grid.Row="0"
                       Grid.Column="0"
-                      Height="300"
                       SelectedItemChanged="treeViewCategories_SelectedItemChanged"/>
 
-            <Border x:Name="borderContent"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Height="300"/>
+            <ScrollViewer x:Name="borderContent"
+                          Grid.Row="0"
+                          Grid.Column="1"
+                          Padding="5,0,5,0"
+                          VerticalScrollBarVisibility="Auto"/>
 
             <StackPanel Grid.Row="1"
                         Grid.Column="0"
@@ -42,11 +42,11 @@
 
                 <Button Margin="5"
                         Padding="10,5,10,5"
-                        >OK</Button>
+                        Click="buttonOK_Click">OK</Button>
 
                 <Button Margin="5"
                         Padding="10,5,10,5"
-                        >Cancel</Button>
+                        Click="buttonCancel_Click">Cancel</Button>
 
             </StackPanel>
 

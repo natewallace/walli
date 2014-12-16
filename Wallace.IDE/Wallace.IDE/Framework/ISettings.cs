@@ -50,5 +50,10 @@ namespace Wallace.IDE.Framework
         /// Save any changes that have been made in the view.
         /// </summary>
         void Save();
+
+        /// <summary>
+        /// Cancel any pending changes.
+        /// </summary>
+        void Cancel();
     }
 }

@@ -41,15 +41,6 @@ namespace Wallace.IDE.Framework.UI
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        #region Fields
-
-        /// <summary>
-        /// Holds the views that have been registered.
-        /// </summary>
-        private Dictionary<string, Control> _views;
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
@@ -58,8 +49,22 @@ namespace Wallace.IDE.Framework.UI
         public SettingsWindow()
         {
             InitializeComponent();
+        }
 
-            _views = new Dictionary<string, Control>();
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The currently selected path.
+        /// </summary>
+        public string SelectedSettingsPath
+        {
+            get
+            {
+                TreeViewItem item = treeViewCategories.SelectedItem as TreeViewItem;
+                return (item != null) ? item.Tag as string : null;
+            }
         }
 
         #endregion
@@ -67,21 +72,30 @@ namespace Wallace.IDE.Framework.UI
         #region Methods
 
         /// <summary>
+        /// Display the given view in the content area.
+        /// </summary>
+        /// <param name="view">The view to display.</param>
+        public void ShowSettingsView(UIElement view)
+        {
+            borderContent.Content = view;
+        }
+
+        /// <summary>
         /// Registers a view for settings.
         /// </summary>
         /// <param name="path">The path for the view, separated by forward slashes.</param>
         /// <param name="view">The view to display for the given path.</param>
-        public void RegisterSettingsView(string path, Control view)
+        public void AddSettingsPath(string path)
         {
             if (String.IsNullOrWhiteSpace(path))
                 throw new ArgumentException("path is null or whitespace", "path");
-            if (view == null)
-                throw new ArgumentNullException("view");
 
             string[] parts = path.Split(new char[] { '/', '\\' });
             ItemCollection items = treeViewCategories.Items;
-            foreach (string part in parts)
+            for (int i = 0; i < parts.Length; i++)
             {
+                string part = parts[i];
+
                 bool found = false;
                 foreach (TreeViewItem item in items)
                 {
@@ -97,13 +111,24 @@ namespace Wallace.IDE.Framework.UI
                 {
                     TreeViewItem item = new TreeViewItem();
                     item.Header = part;
-                    item.Tag = path;
+                    item.IsExpanded = true;
                     items.Add(item);
                     items = item.Items;
+
+                    if (i == parts.Length - 1)
+                        item.Tag = path;
                 }
             }
+        }
 
-            _views.Add(path, view);
+        /// <summary>
+        /// Raises the SelectedSettingsPathChanged event.
+        /// </summary>
+        /// <param name="e">Arguments to pass with the event.</param>
+        public virtual void OnSelectedSettingsPathChanged(EventArgs e)
+        {
+            if (SelectedSettingsPathChanged != null)
+                SelectedSettingsPathChanged(this, e);
         }
 
         #endregion
@@ -111,7 +136,7 @@ namespace Wallace.IDE.Framework.UI
         #region Event Handlers
 
         /// <summary>
-        /// Update the view to show the currently selected category.
+        /// Raise the SelectedSettingsPathChanged event.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
@@ -119,16 +144,58 @@ namespace Wallace.IDE.Framework.UI
         {
             try
             {
-                TreeViewItem item = treeViewCategories.SelectedItem as TreeViewItem;
-                string path = (item != null) ? item.Tag as string : null;
-                Control view = (path != null && _views.ContainsKey(path)) ? _views[path] : null;
-                borderContent.Child = view;
+                OnSelectedSettingsPathChanged(EventArgs.Empty);
             }
             catch (Exception err)
             {
                 App.HandleException(err);
             }
         }
+
+        /// <summary>
+        /// Close the dialog with a dialog result of true.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonOK_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DialogResult = true;
+                Close();
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Close the dialog with a dialog result of false.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DialogResult = false;
+                Close();
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Raised when the selected settings path has been changed.
+        /// </summary>
+        public event EventHandler SelectedSettingsPathChanged;
 
         #endregion
     }

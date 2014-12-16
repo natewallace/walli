@@ -74,6 +74,7 @@
     <Compile Include="Framework\UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Framework\UI\SettingsManager.cs" />
     <Compile Include="Framework\UI\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -183,6 +184,7 @@
     <Compile Include="SalesForce\Node\PackageFolderNode.cs" />
     <Compile Include="SalesForce\Node\PackageNode.cs" />
     <Compile Include="SalesForce\Node\SourceFolderNode.cs" />
+    <Compile Include="SalesForce\Settings\ApexEditorSettings.cs" />
     <Compile Include="SalesForce\UI\ApexCodeCompletionData.cs" />
     <Compile Include="SalesForce\UI\ApexDocumentColorizingTransformer.cs" />
     <Compile Include="SalesForce\UI\ApexEditorControl.xaml.cs">
@@ -200,6 +202,7 @@
     <Compile Include="SalesForce\UI\EditorSettingsControl.xaml.cs">
       <DependentUpon>EditorSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\UI\EditorSymbolSettings.cs" />
     <Compile Include="SalesForce\UI\EditSalesForceCredentialWindow.xaml.cs">
       <DependentUpon>EditSalesForceCredentialWindow.xaml</DependentUpon>
     </Compile>
