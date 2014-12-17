@@ -24,34 +24,15 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
-        <TextBlock Text="Default header:"
+
+        <TextBlock Text="Font:"
                    Grid.Row="0"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   FontWeight="Bold"
-                   Margin="0,0,0,5"/>
-
-        <ScrollViewer Grid.Row="1"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="2"
-                      Height="100px">
-            <TextBox x:Name="textBoxHeader"
-                     AcceptsReturn="True"
-                     AcceptsTab="True"
-                     FontFamily="Consolas"
-                     FontSize="10pt"/>
-        </ScrollViewer>
-
-        <TextBlock Text="Font:"
-                   Grid.Row="2"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   FontWeight="Bold"
-                   Margin="0,10,0,0"/>
+                   FontWeight="Bold"/>
 
         <Button x:Name="buttonFont"
-                Grid.Row="3"
+                Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Stretch"
@@ -59,26 +40,26 @@
                 Click="buttonFont_Click">Times New Roman, 11pt</Button>
 
         <TextBlock Text="Symbols:"
-                   Grid.Row="4"
+                   Grid.Row="2"
                    Grid.Column="0"
                    FontWeight="Bold"
                    Margin="0,10,0,0"/>
         
         <ListBox x:Name="listBoxSymbols"
-                 Grid.Row="5"
+                 Grid.Row="3"
                  Grid.Column="0"
                  Grid.RowSpan="6"
                  SelectionChanged="listBoxSymbols_SelectionChanged"/>
 
         <TextBlock x:Name="textBlockSymbolForegroundTitle"
                    Text="Foreground:"
-                   Grid.Row="5"
+                   Grid.Row="3"
                    Grid.Column="1"
                    FontWeight="Bold"
                    Margin="10,0,0,0"/>
 
         <Button x:Name="buttonSymbolForeground"
-                Grid.Row="6"
+                Grid.Row="4"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
@@ -97,13 +78,13 @@
 
         <TextBlock x:Name="textBlockSymbolBackgroundTitle"
                    Text="Background:"
-                   Grid.Row="7"
+                   Grid.Row="5"
                    Grid.Column="1"
                    FontWeight="Bold"
                    Margin="10,10,0,0"/>
 
         <Button x:Name="buttonSymbolBackground"
-                Grid.Row="8"
+                Grid.Row="6"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
@@ -121,7 +102,7 @@
         </Button>
 
         <StackPanel x:Name="stackPanelSymbolBold"
-                    Grid.Row="9"
+                    Grid.Row="7"
                     Grid.Column="1"
                     Orientation="Horizontal"
                     Margin="10,10,0,0">
@@ -136,7 +117,7 @@
         </StackPanel>
 
         <StackPanel x:Name="stackPanelSymbolItalic"
-                    Grid.Row="10"
+                    Grid.Row="8"
                     Grid.Column="1"
                     Orientation="Horizontal"
                     Margin="10,10,0,0">
@@ -149,6 +130,25 @@
                        Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
         </StackPanel>
+
+        <TextBlock x:Name="textBlockHeader"
+                   Text="Default header:"
+                   Grid.Row="9"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   FontWeight="Bold"
+                   Margin="0,10,0,5"/>
+
+        <ScrollViewer Grid.Row="10"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      Height="100px">
+            <TextBox x:Name="textBoxHeader"
+                     AcceptsReturn="True"
+                     AcceptsTab="True"
+                     FontFamily="Consolas"
+                     FontSize="10pt"/>
+        </ScrollViewer>
 
     </Grid>
 </UserControl>

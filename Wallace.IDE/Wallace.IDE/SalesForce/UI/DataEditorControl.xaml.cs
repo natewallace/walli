@@ -69,11 +69,7 @@ namespace Wallace.IDE.SalesForce.UI
 
             Data = null;
 
-            StreamResourceInfo info = Application.GetResourceStream(new Uri("Resources/SOQL.xshd", UriKind.Relative));
-            using (System.Xml.XmlTextReader reader = new System.Xml.XmlTextReader(info.Stream))
-            {
-                textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            }
+            ApplyEditorSettings();
 
             textEditor.TextArea.SelectionCornerRadius = 0;
             textEditor.TextArea.SelectionBrush = Brushes.LightBlue;
@@ -183,6 +179,17 @@ namespace Wallace.IDE.SalesForce.UI
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Apply the editor settings as currently configured for the application.
+        /// </summary>
+        public void ApplyEditorSettings()
+        {
+            textEditor.SyntaxHighlighting = EditorSettings.SOQLSettings.HighlightDefinition;
+            textEditor.FontFamily = EditorSettings.SOQLSettings.FontFamily;
+            textEditor.FontSize = EditorSettings.SOQLSettings.FontSize;
+            textEditor.TextArea.TextView.Redraw();
+        }
 
         /// <summary>
         /// Give focus to the text input.

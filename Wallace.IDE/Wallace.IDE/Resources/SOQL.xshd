@@ -3,49 +3,11 @@
                   xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
 
   <!-- Colors -->
-  <Color name="Comment" foreground="Green" />
-  <Color name="DocComment" foreground="Gray" />
-  <Color name="DocCommentText" foreground="Green" fontStyle="italic" />
-  <Color name="String" foreground="DarkRed" />
-  <Color name="ApexKeyword" foreground="Blue" />
   <Color name="SOQLKeyword" foreground="Purple" />
-  <Color name="Alert" foreground="Red" fontWeight="bold" />
-  <Color name="Warning" foreground="#EEE0E000" fontWeight="bold" />
-
-  <!-- Comment markers -->
-  <RuleSet name="CommentMarkers" ignoreCase="true">
-
-    <Keywords color="Alert">
-      <Word>TODO</Word>
-      <Word>FIXME</Word>
-    </Keywords>
-
-    <Keywords color="Warning">
-      <Word>HACK</Word>
-      <Word>UNDONE</Word>
-    </Keywords>
-
-  </RuleSet>
+  <Color name="String" foreground="DarkRed" />  
 
   <!-- Main ruleset -->
   <RuleSet ignoreCase="true">
-
-    <!-- Line comment -->
-    <Span color="Comment">
-      <Begin>//</Begin>
-      <RuleSet ignoreCase="true">
-        <Import ruleSet="CommentMarkers" />
-      </RuleSet>
-    </Span>
-
-    <!-- Block comment -->
-    <Span color="Comment" multiline="true">
-      <Begin>/\*</Begin>
-      <End>\*/</End>
-      <RuleSet ignoreCase="true">
-        <Import ruleSet="CommentMarkers" />
-      </RuleSet>
-    </Span>
 
     <!-- String -->
     <Span color="String">

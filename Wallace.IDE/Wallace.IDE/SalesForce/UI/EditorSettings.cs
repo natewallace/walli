@@ -48,6 +48,11 @@ namespace Wallace.IDE.SalesForce.UI
         public static EditorSettings ApexSettings { get; private set; }
 
         /// <summary>
+        /// The SOQL settings that serve the entire application.
+        /// </summary>
+        public static EditorSettings SOQLSettings { get; private set; }
+
+        /// <summary>
         /// The visual force settings that serve the entire application.
         /// </summary>
         public static EditorSettings VisualForceSettings { get; private set; }
@@ -68,6 +73,9 @@ namespace Wallace.IDE.SalesForce.UI
         {
             StreamResourceInfo highlight = Application.GetResourceStream(new Uri("Resources/Apex.xshd", UriKind.Relative));
             ApexSettings = new EditorSettings("EditorSettingsApex", highlight.Stream);
+
+            highlight = Application.GetResourceStream(new Uri("Resources/SOQL.xshd", UriKind.Relative));
+            SOQLSettings = new EditorSettings("EditorSettingsSOQL", highlight.Stream);
 
             highlight = Application.GetResourceStream(new Uri("Resources/VisualForce.xshd", UriKind.Relative));
             VisualForceSettings = new EditorSettings("EditorSettingsVisualForce", highlight.Stream);

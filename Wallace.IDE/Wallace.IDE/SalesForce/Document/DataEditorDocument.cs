@@ -151,6 +151,14 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Update the editor settings.
+        /// </summary>
+        public void UpdateEditorSettings()
+        {
+            View.ApplyEditorSettings();
+        }
+
+        /// <summary>
         /// Check for data loss before closing.
         /// </summary>
         /// <returns>true if this document can be closed.  false if it can't.</returns>

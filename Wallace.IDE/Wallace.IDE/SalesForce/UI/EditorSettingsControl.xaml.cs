@@ -90,6 +90,19 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Show/Hide the header input controls.
+        /// </summary>
+        public bool ShowSettingHeader
+        {
+            get { return textBoxHeader.Visibility == Visibility.Visible; }
+            set
+            {
+                textBoxHeader.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                textBlockHeader.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        /// <summary>
         /// The font selected by the user.
         /// </summary>
         public FontFamily SettingFontFamily
