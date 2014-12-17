@@ -83,5 +83,29 @@ namespace Wallace.IDE.Properties {
                 this["EditorSettingsApex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EditorSettingsVisualForce {
+            get {
+                return ((string)(this["EditorSettingsVisualForce"]));
+            }
+            set {
+                this["EditorSettingsVisualForce"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EditorSettingsSOQL {
+            get {
+                return ((string)(this["EditorSettingsSOQL"]));
+            }
+            set {
+                this["EditorSettingsSOQL"] = value;
+            }
+        }
     }
 }

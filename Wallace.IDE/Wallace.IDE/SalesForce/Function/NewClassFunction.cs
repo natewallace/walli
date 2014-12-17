@@ -82,7 +82,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     using (App.Wait("Creating Class"))
                     {
-                        SourceFile file = project.Client.CreateClass(dlg.EnteredValue);
+                        SourceFile file = project.Client.CreateClass(dlg.EnteredValue, EditorSettings.ApexSettings.CreateHeader());
                         ApexClassFolderNode folder = App.Instance.Navigation.GetNode<ApexClassFolderNode>();
                         if (folder != null)
                             folder.AddApexClass(file);

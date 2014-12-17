@@ -25,7 +25,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
-        <TextBlock Text="Header:"
+        <TextBlock Text="Default header:"
                    Grid.Row="0"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
@@ -38,7 +38,9 @@
                       Height="100px">
             <TextBox x:Name="textBoxHeader"
                      AcceptsReturn="True"
-                     AcceptsTab="True"/>
+                     AcceptsTab="True"
+                     FontFamily="Consolas"
+                     FontSize="10pt"/>
         </ScrollViewer>
 
         <TextBlock Text="Font:"
@@ -73,12 +75,12 @@
                    Grid.Row="5"
                    Grid.Column="1"
                    FontWeight="Bold"
-                   Margin="5,0,0,0"/>
+                   Margin="10,0,0,0"/>
 
         <Button x:Name="buttonSymbolForeground"
                 Grid.Row="6"
                 Grid.Column="1"
-                Margin="5,0,0,0"
+                Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
                 Click="buttonSymbolForeground_Click">
@@ -98,12 +100,12 @@
                    Grid.Row="7"
                    Grid.Column="1"
                    FontWeight="Bold"
-                   Margin="5,10,0,0"/>
+                   Margin="10,10,0,0"/>
 
         <Button x:Name="buttonSymbolBackground"
                 Grid.Row="8"
                 Grid.Column="1"
-                Margin="5,0,0,0"
+                Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
                 Click="buttonSymbolBackground_Click">
@@ -122,7 +124,7 @@
                     Grid.Row="9"
                     Grid.Column="1"
                     Orientation="Horizontal"
-                    Margin="5,10,0,0">
+                    Margin="10,10,0,0">
             <CheckBox x:Name="checkBoxSymbolBold"
                       VerticalAlignment="Center"
                       Checked="checkBoxSymbolBold_Changed"
@@ -137,7 +139,7 @@
                     Grid.Row="10"
                     Grid.Column="1"
                     Orientation="Horizontal"
-                    Margin="5,10,0,0">
+                    Margin="10,10,0,0">
             <CheckBox x:Name="checkBoxSymbolItalic"
                       VerticalAlignment="Center"
                       Checked="checkBoxSymbolItalic_Changed"

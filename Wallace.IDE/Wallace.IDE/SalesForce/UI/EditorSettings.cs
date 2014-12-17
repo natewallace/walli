@@ -43,9 +43,14 @@ namespace Wallace.IDE.SalesForce.UI
         #region Fields
 
         /// <summary>
-        /// The apex settings that serves the entire application.
+        /// The apex settings that serve the entire application.
         /// </summary>
         public static EditorSettings ApexSettings { get; private set; }
+
+        /// <summary>
+        /// The visual force settings that serve the entire application.
+        /// </summary>
+        public static EditorSettings VisualForceSettings { get; private set; }
 
         /// <summary>
         /// The name for the setting.
@@ -63,6 +68,9 @@ namespace Wallace.IDE.SalesForce.UI
         {
             StreamResourceInfo highlight = Application.GetResourceStream(new Uri("Resources/Apex.xshd", UriKind.Relative));
             ApexSettings = new EditorSettings("EditorSettingsApex", highlight.Stream);
+
+            highlight = Application.GetResourceStream(new Uri("Resources/VisualForce.xshd", UriKind.Relative));
+            VisualForceSettings = new EditorSettings("EditorSettingsVisualForce", highlight.Stream);
         }
 
         /// <summary>
@@ -154,6 +162,29 @@ namespace Wallace.IDE.SalesForce.UI
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Creates a new header using the header text which may contain variables.
+        /// </summary>
+        /// <returns>A new header with the variables replaced with their values.</returns>
+        public string CreateHeader()
+        {
+            if (Header != null)
+            {
+                StringBuilder sb = new StringBuilder(Header);
+                sb.Replace("{!datetime}", DateTime.Now.ToString());
+                sb.Replace("{!date}", DateTime.Now.ToShortDateString());
+                sb.Replace("{!time}", DateTime.Now.ToShortTimeString());
+                if (App.Instance.SalesForceApp.CurrentProject != null)
+                    sb.Replace("{!author}", App.Instance.SalesForceApp.CurrentProject.Client.GetUserName());
+
+                return sb.ToString();
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// Reset any changes made to the symbols.

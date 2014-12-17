@@ -1505,8 +1505,9 @@ namespace SalesForceData
         /// Create a new class.
         /// </summary>
         /// <param name="name">The name of the class.</param>
+        /// <param name="header">Optional header text to include at the head of the class.</param>
         /// <returns>The source file for the newly created class.</returns>
-        public SourceFile CreateClass(string name)
+        public SourceFile CreateClass(string name, string header)
         {
             InitClients();
 
@@ -1514,7 +1515,10 @@ namespace SalesForceData
                 throw new Exception("name is null or whitespace.");
 
             SalesForceAPI.Tooling.ApexClass apexClass = new SalesForceAPI.Tooling.ApexClass();
-            apexClass.Body = String.Format("public class {0} {{{1}}}", name, Environment.NewLine);
+            if (header != null)
+                apexClass.Body = String.Format("{0}{1}public class {2} {{{1}}}", header, Environment.NewLine, name);
+            else
+                apexClass.Body = String.Format("public class {0} {{{1}}}", name, Environment.NewLine);
 
             SalesForceAPI.Tooling.createResponse response = _toolingClient.create(new SalesForceAPI.Tooling.createRequest()
             {
@@ -1544,8 +1548,9 @@ namespace SalesForceData
         /// <param name="triggerName">The name of the trigger.</param>
         /// <param name="objectName">The name of the object to create the trigger on.</param>
         /// <param name="triggerEvents">The events for the trigger.</param>
+        /// <param name="header">Optional header text to include at the head of the trigger.</param>
         /// <returns>The newly created trigger.</returns>
-        public SourceFile CreateTrigger(string triggerName, string objectName, TriggerEvents triggerEvents)
+        public SourceFile CreateTrigger(string triggerName, string objectName, TriggerEvents triggerEvents, string header)
         {
             InitClients();
 
@@ -1558,29 +1563,38 @@ namespace SalesForceData
 
             StringBuilder triggerEventsText = new StringBuilder();
             if (triggerEvents.HasFlag(TriggerEvents.BeforeInsert))
-                triggerEventsText.AppendFormat("before insert, ");
+                triggerEventsText.Append("before insert, ");
             if (triggerEvents.HasFlag(TriggerEvents.AfterInsert))
-                triggerEventsText.AppendFormat("after insert, ");
+                triggerEventsText.Append("after insert, ");
             if (triggerEvents.HasFlag(TriggerEvents.BeforeUpdate))
-                triggerEventsText.AppendFormat("before update, ");
+                triggerEventsText.Append("before update, ");
             if (triggerEvents.HasFlag(TriggerEvents.AfterUpdate))
-                triggerEventsText.AppendFormat("after update, ");
+                triggerEventsText.Append("after update, ");
             if (triggerEvents.HasFlag(TriggerEvents.BeforeDelete))
-                triggerEventsText.AppendFormat("before delete, ");
+                triggerEventsText.Append("before delete, ");
             if (triggerEvents.HasFlag(TriggerEvents.AfterDelete))
-                triggerEventsText.AppendFormat("after delete, ");
+                triggerEventsText.Append("after delete, ");
             if (triggerEvents.HasFlag(TriggerEvents.AfterUndelete))
-                triggerEventsText.AppendFormat("after undelete, ");
+                triggerEventsText.Append("after undelete, ");
             triggerEventsText.Length = triggerEventsText.Length - 2;
 
             SalesForceAPI.Tooling.ApexTrigger apexTrigger = new SalesForceAPI.Tooling.ApexTrigger();
             apexTrigger.Name = triggerName;
             apexTrigger.TableEnumOrId = objectName;
-            apexTrigger.Body = String.Format("trigger {0} on {1}({2}) {{{3}}}",
-                triggerName,
-                objectName,
-                triggerEventsText.ToString(),
-                Environment.NewLine);
+
+            if (header != null)
+                apexTrigger.Body = String.Format("{0}{4}trigger {1} on {2}({3}) {{{4}}}",
+                    header,
+                    triggerName,
+                    objectName,
+                    triggerEventsText.ToString(),
+                    Environment.NewLine);
+            else
+                apexTrigger.Body = String.Format("trigger {0} on {1}({2}) {{{3}}}",
+                    triggerName,
+                    objectName,
+                    triggerEventsText.ToString(),
+                    Environment.NewLine);
 
             SalesForceAPI.Tooling.createResponse response = _toolingClient.create(new SalesForceAPI.Tooling.createRequest()
             {
@@ -1608,8 +1622,9 @@ namespace SalesForceData
         /// Create a new component.
         /// </summary>
         /// <param name="name">The name of the component to create.</param>
+        /// <param name="header">Optional header text to include at the head of the page.</param>
         /// <returns>The newly created component.</returns>
-        public SourceFile CreateComponent(string name)
+        public SourceFile CreateComponent(string name, string header)
         {
             InitClients();
 
@@ -1619,7 +1634,11 @@ namespace SalesForceData
             SalesForceAPI.Tooling.ApexComponent apexComponent = new SalesForceAPI.Tooling.ApexComponent();
             apexComponent.Name = name;
             apexComponent.MasterLabel = name;
-            apexComponent.Markup = "<apex:component>\n</apex:component>";
+
+            if (header != null)
+                apexComponent.Markup = String.Format("{0}{1}<apex:component>{1}</apex:component>", header, Environment.NewLine);
+            else
+                apexComponent.Markup = String.Format("<apex:component>{0}</apex:component>", Environment.NewLine);
 
             SalesForceAPI.Tooling.createResponse response = _toolingClient.create(new SalesForceAPI.Tooling.createRequest()
             {
@@ -1647,8 +1666,9 @@ namespace SalesForceData
         /// Create a new page.
         /// </summary>
         /// <param name="name">The name of the page.</param>
+        /// <param name="header">Optional header text to include at the head of the page.</param>
         /// <returns>The source file for the newly created page.</returns>
-        public SourceFile CreatePage(string name)
+        public SourceFile CreatePage(string name, string header)
         {
             InitClients();
 
@@ -1658,7 +1678,11 @@ namespace SalesForceData
             SalesForceAPI.Tooling.ApexPage apexPage = new SalesForceAPI.Tooling.ApexPage();
             apexPage.Name = name;
             apexPage.MasterLabel = name;
-            apexPage.Markup = "<apex:page>\n</apex:page>";
+
+            if (header != null)
+                apexPage.Markup = String.Format("{0}{1}<apex:page>{1}</apex:page>", header, Environment.NewLine);
+            else
+                apexPage.Markup = String.Format("<apex:page>{0}</apex:page>", Environment.NewLine);
 
             SalesForceAPI.Tooling.createResponse response = _toolingClient.create(new SalesForceAPI.Tooling.createRequest()
             {

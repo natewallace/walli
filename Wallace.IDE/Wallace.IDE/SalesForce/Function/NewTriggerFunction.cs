@@ -94,7 +94,8 @@ namespace Wallace.IDE.SalesForce.Function
                         SourceFile file = project.Client.CreateTrigger(
                             dlg.TriggerName,
                             (dlg.TriggerObject as SObjectTypePartial).Name,
-                            dlg.TriggerEvents);
+                            dlg.TriggerEvents,
+                            EditorSettings.ApexSettings.CreateHeader());
 
                         ApexTriggerFolderNode folder = App.Instance.Navigation.GetNode<ApexTriggerFolderNode>();
                         if (folder != null)
