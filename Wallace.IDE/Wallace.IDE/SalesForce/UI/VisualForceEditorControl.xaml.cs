@@ -65,11 +65,7 @@ namespace Wallace.IDE.SalesForce.UI
             InitializeComponent();
             SetErrors(null);
 
-            StreamResourceInfo info = Application.GetResourceStream(new Uri("Resources/VisualForce.xshd", UriKind.Relative));
-            using (System.Xml.XmlTextReader reader = new System.Xml.XmlTextReader(info.Stream))
-            {
-                textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            }
+            ApplyEditorSettings();
 
             textEditor.TextArea.SelectionCornerRadius = 0;
             textEditor.TextArea.SelectionBrush = Brushes.LightBlue;
@@ -125,6 +121,17 @@ namespace Wallace.IDE.SalesForce.UI
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Apply the editor settings as currently configured for the application.
+        /// </summary>
+        public void ApplyEditorSettings()
+        {
+            textEditor.SyntaxHighlighting = EditorSettings.VisualForceSettings.HighlightDefinition;
+            textEditor.FontFamily = EditorSettings.VisualForceSettings.FontFamily;
+            textEditor.FontSize = EditorSettings.VisualForceSettings.FontSize;
+            textEditor.TextArea.TextView.Redraw();
+        }
 
         /// <summary>
         /// Show the code completions window.

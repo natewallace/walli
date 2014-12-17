@@ -108,8 +108,8 @@ namespace Wallace.IDE.SalesForce.Settings
 
             foreach (IDocument document in App.Instance.Content.OpenDocuments)
             {
-                if (document is ClassEditorDocument)
-                    (document as ClassEditorDocument).UpdateEditorSettings();
+                if (document is ClassEditorDocument || document is TriggerEditorDocument)
+                    (document as ISourceFileEditorDocument).UpdateEditorSettings();
             }
         }
 

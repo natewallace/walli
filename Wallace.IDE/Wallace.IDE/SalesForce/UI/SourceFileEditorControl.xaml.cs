@@ -144,6 +144,13 @@ namespace Wallace.IDE.SalesForce.UI
         #region Methods
 
         /// <summary>
+        /// Apply the editor settings as currently configured for the application.
+        /// </summary>
+        public void ApplyEditorSettings()
+        {
+        }
+
+        /// <summary>
         /// Give focus to the text input.
         /// </summary>
         public void FocusText()

@@ -233,6 +233,14 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Update the editor settings.
+        /// </summary>
+        public void UpdateEditorSettings()
+        {
+            View.ApplyEditorSettings();
+        }
+
+        /// <summary>
         /// Save changes made to the content.
         /// </summary>
         public virtual void Save()

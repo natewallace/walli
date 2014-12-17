@@ -101,5 +101,10 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         /// <param name="line">The line number to go to. (1 based)</param>
         void GotToLine(int line);
+
+        /// <summary>
+        /// Apply the editor settings as currently configured for the application.
+        /// </summary>
+        void ApplyEditorSettings();
     }
 }

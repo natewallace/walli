@@ -10,7 +10,8 @@
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Style="{StaticResource ChromeWindowStyle}"
-        Background="{StaticResource CaptionBackgroundBrush}">
+        Background="{StaticResource CaptionBackgroundBrush}"
+        Loaded="OnLoad">
     <Border Margin="10">
         <Grid>
             <Grid.RowDefinitions>

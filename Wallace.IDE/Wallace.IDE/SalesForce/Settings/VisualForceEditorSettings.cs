@@ -106,11 +106,11 @@ namespace Wallace.IDE.SalesForce.Settings
 
             CreateView();
 
-            //foreach (IDocument document in App.Instance.Content.OpenDocuments)
-            //{
-            //    if (document is ClassEditorDocument)
-            //        (document as ClassEditorDocument).UpdateEditorSettings();
-            //}
+            foreach (IDocument document in App.Instance.Content.OpenDocuments)
+            {
+                if (document is VisualForceEditorDocument)
+                    (document as ISourceFileEditorDocument).UpdateEditorSettings();
+            }
         }
 
         /// <summary>

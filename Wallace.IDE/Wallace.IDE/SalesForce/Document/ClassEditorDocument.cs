@@ -172,14 +172,6 @@ namespace Wallace.IDE.SalesForce.Document
             View.CommentSelectedText(flag);
         }
 
-        /// <summary>
-        /// Update the editor settings.
-        /// </summary>
-        public void UpdateEditorSettings()
-        {
-            View.ApplyEditorSettings();
-        }
-
         #endregion
 
         #region Event Handlers

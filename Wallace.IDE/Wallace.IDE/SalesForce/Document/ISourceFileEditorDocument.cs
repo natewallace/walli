@@ -100,5 +100,10 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         /// <param name="line">The line number to go to. (1 based)</param>
         void GotToLine(int line);
+
+        /// <summary>
+        /// Update the editor settings.
+        /// </summary>
+        void UpdateEditorSettings();
     }
 }

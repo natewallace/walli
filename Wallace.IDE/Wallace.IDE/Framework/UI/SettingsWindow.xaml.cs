@@ -136,6 +136,38 @@ namespace Wallace.IDE.Framework.UI
         #region Event Handlers
 
         /// <summary>
+        /// Select the first setting item in the window.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        protected virtual void OnLoad(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TreeViewItem item = null;
+                if (treeViewCategories.Items.Count > 0)
+                    item = treeViewCategories.Items[0] as TreeViewItem;
+
+                while (item != null)
+                {
+                    if (item.Items.Count > 0)
+                    {
+                        item = item.Items[0] as TreeViewItem;
+                    }
+                    else
+                    {
+                        item.IsSelected = true;
+                        break;
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
         /// Raise the SelectedSettingsPathChanged event.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
