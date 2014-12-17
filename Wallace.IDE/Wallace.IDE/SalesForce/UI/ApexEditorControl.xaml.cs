@@ -140,9 +140,10 @@ namespace Wallace.IDE.SalesForce.UI
             InitializeComponent();
             SetErrors(null);
 
+            _colorTransformer = new ApexDocumentColorizingTransformer();
+
             ApplyEditorSettings();
 
-            _colorTransformer = new ApexDocumentColorizingTransformer();
             textEditor.TextArea.TextView.LineTransformers.Add(_colorTransformer);
             textEditor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
             textEditor.MouseHover += textEditor_MouseHover;
@@ -391,6 +392,8 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.SyntaxHighlighting = EditorSettings.ApexSettings.HighlightDefinition;
             textEditor.FontFamily = EditorSettings.ApexSettings.FontFamily;
             textEditor.FontSize = EditorSettings.ApexSettings.FontSize;
+            _colorTransformer.ResetSymbolSettings();
+            textEditor.TextArea.TextView.Redraw();
         }
 
         /// <summary>

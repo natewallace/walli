@@ -124,7 +124,9 @@
                     Orientation="Horizontal"
                     Margin="5,10,0,0">
             <CheckBox x:Name="checkBoxSymbolBold"
-                      VerticalAlignment="Center"/>
+                      VerticalAlignment="Center"
+                      Checked="checkBoxSymbolBold_Changed"
+                      Unchecked="checkBoxSymbolBold_Changed"/>
             <TextBlock Text="Bold"
                        FontWeight="Bold"
                        Margin="5,0,0,0"
@@ -137,7 +139,9 @@
                     Orientation="Horizontal"
                     Margin="5,10,0,0">
             <CheckBox x:Name="checkBoxSymbolItalic"
-                      VerticalAlignment="Center"/>
+                      VerticalAlignment="Center"
+                      Checked="checkBoxSymbolItalic_Changed"
+                      Unchecked="checkBoxSymbolItalic_Changed"/>
             <TextBlock Text="Italic"
                        FontWeight="Bold"
                        Margin="5,0,0,0"

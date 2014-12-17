@@ -41,6 +41,21 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private static TextDecorationCollection ERROR_DECORATIONS;
 
+        /// <summary>
+        /// The brush to use for type symbol foreground.
+        /// </summary>
+        private Brush _typeForeground;
+
+        /// <summary>
+        /// The brush to use for type symbol background.
+        /// </summary>
+        private Brush _typeBackground;
+
+        /// <summary>
+        /// The typeface to use for type symbols.
+        /// </summary>
+        private Typeface _typeTypeface;
+
         #endregion
 
         #region Constructors
@@ -85,6 +100,48 @@ namespace Wallace.IDE.SalesForce.UI
 
         #region Methods
 
+        /// <summary>
+        /// Reset the symbol settings used to color symbols.
+        /// </summary>
+        public void ResetSymbolSettings()
+        {
+            _typeTypeface = null;
+
+            foreach (EditorSymbolSettings ess in EditorSettings.ApexSettings.Symbols)
+            {
+                if (ess.Name == "Type")
+                {
+                    if (ess.Foreground.HasValue)
+                        _typeForeground = new SolidColorBrush(ess.Foreground.Value);
+                    else
+                        _typeForeground = Brushes.Teal;
+
+                    if (ess.Background.HasValue)
+                        _typeBackground = new SolidColorBrush(ess.Background.Value);
+                    else
+                        _typeBackground = null;
+
+                    if (ess.Weight.HasValue || ess.Style.HasValue)
+                    {
+                        FontWeight weight = FontWeights.Normal;
+                        if (ess.Weight.HasValue)
+                            weight = ess.Weight.Value;
+
+                        FontStyle style = FontStyles.Normal;
+                        if (ess.Style.HasValue)
+                            style = ess.Style.Value;
+
+                        _typeTypeface = new Typeface(
+                            EditorSettings.ApexSettings.FontFamily,
+                            style,
+                            weight,
+                            FontStretches.Normal);
+                    }
+
+                    break;
+                }
+            }
+        }
 
         /// <summary>
         /// Color the given line.
@@ -114,7 +171,12 @@ namespace Wallace.IDE.SalesForce.UI
                                 endOffset,
                                 (element) =>
                                 {
-                                    element.TextRunProperties.SetForegroundBrush(Brushes.Teal);
+                                    if (_typeForeground != null)
+                                        element.TextRunProperties.SetForegroundBrush(_typeForeground);
+                                    if (_typeBackground != null)
+                                        element.TextRunProperties.SetBackgroundBrush(_typeBackground);
+                                    if (_typeTypeface != null)
+                                        element.TextRunProperties.SetTypeface(_typeTypeface);
                                 });
                     }
                 }

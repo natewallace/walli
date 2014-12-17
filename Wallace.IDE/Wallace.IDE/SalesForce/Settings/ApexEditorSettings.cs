@@ -26,6 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.Framework;
+using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Settings
@@ -104,6 +105,12 @@ namespace Wallace.IDE.SalesForce.Settings
             EditorSettings.ApexSettings.Save();
 
             CreateView();
+
+            foreach (IDocument document in App.Instance.Content.OpenDocuments)
+            {
+                if (document is ClassEditorDocument)
+                    (document as ClassEditorDocument).UpdateEditorSettings();
+            }
         }
 
         /// <summary>

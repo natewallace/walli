@@ -322,6 +322,48 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Update the symbol.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void checkBoxSymbolBold_Changed(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                EditorSymbolSettings ess = SelectedSettingSymbol;
+                if (ess != null)
+                {
+                    ess.IsBold = checkBoxSymbolBold.IsChecked.HasValue && checkBoxSymbolBold.IsChecked.Value;
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Update the symbol.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void checkBoxSymbolItalic_Changed(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                EditorSymbolSettings ess = SelectedSettingSymbol;
+                if (ess != null)
+                {
+                    ess.IsItalic = checkBoxSymbolItalic.IsChecked.HasValue && checkBoxSymbolItalic.IsChecked.Value;
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
     }
 }

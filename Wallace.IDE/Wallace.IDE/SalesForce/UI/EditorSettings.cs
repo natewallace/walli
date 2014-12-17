@@ -263,6 +263,9 @@ namespace Wallace.IDE.SalesForce.UI
                             }
                         }
                     }
+
+                    if (Symbols.Count() == 0)
+                        return false;
                 }
                 catch
                 {
