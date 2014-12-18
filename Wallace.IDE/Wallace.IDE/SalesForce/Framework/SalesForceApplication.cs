@@ -385,6 +385,7 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Navigation.Nodes.Add(new SourceFolderNode(project));
             App.Instance.Navigation.Nodes.Add(new DataFolderNode(project));
             App.Instance.Navigation.Nodes.Add(new DeployFolderNode(project));
+            App.Instance.Navigation.Nodes.Add(new SnippetsFolderNode(project));
 
             App.Instance.Menu.UpdateFunctions();
             App.Instance.ToolBar.UpdateFunctions();

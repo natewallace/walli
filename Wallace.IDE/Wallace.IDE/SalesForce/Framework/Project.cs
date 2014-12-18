@@ -53,6 +53,11 @@ namespace Wallace.IDE.SalesForce.Framework
         private static readonly string ROOT_FOLDER = Path.Combine(APP_DATA_FOLDER, "SalesForce Projects");
 
         /// <summary>
+        /// The root folder for global snippets.
+        /// </summary>
+        private static readonly string GLOBAL_SNIPPETS_FOLDER = Path.Combine(APP_DATA_FOLDER, "Snippets");
+
+        /// <summary>
         /// Used for encryption of credentials.  Not real secure but it's better than storing them in plain text.
         /// </summary>
         private static readonly System.Security.SecureString PROJECT_PASSWORD = SecureStringUtility.CreateSecureString("{70B204A2-3766-4899-8F75-5CB9BFB038E6}");
@@ -90,6 +95,8 @@ namespace Wallace.IDE.SalesForce.Framework
                 Directory.CreateDirectory(APP_DATA_FOLDER);
             if (!Directory.Exists(ROOT_FOLDER))
                 Directory.CreateDirectory(ROOT_FOLDER);
+            if (!Directory.Exists(GLOBAL_SNIPPETS_FOLDER))
+                Directory.CreateDirectory(GLOBAL_SNIPPETS_FOLDER);
         }
 
         /// <summary>
@@ -121,6 +128,10 @@ namespace Wallace.IDE.SalesForce.Framework
             SymbolsFolder = Path.Combine(ProjectFolder, "Symbols");
             if (!Directory.Exists(SymbolsFolder))
                 Directory.CreateDirectory(SymbolsFolder);
+
+            SnippetsFolder = Path.Combine(ProjectFolder, "Snippets");
+            if (!Directory.Exists(SnippetsFolder))
+                Directory.CreateDirectory(SnippetsFolder);
 
             Language = new LanguageManager(SymbolsFolder);
 
@@ -201,6 +212,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// The file path for the symbols folder of this project.
         /// </summary>
         public string SymbolsFolder { get; private set; }
+
+        /// <summary>
+        /// The file path for the snippets folder.
+        /// </summary>
+        public string SnippetsFolder { get; private set; }
 
         /// <summary>
         /// All of the project names of projects that have been saved.
@@ -345,6 +361,24 @@ namespace Wallace.IDE.SalesForce.Framework
                 result.Add(new Package(file));
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Get the global snippets.
+        /// </summary>
+        /// <returns>The global snippets.</returns>
+        public string[] GetGlobalSnippets()
+        {
+            return System.IO.Directory.GetFiles(GLOBAL_SNIPPETS_FOLDER);
+        }
+
+        /// <summary>
+        /// Get the project snippets.
+        /// </summary>
+        /// <returns>The project snippets.</returns>
+        public string[] GetProjectSnippets()
+        {
+            return System.IO.Directory.GetFiles(SnippetsFolder);
         }
 
         /// <summary>

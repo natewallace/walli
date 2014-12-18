@@ -183,6 +183,10 @@
     <Compile Include="SalesForce\Node\ManifestNode.cs" />
     <Compile Include="SalesForce\Node\PackageFolderNode.cs" />
     <Compile Include="SalesForce\Node\PackageNode.cs" />
+    <Compile Include="SalesForce\Node\SnippetNode.cs" />
+    <Compile Include="SalesForce\Node\SnippetsFolderNode.cs" />
+    <Compile Include="SalesForce\Node\SnippetsGlobalFolderNode.cs" />
+    <Compile Include="SalesForce\Node\SnippetsProjectFolderNode.cs" />
     <Compile Include="SalesForce\Node\SourceFolderNode.cs" />
     <Compile Include="SalesForce\Settings\ApexEditorSettings.cs" />
     <Compile Include="SalesForce\Settings\SOQLEditorSettings.cs" />
