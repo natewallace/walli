@@ -50,9 +50,11 @@ namespace Wallace.IDE.SalesForce.UI
             DocumentLine previousLine = line.PreviousLine;
             if (previousLine != null)
             {
-                string previousLineText = document.GetText(previousLine.Offset, previousLine.Length);
+                string previousLineText = document.GetText(previousLine.Offset, previousLine.Length);                
                 if (previousLineText != null)
                 {
+                    string previousLineTextTrimmed = previousLineText.Trim();
+
                     // check for opening block comment
                     Match match = Regex.Match(previousLineText, @"^[ \t]*/?\*(?!/)");
                     if (match != null && match.Success)
@@ -80,9 +82,8 @@ namespace Wallace.IDE.SalesForce.UI
                         document.Insert(line.Offset, sb.ToString());
                     }
                     // check for opening block of code or opening if type statement
-                    else if (previousLineText.Trim().EndsWith("{") || 
-                             previousLineText.Trim().EndsWith(")") ||
-                             previousLineText.Trim().EndsWith("else"))
+                    else if (!previousLineTextTrimmed.StartsWith("//") &&
+                             Regex.IsMatch(previousLineTextTrimmed, "(^(if|else[ ]+if|for|while)[^A-Za-z0-9])|(\\)|{)$", RegexOptions.IgnoreCase))
                     {
                         StringBuilder sb = new StringBuilder();
                         bool done = false;
