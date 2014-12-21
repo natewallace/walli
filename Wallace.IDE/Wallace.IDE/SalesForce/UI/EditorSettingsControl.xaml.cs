@@ -150,7 +150,7 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 buttonForeground.Tag = value;
                 borderForeground.Background = new SolidColorBrush(value);
-                textBlockForeground.Text = value.ToString();
+                textBlockForeground.Text = ColorSelectWindow.GetColorName(value);
             }
         }
 
@@ -170,7 +170,7 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 buttonBackground.Tag = value;
                 borderBackground.Background = new SolidColorBrush(value);
-                textBlockBackground.Text = value.ToString();
+                textBlockBackground.Text = ColorSelectWindow.GetColorName(value);
             }
         }
 

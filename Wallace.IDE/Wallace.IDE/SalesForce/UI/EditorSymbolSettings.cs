@@ -110,7 +110,7 @@ namespace Wallace.IDE.SalesForce.UI
         {
             get
             {
-                return Foreground.HasValue ? Foreground.Value.ToString() : "(none)";
+                return Foreground.HasValue ? ColorSelectWindow.GetColorName(Foreground.Value) : "(none)";
             }
         }
 
@@ -126,7 +126,7 @@ namespace Wallace.IDE.SalesForce.UI
         {
             get
             {
-                return Background.HasValue ? Background.Value.ToString() : "(none)";
+                return Background.HasValue ? ColorSelectWindow.GetColorName(Background.Value) : "(none)";
             }
         }
 
