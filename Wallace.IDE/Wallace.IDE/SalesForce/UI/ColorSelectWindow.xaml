@@ -1,0 +1,624 @@
+﻿<Window x:Class="Wallace.IDE.SalesForce.UI.ColorSelectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Select a color" 
+        Height="132" 
+        Width="350"
+        MinHeight="200"
+        MinWidth="200"        
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Style="{StaticResource ChromeWindowStyle}"
+        Background="{StaticResource CaptionBackgroundBrush}">
+    <Border Padding="10,5,20,5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0"
+                        VerticalAlignment="Center">
+                <TextBlock x:Name="textBlockInput" 
+                           Margin="0,0,0,5"
+                           FontWeight="Bold"
+                           Text="Color:" />
+                <ComboBox x:Name="comboBoxInput"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Stretch"
+                          SelectionChanged="comboBoxInput_SelectionChanged">
+
+                    <StackPanel Orientation="Horizontal" x:Name="panelCustomColor">
+                        <Border Height="16" Width="16" Background="Transparent"/>
+                        <TextBlock Margin="5,0,0,0" Text="Custom color..." />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="AliceBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="AliceBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="AntiqueWhite"/>
+                        <TextBlock Margin="5,0,0,0" Text="AntiqueWhite" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Aqua"/>
+                        <TextBlock Margin="5,0,0,0" Text="Aqua" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Aquamarine"/>
+                        <TextBlock Margin="5,0,0,0" Text="Aquamarine" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Azure"/>
+                        <TextBlock Margin="5,0,0,0" Text="Azure" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Beige"/>
+                        <TextBlock Margin="5,0,0,0" Text="Beige" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Bisque"/>
+                        <TextBlock Margin="5,0,0,0" Text="Bisque" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Black"/>
+                        <TextBlock Margin="5,0,0,0" Text="Black" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="BlanchedAlmond"/>
+                        <TextBlock Margin="5,0,0,0" Text="BlanchedAlmond" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Blue"/>
+                        <TextBlock Margin="5,0,0,0" Text="Blue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="BlueViolet"/>
+                        <TextBlock Margin="5,0,0,0" Text="BlueViolet" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Brown"/>
+                        <TextBlock Margin="5,0,0,0" Text="Brown" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="BurlyWood"/>
+                        <TextBlock Margin="5,0,0,0" Text="BurlyWood" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="CadetBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="CadetBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Chartreuse"/>
+                        <TextBlock Margin="5,0,0,0" Text="Chartreuse" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Chocolate"/>
+                        <TextBlock Margin="5,0,0,0" Text="Chocolate" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Coral"/>
+                        <TextBlock Margin="5,0,0,0" Text="Coral" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="CornflowerBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="CornflowerBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Cornsilk"/>
+                        <TextBlock Margin="5,0,0,0" Text="Cornsilk" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Crimson"/>
+                        <TextBlock Margin="5,0,0,0" Text="Crimson" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Cyan"/>
+                        <TextBlock Margin="5,0,0,0" Text="Cyan" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkCyan"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkCyan" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkGoldenrod"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkGoldenrod" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkGray"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkGray" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkKhaki"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkKhaki" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkMagenta"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkMagenta" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkOliveGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkOliveGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkOrange"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkOrange" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkOrchid"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkOrchid" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkRed"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkRed" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkSalmon"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkSalmon" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkSeaGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkSeaGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkSlateBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkSlateBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkSlateGray"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkSlateGray" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkTurquoise"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkTurquoise" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DarkViolet"/>
+                        <TextBlock Margin="5,0,0,0" Text="DarkViolet" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DeepPink"/>
+                        <TextBlock Margin="5,0,0,0" Text="DeepPink" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DeepSkyBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="DeepSkyBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DimGray"/>
+                        <TextBlock Margin="5,0,0,0" Text="DimGray" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="DodgerBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="DodgerBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Firebrick"/>
+                        <TextBlock Margin="5,0,0,0" Text="Firebrick" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="FloralWhite"/>
+                        <TextBlock Margin="5,0,0,0" Text="FloralWhite" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="ForestGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="ForestGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Fuchsia"/>
+                        <TextBlock Margin="5,0,0,0" Text="Fuchsia" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Gainsboro"/>
+                        <TextBlock Margin="5,0,0,0" Text="Gainsboro" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="GhostWhite"/>
+                        <TextBlock Margin="5,0,0,0" Text="GhostWhite" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Gold"/>
+                        <TextBlock Margin="5,0,0,0" Text="Gold" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Goldenrod"/>
+                        <TextBlock Margin="5,0,0,0" Text="Goldenrod" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Gray"/>
+                        <TextBlock Margin="5,0,0,0" Text="Gray" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Green"/>
+                        <TextBlock Margin="5,0,0,0" Text="Green" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="GreenYellow"/>
+                        <TextBlock Margin="5,0,0,0" Text="GreenYellow" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Honeydew"/>
+                        <TextBlock Margin="5,0,0,0" Text="Honeydew" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="HotPink"/>
+                        <TextBlock Margin="5,0,0,0" Text="HotPink" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="IndianRed"/>
+                        <TextBlock Margin="5,0,0,0" Text="IndianRed" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Indigo"/>
+                        <TextBlock Margin="5,0,0,0" Text="Indigo" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Ivory"/>
+                        <TextBlock Margin="5,0,0,0" Text="Ivory" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Khaki"/>
+                        <TextBlock Margin="5,0,0,0" Text="Khaki" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Lavender"/>
+                        <TextBlock Margin="5,0,0,0" Text="Lavender" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LavenderBlush"/>
+                        <TextBlock Margin="5,0,0,0" Text="LavenderBlush" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LawnGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="LawnGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LemonChiffon"/>
+                        <TextBlock Margin="5,0,0,0" Text="LemonChiffon" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightCoral"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightCoral" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightCyan"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightCyan" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightGoldenrodYellow"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightGoldenrodYellow" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightGray"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightGray" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightPink"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightPink" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightSalmon"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightSalmon" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightSeaGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightSeaGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightSkyBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightSkyBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightSlateGray"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightSlateGray" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightSteelBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightSteelBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LightYellow"/>
+                        <TextBlock Margin="5,0,0,0" Text="LightYellow" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Lime"/>
+                        <TextBlock Margin="5,0,0,0" Text="Lime" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="LimeGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="LimeGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Linen"/>
+                        <TextBlock Margin="5,0,0,0" Text="Linen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Magenta"/>
+                        <TextBlock Margin="5,0,0,0" Text="Magenta" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Maroon"/>
+                        <TextBlock Margin="5,0,0,0" Text="Maroon" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumAquamarine"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumAquamarine" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumOrchid"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumOrchid" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumPurple"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumPurple" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumSeaGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumSeaGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumSlateBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumSlateBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumSpringGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumSpringGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumTurquoise"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumTurquoise" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MediumVioletRed"/>
+                        <TextBlock Margin="5,0,0,0" Text="MediumVioletRed" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MidnightBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="MidnightBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MintCream"/>
+                        <TextBlock Margin="5,0,0,0" Text="MintCream" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="MistyRose"/>
+                        <TextBlock Margin="5,0,0,0" Text="MistyRose" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Moccasin"/>
+                        <TextBlock Margin="5,0,0,0" Text="Moccasin" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="NavajoWhite"/>
+                        <TextBlock Margin="5,0,0,0" Text="NavajoWhite" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Navy"/>
+                        <TextBlock Margin="5,0,0,0" Text="Navy" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="OldLace"/>
+                        <TextBlock Margin="5,0,0,0" Text="OldLace" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Olive"/>
+                        <TextBlock Margin="5,0,0,0" Text="Olive" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="OliveDrab"/>
+                        <TextBlock Margin="5,0,0,0" Text="OliveDrab" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Orange"/>
+                        <TextBlock Margin="5,0,0,0" Text="Orange" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="OrangeRed"/>
+                        <TextBlock Margin="5,0,0,0" Text="OrangeRed" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Orchid"/>
+                        <TextBlock Margin="5,0,0,0" Text="Orchid" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="PaleGoldenrod"/>
+                        <TextBlock Margin="5,0,0,0" Text="PaleGoldenrod" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="PaleGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="PaleGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="PaleTurquoise"/>
+                        <TextBlock Margin="5,0,0,0" Text="PaleTurquoise" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="PaleVioletRed"/>
+                        <TextBlock Margin="5,0,0,0" Text="PaleVioletRed" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="PapayaWhip"/>
+                        <TextBlock Margin="5,0,0,0" Text="PapayaWhip" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="PeachPuff"/>
+                        <TextBlock Margin="5,0,0,0" Text="PeachPuff" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Peru"/>
+                        <TextBlock Margin="5,0,0,0" Text="Peru" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Pink"/>
+                        <TextBlock Margin="5,0,0,0" Text="Pink" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Plum"/>
+                        <TextBlock Margin="5,0,0,0" Text="Plum" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="PowderBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="PowderBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Purple"/>
+                        <TextBlock Margin="5,0,0,0" Text="Purple" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Red"/>
+                        <TextBlock Margin="5,0,0,0" Text="Red" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="RosyBrown"/>
+                        <TextBlock Margin="5,0,0,0" Text="RosyBrown" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="RoyalBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="RoyalBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SaddleBrown"/>
+                        <TextBlock Margin="5,0,0,0" Text="SaddleBrown" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Salmon"/>
+                        <TextBlock Margin="5,0,0,0" Text="Salmon" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SandyBrown"/>
+                        <TextBlock Margin="5,0,0,0" Text="SandyBrown" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SeaGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="SeaGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SeaShell"/>
+                        <TextBlock Margin="5,0,0,0" Text="SeaShell" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Sienna"/>
+                        <TextBlock Margin="5,0,0,0" Text="Sienna" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Silver"/>
+                        <TextBlock Margin="5,0,0,0" Text="Silver" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SkyBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="SkyBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SlateBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="SlateBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SlateGray"/>
+                        <TextBlock Margin="5,0,0,0" Text="SlateGray" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Snow"/>
+                        <TextBlock Margin="5,0,0,0" Text="Snow" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SpringGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="SpringGreen" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="SteelBlue"/>
+                        <TextBlock Margin="5,0,0,0" Text="SteelBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Tan"/>
+                        <TextBlock Margin="5,0,0,0" Text="Tan" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Teal"/>
+                        <TextBlock Margin="5,0,0,0" Text="Teal" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Thistle"/>
+                        <TextBlock Margin="5,0,0,0" Text="Thistle" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Tomato"/>
+                        <TextBlock Margin="5,0,0,0" Text="Tomato" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Transparent"/>
+                        <TextBlock Margin="5,0,0,0" Text="Transparent" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Turquoise"/>
+                        <TextBlock Margin="5,0,0,0" Text="Turquoise" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Violet"/>
+                        <TextBlock Margin="5,0,0,0" Text="Violet" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Wheat"/>
+                        <TextBlock Margin="5,0,0,0" Text="Wheat" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="White"/>
+                        <TextBlock Margin="5,0,0,0" Text="White" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="WhiteSmoke"/>
+                        <TextBlock Margin="5,0,0,0" Text="WhiteSmoke" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="Yellow"/>
+                        <TextBlock Margin="5,0,0,0" Text="Yellow" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Height="16" Width="16" Background="YellowGreen"/>
+                        <TextBlock Margin="5,0,0,0" Text="YellowGreen" />
+                    </StackPanel>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="5"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right">
+                <Button x:Name="buttonSelect"
+                        Margin="5"
+                        Padding="10,5,10,5"
+                        IsEnabled="False"
+                        Click="buttonSelect_Click">
+                    Select
+                </Button>
+                <Button Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonCancel_Click">
+                    Cancel
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

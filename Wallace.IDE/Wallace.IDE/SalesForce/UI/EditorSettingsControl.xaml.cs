@@ -313,14 +313,14 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                System.Windows.Forms.ColorDialog dlg = new System.Windows.Forms.ColorDialog();                
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                EditorSymbolSettings ess = SelectedSettingSymbol;
+                if (ess != null)
                 {
-                    EditorSymbolSettings ess = SelectedSettingSymbol;
-                    if (ess != null)
+                    ColorSelectWindow dlg = new ColorSelectWindow();
+                    dlg.SelectedColor = ess.Foreground;
+                    if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
                     {
-                        Color color = Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
-                        ess.Foreground = color;
+                        ess.Foreground = dlg.SelectedColor.Value;
                         UpdateView();
                     }
                 }
@@ -340,14 +340,14 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                System.Windows.Forms.ColorDialog dlg = new System.Windows.Forms.ColorDialog();
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                EditorSymbolSettings ess = SelectedSettingSymbol;
+                if (ess != null)
                 {
-                    EditorSymbolSettings ess = SelectedSettingSymbol;
-                    if (ess != null)
+                    ColorSelectWindow dlg = new ColorSelectWindow();
+                    dlg.SelectedColor = ess.Background;
+                    if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
                     {
-                        Color color = Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
-                        ess.Background = color;
+                        ess.Background = dlg.SelectedColor.Value;
                         UpdateView();
                     }
                 }
@@ -367,11 +367,11 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                System.Windows.Forms.ColorDialog dlg = new System.Windows.Forms.ColorDialog();
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                ColorSelectWindow dlg = new ColorSelectWindow();
+                dlg.SelectedColor = SettingForeground;
+                if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
                 {
-                    Color color = Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
-                    SettingForeground = color;
+                    SettingForeground = dlg.SelectedColor.Value;
                     UpdateView();
                 }
             }
@@ -390,11 +390,11 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                System.Windows.Forms.ColorDialog dlg = new System.Windows.Forms.ColorDialog();
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                ColorSelectWindow dlg = new ColorSelectWindow();
+                dlg.SelectedColor = SettingBackground;
+                if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
                 {
-                    Color color = Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
-                    SettingBackground = color;
+                    SettingBackground = dlg.SelectedColor.Value;
                     UpdateView();
                 }
             }

@@ -198,6 +198,9 @@
     </Compile>
     <Compile Include="SalesForce\UI\ApexFoldingStrategy.cs" />
     <Compile Include="SalesForce\UI\ApexIndentationStrategy.cs" />
+    <Compile Include="SalesForce\UI\ColorSelectWindow.xaml.cs">
+      <DependentUpon>ColorSelectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\DataEditorControl.xaml.cs">
       <DependentUpon>DataEditorControl.xaml</DependentUpon>
     </Compile>
@@ -366,6 +369,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\ApexEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\ColorSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
