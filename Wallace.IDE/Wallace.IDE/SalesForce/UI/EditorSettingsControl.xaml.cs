@@ -135,6 +135,46 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// The foreground color.
+        /// </summary>
+        public Color SettingForeground
+        {
+            get
+            {
+                if (buttonForeground.Tag is Color)
+                    return (Color)buttonForeground.Tag;
+                else
+                    return Colors.Transparent;
+            }
+            set
+            {
+                buttonForeground.Tag = value;
+                borderForeground.Background = new SolidColorBrush(value);
+                textBlockForeground.Text = value.ToString();
+            }
+        }
+
+        /// <summary>
+        /// The background color.
+        /// </summary>
+        public Color SettingBackground
+        {
+            get
+            {
+                if (buttonBackground.Tag is Color)
+                    return (Color)buttonBackground.Tag;
+                else
+                    return Colors.Transparent;
+            }
+            set
+            {
+                buttonBackground.Tag = value;
+                borderBackground.Background = new SolidColorBrush(value);
+                textBlockBackground.Text = value.ToString();
+            }
+        }
+
+        /// <summary>
         /// The symbol colors.
         /// </summary>
         public IEnumerable<EditorSymbolSettings> SettingSymbols
@@ -310,6 +350,52 @@ namespace Wallace.IDE.SalesForce.UI
                         ess.Background = color;
                         UpdateView();
                     }
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// The foreground for the editor.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonForeground_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Windows.Forms.ColorDialog dlg = new System.Windows.Forms.ColorDialog();
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    Color color = Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
+                    SettingForeground = color;
+                    UpdateView();
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// The background for the editor.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonBackground_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Windows.Forms.ColorDialog dlg = new System.Windows.Forms.ColorDialog();
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    Color color = Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
+                    SettingBackground = color;
+                    UpdateView();
                 }
             }
             catch (Exception err)

@@ -392,6 +392,8 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.SyntaxHighlighting = EditorSettings.ApexSettings.HighlightDefinition;
             textEditor.FontFamily = EditorSettings.ApexSettings.FontFamily;
             textEditor.FontSize = EditorSettings.ApexSettings.FontSize;
+            textEditor.Foreground = new SolidColorBrush(EditorSettings.ApexSettings.Foreground);
+            textEditor.Background = new SolidColorBrush(EditorSettings.ApexSettings.Background);
             _colorTransformer.ResetSymbolSettings();
             textEditor.TextArea.TextView.Redraw();
         }

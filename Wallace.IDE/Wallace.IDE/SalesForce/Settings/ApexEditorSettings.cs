@@ -68,6 +68,8 @@ namespace Wallace.IDE.SalesForce.Settings
             _view.SettingHeader = EditorSettings.ApexSettings.Header;
             _view.SettingFontFamily = EditorSettings.ApexSettings.FontFamily;
             _view.SettingFontSize = EditorSettings.ApexSettings.FontSizeInPoints;
+            _view.SettingForeground = EditorSettings.ApexSettings.Foreground;
+            _view.SettingBackground = EditorSettings.ApexSettings.Background;
             _view.SettingSymbols = EditorSettings.ApexSettings.Symbols;
         }
 
@@ -100,6 +102,8 @@ namespace Wallace.IDE.SalesForce.Settings
         {
             EditorSettings.ApexSettings.Header = _view.SettingHeader;
             EditorSettings.ApexSettings.FontFamily = _view.SettingFontFamily;
+            EditorSettings.ApexSettings.Foreground = _view.SettingForeground;
+            EditorSettings.ApexSettings.Background = _view.SettingBackground;
             EditorSettings.ApexSettings.FontSizeInPoints = _view.SettingFontSize;
 
             EditorSettings.ApexSettings.Save();

@@ -99,11 +99,13 @@ namespace Wallace.IDE.SalesForce.UI
 
             Symbols = new List<EditorSymbolSettings>();
 
+            FontFamily = new FontFamily("Consolas");
+            FontSizeInPoints = 10;
+            Foreground = Colors.Black;
+            Background = Colors.White;
+
             if (!Load())
             {
-                FontFamily = new FontFamily("Consolas");
-                FontSizeInPoints = 10;
-
                 List<EditorSymbolSettings> symbols = new List<EditorSymbolSettings>();
                 foreach (HighlightingColor hc in HighlightDefinition.NamedHighlightingColors)
                 {
@@ -161,6 +163,16 @@ namespace Wallace.IDE.SalesForce.UI
                 FontSize = value * 96d / 72d;
             }
         }
+
+        /// <summary>
+        /// The foreground color.
+        /// </summary>
+        public Color Foreground { get; set; }
+
+        /// <summary>
+        /// The background color.
+        /// </summary>
+        public Color Background { get; set; }
 
         /// <summary>
         /// The symbols settings.
@@ -280,6 +292,10 @@ namespace Wallace.IDE.SalesForce.UI
                                             FontFamily = new FontFamily(xml["family"]);
                                         if (xml["size"] != null)
                                             FontSizeInPoints = double.Parse(xml["size"]);
+                                        if (xml["foreground"] != null)
+                                            Foreground = (Color)ColorConverter.ConvertFromString(xml["foreground"]);
+                                        if (xml["background"] != null)
+                                            Background = (Color)ColorConverter.ConvertFromString(xml["background"]);
                                         xml.Read();
                                         break;
 
@@ -336,6 +352,8 @@ namespace Wallace.IDE.SalesForce.UI
                     xml.WriteStartElement("font");
                     xml.WriteAttributeString("family", FontFamily.Source);
                     xml.WriteAttributeString("size", FontSizeInPoints.ToString());
+                    xml.WriteAttributeString("foreground", Foreground.ToString());
+                    xml.WriteAttributeString("background", Background.ToString());
                     xml.WriteEndElement();
 
                     xml.WriteStartElement("symbols");
