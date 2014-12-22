@@ -67,7 +67,14 @@ namespace Wallace.IDE.SalesForce.Settings
             _view = new EditorSettingsControl();
             _view.SettingFontFamily = EditorSettings.VisualForceSettings.FontFamily;
             _view.SettingFontSize = EditorSettings.VisualForceSettings.FontSizeInPoints;
+            _view.SettingForeground = EditorSettings.VisualForceSettings.Foreground;
+            _view.SettingBackground = EditorSettings.VisualForceSettings.Background;
+            _view.SettingSelectionForeground = EditorSettings.VisualForceSettings.SelectionForeground;
+            _view.SettingSelectionBackground = EditorSettings.VisualForceSettings.SelectionBackground;
+            _view.SettingFindResultBackground = EditorSettings.VisualForceSettings.FindResultBackground;
             _view.SettingSymbols = EditorSettings.VisualForceSettings.Symbols;
+            _view.ShowThemes = true;
+            _view.ThemeClick += view_ThemeClick;
         }
 
         #endregion
@@ -99,6 +106,13 @@ namespace Wallace.IDE.SalesForce.Settings
         {
             EditorSettings.VisualForceSettings.FontFamily = _view.SettingFontFamily;
             EditorSettings.VisualForceSettings.FontSizeInPoints = _view.SettingFontSize;
+            EditorSettings.VisualForceSettings.Foreground = _view.SettingForeground;
+            EditorSettings.VisualForceSettings.Background = _view.SettingBackground;
+            EditorSettings.VisualForceSettings.SelectionForeground = _view.SettingSelectionForeground;
+            EditorSettings.VisualForceSettings.SelectionBackground = _view.SettingSelectionBackground;
+            EditorSettings.VisualForceSettings.FindResultBackground = _view.SettingFindResultBackground;
+            EditorSettings.VisualForceSettings.FontSizeInPoints = _view.SettingFontSize;
+            EditorSettings.VisualForceSettings.UpdateSymbols(_view.SettingSymbols);
 
             EditorSettings.VisualForceSettings.Save();
 
@@ -118,6 +132,39 @@ namespace Wallace.IDE.SalesForce.Settings
         {
             EditorSettings.VisualForceSettings.ResetSymbols();
             CreateView();
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Show the theme selections.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void view_ThemeClick(object sender, EventArgs e)
+        {
+            SelectValueWindow dlg = new SelectValueWindow();
+            dlg.Title = "Select a theme";
+            dlg.InputLabel = "Themes:";
+            foreach (EditorSettingsTheme theme in EditorSettings.VisualForceSettings.Themes)
+                dlg.Items.Add(theme);
+
+            if (App.ShowDialog(dlg))
+            {
+                EditorSettingsTheme theme = dlg.SelectedValue as EditorSettingsTheme;
+                if (theme != null)
+                {
+                    _view.SettingFontFamily = theme.FontFamily;
+                    _view.SettingForeground = theme.Foreground;
+                    _view.SettingBackground = theme.Background;
+                    _view.SettingSelectionForeground = theme.SelectionForeground;
+                    _view.SettingSelectionBackground = theme.SelectionBackground;
+                    _view.SettingFindResultBackground = theme.FindResultBackground;
+                    _view.SettingSymbols = theme.Symbols;
+                }
+            }
         }
 
         #endregion

@@ -147,6 +147,34 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Treat double click as a select click.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void listBoxInput_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                try
+                {
+                    if (buttonSelect.IsEnabled)
+                    {
+                        DialogResult = true;
+                        Close();
+                    }
+                }
+                catch (Exception err)
+                {
+                    App.HandleException(err);
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
     }
 }

@@ -76,6 +76,48 @@ namespace Wallace.IDE.SalesForce.UI
             ApexSettings = new EditorSettings("EditorSettingsApex", highlight.Stream);
             List<EditorSettingsTheme> themes = new List<EditorSettingsTheme>();
 
+            EditorSettingsTheme eTheme = new EditorSettingsTheme("Eclipse");
+            eTheme.FontFamily = new FontFamily("Consolas");
+            eTheme.Foreground = Colors.Black;
+            eTheme.Background = Colors.White;
+            eTheme.SelectionForeground = null;
+            eTheme.SelectionBackground = Colors.LightBlue;
+            eTheme.FindResultBackground = Colors.DarkOrange;
+            eTheme.AddSymbol("Alert", Colors.Red, null, true, false);
+            eTheme.AddSymbol("ApexKeyword", "#7F0055", null, false, false);
+            eTheme.AddSymbol("Comment", "#428161", null, false, false);
+            eTheme.AddSymbol("Delimiter", Colors.Black, null, false, false);
+            eTheme.AddSymbol("DocComment", "#3F5FBF", null, false, false);
+            eTheme.AddSymbol("DocCommentText", "#3F5FBF", null, false, false);
+            eTheme.AddSymbol("Region", "#7F0055", null, false, false);
+            eTheme.AddSymbol("RegionName", Colors.Black, null, false, false);
+            eTheme.AddSymbol("SOQLKeyword", Colors.Purple, null, false, false);
+            eTheme.AddSymbol("String", "#3A14FF", null, false, false);
+            eTheme.AddSymbol("Type", Colors.Black, null, false, false);
+            eTheme.AddSymbol("Warning", "#EEE0E000", null, true, false);
+            themes.Add(eTheme);
+
+            EditorSettingsTheme mTheme = new EditorSettingsTheme("Monokai");
+            mTheme.FontFamily = new FontFamily("Consolas");
+            mTheme.Foreground = (Color)ColorConverter.ConvertFromString("#F8F8F2");
+            mTheme.Background = (Color)ColorConverter.ConvertFromString("#272822");
+            mTheme.SelectionForeground = null;
+            mTheme.SelectionBackground = (Color)ColorConverter.ConvertFromString("#49483E");
+            mTheme.FindResultBackground = (Color)ColorConverter.ConvertFromString("#FFE792");
+            mTheme.AddSymbol("Alert", Colors.Red, null, true, false);
+            mTheme.AddSymbol("ApexKeyword", "#F92672", null, false, false);
+            mTheme.AddSymbol("Comment", "#75715E", null, false, false);
+            mTheme.AddSymbol("Delimiter", "#F8F8F2", null, false, false);
+            mTheme.AddSymbol("DocComment", "#75715E", null, false, false);
+            mTheme.AddSymbol("DocCommentText", "#75715E", null, false, false);
+            mTheme.AddSymbol("Region", "#F92672", null, false, false);
+            mTheme.AddSymbol("RegionName", "#F8F8F2", null, false, false);
+            mTheme.AddSymbol("SOQLKeyword", Colors.Gold, null, false, false);
+            mTheme.AddSymbol("String", "#E6DB74", null, false, false);
+            mTheme.AddSymbol("Type", "#A6E22E", null, false, false);
+            mTheme.AddSymbol("Warning", (Color)ColorConverter.ConvertFromString("#EEE0E000"), null, true, false);
+            themes.Add(mTheme);
+
             EditorSettingsTheme vsTheme = new EditorSettingsTheme("Visual Studio");
             vsTheme.FontFamily = new FontFamily("Consolas");
             vsTheme.Foreground = Colors.Black;
@@ -97,34 +139,114 @@ namespace Wallace.IDE.SalesForce.UI
             vsTheme.AddSymbol("Warning", "#EEE0E000", null, true, false);
             themes.Add(vsTheme);
 
-            EditorSettingsTheme mTheme = new EditorSettingsTheme("Monokai");
+            ApexSettings.Themes = themes;
+
+            // visual force
+            highlight = Application.GetResourceStream(new Uri("Resources/VisualForce.xshd", UriKind.Relative));
+            VisualForceSettings = new EditorSettings("EditorSettingsVisualForce", highlight.Stream);
+            themes = new List<EditorSettingsTheme>();
+
+            eTheme = new EditorSettingsTheme("Eclipse");
+            eTheme.FontFamily = new FontFamily("Consolas");
+            eTheme.Foreground = Colors.Black;
+            eTheme.Background = Colors.White;
+            eTheme.SelectionForeground = null;
+            eTheme.SelectionBackground = Colors.LightBlue;
+            eTheme.FindResultBackground = Colors.DarkOrange;
+            eTheme.AddSymbol("Assignment", Colors.Black, null, false, false);
+            eTheme.AddSymbol("Attributes", "#B04391", null, false, false);
+            eTheme.AddSymbol("Comment", "#6085D5", null, false, false);
+            eTheme.AddSymbol("Digits", Colors.Black, null, false, false);
+            eTheme.AddSymbol("Entities", "#267F89", null, false, false);
+            eTheme.AddSymbol("EntityReference", "#267F89", null, false, false);
+            eTheme.AddSymbol("HtmlTag", "#267F89", null, false, false);
+            eTheme.AddSymbol("JavaScriptTag", "#267F89", null, false, false);
+            eTheme.AddSymbol("Slash", "#267F89", null, false, false);
+            eTheme.AddSymbol("String", "#471BFF", null, false, false);
+            eTheme.AddSymbol("Tags", "#267F89", null, false, false);
+            themes.Add(eTheme);
+
+            mTheme = new EditorSettingsTheme("Monokai");
             mTheme.FontFamily = new FontFamily("Consolas");
             mTheme.Foreground = (Color)ColorConverter.ConvertFromString("#F8F8F2");
             mTheme.Background = (Color)ColorConverter.ConvertFromString("#272822");
             mTheme.SelectionForeground = null;
             mTheme.SelectionBackground = (Color)ColorConverter.ConvertFromString("#49483E");
             mTheme.FindResultBackground = (Color)ColorConverter.ConvertFromString("#FFE792");
-            mTheme.AddSymbol("Alert", Colors.Red, null, true, false);
-            mTheme.AddSymbol("ApexKeyword", "#F92672", null, false, false);
+            mTheme.AddSymbol("Assignment", "#F92672", null, false, false);
+            mTheme.AddSymbol("Attributes", "#A6E22E", null, false, false);
             mTheme.AddSymbol("Comment", "#75715E", null, false, false);
-            mTheme.AddSymbol("Delimiter", "#F8F8F2", null, false, false);
-            mTheme.AddSymbol("DocComment", "#75715E", null, false, false);
-            mTheme.AddSymbol("DocCommentText", "#75715E", null, false, false);
-            mTheme.AddSymbol("Region", "#F92672", null, false, false);
-            mTheme.AddSymbol("RegionName", "#F8F8F2", null, false, false);
-            mTheme.AddSymbol("SOQLKeyword", Colors.Purple, null, false, false);
+            mTheme.AddSymbol("Digits", "#E6DB74", null, false, false);
+            mTheme.AddSymbol("Entities", "#2D96A2", null, false, false);
+            mTheme.AddSymbol("EntityReference", "#2D96A2", null, false, false);
+            mTheme.AddSymbol("HtmlTag", "#F8F8F2", null, false, false);
+            mTheme.AddSymbol("JavaScriptTag", "#F92672", null, false, false);
+            mTheme.AddSymbol("Slash", "#F8F8F2", null, false, false);
             mTheme.AddSymbol("String", "#E6DB74", null, false, false);
-            mTheme.AddSymbol("Type", "#A6E22E", null, false, false);
-            mTheme.AddSymbol("Warning", (Color)ColorConverter.ConvertFromString("#EEE0E000"), null, true, false);
+            mTheme.AddSymbol("Tags", "#F92672", null, false, false);
             themes.Add(mTheme);
 
-            ApexSettings.Themes = themes;
+            vsTheme = new EditorSettingsTheme("Visual Studio");
+            vsTheme.FontFamily = new FontFamily("Consolas");
+            vsTheme.Foreground = Colors.Black;
+            vsTheme.Background = Colors.White;
+            vsTheme.SelectionForeground = null;
+            vsTheme.SelectionBackground = Colors.LightBlue;
+            vsTheme.FindResultBackground = Colors.DarkOrange;
+            vsTheme.AddSymbol("Assignment", Colors.Blue, null, false, false);
+            vsTheme.AddSymbol("Attributes", Colors.Red, null, false, false);
+            vsTheme.AddSymbol("Comment", Colors.Green, null, false, false);
+            vsTheme.AddSymbol("Digits", Colors.DarkBlue, null, false, false);
+            vsTheme.AddSymbol("Entities", Colors.Red, null, false, false);
+            vsTheme.AddSymbol("EntityReference", Colors.Red, null, false, false);
+            vsTheme.AddSymbol("HtmlTag", Colors.Blue, null, false, false);
+            vsTheme.AddSymbol("JavaScriptTag", Colors.Black, null, false, false);
+            vsTheme.AddSymbol("Slash", Colors.Blue, null, false, false);
+            vsTheme.AddSymbol("String", Colors.Blue, null, false, false);
+            vsTheme.AddSymbol("Tags", Colors.DarkRed, null, false, false);
+            themes.Add(vsTheme);
 
+            VisualForceSettings.Themes = themes;
+
+            // SOQL
             highlight = Application.GetResourceStream(new Uri("Resources/SOQL.xshd", UriKind.Relative));
             SOQLSettings = new EditorSettings("EditorSettingsSOQL", highlight.Stream);
+            themes = new List<EditorSettingsTheme>();
 
-            highlight = Application.GetResourceStream(new Uri("Resources/VisualForce.xshd", UriKind.Relative));
-            VisualForceSettings = new EditorSettings("EditorSettingsVisualForce", highlight.Stream);
+            eTheme = new EditorSettingsTheme("Eclipse");
+            eTheme.FontFamily = new FontFamily("Consolas");
+            eTheme.Foreground = Colors.Black;
+            eTheme.Background = Colors.White;
+            eTheme.SelectionForeground = null;
+            eTheme.SelectionBackground = Colors.LightBlue;
+            eTheme.FindResultBackground = Colors.DarkOrange;
+            eTheme.AddSymbol("SOQLKeyword", Colors.Purple, null, false, false);
+            eTheme.AddSymbol("String", "#3A14FF", null, false, false);
+            themes.Add(eTheme);
+
+            mTheme = new EditorSettingsTheme("Monokai");
+            mTheme.FontFamily = new FontFamily("Consolas");
+            mTheme.Foreground = (Color)ColorConverter.ConvertFromString("#F8F8F2");
+            mTheme.Background = (Color)ColorConverter.ConvertFromString("#272822");
+            mTheme.SelectionForeground = null;
+            mTheme.SelectionBackground = (Color)ColorConverter.ConvertFromString("#49483E");
+            mTheme.FindResultBackground = (Color)ColorConverter.ConvertFromString("#FFE792");
+            mTheme.AddSymbol("SOQLKeyword", Colors.Gold, null, false, false);
+            mTheme.AddSymbol("String", "#E6DB74", null, false, false);
+            themes.Add(mTheme);
+
+            vsTheme = new EditorSettingsTheme("Visual Studio");
+            vsTheme.FontFamily = new FontFamily("Consolas");
+            vsTheme.Foreground = Colors.Black;
+            vsTheme.Background = Colors.White;
+            vsTheme.SelectionForeground = null;
+            vsTheme.SelectionBackground = Colors.LightBlue;
+            vsTheme.FindResultBackground = Colors.DarkOrange;
+            vsTheme.AddSymbol("SOQLKeyword", Colors.Purple, null, false, false);
+            vsTheme.AddSymbol("String", Colors.DarkRed, null, false, false);
+            themes.Add(vsTheme);
+
+            SOQLSettings.Themes = themes;
         }
 
         /// <summary>

@@ -416,10 +416,11 @@ namespace Wallace.IDE.SalesForce.UI
                 if (ess != null)
                 {
                     ColorSelectWindow dlg = new ColorSelectWindow();
+                    dlg.AllowNoColor = true;
                     dlg.SelectedColor = ess.Foreground;
-                    if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
+                    if (App.ShowDialog(dlg))
                     {
-                        ess.Foreground = dlg.SelectedColor.Value;
+                        ess.Foreground = dlg.SelectedColor;
                         UpdateView();
                     }
                 }
@@ -443,10 +444,11 @@ namespace Wallace.IDE.SalesForce.UI
                 if (ess != null)
                 {
                     ColorSelectWindow dlg = new ColorSelectWindow();
+                    dlg.AllowNoColor = true;
                     dlg.SelectedColor = ess.Background;
-                    if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
+                    if (App.ShowDialog(dlg))
                     {
-                        ess.Background = dlg.SelectedColor.Value;
+                        ess.Background = dlg.SelectedColor;
                         UpdateView();
                     }
                 }
@@ -513,10 +515,11 @@ namespace Wallace.IDE.SalesForce.UI
             try
             {
                 ColorSelectWindow dlg = new ColorSelectWindow();
+                dlg.AllowNoColor = true;
                 dlg.SelectedColor = SettingSelectionForeground;
-                if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
+                if (App.ShowDialog(dlg))
                 {
-                    SettingSelectionForeground = dlg.SelectedColor.Value;
+                    SettingSelectionForeground = dlg.SelectedColor;
                     UpdateView();
                 }
             }
@@ -536,10 +539,11 @@ namespace Wallace.IDE.SalesForce.UI
             try
             {
                 ColorSelectWindow dlg = new ColorSelectWindow();
+                dlg.AllowNoColor = true;
                 dlg.SelectedColor = SettingSelectionBackground;
-                if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
+                if (App.ShowDialog(dlg))
                 {
-                    SettingSelectionBackground = dlg.SelectedColor.Value;
+                    SettingSelectionBackground = dlg.SelectedColor;
                     UpdateView();
                 }
             }

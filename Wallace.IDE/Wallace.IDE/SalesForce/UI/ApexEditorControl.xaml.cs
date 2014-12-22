@@ -142,6 +142,7 @@ namespace Wallace.IDE.SalesForce.UI
 
             _colorTransformer = new ApexDocumentColorizingTransformer();
             _searchPanel = SearchPanel.Install(textEditor.TextArea);
+            _searchPanel.BorderThickness = new Thickness(0);
 
             ApplyEditorSettings();
 

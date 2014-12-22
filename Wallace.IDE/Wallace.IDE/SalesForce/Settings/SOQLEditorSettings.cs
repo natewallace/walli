@@ -67,7 +67,14 @@ namespace Wallace.IDE.SalesForce.Settings
             _view = new EditorSettingsControl();
             _view.SettingFontFamily = EditorSettings.SOQLSettings.FontFamily;
             _view.SettingFontSize = EditorSettings.SOQLSettings.FontSizeInPoints;
+            _view.SettingForeground = EditorSettings.SOQLSettings.Foreground;
+            _view.SettingBackground = EditorSettings.SOQLSettings.Background;
+            _view.SettingSelectionForeground = EditorSettings.SOQLSettings.SelectionForeground;
+            _view.SettingSelectionBackground = EditorSettings.SOQLSettings.SelectionBackground;
+            _view.SettingFindResultBackground = EditorSettings.SOQLSettings.FindResultBackground;
             _view.SettingSymbols = EditorSettings.SOQLSettings.Symbols;
+            _view.ShowThemes = true;
+            _view.ThemeClick += view_ThemeClick;
         }
 
         #endregion
@@ -98,7 +105,13 @@ namespace Wallace.IDE.SalesForce.Settings
         public void Save()
         {
             EditorSettings.SOQLSettings.FontFamily = _view.SettingFontFamily;
+            EditorSettings.SOQLSettings.Foreground = _view.SettingForeground;
+            EditorSettings.SOQLSettings.Background = _view.SettingBackground;
+            EditorSettings.SOQLSettings.SelectionForeground = _view.SettingSelectionForeground;
+            EditorSettings.SOQLSettings.SelectionBackground = _view.SettingSelectionBackground;
+            EditorSettings.SOQLSettings.FindResultBackground = _view.SettingFindResultBackground;
             EditorSettings.SOQLSettings.FontSizeInPoints = _view.SettingFontSize;
+            EditorSettings.SOQLSettings.UpdateSymbols(_view.SettingSymbols);
 
             EditorSettings.SOQLSettings.Save();
 
@@ -118,6 +131,39 @@ namespace Wallace.IDE.SalesForce.Settings
         {
             EditorSettings.SOQLSettings.ResetSymbols();
             CreateView();
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Show the theme selections.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void view_ThemeClick(object sender, EventArgs e)
+        {
+            SelectValueWindow dlg = new SelectValueWindow();
+            dlg.Title = "Select a theme";
+            dlg.InputLabel = "Themes:";
+            foreach (EditorSettingsTheme theme in EditorSettings.SOQLSettings.Themes)
+                dlg.Items.Add(theme);
+
+            if (App.ShowDialog(dlg))
+            {
+                EditorSettingsTheme theme = dlg.SelectedValue as EditorSettingsTheme;
+                if (theme != null)
+                {
+                    _view.SettingFontFamily = theme.FontFamily;
+                    _view.SettingForeground = theme.Foreground;
+                    _view.SettingBackground = theme.Background;
+                    _view.SettingSelectionForeground = theme.SelectionForeground;
+                    _view.SettingSelectionBackground = theme.SelectionBackground;
+                    _view.SettingFindResultBackground = theme.FindResultBackground;
+                    _view.SettingSymbols = theme.Symbols;
+                }
+            }
         }
 
         #endregion

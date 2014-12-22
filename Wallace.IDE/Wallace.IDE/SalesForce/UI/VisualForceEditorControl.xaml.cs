@@ -64,18 +64,14 @@ namespace Wallace.IDE.SalesForce.UI
         {
             InitializeComponent();
             SetErrors(null);
+            _searchPanel = SearchPanel.Install(textEditor.TextArea);
 
             ApplyEditorSettings();
 
             textEditor.TextArea.SelectionCornerRadius = 0;
-            textEditor.TextArea.SelectionBrush = Brushes.LightBlue;
-            textEditor.TextArea.SelectionBorder = null;
-            textEditor.TextArea.SelectionForeground = null;
+            textEditor.TextArea.SelectionBorder = null;            
             textEditor.TextArea.TextEntered += TextArea_TextEntered;
             textEditor.TextArea.TextEntering += TextArea_TextEntering;
-
-            _searchPanel = SearchPanel.Install(textEditor.TextArea);
-            _searchPanel.MarkerBrush = Brushes.DarkOrange;
 
             _completionWindow = null;
         }
@@ -130,6 +126,21 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.SyntaxHighlighting = EditorSettings.VisualForceSettings.HighlightDefinition;
             textEditor.FontFamily = EditorSettings.VisualForceSettings.FontFamily;
             textEditor.FontSize = EditorSettings.VisualForceSettings.FontSize;
+            textEditor.Foreground = new SolidColorBrush(EditorSettings.VisualForceSettings.Foreground);
+            textEditor.Background = new SolidColorBrush(EditorSettings.VisualForceSettings.Background);
+
+            if (EditorSettings.VisualForceSettings.SelectionForeground.HasValue)
+                textEditor.TextArea.SelectionForeground = new SolidColorBrush(EditorSettings.VisualForceSettings.SelectionForeground.Value);
+            else
+                textEditor.TextArea.SelectionForeground = null;
+
+            if (EditorSettings.VisualForceSettings.SelectionBackground.HasValue)
+                textEditor.TextArea.SelectionBrush = new SolidColorBrush(EditorSettings.VisualForceSettings.SelectionBackground.Value);
+            else
+                textEditor.TextArea.SelectionBrush = null;
+
+            _searchPanel.MarkerBrush = new SolidColorBrush(EditorSettings.VisualForceSettings.FindResultBackground);
+
             textEditor.TextArea.TextView.Redraw();
         }
 

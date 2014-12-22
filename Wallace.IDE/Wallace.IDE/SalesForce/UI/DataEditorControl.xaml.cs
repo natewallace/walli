@@ -72,9 +72,7 @@ namespace Wallace.IDE.SalesForce.UI
             ApplyEditorSettings();
 
             textEditor.TextArea.SelectionCornerRadius = 0;
-            textEditor.TextArea.SelectionBrush = Brushes.LightBlue;
             textEditor.TextArea.SelectionBorder = null;
-            textEditor.TextArea.SelectionForeground = null;
 
             textEditor.TextArea.TextView.Drop += textEditor_Drop;
 
@@ -188,6 +186,19 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.SyntaxHighlighting = EditorSettings.SOQLSettings.HighlightDefinition;
             textEditor.FontFamily = EditorSettings.SOQLSettings.FontFamily;
             textEditor.FontSize = EditorSettings.SOQLSettings.FontSize;
+            textEditor.Foreground = new SolidColorBrush(EditorSettings.SOQLSettings.Foreground);
+            textEditor.Background = new SolidColorBrush(EditorSettings.SOQLSettings.Background);
+
+            if (EditorSettings.SOQLSettings.SelectionForeground.HasValue)
+                textEditor.TextArea.SelectionForeground = new SolidColorBrush(EditorSettings.SOQLSettings.SelectionForeground.Value);
+            else
+                textEditor.TextArea.SelectionForeground = null;
+
+            if (EditorSettings.SOQLSettings.SelectionBackground.HasValue)
+                textEditor.TextArea.SelectionBrush = new SolidColorBrush(EditorSettings.SOQLSettings.SelectionBackground.Value);
+            else
+                textEditor.TextArea.SelectionBrush = null;
+
             textEditor.TextArea.TextView.Redraw();
         }
 

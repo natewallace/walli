@@ -53,6 +53,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private static Dictionary<string, string> _colorNames;
 
+        /// <summary>
+        /// The no color option.
+        /// </summary>
+        private object _noColor;
+
         #endregion
 
         #region Constructors
@@ -212,6 +217,9 @@ namespace Wallace.IDE.SalesForce.UI
             InitializeComponent();
 
             _previousSelection = null;
+
+            _noColor = CreateItemColor(Colors.Transparent);
+            ((_noColor as StackPanel).Children[1] as TextBlock).Text = "(none)";
         }
 
         #endregion
@@ -255,7 +263,33 @@ namespace Wallace.IDE.SalesForce.UI
                 }
                 else
                 {
-                    comboBoxInput.SelectedItem = null;
+                    if (AllowNoColor)
+                        comboBoxInput.SelectedItem = _noColor;
+                    else
+                        comboBoxInput.SelectedItem = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enable the option to select null for a color.
+        /// </summary>
+        public bool AllowNoColor
+        {
+            get
+            {
+                return comboBoxInput.Items.Contains(_noColor);
+            }
+            set
+            {
+                if (value)
+                {
+                    if (!comboBoxInput.Items.Contains(_noColor))
+                        comboBoxInput.Items.Insert(0, _noColor);
+                }
+                else
+                {
+                    comboBoxInput.Items.Remove(_noColor);
                 }
             }
         }
@@ -285,7 +319,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// <returns>The color for the given item or null if it can't be read.</returns>
         private Color? GetItemColor(object item)
         {
-            if (item == null)
+            if (item == null || item == _noColor)
                 return null;
 
             StackPanel panel = item as StackPanel;
@@ -396,7 +430,7 @@ namespace Wallace.IDE.SalesForce.UI
                     _previousSelection = comboBoxInput.SelectedItem;
                 }
 
-                buttonSelect.IsEnabled = (SelectedColor.HasValue);
+                buttonSelect.IsEnabled = (comboBoxInput.SelectedItem != null);
             }
             catch (Exception err)
             {

@@ -26,7 +26,8 @@
             
             <ListBox x:Name="listBoxInput"
                      Grid.Row="1" 
-                     SelectionChanged="listBoxInput_SelectionChanged"/>
+                     SelectionChanged="listBoxInput_SelectionChanged"
+                     MouseDoubleClick="listBoxInput_MouseDoubleClick"/>
             
             <StackPanel Grid.Row="2"
                         Grid.Column="0"

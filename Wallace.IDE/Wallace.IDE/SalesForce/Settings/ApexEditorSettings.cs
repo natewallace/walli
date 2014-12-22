@@ -136,6 +136,10 @@ namespace Wallace.IDE.SalesForce.Settings
             CreateView();
         }
 
+        #endregion
+
+        #region Event Handlers
+
         /// <summary>
         /// Show the theme selections.
         /// </summary>
