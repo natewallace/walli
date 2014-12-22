@@ -64,13 +64,20 @@ namespace Wallace.IDE.SalesForce.Settings
         /// </summary>
         private void CreateView()
         {
+            if (_view != null)
+                _view.ThemeClick -= view_ThemeClick;
+
             _view = new EditorSettingsControl();
-            _view.SettingHeader = EditorSettings.ApexSettings.Header;
             _view.SettingFontFamily = EditorSettings.ApexSettings.FontFamily;
             _view.SettingFontSize = EditorSettings.ApexSettings.FontSizeInPoints;
             _view.SettingForeground = EditorSettings.ApexSettings.Foreground;
             _view.SettingBackground = EditorSettings.ApexSettings.Background;
+            _view.SettingSelectionForeground = EditorSettings.ApexSettings.SelectionForeground;
+            _view.SettingSelectionBackground = EditorSettings.ApexSettings.SelectionBackground;
+            _view.SettingFindResultBackground = EditorSettings.ApexSettings.FindResultBackground;
             _view.SettingSymbols = EditorSettings.ApexSettings.Symbols;
+            _view.ShowThemes = true;
+            _view.ThemeClick += view_ThemeClick;
         }
 
         #endregion
@@ -83,7 +90,7 @@ namespace Wallace.IDE.SalesForce.Settings
         /// <returns>The path for these settings.</returns>
         public string GetPath()
         {
-            return "Editor/Apex";
+            return "Font and Color/Apex";
         }
 
         /// <summary>
@@ -100,11 +107,14 @@ namespace Wallace.IDE.SalesForce.Settings
         /// </summary>
         public void Save()
         {
-            EditorSettings.ApexSettings.Header = _view.SettingHeader;
             EditorSettings.ApexSettings.FontFamily = _view.SettingFontFamily;
             EditorSettings.ApexSettings.Foreground = _view.SettingForeground;
             EditorSettings.ApexSettings.Background = _view.SettingBackground;
+            EditorSettings.ApexSettings.SelectionForeground = _view.SettingSelectionForeground;
+            EditorSettings.ApexSettings.SelectionBackground = _view.SettingSelectionBackground;
+            EditorSettings.ApexSettings.FindResultBackground = _view.SettingFindResultBackground;
             EditorSettings.ApexSettings.FontSizeInPoints = _view.SettingFontSize;
+            EditorSettings.ApexSettings.UpdateSymbols(_view.SettingSymbols);
 
             EditorSettings.ApexSettings.Save();
 
@@ -124,6 +134,35 @@ namespace Wallace.IDE.SalesForce.Settings
         {
             EditorSettings.ApexSettings.ResetSymbols();
             CreateView();
+        }
+
+        /// <summary>
+        /// Show the theme selections.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void view_ThemeClick(object sender, EventArgs e)
+        {
+            SelectValueWindow dlg = new SelectValueWindow();
+            dlg.Title = "Select a theme";
+            dlg.InputLabel = "Themes:";
+            foreach (EditorSettingsTheme theme in EditorSettings.ApexSettings.Themes)
+                dlg.Items.Add(theme);
+
+            if (App.ShowDialog(dlg))
+            {
+                EditorSettingsTheme theme = dlg.SelectedValue as EditorSettingsTheme;
+                if (theme != null)
+                {
+                    _view.SettingFontFamily = theme.FontFamily;
+                    _view.SettingForeground = theme.Foreground;
+                    _view.SettingBackground = theme.Background;
+                    _view.SettingSelectionForeground = theme.SelectionForeground;
+                    _view.SettingSelectionBackground = theme.SelectionBackground;
+                    _view.SettingFindResultBackground = theme.FindResultBackground;
+                    _view.SettingSymbols = theme.Symbols;
+                }
+            }
         }
 
         #endregion

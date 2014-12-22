@@ -141,6 +141,7 @@ namespace Wallace.IDE.SalesForce.UI
             SetErrors(null);
 
             _colorTransformer = new ApexDocumentColorizingTransformer();
+            _searchPanel = SearchPanel.Install(textEditor.TextArea);
 
             ApplyEditorSettings();
 
@@ -151,9 +152,7 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.TextArea.TextEntered += TextArea_TextEntered;
             textEditor.TextArea.TextEntering += TextArea_TextEntering;
             textEditor.TextArea.SelectionCornerRadius = 0;
-            textEditor.TextArea.SelectionBrush = Brushes.LightBlue;
             textEditor.TextArea.SelectionBorder = null;
-            textEditor.TextArea.SelectionForeground = null;
 
             textEditor.TextArea.IndentationStrategy = new ApexIndentationStrategy();
 
@@ -165,9 +164,7 @@ namespace Wallace.IDE.SalesForce.UI
                 if (marginElement is ICSharpCode.AvalonEdit.Editing.LineNumberMargin)
                     marginElement.PreviewMouseLeftButtonDown += marginElement_PreviewMouseLeftButtonDown;
             }
-
-            _searchPanel = SearchPanel.Install(textEditor.TextArea);
-            _searchPanel.MarkerBrush = Brushes.DarkOrange;
+                        
             _toolTip = new ToolTip();
             _completionWindow = null;
             _insightWindow = null;
@@ -394,6 +391,19 @@ namespace Wallace.IDE.SalesForce.UI
             textEditor.FontSize = EditorSettings.ApexSettings.FontSize;
             textEditor.Foreground = new SolidColorBrush(EditorSettings.ApexSettings.Foreground);
             textEditor.Background = new SolidColorBrush(EditorSettings.ApexSettings.Background);
+
+            if (EditorSettings.ApexSettings.SelectionForeground.HasValue)
+                textEditor.TextArea.SelectionForeground = new SolidColorBrush(EditorSettings.ApexSettings.SelectionForeground.Value);
+            else
+                textEditor.TextArea.SelectionForeground = null;
+
+            if (EditorSettings.ApexSettings.SelectionBackground.HasValue)
+                textEditor.TextArea.SelectionBrush = new SolidColorBrush(EditorSettings.ApexSettings.SelectionBackground.Value);
+            else
+                textEditor.TextArea.SelectionBrush = null;
+
+            _searchPanel.MarkerBrush = new SolidColorBrush(EditorSettings.ApexSettings.FindResultBackground);
+
             _colorTransformer.ResetSymbolSettings();
             textEditor.TextArea.TextView.Redraw();
         }

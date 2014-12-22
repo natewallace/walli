@@ -211,6 +211,7 @@
     <Compile Include="SalesForce\UI\EditorSettingsControl.xaml.cs">
       <DependentUpon>EditorSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\UI\EditorSettingsTheme.cs" />
     <Compile Include="SalesForce\UI\EditorSymbolSettings.cs" />
     <Compile Include="SalesForce\UI\EditSalesForceCredentialWindow.xaml.cs">
       <DependentUpon>EditSalesForceCredentialWindow.xaml</DependentUpon>
@@ -271,6 +272,9 @@
       <DependentUpon>SelectProjectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\Node\SourceFileFolderNode.cs" />
+    <Compile Include="SalesForce\UI\SelectValueWindow.xaml.cs">
+      <DependentUpon>SelectValueWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\SourceFileEditorControl.xaml.cs">
       <DependentUpon>SourceFileEditorControl.xaml</DependentUpon>
     </Compile>
@@ -453,6 +457,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\SelectProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\SelectValueWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

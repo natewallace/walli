@@ -1,0 +1,53 @@
+﻿<Window x:Class="Wallace.IDE.SalesForce.UI.SelectValueWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Select a value" 
+        Height="300" 
+        Width="300"
+        MinHeight="200"
+        MinWidth="200"        
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Style="{StaticResource ChromeWindowStyle}"
+        Background="{StaticResource CaptionBackgroundBrush}">
+    <Border Padding="10,5,20,5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Name="textBlockInput" 
+                       Grid.Row="0"
+                       Margin="0,0,0,5"
+                       FontWeight="Bold"
+                       Text="Select a value:" />
+            
+            <ListBox x:Name="listBoxInput"
+                     Grid.Row="1" 
+                     SelectionChanged="listBoxInput_SelectionChanged"/>
+            
+            <StackPanel Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right">
+                <Button x:Name="buttonSelect"
+                        Margin="5"
+                        IsEnabled="False"
+                        Padding="10,5,10,5"
+                        Click="buttonSelect_Click">
+                    Select
+                </Button>
+                <Button Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonCancel_Click">
+                    Cancel
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

@@ -65,7 +65,6 @@ namespace Wallace.IDE.SalesForce.Settings
         private void CreateView()
         {
             _view = new EditorSettingsControl();
-            _view.SettingHeader = EditorSettings.VisualForceSettings.Header;
             _view.SettingFontFamily = EditorSettings.VisualForceSettings.FontFamily;
             _view.SettingFontSize = EditorSettings.VisualForceSettings.FontSizeInPoints;
             _view.SettingSymbols = EditorSettings.VisualForceSettings.Symbols;
@@ -81,7 +80,7 @@ namespace Wallace.IDE.SalesForce.Settings
         /// <returns>The path for these settings.</returns>
         public string GetPath()
         {
-            return "Editor/VisualForce";
+            return "Font and Color/VisualForce";
         }
 
         /// <summary>
@@ -98,7 +97,6 @@ namespace Wallace.IDE.SalesForce.Settings
         /// </summary>
         public void Save()
         {
-            EditorSettings.VisualForceSettings.Header = _view.SettingHeader;
             EditorSettings.VisualForceSettings.FontFamily = _view.SettingFontFamily;
             EditorSettings.VisualForceSettings.FontSizeInPoints = _view.SettingFontSize;
 

@@ -22,6 +22,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>  
         
         <Grid.ColumnDefinitions>
@@ -46,14 +48,12 @@
         <TextBlock Text="Foreground:"
                    Grid.Row="2"
                    Grid.Column="0"
-                   Grid.ColumnSpan="2"
                    Margin="0,10,0,0"
                    FontWeight="Bold"/>
 
         <Button x:Name="buttonForeground"
                 Grid.Row="3"
                 Grid.Column="0"
-                Grid.ColumnSpan="2"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
                 Click="buttonForeground_Click">
@@ -73,14 +73,12 @@
         <TextBlock Text="Background:"
                    Grid.Row="4"
                    Grid.Column="0"
-                   Grid.ColumnSpan="2"
                    Margin="0,10,0,0"
                    FontWeight="Bold"/>
 
         <Button x:Name="buttonBackground"
                 Grid.Row="5"
                 Grid.Column="0"
-                Grid.ColumnSpan="2"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
                 Click="buttonBackground_Click">
@@ -97,27 +95,102 @@
             </StackPanel>
         </Button>
 
-        <TextBlock Text="Symbols:"
+        <TextBlock Text="Selection Foreground:"
+                   Grid.Row="2"
+                   Grid.Column="1"
+                   Margin="0,10,0,0"
+                   FontWeight="Bold"/>
+
+        <Button x:Name="buttonSelectionForeground"
+                Grid.Row="3"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Click="buttonSelectionForeground_Click">
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="borderSelectionForeground"
+                        Height="16"
+                        Width="16"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        Background="Red"/>
+                <TextBlock x:Name="textBlockSelectionForeground"
+                           Margin="5,0,0,0"
+                           Text="Red" />
+            </StackPanel>
+        </Button>
+
+        <TextBlock Text="Selection Background:"
+                   Grid.Row="4"
+                   Grid.Column="1"
+                   Margin="0,10,0,0"
+                   FontWeight="Bold"/>
+
+        <Button x:Name="buttonSelectionBackground"
+                Grid.Row="5"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Click="buttonSelectionBackground_Click">
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="borderSelectionBackground"
+                        Height="16"
+                        Width="16"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        Background="Red"/>
+                <TextBlock x:Name="textBlockSelectionBackground"
+                           Margin="5,0,0,0"
+                           Text="Red" />
+            </StackPanel>
+        </Button>
+
+        <TextBlock Text="Find Result Background:"
                    Grid.Row="6"
+                   Grid.Column="0"
+                   Margin="0,10,0,0"
+                   FontWeight="Bold"/>
+
+        <Button x:Name="buttonFindResultBackground"
+                Grid.Row="7"
+                Grid.Column="0"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Click="buttonSelectionBackground_Click">
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="borderFindResultBackground"
+                        Height="16"
+                        Width="16"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        Background="Red"/>
+                <TextBlock x:Name="textBlockFindResultBackground"
+                           Margin="5,0,0,0"
+                           Text="Red" />
+            </StackPanel>
+        </Button>
+
+        <TextBlock Text="Symbols:"
+                   Grid.Row="8"
                    Grid.Column="0"
                    FontWeight="Bold"
                    Margin="0,10,0,0"/>
         
         <ListBox x:Name="listBoxSymbols"
-                 Grid.Row="7"
+                 Grid.Row="9"
                  Grid.Column="0"
                  Grid.RowSpan="6"
                  SelectionChanged="listBoxSymbols_SelectionChanged"/>
 
         <TextBlock x:Name="textBlockSymbolForegroundTitle"
                    Text="Foreground:"
-                   Grid.Row="7"
+                   Grid.Row="9"
                    Grid.Column="1"
                    FontWeight="Bold"
                    Margin="10,0,0,0"/>
 
         <Button x:Name="buttonSymbolForeground"
-                Grid.Row="8"
+                Grid.Row="10"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
@@ -138,13 +211,13 @@
 
         <TextBlock x:Name="textBlockSymbolBackgroundTitle"
                    Text="Background:"
-                   Grid.Row="9"
+                   Grid.Row="11"
                    Grid.Column="1"
                    FontWeight="Bold"
                    Margin="10,10,0,0"/>
 
         <Button x:Name="buttonSymbolBackground"
-                Grid.Row="10"
+                Grid.Row="12"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
@@ -164,7 +237,7 @@
         </Button>
 
         <StackPanel x:Name="stackPanelSymbolBold"
-                    Grid.Row="11"
+                    Grid.Row="13"
                     Grid.Column="1"
                     Orientation="Horizontal"
                     Margin="10,10,0,0">
@@ -179,7 +252,7 @@
         </StackPanel>
 
         <StackPanel x:Name="stackPanelSymbolItalic"
-                    Grid.Row="12"
+                    Grid.Row="14"
                     Grid.Column="1"
                     Orientation="Horizontal"
                     Margin="10,10,0,0">
@@ -193,24 +266,21 @@
                        VerticalAlignment="Center"/>
         </StackPanel>
 
-        <TextBlock x:Name="textBlockHeader"
-                   Text="Default header:"
-                   Grid.Row="13"
+        <TextBlock x:Name="textBlockTheme"
+                   Text="Theme:"
+                   Grid.Row="15"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   FontWeight="Bold"
-                   Margin="0,10,0,5"/>
+                   Margin="0,10,0,0"
+                   FontWeight="Bold"/>
 
-        <ScrollViewer Grid.Row="14"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="2"
-                      Height="100px">
-            <TextBox x:Name="textBoxHeader"
-                     AcceptsReturn="True"
-                     AcceptsTab="True"
-                     FontFamily="Consolas"
-                     FontSize="10pt"/>
-        </ScrollViewer>
+        <Button x:Name="buttonTheme"
+                Grid.Row="16"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Click="buttonTheme_Click">Click here to apply a predefined theme</Button>
 
     </Grid>
 </UserControl>

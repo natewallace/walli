@@ -81,28 +81,6 @@ namespace Wallace.IDE.SalesForce.UI
         #region Properties
 
         /// <summary>
-        /// The header entered by the user.
-        /// </summary>
-        public string SettingHeader
-        {
-            get { return textBoxHeader.Text; }
-            set { textBoxHeader.Text = value; }
-        }
-
-        /// <summary>
-        /// Show/Hide the header input controls.
-        /// </summary>
-        public bool ShowSettingHeader
-        {
-            get { return textBoxHeader.Visibility == Visibility.Visible; }
-            set
-            {
-                textBoxHeader.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-                textBlockHeader.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        /// <summary>
         /// The font selected by the user.
         /// </summary>
         public FontFamily SettingFontFamily
@@ -175,6 +153,93 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// The selection foreground color.
+        /// </summary>
+        public Color? SettingSelectionForeground
+        {
+            get
+            {
+                if (buttonSelectionForeground.Tag is Color)
+                    return (Color)buttonSelectionForeground.Tag;
+                else
+                    return null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    buttonSelectionForeground.Tag = value;
+                    borderSelectionForeground.Background = new SolidColorBrush(value.Value);
+                    textBlockSelectionForeground.Text = ColorSelectWindow.GetColorName(value.Value);
+                }
+                else
+                {
+                    buttonSelectionForeground.Tag = null;
+                    borderSelectionForeground.Background = null;
+                    textBlockSelectionForeground.Text = "(none)";
+                }
+            }
+        }
+
+        /// <summary>
+        /// The selection background color.
+        /// </summary>
+        public Color? SettingSelectionBackground
+        {
+            get
+            {
+                if (buttonSelectionBackground.Tag is Color)
+                    return (Color)buttonSelectionBackground.Tag;
+                else
+                    return null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    buttonSelectionBackground.Tag = value;
+                    borderSelectionBackground.Background = new SolidColorBrush(value.Value);
+                    textBlockSelectionBackground.Text = ColorSelectWindow.GetColorName(value.Value);
+                }
+                else
+                {
+                    buttonSelectionBackground.Tag = null;
+                    borderSelectionBackground.Background = null;
+                    textBlockSelectionBackground.Text = "(none)";
+                }
+            }
+        }
+
+        /// <summary>
+        /// The find result background color.
+        /// </summary>
+        public Color SettingFindResultBackground
+        {
+            get
+            {
+                if (buttonFindResultBackground.Tag is Color)
+                    return (Color)buttonFindResultBackground.Tag;
+                else
+                    return Colors.Transparent;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    buttonFindResultBackground.Tag = value;
+                    borderFindResultBackground.Background = new SolidColorBrush(value);
+                    textBlockFindResultBackground.Text = ColorSelectWindow.GetColorName(value);
+                }
+                else
+                {
+                    buttonFindResultBackground.Tag = null;
+                    borderFindResultBackground.Background = null;
+                    textBlockFindResultBackground.Text = ColorSelectWindow.GetColorName(value);
+                }
+            }
+        }
+
+        /// <summary>
         /// The symbol colors.
         /// </summary>
         public IEnumerable<EditorSymbolSettings> SettingSymbols
@@ -216,6 +281,30 @@ namespace Wallace.IDE.SalesForce.UI
                         return ess;
 
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// The themes a user can select from.
+        /// </summary>
+        public bool ShowThemes
+        {
+            get
+            {
+                return (buttonTheme.Visibility == Visibility.Visible);
+            }
+            set
+            {
+                if (value)
+                {
+                    textBlockTheme.Visibility = Visibility.Visible;
+                    buttonTheme.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    textBlockTheme.Visibility = Visibility.Collapsed;
+                    buttonTheme.Visibility = Visibility.Collapsed;
+                }
             }
         }
 
@@ -272,6 +361,16 @@ namespace Wallace.IDE.SalesForce.UI
                 stackPanelSymbolBold.Visibility = Visibility.Hidden;
                 stackPanelSymbolItalic.Visibility = Visibility.Hidden;
             }
+        }
+
+        /// <summary>
+        /// Raises the ThemeClick event.
+        /// </summary>
+        /// <param name="e">Arguments to pass with the event.</param>
+        protected virtual void OnThemeClick(EventArgs e)
+        {
+            if (ThemeClick != null)
+                ThemeClick(this, e);
         }
 
         #endregion
@@ -405,6 +504,75 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// The selection foreground for the editor.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonSelectionForeground_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ColorSelectWindow dlg = new ColorSelectWindow();
+                dlg.SelectedColor = SettingSelectionForeground;
+                if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
+                {
+                    SettingSelectionForeground = dlg.SelectedColor.Value;
+                    UpdateView();
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// The selection background for the editor.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonSelectionBackground_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ColorSelectWindow dlg = new ColorSelectWindow();
+                dlg.SelectedColor = SettingSelectionBackground;
+                if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
+                {
+                    SettingSelectionBackground = dlg.SelectedColor.Value;
+                    UpdateView();
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// The find result background for the editor.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonFindResultBackground_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ColorSelectWindow dlg = new ColorSelectWindow();
+                dlg.SelectedColor = SettingFindResultBackground;
+                if (App.ShowDialog(dlg) && dlg.SelectedColor.HasValue)
+                {
+                    SettingFindResultBackground = dlg.SelectedColor.Value;
+                    UpdateView();
+                }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
         /// Update the view.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
@@ -462,6 +630,32 @@ namespace Wallace.IDE.SalesForce.UI
                 App.HandleException(err);
             }
         }
+
+        /// <summary>
+        /// Select a theme to apply.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonTheme_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OnThemeClick(EventArgs.Empty);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Raised when the user clicks the theme button.
+        /// </summary>
+        public event EventHandler ThemeClick;
 
         #endregion
     }

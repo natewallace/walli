@@ -65,7 +65,6 @@ namespace Wallace.IDE.SalesForce.Settings
         private void CreateView()
         {
             _view = new EditorSettingsControl();
-            _view.ShowSettingHeader = false;
             _view.SettingFontFamily = EditorSettings.SOQLSettings.FontFamily;
             _view.SettingFontSize = EditorSettings.SOQLSettings.FontSizeInPoints;
             _view.SettingSymbols = EditorSettings.SOQLSettings.Symbols;
@@ -81,7 +80,7 @@ namespace Wallace.IDE.SalesForce.Settings
         /// <returns>The path for these settings.</returns>
         public string GetPath()
         {
-            return "Editor/SOQL";
+            return "Font and Color/SOQL";
         }
 
         /// <summary>

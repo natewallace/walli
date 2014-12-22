@@ -71,8 +71,54 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         static EditorSettings()
         {
+            // apex
             StreamResourceInfo highlight = Application.GetResourceStream(new Uri("Resources/Apex.xshd", UriKind.Relative));
             ApexSettings = new EditorSettings("EditorSettingsApex", highlight.Stream);
+            List<EditorSettingsTheme> themes = new List<EditorSettingsTheme>();
+
+            EditorSettingsTheme vsTheme = new EditorSettingsTheme("Visual Studio");
+            vsTheme.FontFamily = new FontFamily("Consolas");
+            vsTheme.Foreground = Colors.Black;
+            vsTheme.Background = Colors.White;
+            vsTheme.SelectionForeground = null;
+            vsTheme.SelectionBackground = Colors.LightBlue;
+            vsTheme.FindResultBackground = Colors.DarkOrange;
+            vsTheme.AddSymbol("Alert", Colors.Red, null, true, false);
+            vsTheme.AddSymbol("ApexKeyword", Colors.Blue, null, false, false);
+            vsTheme.AddSymbol("Comment", Colors.Green, null, false, false);
+            vsTheme.AddSymbol("Delimiter", Colors.Black, null, false, false);
+            vsTheme.AddSymbol("DocComment", Colors.Gray, null, false, false);
+            vsTheme.AddSymbol("DocCommentText", Colors.Green, null, false, true);
+            vsTheme.AddSymbol("Region", Colors.Blue, null, false, false);
+            vsTheme.AddSymbol("RegionName", Colors.Black, null, false, false);
+            vsTheme.AddSymbol("SOQLKeyword", Colors.Purple, null, false, false);
+            vsTheme.AddSymbol("String", Colors.DarkRed, null, false, false);
+            vsTheme.AddSymbol("Type", Colors.Teal, null, false, false);
+            vsTheme.AddSymbol("Warning", "#EEE0E000", null, true, false);
+            themes.Add(vsTheme);
+
+            EditorSettingsTheme mTheme = new EditorSettingsTheme("Monokai");
+            mTheme.FontFamily = new FontFamily("Consolas");
+            mTheme.Foreground = (Color)ColorConverter.ConvertFromString("#F8F8F2");
+            mTheme.Background = (Color)ColorConverter.ConvertFromString("#272822");
+            mTheme.SelectionForeground = null;
+            mTheme.SelectionBackground = (Color)ColorConverter.ConvertFromString("#49483E");
+            mTheme.FindResultBackground = (Color)ColorConverter.ConvertFromString("#FFE792");
+            mTheme.AddSymbol("Alert", Colors.Red, null, true, false);
+            mTheme.AddSymbol("ApexKeyword", "#F92672", null, false, false);
+            mTheme.AddSymbol("Comment", "#75715E", null, false, false);
+            mTheme.AddSymbol("Delimiter", "#F8F8F2", null, false, false);
+            mTheme.AddSymbol("DocComment", "#75715E", null, false, false);
+            mTheme.AddSymbol("DocCommentText", "#75715E", null, false, false);
+            mTheme.AddSymbol("Region", "#F92672", null, false, false);
+            mTheme.AddSymbol("RegionName", "#F8F8F2", null, false, false);
+            mTheme.AddSymbol("SOQLKeyword", Colors.Purple, null, false, false);
+            mTheme.AddSymbol("String", "#E6DB74", null, false, false);
+            mTheme.AddSymbol("Type", "#A6E22E", null, false, false);
+            mTheme.AddSymbol("Warning", (Color)ColorConverter.ConvertFromString("#EEE0E000"), null, true, false);
+            themes.Add(mTheme);
+
+            ApexSettings.Themes = themes;
 
             highlight = Application.GetResourceStream(new Uri("Resources/SOQL.xshd", UriKind.Relative));
             SOQLSettings = new EditorSettings("EditorSettingsSOQL", highlight.Stream);
@@ -103,6 +149,9 @@ namespace Wallace.IDE.SalesForce.UI
             FontSizeInPoints = 10;
             Foreground = Colors.Black;
             Background = Colors.White;
+            SelectionForeground = null;
+            SelectionBackground = Colors.LightBlue;
+            FindResultBackground = Colors.DarkOrange;
 
             if (!Load())
             {
@@ -123,6 +172,8 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 ApplySymbolUpdates();
             }
+
+            Themes = new List<EditorSettingsTheme>();
         }
 
         #endregion
@@ -175,13 +226,58 @@ namespace Wallace.IDE.SalesForce.UI
         public Color Background { get; set; }
 
         /// <summary>
+        /// The background color for selected text.
+        /// </summary>
+        public Color? SelectionForeground { get; set; }
+
+        /// <summary>
+        /// The foreground color for selected text.
+        /// </summary>
+        public Color? SelectionBackground { get; set; }
+
+        /// <summary>
+        /// The find result background color.
+        /// </summary>
+        public Color FindResultBackground { get; set; }
+
+        /// <summary>
         /// The symbols settings.
         /// </summary>
         public IEnumerable<EditorSymbolSettings> Symbols { get; private set; }
 
+        /// <summary>
+        /// The themes that are supported.
+        /// </summary>
+        public IEnumerable<EditorSettingsTheme> Themes { get; private set; }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Update symbols with the given values.
+        /// </summary>
+        /// <param name="symbols">The symbols to update with.</param>
+        public void UpdateSymbols(IEnumerable<EditorSymbolSettings> symbols)
+        {
+            if (symbols == null)
+                return;
+
+            foreach (EditorSymbolSettings essSource in symbols)
+            {
+                foreach (EditorSymbolSettings essTarget in Symbols)
+                {
+                    if (essSource.Name == essTarget.Name)
+                    {
+                        essTarget.Foreground = essSource.Foreground;
+                        essTarget.Background = essSource.Background;
+                        essTarget.IsBold = essSource.IsBold;
+                        essTarget.IsItalic = essSource.IsItalic;
+                        break;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Creates a new header using the header text which may contain variables.
@@ -296,6 +392,16 @@ namespace Wallace.IDE.SalesForce.UI
                                             Foreground = (Color)ColorConverter.ConvertFromString(xml["foreground"]);
                                         if (xml["background"] != null)
                                             Background = (Color)ColorConverter.ConvertFromString(xml["background"]);
+                                        if (xml["selectionForeground"] != null)
+                                            SelectionForeground = (Color)ColorConverter.ConvertFromString(xml["selectionForeground"]);
+                                        else
+                                            SelectionForeground = null;
+                                        if (xml["selectionBackground"] != null)
+                                            SelectionBackground = (Color)ColorConverter.ConvertFromString(xml["selectionBackground"]);
+                                        else
+                                            SelectionBackground = null;
+                                        if (xml["findResultBackground"] != null)
+                                            FindResultBackground = (Color)ColorConverter.ConvertFromString(xml["findResultBackground"]);
                                         xml.Read();
                                         break;
 
@@ -354,6 +460,11 @@ namespace Wallace.IDE.SalesForce.UI
                     xml.WriteAttributeString("size", FontSizeInPoints.ToString());
                     xml.WriteAttributeString("foreground", Foreground.ToString());
                     xml.WriteAttributeString("background", Background.ToString());
+                    if (SelectionForeground.HasValue)
+                        xml.WriteAttributeString("selectionForeground", SelectionForeground.Value.ToString());
+                    if (SelectionBackground.HasValue)
+                        xml.WriteAttributeString("selectionBackground", SelectionBackground.Value.ToString());
+                    xml.WriteAttributeString("findResultBackground", FindResultBackground.ToString());
                     xml.WriteEndElement();
 
                     xml.WriteStartElement("symbols");
