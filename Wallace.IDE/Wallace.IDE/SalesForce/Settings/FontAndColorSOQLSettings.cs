@@ -34,14 +34,14 @@ namespace Wallace.IDE.SalesForce.Settings
     /// <summary>
     /// Settings for the SOQL editor.
     /// </summary>
-    public class SOQLEditorSettings : ISettings
+    public class FontAndColorSOQLSettings : ISettings
     {
         #region Fields
 
         /// <summary>
         /// The view for these settings.
         /// </summary>
-        private EditorSettingsControl _view;
+        private FontAndColorSettingsControl _view;
 
         #endregion
 
@@ -50,7 +50,7 @@ namespace Wallace.IDE.SalesForce.Settings
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SOQLEditorSettings()
+        public FontAndColorSOQLSettings()
         {
             CreateView();
         }
@@ -64,7 +64,10 @@ namespace Wallace.IDE.SalesForce.Settings
         /// </summary>
         private void CreateView()
         {
-            _view = new EditorSettingsControl();
+            if (_view != null)
+                _view.ThemeClick -= view_ThemeClick;
+
+            _view = new FontAndColorSettingsControl();
             _view.SettingFontFamily = EditorSettings.SOQLSettings.FontFamily;
             _view.SettingFontSize = EditorSettings.SOQLSettings.FontSizeInPoints;
             _view.SettingForeground = EditorSettings.SOQLSettings.Foreground;

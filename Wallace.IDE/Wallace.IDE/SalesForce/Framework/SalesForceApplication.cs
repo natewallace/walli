@@ -61,9 +61,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public void LoadSettings()
         {
-            App.Instance.Settings.RegisterSettings(new ApexEditorSettings());
-            App.Instance.Settings.RegisterSettings(new SOQLEditorSettings());
-            App.Instance.Settings.RegisterSettings(new VisualForceEditorSettings());
+            App.Instance.Settings.RegisterSettings(new FontAndColorApexSettings());
+            App.Instance.Settings.RegisterSettings(new FontAndColorSOQLSettings());
+            App.Instance.Settings.RegisterSettings(new FontAndColorVisualForceSettings());
+            App.Instance.Settings.RegisterSettings(new DefaultHeaderApexSettings());
+            App.Instance.Settings.RegisterSettings(new DefaultHeaderVisualForceSettings());
         }
 
         /// <summary>

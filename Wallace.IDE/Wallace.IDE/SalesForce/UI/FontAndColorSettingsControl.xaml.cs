@@ -41,7 +41,7 @@ namespace Wallace.IDE.SalesForce.UI
     /// <summary>
     /// Interaction logic for EditorSettingsControl.xaml
     /// </summary>
-    public partial class EditorSettingsControl : UserControl
+    public partial class FontAndColorSettingsControl : UserControl
     {
         #region Fields
 
@@ -67,7 +67,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// Constructor.
         /// </summary>
-        public EditorSettingsControl()
+        public FontAndColorSettingsControl()
         {
             InitializeComponent();
 

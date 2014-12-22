@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Wallace.IDE.SalesForce.UI.EditorSettingsControl"
+﻿<UserControl x:Class="Wallace.IDE.SalesForce.UI.FontAndColorSettingsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -95,7 +95,7 @@
             </StackPanel>
         </Button>
 
-        <TextBlock Text="Selection Foreground:"
+        <TextBlock Text="Selection foreground:"
                    Grid.Row="2"
                    Grid.Column="1"
                    Margin="0,10,0,0"
@@ -120,7 +120,7 @@
             </StackPanel>
         </Button>
 
-        <TextBlock Text="Selection Background:"
+        <TextBlock Text="Selection background:"
                    Grid.Row="4"
                    Grid.Column="1"
                    Margin="0,10,0,0"
@@ -145,7 +145,7 @@
             </StackPanel>
         </Button>
 
-        <TextBlock Text="Find Result Background:"
+        <TextBlock Text="Find result background:"
                    Grid.Row="6"
                    Grid.Column="0"
                    Margin="0,10,0,0"

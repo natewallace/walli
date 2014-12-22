@@ -188,9 +188,11 @@
     <Compile Include="SalesForce\Node\SnippetsGlobalFolderNode.cs" />
     <Compile Include="SalesForce\Node\SnippetsProjectFolderNode.cs" />
     <Compile Include="SalesForce\Node\SourceFolderNode.cs" />
-    <Compile Include="SalesForce\Settings\ApexEditorSettings.cs" />
-    <Compile Include="SalesForce\Settings\SOQLEditorSettings.cs" />
-    <Compile Include="SalesForce\Settings\VisualForceEditorSettings.cs" />
+    <Compile Include="SalesForce\Settings\DefaultHeaderApexSettings.cs" />
+    <Compile Include="SalesForce\Settings\DefaultHeaderVisualForceSettings.cs" />
+    <Compile Include="SalesForce\Settings\FontAndColorApexSettings.cs" />
+    <Compile Include="SalesForce\Settings\FontAndColorSOQLSettings.cs" />
+    <Compile Include="SalesForce\Settings\FontAndColorVisualForceSettings.cs" />
     <Compile Include="SalesForce\UI\ApexCodeCompletionData.cs" />
     <Compile Include="SalesForce\UI\ApexDocumentColorizingTransformer.cs" />
     <Compile Include="SalesForce\UI\ApexEditorControl.xaml.cs">
@@ -208,8 +210,11 @@
     <Compile Include="SalesForce\Node\DataObjectFieldNode.cs" />
     <Compile Include="SalesForce\Node\DataObjectNode.cs" />
     <Compile Include="SalesForce\Function\NewProjectFunction.cs" />
-    <Compile Include="SalesForce\UI\EditorSettingsControl.xaml.cs">
-      <DependentUpon>EditorSettingsControl.xaml</DependentUpon>
+    <Compile Include="SalesForce\UI\DefaultHeaderControl.xaml.cs">
+      <DependentUpon>DefaultHeaderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\FontAndColorSettingsControl.xaml.cs">
+      <DependentUpon>FontAndColorSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\EditorSettingsTheme.cs" />
     <Compile Include="SalesForce\UI\EditorSymbolSettings.cs" />
@@ -384,7 +389,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SalesForce\UI\EditorSettingsControl.xaml">
+    <Page Include="SalesForce\UI\DefaultHeaderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\FontAndColorSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
