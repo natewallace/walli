@@ -526,7 +526,9 @@ relational_expression:
 	relational_expression OPERATOR_GREATER_THAN shift_expression |
 	relational_expression OPERATOR_LESS_THAN_OR_EQUAL shift_expression |
 	relational_expression OPERATOR_GREATER_THAN_OR_EQUAL shift_expression |
-	relational_expression OPERATOR_INSTANCEOF type ;
+	relational_expression OPERATOR_INSTANCEOF type |
+	SEPARATOR_PARENTHESES_LEFT qualified_name OPERATOR_LESS_THAN qualified_name SEPARATOR_PARENTHESES_RIGHT |
+	SEPARATOR_PARENTHESES_LEFT qualified_name OPERATOR_LESS_THAN literal SEPARATOR_PARENTHESES_RIGHT ;
 
 equality_expression:
 	relational_expression |
