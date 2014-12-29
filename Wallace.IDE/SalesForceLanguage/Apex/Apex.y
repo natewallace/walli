@@ -589,7 +589,6 @@ boolean_expression:
 statement:
 	declaration_statement |
 	embedded_statement |
-	error { Error(); } |
 	error { Error(); } ;
 
 embedded_statement:
@@ -799,7 +798,6 @@ class_member_declaration:
 	constructor_declaration |
 	static_constructor_declaration |
 	type_declaration |
-	error { Error(); } |
 	error { Error(); } ;
 
 field_declaration:
