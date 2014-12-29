@@ -599,7 +599,8 @@ embedded_statement:
 	selection_statement |
 	iteration_statement |
 	jump_statement |
-	try_statement ;
+	try_statement |
+	error { Error(); } ;
 
 block:
 	SEPARATOR_BRACE_LEFT statement_list SEPARATOR_BRACE_RIGHT |
