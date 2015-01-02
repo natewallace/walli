@@ -156,7 +156,7 @@
                 Grid.Column="0"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
-                Click="buttonSelectionBackground_Click">
+                Click="buttonFindResultBackground_Click">
             <StackPanel Orientation="Horizontal">
                 <Border x:Name="borderFindResultBackground"
                         Height="16"
