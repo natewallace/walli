@@ -55,6 +55,12 @@ namespace Wallace.IDE.SalesForce.UI
                 {
                     string previousLineTextTrimmed = previousLineText.Trim();
 
+                    string secondPreviousLineText = String.Empty;
+                    if (previousLine.PreviousLine != null)
+                        secondPreviousLineText = document.GetText(previousLine.PreviousLine.Offset, previousLine.PreviousLine.Length);
+
+                    string secondPreviousLineTextTrimmed = secondPreviousLineText.Trim();
+
                     // check for opening block comment
                     Match match = Regex.Match(previousLineText, @"^[ \t]*/?\*(?!/)");
                     if (match != null && match.Success)
@@ -107,6 +113,34 @@ namespace Wallace.IDE.SalesForce.UI
 
                         sb.Append('\t');
                         document.Insert(line.Offset, sb.ToString());
+                    }
+                    // check for end of block statement that is a single line without braces
+                    else if (!secondPreviousLineTextTrimmed.StartsWith("//") &&
+                             secondPreviousLineTextTrimmed.EndsWith(")") &&
+                             Regex.IsMatch(secondPreviousLineTextTrimmed, "^(if|else[ ]+if|for|while)[^A-Za-z0-9]", RegexOptions.IgnoreCase))
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        bool done = false;
+                        foreach (char c in secondPreviousLineText)
+                        {
+                            switch (c)
+                            {
+                                case ' ':
+                                case '\t':
+                                    sb.Append(c);
+                                    break;
+
+                                default:
+                                    done = true;
+                                    break;
+                            }
+
+                            if (done)
+                                break;
+                        }
+
+                        if (sb.Length > 0)
+                            document.Insert(line.Offset, sb.ToString());
                     }
                     // copy indent from previous line
                     else
