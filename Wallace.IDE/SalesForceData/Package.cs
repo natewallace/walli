@@ -275,6 +275,34 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Extract the contents of this package to the given path.
+        /// </summary>
+        /// <param name="path">The path to extract to.</param>
+        /// <param name="overwrite">If set to true, files will be overwritten.</param>
+        public void ExtractTo(string path, bool overwrite)
+        {
+            if (!overwrite)
+            {
+                ZipFile.ExtractToDirectory(FileName, path);
+            }
+            else
+            {
+                using (ZipArchive archive = ZipFile.OpenRead(FileName))
+                {
+                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    {
+                        string extractName = Path.Combine(path, entry.FullName);
+                        string folderName = Path.GetDirectoryName(extractName);
+                        if (!Directory.Exists(folderName))
+                            Directory.CreateDirectory(folderName);
+
+                        entry.ExtractToFile(extractName, true);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Check for logical equality.
         /// </summary>
         /// <param name="obj">The object to compare with this one.</param>

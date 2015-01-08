@@ -104,6 +104,12 @@ namespace Wallace.IDE.SalesForce.Function
                     "SalesForce Project",
                     Project.Projects);
 
+                List<string> localFolders = new List<string>(
+                    Properties.Settings.Default.DeployLocalFolderHistory.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                localFolders.Add("browse...");
+
+                dlg.Targets.Add("Local Folder", localFolders.ToArray());
+
                 // target type options
                 dlg.TargetTypeOptions.Add(
                     "SalesForce Project",
@@ -117,14 +123,15 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.TargetTypes = new string[]
                 {
                     "SalesForce Project",
+                    "Local Folder"
                 };
                 dlg.SelectedTargetType = "SalesForce Project";
 
                 if (App.ShowDialog(dlg))
                 {
-                    using (App.Wait("Deploying package..."))
+                    if (dlg.SelectedTargetType == "SalesForce Project")
                     {
-                        if (dlg.SelectedTargetType == "SalesForce Project")
+                        using (App.Wait("Deploying package..."))
                         {
                             PackageDeployToProjectStatusDocument document = new PackageDeployToProjectStatusDocument(
                                 package,
@@ -134,10 +141,23 @@ namespace Wallace.IDE.SalesForce.Function
 
                             App.Instance.Content.OpenDocument(document);
                         }
-                        else if (dlg.SelectedTargetType == "Git Repository")
-                        {
+                    }
+                    else if (dlg.SelectedTargetType == "Local Folder")
+                    {
+                        // remember the selected local folder
+                        localFolders.RemoveAt(localFolders.Count - 1);
+                        localFolders.Remove(dlg.SelectedTarget);
+                        localFolders.Insert(0, dlg.SelectedTarget);
+                        if (localFolders.Count > 8)
+                            localFolders.RemoveAt(localFolders.Count - 1);
+                        Properties.Settings.Default.DeployLocalFolderHistory = String.Join(";", localFolders);
+                        Properties.Settings.Default.Save();
 
-                        }
+                        package.ExtractTo(dlg.SelectedTarget, true);
+                        App.MessageUser("Deployment complete",
+                                        "Deployment",
+                                        System.Windows.MessageBoxImage.Information,
+                                        new string[] { "OK" });
                     }
                 }
             }

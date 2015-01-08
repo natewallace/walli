@@ -53,6 +53,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private IDictionary<string, string[]> _targetTypeOptions;
 
+        /// <summary>
+        /// This field is used to revert to the previous selection when a user cancels a folder browse dialog.
+        /// </summary>
+        private string _lastSelectedTarget;
+
         #endregion
 
         #region Constructors
@@ -66,6 +71,7 @@ namespace Wallace.IDE.SalesForce.UI
             
             _targets = new Dictionary<string, string[]>();
             _targetTypeOptions = new Dictionary<string, string[]>();
+            _lastSelectedTarget = null;
         }
 
         #endregion
@@ -191,7 +197,31 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                buttonDeploy.IsEnabled = (SelectedTarget != null);
+                if (SelectedTarget == "browse...")
+                {
+                    System.Windows.Forms.FolderBrowserDialog dlg = new System.Windows.Forms.FolderBrowserDialog();
+                    dlg.Description = "Select the folder to deploy the package to.";
+                    if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        if (!comboBoxTarget.Items.Contains(dlg.SelectedPath))
+                        {
+                            List<string> items = new List<string>(comboBoxTarget.ItemsSource as string[]);
+                            items.Insert(0, dlg.SelectedPath);
+                            comboBoxTarget.ItemsSource = items.ToArray();
+                        }
+                        
+                        comboBoxTarget.SelectedItem = dlg.SelectedPath;
+                    }
+                    else
+                    {
+                        comboBoxTarget.SelectedItem = _lastSelectedTarget;
+                    }
+                }
+                else
+                {
+                    buttonDeploy.IsEnabled = (SelectedTarget != null);
+                    _lastSelectedTarget = SelectedTarget;
+                }
             }
             catch (Exception err)
             {
