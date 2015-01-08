@@ -326,7 +326,7 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(closeAllDocumentsFunction, "DOCUMENT");
 
             ApexDocumentationFunction apexDocFunction = new ApexDocumentationFunction();
-            App.Instance.Menu.AddFunction(apexDocFunction, "HELP");
+            App.Instance.Menu.AddFunction(apexDocFunction, "HELP", 0);
         }
 
         /// <summary>
