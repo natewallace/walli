@@ -85,15 +85,15 @@ namespace Wallace.IDE.SalesForce.UI
             eTheme.FindResultBackground = Colors.DarkOrange;
             eTheme.AddSymbol("Alert", Colors.Red, null, true, false);
             eTheme.AddSymbol("ApexKeyword", "#7F0055", null, false, false);
-            eTheme.AddSymbol("Comment", "#428161", null, false, false);
+            eTheme.AddSymbol("Comment", "#827513", null, false, false);
             eTheme.AddSymbol("Delimiter", Colors.Black, null, false, false);
-            eTheme.AddSymbol("DocComment", "#3F5FBF", null, false, false);
-            eTheme.AddSymbol("DocCommentText", "#3F5FBF", null, false, false);
+            eTheme.AddSymbol("DocComment", "#827513", null, false, false);
+            eTheme.AddSymbol("DocCommentText", "#827513", null, false, false);
             eTheme.AddSymbol("Region", "#7F0055", null, false, false);
             eTheme.AddSymbol("RegionName", Colors.Black, null, false, false);
             eTheme.AddSymbol("SOQLKeyword", Colors.Purple, null, false, false);
-            eTheme.AddSymbol("String", "#3A14FF", null, false, false);
-            eTheme.AddSymbol("Type", Colors.Black, null, false, false);
+            eTheme.AddSymbol("String", Colors.Green, null, false, false);
+            eTheme.AddSymbol("Type", Colors.DarkSlateBlue, null, false, false);
             eTheme.AddSymbol("Warning", "#EEE0E000", null, true, false);
             themes.Add(eTheme);
 
