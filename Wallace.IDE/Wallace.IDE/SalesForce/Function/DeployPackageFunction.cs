@@ -144,20 +144,34 @@ namespace Wallace.IDE.SalesForce.Function
                     }
                     else if (dlg.SelectedTargetType == "Local Folder")
                     {
-                        // remember the selected local folder
-                        localFolders.RemoveAt(localFolders.Count - 1);
-                        localFolders.Remove(dlg.SelectedTarget);
-                        localFolders.Insert(0, dlg.SelectedTarget);
-                        if (localFolders.Count > 8)
-                            localFolders.RemoveAt(localFolders.Count - 1);
-                        Properties.Settings.Default.DeployLocalFolderHistory = String.Join(";", localFolders);
-                        Properties.Settings.Default.Save();
+                        bool isOK = true;
+                        if (System.IO.Directory.GetFiles(dlg.SelectedTarget).Length > 0 ||
+                            System.IO.Directory.GetDirectories(dlg.SelectedTarget).Length > 0)
+                        {
+                            isOK = (App.MessageUser(
+                                        "The files within the selected folder may be overwritten.  Do you wish to continue?",
+                                        "Overwrite",
+                                        System.Windows.MessageBoxImage.Warning,
+                                        new string[] { "Yes", "No" }) == "Yes");
+                        }
 
-                        package.ExtractTo(dlg.SelectedTarget, true);
-                        App.MessageUser("Deployment complete",
-                                        "Deployment",
-                                        System.Windows.MessageBoxImage.Information,
-                                        new string[] { "OK" });
+                        if (isOK)
+                        {
+                            // remember the selected local folder
+                            localFolders.RemoveAt(localFolders.Count - 1);
+                            localFolders.Remove(dlg.SelectedTarget);
+                            localFolders.Insert(0, dlg.SelectedTarget);
+                            if (localFolders.Count > 8)
+                                localFolders.RemoveAt(localFolders.Count - 1);
+                            Properties.Settings.Default.DeployLocalFolderHistory = String.Join(";", localFolders);
+                            Properties.Settings.Default.Save();
+
+                            package.ExtractTo(dlg.SelectedTarget, true);
+                            App.MessageUser("Deployment complete",
+                                            "Deployment",
+                                            System.Windows.MessageBoxImage.Information,
+                                            new string[] { "OK" });
+                        }
                     }
                 }
             }
