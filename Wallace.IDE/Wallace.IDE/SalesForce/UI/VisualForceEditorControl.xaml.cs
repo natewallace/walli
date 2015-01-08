@@ -270,6 +270,7 @@ namespace Wallace.IDE.SalesForce.UI
                     listBoxErrors.Items.Add(VisualHelper.CreateIconHeader(error, "Error.png"));
 
             scrollViewerErrors.Visibility = (listBoxErrors.Items.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
+            buttonCloseErrors.Visibility = scrollViewerErrors.Visibility;
         }
 
         /// <summary>
@@ -379,6 +380,24 @@ namespace Wallace.IDE.SalesForce.UI
                         _completionWindow.CompletionList.RequestInsertion(e);
                     }
                 }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Close the errors view.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonCloseErrors_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                scrollViewerErrors.Visibility = Visibility.Collapsed;
+                buttonCloseErrors.Visibility = Visibility.Collapsed;
             }
             catch (Exception err)
             {
