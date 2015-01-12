@@ -79,6 +79,7 @@ namespace SalesForceData
                     throw new ArgumentException("Unsupported type: " + FileType.Name);
             }
 
+            Id = data.Rows[0]["Id"] as string;
             ChangedById = data.Rows[0]["CreatedById"] as string;
             ChangedOn = DateTime.Parse(data.Rows[0]["CreatedDate"] as string).ToLocalTime();
             CreatedById = ChangedById;
@@ -103,6 +104,7 @@ namespace SalesForceData
             if (fileProperties == null)
                 throw new ArgumentNullException("fileProperties");
 
+            Id = fileProperties.id;
             FileType = fileType;
             Name = fileProperties.fullName;
             FileName = fileProperties.fileName;
@@ -171,6 +173,11 @@ namespace SalesForceData
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The id of the source file.
+        /// </summary>
+        public string Id { get; private set; }
 
         /// <summary>
         /// The type of source file this is.

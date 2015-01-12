@@ -123,6 +123,8 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\WalliLockTableCreate.zip" />
+    <EmbeddedResource Include="Resources\WalliLockTableDelete.zip" />
     <None Include="Service References\SalesForceAPI.Apex\apex.wsdl" />
     <None Include="Service References\SalesForceAPI.Metadata\metadata.wsdl" />
     <None Include="Service References\SalesForceAPI.Partner\partner.wsdl" />
@@ -185,6 +187,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

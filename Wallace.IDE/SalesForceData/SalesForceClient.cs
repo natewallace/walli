@@ -775,13 +775,28 @@ namespace SalesForceData
             if (package == null)
                 throw new ArgumentNullException("package");
 
+            return DeployPackage(package.ToByteArray(), checkOnly, runAllTests);
+        }
+
+        /// <summary>
+        /// Deploy a package.
+        /// </summary>
+        /// <param name="package">The package to deploy.</param>
+        /// <param name="checkOnly">When true only a deployment check is performed.</param>
+        /// <param name="runAllTests">When true all tests are run.</param>
+        /// <returns>The id of the deployment that was started.</returns>
+        public string DeployPackage(byte[] package, bool checkOnly, bool runAllTests)
+        {
+            if (package == null)
+                throw new ArgumentNullException("package");
+
             InitClients();
 
             SalesForceAPI.Metadata.deployRequest deployRequest = new SalesForceAPI.Metadata.deployRequest(
                 new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
                 null,
                 null,
-                package.ToByteArray(),
+                package,
                 new SalesForceAPI.Metadata.DeployOptions()
                 {
                     checkOnly = checkOnly,
@@ -1538,7 +1553,7 @@ namespace SalesForceData
                 throw new Exception(sb.ToString());
             }
 
-            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexClass WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
+            DataSelectResult result = DataSelect(String.Format("SELECT Id, Name, CreatedById, CreatedDate FROM ApexClass WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
             return new SourceFile(result.Data);
         }
 
@@ -1614,7 +1629,7 @@ namespace SalesForceData
                 throw new Exception(sb.ToString());
             }
 
-            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexTrigger WHERE Name = '{0}' AND NamespacePrefix = '{1}'", triggerName, GetOrgInfo().organizationNamespace));
+            DataSelectResult result = DataSelect(String.Format("SELECT Id, Name, CreatedById, CreatedDate FROM ApexTrigger WHERE Name = '{0}' AND NamespacePrefix = '{1}'", triggerName, GetOrgInfo().organizationNamespace));
             return new SourceFile(result.Data);
         }
 
@@ -1658,7 +1673,7 @@ namespace SalesForceData
                 throw new Exception(sb.ToString());
             }
 
-            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexComponent WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
+            DataSelectResult result = DataSelect(String.Format("SELECT Id, Name, CreatedById, CreatedDate FROM ApexComponent WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
             return new SourceFile(result.Data);
         }
 
@@ -1702,7 +1717,7 @@ namespace SalesForceData
                 throw new Exception(sb.ToString());
             }
 
-            DataSelectResult result = DataSelect(String.Format("SELECT Name, CreatedById, CreatedDate FROM ApexPage WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
+            DataSelectResult result = DataSelect(String.Format("SELECT Id, Name, CreatedById, CreatedDate FROM ApexPage WHERE Name = '{0}' AND NamespacePrefix = '{1}'", name, GetOrgInfo().organizationNamespace));
             return new SourceFile(result.Data);
         }
 
@@ -2572,6 +2587,57 @@ namespace SalesForceData
                 return new SObjectType(response.result);
 
             throw new Exception("Couldn't get details for the given object: " + objectTypeName);
+        }
+
+        /// <summary>
+        /// Check to see if the checkout system is enabled.
+        /// </summary>
+        /// <returns>true if checkouts are enabled, false if they are not.</returns>
+        public bool IsCheckoutEnabled()
+        {
+            foreach (SObjectTypePartial obj in DataDescribeGlobal())
+                if (obj.Name != null && obj.Name.EndsWith("Walli_Lock_Table__c"))
+                    return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Enable checkouts for the entire system.
+        /// </summary>
+        /// <param name="value">true to enable checkouts, false to disable them.</param>
+        public void EnableCheckout(bool value)
+        {
+            InitClients();
+
+            byte[] package = null;
+            if (value)
+            {
+                using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("SalesForceData.Resources.WalliLockTableCreate.zip"))
+                {
+                    BinaryReader reader = new BinaryReader(stream);
+                    package = reader.ReadBytes((int)stream.Length);
+                }
+            }
+            else
+            {
+                using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("SalesForceData.Resources.WalliLockTableDelete.zip"))
+                {
+                    BinaryReader reader = new BinaryReader(stream);
+                    package = reader.ReadBytes((int)stream.Length);
+                }
+            }
+
+            string id = DeployPackage(package, false, false);
+            bool complete = false;
+            while (!complete)
+            {
+                PackageDeployResult result = CheckPackageDeploy(id);
+                if (result.Status == PackageDeployResultStatus.Failed)
+                    throw new Exception("Could not change checkout system: " + result.ResultMessage);
+
+                complete = result.DeploymentComplete;
+            }
         }
 
         /// <summary>

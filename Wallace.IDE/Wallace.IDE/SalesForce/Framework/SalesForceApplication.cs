@@ -149,6 +149,9 @@ namespace Wallace.IDE.SalesForce.Framework
             ReloadSymbolsFunction reloadSymbols = new ReloadSymbolsFunction();
             App.Instance.Menu.AddFunction(reloadSymbols, "PROJECT");
 
+            CheckoutSystemFunction checkoutSystemFunction = new CheckoutSystemFunction();
+            App.Instance.Menu.AddFunction(checkoutSystemFunction, "PROJECT");
+
             DeleteSourceFileFunction deleteSourceFileFunction = new DeleteSourceFileFunction();
             App.Instance.Menu.AddFunction(deleteSourceFileFunction, "PROJECT");
             App.Instance.RegisterFunction(deleteSourceFileFunction);
