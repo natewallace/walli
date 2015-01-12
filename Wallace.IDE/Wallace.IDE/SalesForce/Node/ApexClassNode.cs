@@ -61,9 +61,9 @@ namespace Wallace.IDE.SalesForce.Node
         {
             if (SourceFile.CheckedOutBy != null)
                 if (SourceFile.CheckedOutBy.Equals(Project.Client.User))
-                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "LockGreen.png");
+                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentClassEdit.png");
                 else
-                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "LockRed.png");
+                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentClassLock.png");
             else
                 Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentClass.png");
         }

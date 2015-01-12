@@ -57,9 +57,15 @@ namespace Wallace.IDE.SalesForce.Node
         /// <summary>
         /// Set the header.
         /// </summary>
-        public override void Init()
+        public override void UpdateHeader()
         {
-            Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentTrigger.png");
+            if (SourceFile.CheckedOutBy != null)
+                if (SourceFile.CheckedOutBy.Equals(Project.Client.User))
+                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentTriggerEdit.png");
+                else
+                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentTriggerLock.png");
+            else
+                Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentTrigger.png");
         }
 
         /// <summary>

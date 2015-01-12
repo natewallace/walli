@@ -74,7 +74,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (project != null && project.IsCheckoutEnabled)
             {
                 SourceFileNode node = GetSelectedNode();
-                if (node != null && node.SourceFile.Id != null)
+                if (node != null && !String.IsNullOrWhiteSpace(node.SourceFile.Id))
                 {
                     name = node.SourceFile.Name;
 
@@ -94,12 +94,12 @@ namespace Wallace.IDE.SalesForce.Function
             {
                 if (isCheckIn)
                 {
-                    presenter.Header = VisualHelper.CreateIconHeader(null, "Empty.png");
+                    presenter.Header = VisualHelper.CreateIconHeader(null, "CheckIn.png");
                     presenter.ToolTip = String.Format("Check in {0}", name);
                 }
                 else if (isCheckOut)
                 {
-                    presenter.Header = VisualHelper.CreateIconHeader(null, "Empty.png");
+                    presenter.Header = VisualHelper.CreateIconHeader(null, "CheckOut.png");
                     presenter.ToolTip = String.Format("Check out {0}", name);
                 }
             }
@@ -109,12 +109,12 @@ namespace Wallace.IDE.SalesForce.Function
                 if (isCheckIn)
                 {
                     presenter.Header = String.Format("Check in {0}", name);
-                    presenter.Icon = VisualHelper.CreateIconHeader(null, "Empty.png");
+                    presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckIn.png");
                 }
                 else if (isCheckOut)
                 {
                     presenter.Header = String.Format("Check out {0}", name);
-                    presenter.Icon = VisualHelper.CreateIconHeader(null, "Empty.png");
+                    presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckOut.png");
                 }
             }
 

@@ -835,11 +835,18 @@
     <Resource Include="Resources\Log.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Lock.png" />
+    <Resource Include="Resources\DocumentClassEdit.png" />
+    <Resource Include="Resources\DocumentClassLock.png" />
+    <Resource Include="Resources\DocumentEdit.png" />
+    <Resource Include="Resources\DocumentLock.png" />
+    <Resource Include="Resources\DocumentPageEdit.png" />
+    <Resource Include="Resources\DocumentPageLock.png" />
+    <Resource Include="Resources\DocumentTriggerEdit.png" />
+    <Resource Include="Resources\DocumentTriggerLock.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\LockGreen.png" />
-    <Resource Include="Resources\LockRed.png" />
+    <Resource Include="Resources\CheckIn.png" />
+    <Resource Include="Resources\CheckOut.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
