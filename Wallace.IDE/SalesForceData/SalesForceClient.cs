@@ -2783,10 +2783,15 @@ namespace SalesForceData
             table.Columns.Add(userIdColumnName);
             table.Columns.Add(userNameColumnName);
 
+            // concat user names that are too long
+            string userName = User.Name ?? String.Empty;
+            if (userName.Length > 128)
+                userName = userName.Substring(0, 128);
+
             DataRow row = table.NewRow();
             row[entityIdColumnName] = file.Id;
             row[userIdColumnName] = User.Id;
-            row[userNameColumnName] = User.Name;
+            row[userNameColumnName] = userName;
             table.Rows.Add(row);
 
             try
