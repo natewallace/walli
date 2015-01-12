@@ -27,6 +27,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Node;
 
 namespace Wallace.IDE.SalesForce.Function
 {
@@ -51,7 +52,7 @@ namespace Wallace.IDE.SalesForce.Function
             }
             else
             {
-                string text = project.IsCheckoutEnabled ? "Disable checkout system" : "Enable checkout system";
+                string text = project.IsCheckoutEnabled ? "Disable check out system" : "Enable check out system";
 
                 if (host == FunctionHost.Toolbar)
                 {
@@ -76,16 +77,59 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null)
             {
-                if (App.MessageUser("Changing the checkout system will impact all users of the organization.  Are you sure you want to proceed?",
-                                    "Checkout system update",
+                string text = project.IsCheckoutEnabled ?
+                    "Disabling the check out system will impact all Walli users of the organization.  Are you sure you want to proceed?" :
+                    "Enabling the check out system will impact all Walli users of the organization.  Are you sure you want to proceed?";
+
+                if (App.MessageUser(text,
+                                    "Check out system",
                                     System.Windows.MessageBoxImage.Warning,
                                     new string[] { "Yes", "No" }) == "Yes")
                 {
-                    using (App.Wait("Updating checkout system"))
+                    using (App.Wait("Updating check out system"))
                     {
                         project.EnableCheckout(!project.IsCheckoutEnabled);
                         App.Instance.UpdateWorkspaces();
+
+                        // refresh open folders
+                        IFunction refreshFunction = App.Instance.GetFunction<RefreshFolderFunction>();
+                        INode currentActiveNode = App.Instance.Navigation.ActiveNode;
+
+                        ApexClassFolderNode classFolderNode = App.Instance.Navigation.GetNode<ApexClassFolderNode>();
+                        if (classFolderNode != null)
+                        {
+                            App.Instance.Navigation.ActiveNode = classFolderNode;
+                            refreshFunction.Execute();
+                        }
+
+                        ApexTriggerFolderNode triggerFolderNode = App.Instance.Navigation.GetNode<ApexTriggerFolderNode>();
+                        if (triggerFolderNode != null)
+                        {
+                            App.Instance.Navigation.ActiveNode = triggerFolderNode;
+                            refreshFunction.Execute();
+                        }
+
+                        ApexPageFolderNode pageFolderNode = App.Instance.Navigation.GetNode<ApexPageFolderNode>();
+                        if (pageFolderNode != null)
+                        {
+                            App.Instance.Navigation.ActiveNode = pageFolderNode;
+                            refreshFunction.Execute();
+                        }
+
+                        ApexComponentFolderNode componentFolderNode = App.Instance.Navigation.GetNode<ApexComponentFolderNode>();
+                        if (componentFolderNode != null)
+                        {
+                            App.Instance.Navigation.ActiveNode = componentFolderNode;
+                            refreshFunction.Execute();
+                        }
+
+                        App.Instance.Navigation.ActiveNode = currentActiveNode;
                     }
+
+                    App.MessageUser("The check out system has been changed.  All users that currently have an open project in Walli for this organization will need to close those projects and then reopen them to see the change take effect.",
+                                    "Check out system changed",
+                                    System.Windows.MessageBoxImage.Information,
+                                    new string[] { "OK" });
                 }
             }
         }
