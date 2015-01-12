@@ -55,9 +55,9 @@ namespace Wallace.IDE.SalesForce.Node
         #region Methods
 
         /// <summary>
-        /// Set the header.
+        /// Update the header.
         /// </summary>
-        public override void Init()
+        public override void UpdateHeader()
         {
             if (SourceFile.CheckedOutBy != null)
                 if (SourceFile.CheckedOutBy.Equals(Project.Client.User))

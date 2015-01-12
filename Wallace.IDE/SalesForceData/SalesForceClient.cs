@@ -2709,7 +2709,7 @@ namespace SalesForceData
         /// Checkout the given file.
         /// </summary>
         /// <param name="file">The file to checkout.</param>
-        public void CheckoutFile(SourceFile file)
+        public void CheckOutFile(SourceFile file)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -2751,13 +2751,15 @@ namespace SalesForceData
             {
                 throw new Exception("Could not checkout file: " + err.Message, err);
             }
+
+            file.CheckedOutBy = User;
         }
 
         /// <summary>
         /// Checkin the given file.
         /// </summary>
         /// <param name="file">The file to checkin.</param>
-        public void CheckinFile(SourceFile file)
+        public void CheckInFile(SourceFile file)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -2790,21 +2792,16 @@ namespace SalesForceData
             if (result.Data.Rows.Count < 1)
                 throw new Exception("Could not checkin file as it appears the file is not checked out to you.");
 
-            DataTable table = new DataTable(tableName);
-            table.Columns.Add("Id");
-
-            DataRow row = table.NewRow();
-            row["Id"] = result.Data.Rows[0]["Id"];
-            table.Rows.Add(row);
-
             try
             {
-                DataDelete(table);
+                DataDelete(result.Data);
             }
             catch (Exception err)
             {
                 throw new Exception("Could not checkin file: " + err.Message, err);
             }
+
+            file.CheckedOutBy = null;
         }
 
         /// <summary>

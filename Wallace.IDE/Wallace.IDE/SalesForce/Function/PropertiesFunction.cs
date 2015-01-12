@@ -116,6 +116,7 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.AddProperty("Changed on", file.ChangedOn.ToLocalTime().ToString());
                 dlg.AddProperty("Created by", file.CreatedBy == null ? String.Empty : file.CreatedBy.Name);                
                 dlg.AddProperty("Created on", file.CreatedOn.ToLocalTime().ToString());
+                dlg.AddProperty("Checked out by", file.CheckedOutBy == null ? String.Empty : file.CheckedOutBy.Name);
 
                 App.ShowDialog(dlg);
             }

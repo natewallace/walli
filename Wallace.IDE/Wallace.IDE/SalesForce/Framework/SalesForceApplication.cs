@@ -149,7 +149,7 @@ namespace Wallace.IDE.SalesForce.Framework
             ReloadSymbolsFunction reloadSymbols = new ReloadSymbolsFunction();
             App.Instance.Menu.AddFunction(reloadSymbols, "PROJECT");
 
-            CheckoutSystemFunction checkoutSystemFunction = new CheckoutSystemFunction();
+            CheckOutSystemFunction checkoutSystemFunction = new CheckOutSystemFunction();
             App.Instance.Menu.AddFunction(checkoutSystemFunction, "PROJECT");
 
             DeleteSourceFileFunction deleteSourceFileFunction = new DeleteSourceFileFunction();
@@ -170,6 +170,10 @@ namespace Wallace.IDE.SalesForce.Framework
             PropertiesFunction propertiesSourceFileFunction = new PropertiesFunction();
             App.Instance.Menu.AddFunction(propertiesSourceFileFunction, "PROJECT");
             App.Instance.RegisterFunction(propertiesSourceFileFunction);
+
+            CheckOutFileFunction checkoutFileFunction = new CheckOutFileFunction();
+            App.Instance.Menu.AddFunction(checkoutFileFunction, "PROJECT");
+            App.Instance.RegisterFunction(checkoutFileFunction);
 
             //ViewCheckpointsFunction viewCheckpointsFunction = new ViewCheckpointsFunction();
             //App.Instance.Menu.AddFunction(viewCheckpointsFunction, "PROJECT");
@@ -384,16 +388,19 @@ namespace Wallace.IDE.SalesForce.Framework
             }
 
             // open the project
-            CurrentProject = project;
-            App.Instance.SessionTitle = project.Credential.Username;
+            using (App.Wait("opening project..."))
+            {
+                CurrentProject = project;
+                App.Instance.SessionTitle = project.Credential.Username;
 
-            App.Instance.Navigation.Nodes.Add(new SourceFolderNode(project));
-            App.Instance.Navigation.Nodes.Add(new DataFolderNode(project));
-            App.Instance.Navigation.Nodes.Add(new DeployFolderNode(project));
-            //App.Instance.Navigation.Nodes.Add(new SnippetsFolderNode(project));
+                App.Instance.Navigation.Nodes.Add(new SourceFolderNode(project));
+                App.Instance.Navigation.Nodes.Add(new DataFolderNode(project));
+                App.Instance.Navigation.Nodes.Add(new DeployFolderNode(project));
+                //App.Instance.Navigation.Nodes.Add(new SnippetsFolderNode(project));
 
-            App.Instance.Menu.UpdateFunctions();
-            App.Instance.ToolBar.UpdateFunctions();
+                App.Instance.Menu.UpdateFunctions();
+                App.Instance.ToolBar.UpdateFunctions();
+            }
         }
 
         /// <summary>

@@ -109,7 +109,21 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void Init()
         {
-            Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "Document.png");
+            UpdateHeader();
+        }
+
+        /// <summary>
+        /// Update the header.
+        /// </summary>
+        public virtual void UpdateHeader()
+        {
+            if (SourceFile.CheckedOutBy != null)
+                if (SourceFile.CheckedOutBy.Equals(Project.Client.User))
+                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "LockGreen.png");
+                else
+                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "LockRed.png");
+            else
+                Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "Document.png");
         }
 
         /// <summary>
@@ -203,6 +217,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             return new IFunction[]
             {
+                App.Instance.GetFunction<CheckOutFileFunction>(),
                 App.Instance.GetFunction<PropertiesFunction>()
             };
         }

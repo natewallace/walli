@@ -33,7 +33,7 @@ namespace Wallace.IDE.SalesForce.Function
     /// <summary>
     /// Enables and disables the checkout system.
     /// </summary>
-    public class CheckoutSystemFunction : FunctionBase
+    public class CheckOutSystemFunction : FunctionBase
     {
         #region Methods
 
