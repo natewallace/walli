@@ -330,10 +330,17 @@ namespace Wallace.IDE.SalesForce.Document
                                     Project.Client.DataDelete(deleteTable);
 
                                 // set the id fields for adds
-                                foreach (DataRow row in addTable.Rows)
+                                if (DataResult.Data.Columns.Contains("Id"))
                                 {
-                                    DataRow originalRow = rowMap[row];
-                                    originalRow["Id"] = row["Id"];
+                                    DataResult.Data.Columns["Id"].ReadOnly = false;
+
+                                    foreach (DataRow row in addTable.Rows)
+                                    {
+                                        DataRow originalRow = rowMap[row];
+                                        originalRow["Id"] = row["Id"];
+                                    }
+
+                                    DataResult.Data.Columns["Id"].ReadOnly = true;
                                 }
 
                                 DataResult.Data.AcceptChanges();

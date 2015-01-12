@@ -987,64 +987,85 @@ namespace SalesForceData
             if (file == null)
                 throw new ArgumentNullException("file");
 
-            switch (file.FileType.Name)
+            // do a checkout if checkouts are enabled and it's not currently checked out to anyone
+            bool isCheckout = false;
+            if (IsCheckoutEnabledCached())
             {
-                case "ApexClass":
-                case "ApexTrigger":
-                case "ApexPage":
-                case "ApexComponent":
+                if (file.CheckedOutBy != null && !file.CheckedOutBy.Equals(User))
+                    throw new Exception("Unable to delete file: it is checked out by another user.");
 
-                    // parse name for apex items
-                    string itemName = null;
-                    string namespacePrefix = null;
+                if (!String.IsNullOrWhiteSpace(file.Id) && file.CheckedOutBy == null)
+                    CheckOutFile(file);
 
-                    string[] classNameParts = file.Name.Split(new string[] { "__" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (classNameParts.Length == 1)
-                    {
-                        itemName = classNameParts[0];
-                        namespacePrefix = GetOrgInfo().organizationNamespace;
-                    }
-                    else if (classNameParts.Length == 2)
-                    {
-                        itemName = classNameParts[1];
-                        namespacePrefix = classNameParts[0];
-                    }
-                    else
-                    {
-                        itemName = file.Name;
-                        namespacePrefix = GetOrgInfo().organizationNamespace;
-                    }
+                isCheckout = true;
+            }
 
-                    // get record
-                    DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}' AND NamespacePrefix = '{2}'", file.FileType.Name, itemName, namespacePrefix));
-                    string objectId = null;
-                    if (objectQueryResult.Data.Rows.Count > 0)
-                        objectId = objectQueryResult.Data.Rows[0]["id"] as string;
-                    else
-                        throw new Exception("Couldn't find id of object.");
+            try
+            {
+                switch (file.FileType.Name)
+                {
+                    case "ApexClass":
+                    case "ApexTrigger":
+                    case "ApexPage":
+                    case "ApexComponent":
 
-                    // delete record
-                    SalesForceAPI.Tooling.deleteResponse response = _toolingClient.delete(new SalesForceAPI.Tooling.deleteRequest(
-                        new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                        new string[] { objectId }));
+                        // parse name for apex items
+                        string itemName = null;
+                        string namespacePrefix = null;
 
-                    // process any error messages
-                    if (response == null || response.result == null || response.result.Length != 1)
-                        throw new Exception("Invalid response received.");
+                        string[] classNameParts = file.Name.Split(new string[] { "__" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (classNameParts.Length == 1)
+                        {
+                            itemName = classNameParts[0];
+                            namespacePrefix = GetOrgInfo().organizationNamespace;
+                        }
+                        else if (classNameParts.Length == 2)
+                        {
+                            itemName = classNameParts[1];
+                            namespacePrefix = classNameParts[0];
+                        }
+                        else
+                        {
+                            itemName = file.Name;
+                            namespacePrefix = GetOrgInfo().organizationNamespace;
+                        }
 
-                    if (response.result[0].errors != null && response.result[0].errors.Length > 0)
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        foreach (SalesForceAPI.Tooling.Error error in response.result[0].errors)
-                            sb.AppendLine(error.message);
+                        // get record
+                        DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}' AND NamespacePrefix = '{2}'", file.FileType.Name, itemName, namespacePrefix));
+                        string objectId = null;
+                        if (objectQueryResult.Data.Rows.Count > 0)
+                            objectId = objectQueryResult.Data.Rows[0]["id"] as string;
+                        else
+                            throw new Exception("Couldn't find id of object.");
 
-                        throw new Exception(sb.ToString());
-                    }
+                        // delete record
+                        SalesForceAPI.Tooling.deleteResponse response = _toolingClient.delete(new SalesForceAPI.Tooling.deleteRequest(
+                            new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                            new string[] { objectId }));
 
-                    break;
+                        // process any error messages
+                        if (response == null || response.result == null || response.result.Length != 1)
+                            throw new Exception("Invalid response received.");
 
-                default:
-                    throw new Exception("The given file type is not supported: " + file.FileType.Name);
+                        if (response.result[0].errors != null && response.result[0].errors.Length > 0)
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            foreach (SalesForceAPI.Tooling.Error error in response.result[0].errors)
+                                sb.AppendLine(error.message);
+
+                            throw new Exception(sb.ToString());
+                        }
+
+                        break;
+
+                    default:
+                        throw new Exception("The given file type is not supported: " + file.FileType.Name);
+                }
+            }
+            finally
+            {
+                if (isCheckout)
+                    CheckInFile(file);
             }
         }
 
@@ -1745,279 +1766,301 @@ namespace SalesForceData
             if (file == null)
                 throw new ArgumentNullException("file");
 
-            switch (file.FileType.Name)
+            // do a checkout if checkouts are enabled and it's not currently checked out to anyone
+            bool isTempCheckout = false;
+            if (IsCheckoutEnabledCached())
             {
-                case "ApexClass":
-                case "ApexPage":
-                case "ApexTrigger":
-                case "ApexComponent":
+                if (file.CheckedOutBy != null && !file.CheckedOutBy.Equals(User))
+                    throw new Exception("Unable to save file: it is checked out by another user.");
 
-                    // parse name for apex items
-                    string itemName = null;
-                    string namespacePrefix = null;
+                if (!String.IsNullOrWhiteSpace(file.Id) && file.CheckedOutBy == null)
+                {
+                    isTempCheckout = true;
+                    CheckOutFile(file);
+                }
+            }
 
-                    string[] classNameParts = file.Name.Split(new string[] { "__" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (classNameParts.Length == 1)
-                    {
-                        itemName = classNameParts[0];
-                        namespacePrefix = GetOrgInfo().organizationNamespace;
-                    }
-                    else if (classNameParts.Length == 2)
-                    {
-                        itemName = classNameParts[1];
-                        namespacePrefix = classNameParts[0];
-                    }
-                    else
-                    {
-                        itemName = file.Name;
-                        namespacePrefix = GetOrgInfo().organizationNamespace;
-                    }
+            try
+            {
+                switch (file.FileType.Name)
+                {
+                    case "ApexClass":
+                    case "ApexPage":
+                    case "ApexTrigger":
+                    case "ApexComponent":
 
-                    // get item record
-                    DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}' AND NamespacePrefix = '{2}'", file.FileType.Name, itemName, namespacePrefix));
-                    string objectId = null;
-                    if (objectQueryResult.Data.Rows.Count > 0)
-                        objectId = objectQueryResult.Data.Rows[0]["id"] as string;
+                        // parse name for apex items
+                        string itemName = null;
+                        string namespacePrefix = null;
 
-                    // create metadata container
-                    SalesForceAPI.Tooling.MetadataContainer metadataContainer = new SalesForceAPI.Tooling.MetadataContainer();
-                    metadataContainer.Name = Guid.NewGuid().ToString("N");
-                    SalesForceAPI.Tooling.createResponse containerResponse = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
-                        new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                        new SalesForceAPI.Tooling.sObject[] { metadataContainer }));
-
-                    if (containerResponse == null)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  containerResponse returned was null.", null) };
-                    if (containerResponse.result == null)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  containerResponse.result returned was null.", null) };
-                    if (containerResponse.result.Length != 1)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  containerResponse.result length was an unexpected value: " + containerResponse.result.Length, null) };
-                    if (!containerResponse.result[0].success)
-                    {
-                        List<SalesForceError> errors = new List<SalesForceError>();
-                        if (containerResponse.result[0].errors != null)
-                            foreach (SalesForceAPI.Tooling.Error err in containerResponse.result[0].errors)
-                                errors.Add(new SalesForceError(err.statusCode.ToString(), err.message, err.fields));
+                        string[] classNameParts = file.Name.Split(new string[] { "__" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (classNameParts.Length == 1)
+                        {
+                            itemName = classNameParts[0];
+                            namespacePrefix = GetOrgInfo().organizationNamespace;
+                        }
+                        else if (classNameParts.Length == 2)
+                        {
+                            itemName = classNameParts[1];
+                            namespacePrefix = classNameParts[0];
+                        }
                         else
-                            errors.Add(new SalesForceError("SYSTEM", "containerResponse.result inidcated failure but reported no error details.", null));
+                        {
+                            itemName = file.Name;
+                            namespacePrefix = GetOrgInfo().organizationNamespace;
+                        }
 
-                        return errors.ToArray();
-                    }
+                        // get item record
+                        DataSelectResult objectQueryResult = DataSelect(String.Format("SELECT id FROM {0} WHERE Name = '{1}' AND NamespacePrefix = '{2}'", file.FileType.Name, itemName, namespacePrefix));
+                        string objectId = null;
+                        if (objectQueryResult.Data.Rows.Count > 0)
+                            objectId = objectQueryResult.Data.Rows[0]["id"] as string;
 
-                    // stage object
-                    SalesForceAPI.Tooling.sObject stageObject = null;
-
-                    if (file.FileType.Name == "ApexClass")
-                    {
-                        SalesForceAPI.Tooling.ApexClassMember apexClass = new SalesForceAPI.Tooling.ApexClassMember();
-                        apexClass.ContentEntityId = objectId;
-                        apexClass.Body = contentValue ?? String.Empty;
-                        apexClass.MetadataContainerId = containerResponse.result[0].id;
-                        stageObject = apexClass;
-                    }
-                    else if (file.FileType.Name == "ApexTrigger")
-                    {
-                        SalesForceAPI.Tooling.ApexTriggerMember apexTrigger = new SalesForceAPI.Tooling.ApexTriggerMember();
-                        apexTrigger.ContentEntityId = objectId;
-                        apexTrigger.Body = contentValue ?? String.Empty;
-                        apexTrigger.MetadataContainerId = containerResponse.result[0].id;
-                        stageObject = apexTrigger;
-                    }
-                    else if (file.FileType.Name == "ApexPage")
-                    {
-                        SalesForceAPI.Tooling.ApexPageMember apexPage = new SalesForceAPI.Tooling.ApexPageMember();
-                        apexPage.ContentEntityId = objectId;
-                        apexPage.Body = contentValue ?? String.Empty;
-                        apexPage.MetadataContainerId = containerResponse.result[0].id;
-                        stageObject = apexPage;
-                    }
-                    else if (file.FileType.Name == "ApexComponent")
-                    {
-                        SalesForceAPI.Tooling.ApexComponentMember apexComponent = new SalesForceAPI.Tooling.ApexComponentMember();
-                        apexComponent.ContentEntityId = objectId;
-                        apexComponent.Body = contentValue ?? String.Empty;
-                        apexComponent.MetadataContainerId = containerResponse.result[0].id;
-                        stageObject = apexComponent;
-                    }
-                    
-
-                    SalesForceAPI.Tooling.createResponse stageApexResponse = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
-                        new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                        new SalesForceAPI.Tooling.sObject[] { stageObject }));
-
-                    if (stageApexResponse == null)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  stageApexResponse returned was null.", null) };
-                    if (stageApexResponse.result == null)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  stageApexResponse.result returned was null.", null) };
-                    if (stageApexResponse.result.Length != 1)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  stageApexResponse.result length was an unexpected value: " + stageApexResponse.result.Length, null) };
-                    if (!stageApexResponse.result[0].success)
-                    {
-                        List<SalesForceError> errors = new List<SalesForceError>();
-                        if (stageApexResponse.result[0].errors != null)
-                            foreach (SalesForceAPI.Tooling.Error err in stageApexResponse.result[0].errors)
-                                errors.Add(new SalesForceError(err.statusCode.ToString(), err.message, err.fields));
-                        else
-                            errors.Add(new SalesForceError("SYSTEM", "stageApexResponse.result inidcated failure but reported no error details.", null));
-
-                        return errors.ToArray();
-                    }
-
-                    // save apex
-                    SalesForceAPI.Tooling.ContainerAsyncRequest apexSaveRequest = new SalesForceAPI.Tooling.ContainerAsyncRequest();
-                    apexSaveRequest.IsCheckOnly = false;
-                    apexSaveRequest.MetadataContainerId = containerResponse.result[0].id;
-                    SalesForceAPI.Tooling.createResponse apexSaveResponse = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
-                        new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                        new SalesForceAPI.Tooling.sObject[] { apexSaveRequest }));
-
-                    if (apexSaveResponse == null)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  apexSaveResponse returned was null.", null) };
-                    if (apexSaveResponse.result == null)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  apexSaveResponse.result returned was null.", null) };
-                    if (apexSaveResponse.result.Length != 1)
-                        return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  apexSaveResponse.result length was an unexpected value: " + apexSaveResponse.result.Length, null) };
-                    if (!apexSaveResponse.result[0].success)
-                    {
-                        List<SalesForceError> errors = new List<SalesForceError>();
-                        if (apexSaveResponse.result[0].errors != null)
-                            foreach (SalesForceAPI.Tooling.Error err in apexSaveResponse.result[0].errors)
-                                errors.Add(new SalesForceError(err.statusCode.ToString(), err.message, err.fields));
-                        else
-                            errors.Add(new SalesForceError("SYSTEM", "apexSaveResponse.result inidcated failure but reported no error details.", null));
-
-                        return errors.ToArray();
-                    }
-                    string saveRequestId = apexSaveResponse.result[0].id;
-
-                    // get result        
-                    DateTime startTime = DateTime.Now;
-                    apexSaveRequest.State = "Queued";
-                    while (apexSaveRequest.State == "Queued")
-                    {
-                        SalesForceAPI.Tooling.queryResponse pollResponse = _toolingClient.query(new SalesForceAPI.Tooling.queryRequest(
+                        // create metadata container
+                        SalesForceAPI.Tooling.MetadataContainer metadataContainer = new SalesForceAPI.Tooling.MetadataContainer();
+                        metadataContainer.Name = Guid.NewGuid().ToString("N");
+                        SalesForceAPI.Tooling.createResponse containerResponse = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
                             new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                            String.Format("SELECT Id, State, CompilerErrors, ErrorMsg FROM ContainerAsyncRequest where id = '{0}'", saveRequestId)));
+                            new SalesForceAPI.Tooling.sObject[] { metadataContainer }));
 
-                        if (pollResponse != null &&
-                            pollResponse.result != null &&
-                            pollResponse.result.records.Length == 1)
+                        if (containerResponse == null)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  containerResponse returned was null.", null) };
+                        if (containerResponse.result == null)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  containerResponse.result returned was null.", null) };
+                        if (containerResponse.result.Length != 1)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  containerResponse.result length was an unexpected value: " + containerResponse.result.Length, null) };
+                        if (!containerResponse.result[0].success)
                         {
-                            apexSaveRequest = pollResponse.result.records[0] as SalesForceAPI.Tooling.ContainerAsyncRequest;
-                        }
-
-                        if (apexSaveRequest.State == "Queued")
-                        {
-                            if (DateTime.Now - startTime > SAVE_TIMEOUT)
-                                throw new Exception("A client side timeout occured while trying to save a file to SalesForce.");
-
-                            System.Threading.Thread.Sleep((int)TimeSpan.FromSeconds(2).TotalMilliseconds);
-                        }
-                    }
-
-                    _toolingClient.delete(new SalesForceAPI.Tooling.deleteRequest(
-                        new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                        new string[] { containerResponse.result[0].id }));
-
-                    switch (apexSaveRequest.State)
-                    {
-                        case "Completed":
-                            DataSelectResult objectNameQueryResult = DataSelect(String.Format("SELECT Name FROM {0} WHERE Id = '{1}'", file.FileType.Name, objectId));
-                            if (objectNameQueryResult.Data.Rows.Count > 0)
-                            {
-                                string name = objectNameQueryResult.Data.Rows[0]["Name"] as string;
-                                file.UpdateName(name);
-                            }
-
-                            return new SalesForceError[0];
-
-                        default:
                             List<SalesForceError> errors = new List<SalesForceError>();
-                            errors.Add(new SalesForceError("SYSTEM", "Failed to save apex file.", null));
-                            if (!String.IsNullOrWhiteSpace(apexSaveRequest.ErrorMsg))
-                                errors.Add(new SalesForceError("ERROR", apexSaveRequest.ErrorMsg, null));
-                            if (!String.IsNullOrWhiteSpace(apexSaveRequest.CompilerErrors))
-                                errors.Add(new SalesForceError("COMPILE ERROR", apexSaveRequest.CompilerErrors, null));
+                            if (containerResponse.result[0].errors != null)
+                                foreach (SalesForceAPI.Tooling.Error err in containerResponse.result[0].errors)
+                                    errors.Add(new SalesForceError(err.statusCode.ToString(), err.message, err.fields));
+                            else
+                                errors.Add(new SalesForceError("SYSTEM", "containerResponse.result inidcated failure but reported no error details.", null));
+
                             return errors.ToArray();
-                    }
-
-                // all other source files
-                default:
-                    using (MemoryStream msZip = new MemoryStream())
-                    {
-                        using (ZipArchive zip = new ZipArchive(msZip, ZipArchiveMode.Create))
-                        {
-                            ZipArchiveEntry fileEntry = zip.CreateEntry(file.FileName);
-                            using (StreamWriter fileWriter = new StreamWriter(fileEntry.Open()))
-                                fileWriter.Write(contentValue);
-
-                            if (metadataValue != null)
-                            {
-                                ZipArchiveEntry metadataEntry = zip.CreateEntry(file.MetadataFileName);
-                                using (StreamWriter metadataWriter = new StreamWriter(metadataEntry.Open()))
-                                    metadataWriter.Write(metadataValue);
-                            }
-
-                            Manifest manifest = new Manifest("package");
-                            manifest.AddGroup(new ManifestItemGroup(file.FileType.Name));
-                            manifest.Groups.ElementAt(0).AddItem(new ManifestItem(file.Name));
-                            ZipArchiveEntry manifestEntry = zip.CreateEntry("package.xml");
-                            using (Stream manifestWriter = manifestEntry.Open())
-                                manifest.Save(manifestWriter);
                         }
 
-                        msZip.Flush();
+                        // stage object
+                        SalesForceAPI.Tooling.sObject stageObject = null;
 
-                        SalesForceAPI.Metadata.AsyncResult result = _metadataClient.deploy(new SalesForceAPI.Metadata.deployRequest(
-                            new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
-                            null,
-                            null,
-                            msZip.ToArray(),
-                            new SalesForceAPI.Metadata.DeployOptions()
-                            {
-                                singlePackage = true,
-                                rollbackOnError = true
-                            })).result;
-
-                        int pollCount = 0;
-
-                        SalesForceAPI.Metadata.DeployResult deployResult = new SalesForceAPI.Metadata.DeployResult();
-                        deployResult.id = result.id;
-                        while (!deployResult.done && String.IsNullOrWhiteSpace(deployResult.errorMessage))
+                        if (file.FileType.Name == "ApexClass")
                         {
-                            if (pollCount > 100)
+                            SalesForceAPI.Tooling.ApexClassMember apexClass = new SalesForceAPI.Tooling.ApexClassMember();
+                            apexClass.ContentEntityId = objectId;
+                            apexClass.Body = contentValue ?? String.Empty;
+                            apexClass.MetadataContainerId = containerResponse.result[0].id;
+                            stageObject = apexClass;
+                        }
+                        else if (file.FileType.Name == "ApexTrigger")
+                        {
+                            SalesForceAPI.Tooling.ApexTriggerMember apexTrigger = new SalesForceAPI.Tooling.ApexTriggerMember();
+                            apexTrigger.ContentEntityId = objectId;
+                            apexTrigger.Body = contentValue ?? String.Empty;
+                            apexTrigger.MetadataContainerId = containerResponse.result[0].id;
+                            stageObject = apexTrigger;
+                        }
+                        else if (file.FileType.Name == "ApexPage")
+                        {
+                            SalesForceAPI.Tooling.ApexPageMember apexPage = new SalesForceAPI.Tooling.ApexPageMember();
+                            apexPage.ContentEntityId = objectId;
+                            apexPage.Body = contentValue ?? String.Empty;
+                            apexPage.MetadataContainerId = containerResponse.result[0].id;
+                            stageObject = apexPage;
+                        }
+                        else if (file.FileType.Name == "ApexComponent")
+                        {
+                            SalesForceAPI.Tooling.ApexComponentMember apexComponent = new SalesForceAPI.Tooling.ApexComponentMember();
+                            apexComponent.ContentEntityId = objectId;
+                            apexComponent.Body = contentValue ?? String.Empty;
+                            apexComponent.MetadataContainerId = containerResponse.result[0].id;
+                            stageObject = apexComponent;
+                        }
+
+
+                        SalesForceAPI.Tooling.createResponse stageApexResponse = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
+                            new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                            new SalesForceAPI.Tooling.sObject[] { stageObject }));
+
+                        if (stageApexResponse == null)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  stageApexResponse returned was null.", null) };
+                        if (stageApexResponse.result == null)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  stageApexResponse.result returned was null.", null) };
+                        if (stageApexResponse.result.Length != 1)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  stageApexResponse.result length was an unexpected value: " + stageApexResponse.result.Length, null) };
+                        if (!stageApexResponse.result[0].success)
+                        {
+                            List<SalesForceError> errors = new List<SalesForceError>();
+                            if (stageApexResponse.result[0].errors != null)
+                                foreach (SalesForceAPI.Tooling.Error err in stageApexResponse.result[0].errors)
+                                    errors.Add(new SalesForceError(err.statusCode.ToString(), err.message, err.fields));
+                            else
+                                errors.Add(new SalesForceError("SYSTEM", "stageApexResponse.result inidcated failure but reported no error details.", null));
+
+                            return errors.ToArray();
+                        }
+
+                        // save apex
+                        SalesForceAPI.Tooling.ContainerAsyncRequest apexSaveRequest = new SalesForceAPI.Tooling.ContainerAsyncRequest();
+                        apexSaveRequest.IsCheckOnly = false;
+                        apexSaveRequest.MetadataContainerId = containerResponse.result[0].id;
+                        SalesForceAPI.Tooling.createResponse apexSaveResponse = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
+                            new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                            new SalesForceAPI.Tooling.sObject[] { apexSaveRequest }));
+
+                        if (apexSaveResponse == null)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  apexSaveResponse returned was null.", null) };
+                        if (apexSaveResponse.result == null)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  apexSaveResponse.result returned was null.", null) };
+                        if (apexSaveResponse.result.Length != 1)
+                            return new SalesForceError[] { new SalesForceError("SYSTEM", "Failed to save apex file.  apexSaveResponse.result length was an unexpected value: " + apexSaveResponse.result.Length, null) };
+                        if (!apexSaveResponse.result[0].success)
+                        {
+                            List<SalesForceError> errors = new List<SalesForceError>();
+                            if (apexSaveResponse.result[0].errors != null)
+                                foreach (SalesForceAPI.Tooling.Error err in apexSaveResponse.result[0].errors)
+                                    errors.Add(new SalesForceError(err.statusCode.ToString(), err.message, err.fields));
+                            else
+                                errors.Add(new SalesForceError("SYSTEM", "apexSaveResponse.result inidcated failure but reported no error details.", null));
+
+                            return errors.ToArray();
+                        }
+                        string saveRequestId = apexSaveResponse.result[0].id;
+
+                        // get result        
+                        DateTime startTime = DateTime.Now;
+                        apexSaveRequest.State = "Queued";
+                        while (apexSaveRequest.State == "Queued")
+                        {
+                            SalesForceAPI.Tooling.queryResponse pollResponse = _toolingClient.query(new SalesForceAPI.Tooling.queryRequest(
+                                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                                String.Format("SELECT Id, State, CompilerErrors, ErrorMsg FROM ContainerAsyncRequest where id = '{0}'", saveRequestId)));
+
+                            if (pollResponse != null &&
+                                pollResponse.result != null &&
+                                pollResponse.result.records.Length == 1)
                             {
-                                return new SalesForceError[] 
+                                apexSaveRequest = pollResponse.result.records[0] as SalesForceAPI.Tooling.ContainerAsyncRequest;
+                            }
+
+                            if (apexSaveRequest.State == "Queued")
+                            {
+                                if (DateTime.Now - startTime > SAVE_TIMEOUT)
+                                    throw new Exception("A client side timeout occured while trying to save a file to SalesForce.");
+
+                                System.Threading.Thread.Sleep((int)TimeSpan.FromSeconds(2).TotalMilliseconds);
+                            }
+                        }
+
+                        _toolingClient.delete(new SalesForceAPI.Tooling.deleteRequest(
+                            new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
+                            new string[] { containerResponse.result[0].id }));
+
+                        switch (apexSaveRequest.State)
+                        {
+                            case "Completed":
+                                DataSelectResult objectNameQueryResult = DataSelect(String.Format("SELECT Name FROM {0} WHERE Id = '{1}'", file.FileType.Name, objectId));
+                                if (objectNameQueryResult.Data.Rows.Count > 0)
+                                {
+                                    string name = objectNameQueryResult.Data.Rows[0]["Name"] as string;
+                                    file.UpdateName(name);
+                                }
+
+                                return new SalesForceError[0];
+
+                            default:
+                                List<SalesForceError> errors = new List<SalesForceError>();
+                                errors.Add(new SalesForceError("SYSTEM", "Failed to save apex file.", null));
+                                if (!String.IsNullOrWhiteSpace(apexSaveRequest.ErrorMsg))
+                                    errors.Add(new SalesForceError("ERROR", apexSaveRequest.ErrorMsg, null));
+                                if (!String.IsNullOrWhiteSpace(apexSaveRequest.CompilerErrors))
+                                    errors.Add(new SalesForceError("COMPILE ERROR", apexSaveRequest.CompilerErrors, null));
+                                return errors.ToArray();
+                        }
+
+                    // all other source files
+                    default:
+                        using (MemoryStream msZip = new MemoryStream())
+                        {
+                            using (ZipArchive zip = new ZipArchive(msZip, ZipArchiveMode.Create))
+                            {
+                                ZipArchiveEntry fileEntry = zip.CreateEntry(file.FileName);
+                                using (StreamWriter fileWriter = new StreamWriter(fileEntry.Open()))
+                                    fileWriter.Write(contentValue);
+
+                                if (metadataValue != null)
+                                {
+                                    ZipArchiveEntry metadataEntry = zip.CreateEntry(file.MetadataFileName);
+                                    using (StreamWriter metadataWriter = new StreamWriter(metadataEntry.Open()))
+                                        metadataWriter.Write(metadataValue);
+                                }
+
+                                Manifest manifest = new Manifest("package");
+                                manifest.AddGroup(new ManifestItemGroup(file.FileType.Name));
+                                manifest.Groups.ElementAt(0).AddItem(new ManifestItem(file.Name));
+                                ZipArchiveEntry manifestEntry = zip.CreateEntry("package.xml");
+                                using (Stream manifestWriter = manifestEntry.Open())
+                                    manifest.Save(manifestWriter);
+                            }
+
+                            msZip.Flush();
+
+                            SalesForceAPI.Metadata.AsyncResult result = _metadataClient.deploy(new SalesForceAPI.Metadata.deployRequest(
+                                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
+                                null,
+                                null,
+                                msZip.ToArray(),
+                                new SalesForceAPI.Metadata.DeployOptions()
+                                {
+                                    singlePackage = true,
+                                    rollbackOnError = true
+                                })).result;
+
+                            int pollCount = 0;
+
+                            SalesForceAPI.Metadata.DeployResult deployResult = new SalesForceAPI.Metadata.DeployResult();
+                            deployResult.id = result.id;
+                            while (!deployResult.done && String.IsNullOrWhiteSpace(deployResult.errorMessage))
+                            {
+                                if (pollCount > 100)
+                                {
+                                    return new SalesForceError[] 
                                 { 
                                     new SalesForceError(
                                         null, 
                                         "Save timed out waiting for response from the server.  Note that your save might have gone through.",
                                         null)
                                 };
+                                }
+
+                                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(0.2));
+
+                                deployResult = _metadataClient.checkDeployStatus(new SalesForceAPI.Metadata.checkDeployStatusRequest(
+                                    new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
+                                    null,
+                                    result.id,
+                                    true)).result;
+
+                                pollCount++;
                             }
 
-                            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(0.2));
+                            if (deployResult.success)
+                                return new SalesForceError[0];
 
-                            deployResult = _metadataClient.checkDeployStatus(new SalesForceAPI.Metadata.checkDeployStatusRequest(
-                                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _session.Id },
-                                null,
-                                result.id,
-                                true)).result;
-
-                            pollCount++;
+                            return new SalesForceError[] 
+                            { 
+                                new SalesForceError(
+                                    null, 
+                                    "Unable to save. " + deployResult.errorMessage,
+                                    null)
+                            };
                         }
-
-                        if (deployResult.success)
-                            return new SalesForceError[0];
-
-                        return new SalesForceError[] 
-                        { 
-                            new SalesForceError(
-                                null, 
-                                "Unable to save. " + deployResult.errorMessage,
-                                null)
-                        };
-                    }                    
+                }
+            }
+            finally
+            {
+                if (isTempCheckout)
+                    CheckInFile(file);
             }
         }
 
@@ -2686,6 +2729,7 @@ namespace SalesForceData
             string tableName = "Walli_Lock_Table__c";
             string entityIdColumnName = "Entity_Id__c";
             string userIdColumnName = "User_Id__c";
+            string userNameColumnName = "User_Name__c";
 
             string namespaceName = GetOrgInfo().organizationNamespace;
             if (!String.IsNullOrEmpty(namespaceName))
@@ -2693,14 +2737,16 @@ namespace SalesForceData
                 tableName = String.Format("{0}__{1}", namespaceName, tableName);
                 entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
                 userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
+                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
             }
 
-            DataSelectResult lockTable = DataSelectAll(String.Format("SELECT {0}, {1} FROM {2}", 
+            DataSelectResult lockTable = DataSelectAll(String.Format("SELECT {0}, {1}, {2} FROM {3}", 
                 entityIdColumnName,
                 userIdColumnName,
+                userNameColumnName,
                 tableName));
             foreach (DataRow row in lockTable.Data.Rows)
-                result.Add(row[entityIdColumnName] as string, new User(row[userIdColumnName] as string, null)); //TODO:
+                result.Add(row[entityIdColumnName] as string, new User(row[userIdColumnName] as string, row[userNameColumnName] as string));
 
             return result;
         }
@@ -3040,25 +3086,34 @@ namespace SalesForceData
                 if (!data.Columns.Contains("Id"))
                     data.Columns.Add("Id");
 
-                if (response.result != null && response.result.Length == data.Rows.Count)
-                {
-                    for (int j = 0; j < response.result.Length; j++)
-                    {
-                        if (!response.result[j].success)
-                        {
-                            StringBuilder sb = new StringBuilder();
-                            sb.AppendLine("Failed to save " + response.result[j].id);
-                            if (response.result[j].errors != null)
-                                foreach (SalesForceAPI.Partner.Error err in response.result[j].errors)
-                                    sb.AppendLine(err.message);
+                data.Columns["Id"].ReadOnly = false;
 
-                            throw new Exception(sb.ToString());
-                        }
-                        else
+                try
+                {
+                    if (response.result != null && response.result.Length == data.Rows.Count)
+                    {
+                        for (int j = 0; j < response.result.Length; j++)
                         {
-                            data.Rows[j + i]["Id"] = response.result[j].id;
+                            if (!response.result[j].success)
+                            {
+                                StringBuilder sb = new StringBuilder();
+                                sb.AppendLine("Failed to save " + response.result[j].id);
+                                if (response.result[j].errors != null)
+                                    foreach (SalesForceAPI.Partner.Error err in response.result[j].errors)
+                                        sb.AppendLine(err.message);
+
+                                throw new Exception(sb.ToString());
+                            }
+                            else
+                            {
+                                data.Rows[j + i]["Id"] = response.result[j].id;
+                            }
                         }
                     }
+                }
+                finally
+                {
+                    data.Columns["Id"].ReadOnly = true;
                 }
             }
         }
@@ -3196,10 +3251,16 @@ namespace SalesForceData
                         continue;
 
                     System.Xml.XmlElement e = doc.CreateElement(column.ColumnName);
+
                     if (row[column] != null && row[column].GetType() == typeof(DateTime))
                         e.InnerText = ((DateTime)row[column]).ToString("s");
                     else
-                        e.InnerText = System.Convert.ToString(row[column]);                    
+                        e.InnerText = System.Convert.ToString(row[column]);
+
+                    // don't put Id field in null list
+                    if (String.Compare(column.ColumnName, "Id", 0) == 0 && 
+                        String.IsNullOrWhiteSpace(e.InnerText))
+                        continue;
 
                     if (e.InnerText == null || e.InnerText == String.Empty)
                         nullFields.Add(column.ColumnName);

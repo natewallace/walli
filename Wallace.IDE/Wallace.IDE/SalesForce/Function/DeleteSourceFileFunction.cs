@@ -24,6 +24,7 @@ using System;
 using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Node;
+using Wallace.IDE.SalesForce.Framework;
 
 namespace Wallace.IDE.SalesForce.Function
 {
@@ -87,6 +88,11 @@ namespace Wallace.IDE.SalesForce.Function
                 }
 
                 canDelete = true;
+
+                // make sure the file isn't locked
+                Project project = App.Instance.SalesForceApp.CurrentProject;
+                if (project != null && file.CheckedOutBy != null && !file.CheckedOutBy.Equals(project.Client.User))
+                    canDelete = false;
             }
 
             IsVisible = canDelete;
