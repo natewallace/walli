@@ -80,9 +80,9 @@ namespace SalesForceData
             }
 
             Id = data.Rows[0]["Id"] as string;
-            ChangedById = data.Rows[0]["CreatedById"] as string;
+            ChangedBy = new User(data.Rows[0]["CreatedById"] as string, null);
             ChangedOn = DateTime.Parse(data.Rows[0]["CreatedDate"] as string).ToLocalTime();
-            CreatedById = ChangedById;
+            CreatedBy = ChangedBy;
             CreatedOn = ChangedOn;
             Children = new SourceFile[0];
 
@@ -90,6 +90,8 @@ namespace SalesForceData
             State = SourceFileState.None;
 
             IsNameUpdated = false;
+
+            CheckedOutBy = null;
         }
 
         /// <summary>
@@ -109,11 +111,9 @@ namespace SalesForceData
             Name = fileProperties.fullName;
             FileName = fileProperties.fileName;
             Parent = null;
-            ChangedById = fileProperties.lastModifiedById ?? String.Empty;
-            ChangedByName = fileProperties.lastModifiedByName;
+            ChangedBy = new User(fileProperties.lastModifiedById ?? String.Empty, fileProperties.lastModifiedByName);
             ChangedOn = fileProperties.lastModifiedDate.ToLocalTime();
-            CreatedById = fileProperties.createdById ?? String.Empty;
-            CreatedByName = fileProperties.createdByName;
+            CreatedBy = new User(fileProperties.createdById ?? String.Empty, fileProperties.createdByName);
             CreatedOn = fileProperties.createdDate.ToLocalTime();
             Children = new SourceFile[0];
             State = GetState(fileProperties);
@@ -121,6 +121,8 @@ namespace SalesForceData
             // salesforce defect workaround
             if (FileName != null && FileName.StartsWith("Workflow/"))
                 FileName = FileName.Replace("Workflow/", "workflows/");
+
+            CheckedOutBy = null;
         }
 
         /// <summary>
@@ -160,14 +162,13 @@ namespace SalesForceData
 
             FileName = null;
             Parent = null;
-            ChangedById = null;
-            ChangedByName = null;
+            ChangedBy = null;
             ChangedOn = DateTime.MinValue;
-            CreatedById = null;
-            CreatedByName = null;
+            CreatedBy = null;
             CreatedOn = DateTime.MinValue;
             Children = new SourceFile[0];
             State = SourceFileState.None;
+            CheckedOutBy = null;
         }
 
         #endregion
@@ -215,14 +216,9 @@ namespace SalesForceData
         public SourceFile[] Children { get; private set; }
 
         /// <summary>
-        /// The id of the user that last changed this file.
+        /// The user that last changed this file.
         /// </summary>
-        public string ChangedById { get; private set; }
-
-        /// <summary>
-        /// The name of the user that last changed this file.
-        /// </summary>
-        public string ChangedByName { get; private set; }
+        public User ChangedBy { get; private set; }
 
         /// <summary>
         /// The date this file was last changed.
@@ -230,14 +226,9 @@ namespace SalesForceData
         public DateTime ChangedOn { get; private set; }
 
         /// <summary>
-        /// The id of the user that created this file.
+        /// The user that created this file.
         /// </summary>
-        public string CreatedById { get; private set; }
-
-        /// <summary>
-        /// The name of the user that created this file.
-        /// </summary>
-        public string CreatedByName { get; private set; }
+        public User CreatedBy { get; private set; }
 
         /// <summary>
         /// The date the file was created.
@@ -255,7 +246,7 @@ namespace SalesForceData
         /// <summary>
         /// The user that has this file checked out or null if it isn't checked out.
         /// </summary>
-        public string CheckedOutById { get; internal set; }
+        public User CheckedOutBy { get; internal set; }
 
         #endregion
 
@@ -375,11 +366,9 @@ namespace SalesForceData
         {
             Name = reader["name"];
             FileName = reader["fileName"];
-            ChangedById = reader["changedById"];
-            ChangedByName = reader["changedByName"];
+            ChangedBy = new User(reader["changedById"], reader["changedByName"]);
             ChangedOn = DateTime.Parse(reader["changedOn"]);
-            CreatedById = reader["createdById"];
-            CreatedByName = reader["createdByName"];
+            CreatedBy = new User(reader["createdById"], reader["createdByName"]);
             CreatedOn = DateTime.Parse(reader["createdOn"]);
             State = (SourceFileState)Enum.Parse(typeof(SourceFileState), reader["state"]);            
             FileType = new SourceFileType(reader["fileType"], null);
@@ -414,11 +403,11 @@ namespace SalesForceData
             writer.WriteAttributeString("fileType", FileType.Name);
             writer.WriteAttributeString("name", Name);
             writer.WriteAttributeString("fileName", FileName);
-            writer.WriteAttributeString("changedById", ChangedById);
-            writer.WriteAttributeString("changedByName", ChangedByName);            
+            writer.WriteAttributeString("changedById", ChangedBy == null ? String.Empty : ChangedBy.Id);
+            writer.WriteAttributeString("changedByName", ChangedBy == null ? String.Empty : ChangedBy.Name);            
             writer.WriteAttributeString("changedOn", ChangedOn.ToString());
-            writer.WriteAttributeString("createdById", CreatedById);
-            writer.WriteAttributeString("createdByName", CreatedByName);
+            writer.WriteAttributeString("createdById", CreatedBy == null ? String.Empty : CreatedBy.Id);
+            writer.WriteAttributeString("createdByName", CreatedBy == null ? String.Empty : CreatedBy.Name);
             writer.WriteAttributeString("createdOn", CreatedOn.ToString());
             writer.WriteAttributeString("state", State.ToString());
         

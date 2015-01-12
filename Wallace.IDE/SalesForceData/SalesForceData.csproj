@@ -119,6 +119,7 @@
     <Compile Include="TestRunItemResultStatus.cs" />
     <Compile Include="TestRunItemStatus.cs" />
     <Compile Include="TriggerEvents.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

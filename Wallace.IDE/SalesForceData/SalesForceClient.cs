@@ -84,6 +84,11 @@ namespace SalesForceData
         /// </summary>
         private static readonly TimeSpan SAVE_TIMEOUT = new TimeSpan(0, 1, 0);
 
+        /// <summary>
+        /// Used to cache the last call to IsCheckoutEnabled.
+        /// </summary>
+        private bool? _isCheckoutEnabled = null;
+
         #endregion
 
         #region Constructors
@@ -132,6 +137,18 @@ namespace SalesForceData
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// The currently logged on user.
+        /// </summary>
+        public User User
+        {
+            get { return _session.User; }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -154,24 +171,6 @@ namespace SalesForceData
         public static void TestLogin(SalesForceCredential credential)
         {
             TestLogin(credential, null);
-        }
-
-        /// <summary>
-        /// Get the user id of the currently logged on user.
-        /// </summary>
-        /// <returns>The id of the user that is currently logged on.</returns>
-        public string GetUserId()
-        {
-            return _session.UserId;
-        }
-
-        /// <summary>
-        /// Get the user name of the currently logged on user.
-        /// </summary>
-        /// <returns>The name of the user that is currently logged on.</returns>
-        public string GetUserName()
-        {
-            return _session.UserName;
         }
 
         /// <summary>
@@ -581,7 +580,7 @@ namespace SalesForceData
 
             SalesForceAPI.Tooling.queryResponse response = _toolingClient.query(new SalesForceAPI.Tooling.queryRequest(
                 new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
-                String.Format("SELECT Id, ActionScript, ActionScriptType, ExecutableEntityId, ExpirationDate, IsDumpingHeap, Iteration, Line, ScopeId FROM ApexExecutionOverlayAction WHERE ScopeId = '{0}'", _session.UserId)));
+                String.Format("SELECT Id, ActionScript, ActionScriptType, ExecutableEntityId, ExpirationDate, IsDumpingHeap, Iteration, Line, ScopeId FROM ApexExecutionOverlayAction WHERE ScopeId = '{0}'", User.Id)));
 
             List<Checkpoint> result = new List<Checkpoint>();
             if (response.result.records != null)
@@ -710,7 +709,7 @@ namespace SalesForceData
             action.IterationSpecified = true;
             action.Line = lineNumber;
             action.LineSpecified = true;
-            action.ScopeId = _session.UserId;
+            action.ScopeId = User.Id;
 
             SalesForceAPI.Tooling.createResponse response = _toolingClient.create(new SalesForceAPI.Tooling.createRequest(
                 new SalesForceAPI.Tooling.SessionHeader() { sessionId = _session.Id },
@@ -2360,16 +2359,16 @@ namespace SalesForceData
             // mark files that are checked out
             if (IsCheckoutEnabled())
             {
-                IDictionary<string, string> checkoutTable = GetCheckoutTable();
+                IDictionary<string, User> checkoutTable = GetCheckoutTable();
 
                 foreach (SourceFile file in result)
                 {
                     if (!String.IsNullOrEmpty(file.Id) && checkoutTable.ContainsKey(file.Id))
-                        file.CheckedOutById = checkoutTable[file.Id];
+                        file.CheckedOutBy = checkoutTable[file.Id];
 
                     foreach (SourceFile childFile in file.Children)
                         if (!String.IsNullOrEmpty(childFile.Id) && checkoutTable.ContainsKey(childFile.Id))
-                            childFile.CheckedOutById = checkoutTable[childFile.Id];
+                            childFile.CheckedOutBy = checkoutTable[childFile.Id];
                 }
             }
 
@@ -2612,10 +2611,28 @@ namespace SalesForceData
         public bool IsCheckoutEnabled()
         {
             foreach (SObjectTypePartial obj in DataDescribeGlobal())
+            {
                 if (obj.Name != null && obj.Name.EndsWith("Walli_Lock_Table__c"))
+                {
+                    _isCheckoutEnabled = true;
                     return true;
+                }
+            }
 
+            _isCheckoutEnabled = false;
             return false;
+        }
+
+        /// <summary>
+        /// Get the most recent value for IsCheckoutEnabled.
+        /// </summary>
+        /// <returns>The most recent value for IsCheckoutEnabled.</returns>
+        private bool IsCheckoutEnabledCached()
+        {
+            if (!_isCheckoutEnabled.HasValue)
+                _isCheckoutEnabled = IsCheckoutEnabled();
+
+            return _isCheckoutEnabled.Value;
         }
 
         /// <summary>
@@ -2660,30 +2677,30 @@ namespace SalesForceData
         /// Get the checkout table entries.
         /// </summary>
         /// <returns>The checkout table entries.</returns>
-        public IDictionary<string, string> GetCheckoutTable()
+        public IDictionary<string, User> GetCheckoutTable()
         {
-            Dictionary<string, string> result = new Dictionary<string, string>();
-            if (!IsCheckoutEnabled())
+            Dictionary<string, User> result = new Dictionary<string, User>();
+            if (!IsCheckoutEnabledCached())
                 return result;
 
             string tableName = "Walli_Lock_Table__c";
-            string entityColumnName = "Entity_Id__c";
-            string userColumnName = "User_Id__c";
+            string entityIdColumnName = "Entity_Id__c";
+            string userIdColumnName = "User_Id__c";
 
             string namespaceName = GetOrgInfo().organizationNamespace;
             if (!String.IsNullOrEmpty(namespaceName))
             {
                 tableName = String.Format("{0}__{1}", namespaceName, tableName);
-                entityColumnName = String.Format("{0}__{1}", namespaceName, entityColumnName);
-                userColumnName = String.Format("{0}__{1}", namespaceName, userColumnName);
+                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
+                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
             }
 
             DataSelectResult lockTable = DataSelectAll(String.Format("SELECT {0}, {1} FROM {2}", 
-                entityColumnName,
-                userColumnName,
+                entityIdColumnName,
+                userIdColumnName,
                 tableName));
             foreach (DataRow row in lockTable.Data.Rows)
-                result.Add(row[entityColumnName] as string, row[userColumnName] as string);
+                result.Add(row[entityIdColumnName] as string, new User(row[userIdColumnName] as string, null)); //TODO:
 
             return result;
         }
@@ -2722,8 +2739,8 @@ namespace SalesForceData
 
             DataRow row = table.NewRow();
             row[entityIdColumnName] = file.Id;
-            row[userIdColumnName] = GetUserId();
-            row[userNameColumnName] = GetUserName();
+            row[userIdColumnName] = User.Id;
+            row[userNameColumnName] = User.Name;
             table.Rows.Add(row);
 
             try
@@ -2768,7 +2785,7 @@ namespace SalesForceData
                 entityIdColumnName,
                 file.Id,
                 userIdColumnName,
-                GetUserId()));
+                User.Id));
 
             if (result.Data.Rows.Count < 1)
                 throw new Exception("Could not checkin file as it appears the file is not checked out to you.");

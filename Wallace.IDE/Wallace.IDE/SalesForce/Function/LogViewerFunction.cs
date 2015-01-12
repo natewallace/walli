@@ -149,7 +149,7 @@ namespace Wallace.IDE.SalesForce.Function
                     NewLogParametersWindow newDlg = new NewLogParametersWindow();
                     newDlg.Title = "New Log Parameters";
                     newDlg.SaveButtonText = "Create";
-                    newDlg.TracedEntity = String.Format("{0} (user)", App.Instance.SalesForceApp.CurrentProject.Client.GetUserName());
+                    newDlg.TracedEntity = String.Format("{0} (user)", App.Instance.SalesForceApp.CurrentProject.Client.User.Name);
                     newDlg.Scope = String.Empty;
                     newDlg.ExpirationDate = DateTime.Now.AddDays(1);
                     newDlg.LogLevelCode = LogLevel.Info;
@@ -161,7 +161,7 @@ namespace Wallace.IDE.SalesForce.Function
                         using (App.Wait("Creating Log Paramters"))
                         {
                             LogParameters log = App.Instance.SalesForceApp.CurrentProject.Client.CreateLogParameters(
-                                App.Instance.SalesForceApp.CurrentProject.Client.GetUserId(),
+                                App.Instance.SalesForceApp.CurrentProject.Client.User.Id,
                                 newDlg.TracedEntity,
                                 String.Empty,
                                 String.Empty,

@@ -183,7 +183,7 @@ namespace Wallace.IDE.SalesForce.UI
 
                 if (tabItemBasic.IsSelected)
                 {
-                    string userId = Project.Client.GetUserId();
+                    string userId = Project.Client.User.Id;
 
                     if (radioButtonBasicUserModifiedToday.IsChecked.Value)
                         ReportFilter = new ReportFilterUserDate(userId, DateTime.Today);

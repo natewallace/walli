@@ -414,7 +414,7 @@ namespace Wallace.IDE.SalesForce.UI
                 sb.Replace("{!date}", DateTime.Now.ToShortDateString());
                 sb.Replace("{!time}", DateTime.Now.ToShortTimeString());
                 if (App.Instance.SalesForceApp.CurrentProject != null)
-                    sb.Replace("{!author}", App.Instance.SalesForceApp.CurrentProject.Client.GetUserName());
+                    sb.Replace("{!author}", App.Instance.SalesForceApp.CurrentProject.Client.User.Name);
 
                 return sb.ToString();
             }

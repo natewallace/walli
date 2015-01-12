@@ -112,9 +112,9 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.AddProperty("Name", file.Name);
                 dlg.AddProperty("File", file.FileName);
                 dlg.AddProperty("State", file.State.ToString());
-                dlg.AddProperty("Changed by", file.ChangedByName);
+                dlg.AddProperty("Changed by", file.ChangedBy == null ? String.Empty : file.ChangedBy.Name);
                 dlg.AddProperty("Changed on", file.ChangedOn.ToLocalTime().ToString());
-                dlg.AddProperty("Created by", file.CreatedByName);                
+                dlg.AddProperty("Created by", file.CreatedBy == null ? String.Empty : file.CreatedBy.Name);                
                 dlg.AddProperty("Created on", file.CreatedOn.ToLocalTime().ToString());
 
                 App.ShowDialog(dlg);

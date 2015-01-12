@@ -59,8 +59,8 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void Init()
         {
-            if (!String.IsNullOrEmpty(SourceFile.CheckedOutById))
-                if (SourceFile.CheckedOutById == Project.Client.GetUserId())
+            if (SourceFile.CheckedOutBy != null)
+                if (SourceFile.CheckedOutBy.Equals(Project.Client.User))
                     Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "LockGreen.png");
                 else
                     Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "LockRed.png");

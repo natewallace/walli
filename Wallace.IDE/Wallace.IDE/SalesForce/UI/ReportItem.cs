@@ -107,7 +107,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         public string ChangedByName
         {
-            get { return File.ChangedByName; }
+            get { return File.ChangedBy == null ? String.Empty : File.ChangedBy.Name; }
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         public string CreatedByName
         {
-            get { return File.CreatedByName; }
+            get { return File.CreatedBy == null ? String.Empty : File.CreatedBy.Name; }
         }
 
         /// <summary>
