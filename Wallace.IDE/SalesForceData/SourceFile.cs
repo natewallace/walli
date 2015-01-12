@@ -252,6 +252,11 @@ namespace SalesForceData
             get { return String.Format("{0}-meta.xml", FileName); }
         }
 
+        /// <summary>
+        /// The user that has this file checked out or null if it isn't checked out.
+        /// </summary>
+        public string CheckedOutById { get; internal set; }
+
         #endregion
 
         #region Methods

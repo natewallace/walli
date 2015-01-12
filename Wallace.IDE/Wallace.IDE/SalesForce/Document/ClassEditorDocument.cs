@@ -21,6 +21,7 @@
  */
 
 using SalesForceData;
+using System;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Function;

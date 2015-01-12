@@ -2357,6 +2357,22 @@ namespace SalesForceData
                     result.AddRange(children);
             }
 
+            // mark files that are checked out
+            if (IsCheckoutEnabled())
+            {
+                IDictionary<string, string> checkoutTable = GetCheckoutTable();
+
+                foreach (SourceFile file in result)
+                {
+                    if (!String.IsNullOrEmpty(file.Id) && checkoutTable.ContainsKey(file.Id))
+                        file.CheckedOutById = checkoutTable[file.Id];
+
+                    foreach (SourceFile childFile in file.Children)
+                        if (!String.IsNullOrEmpty(childFile.Id) && checkoutTable.ContainsKey(childFile.Id))
+                            childFile.CheckedOutById = checkoutTable[childFile.Id];
+                }
+            }
+
             // get user names
             //HashSet<string> distinctUserIds = new HashSet<string>();
             //foreach (SourceFile parent in result)
@@ -2637,6 +2653,140 @@ namespace SalesForceData
                     throw new Exception("Could not change checkout system: " + result.ResultMessage);
 
                 complete = result.DeploymentComplete;
+            }
+        }
+
+        /// <summary>
+        /// Get the checkout table entries.
+        /// </summary>
+        /// <returns>The checkout table entries.</returns>
+        public IDictionary<string, string> GetCheckoutTable()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            if (!IsCheckoutEnabled())
+                return result;
+
+            string tableName = "Walli_Lock_Table__c";
+            string entityColumnName = "Entity_Id__c";
+            string userColumnName = "User_Id__c";
+
+            string namespaceName = GetOrgInfo().organizationNamespace;
+            if (!String.IsNullOrEmpty(namespaceName))
+            {
+                tableName = String.Format("{0}__{1}", namespaceName, tableName);
+                entityColumnName = String.Format("{0}__{1}", namespaceName, entityColumnName);
+                userColumnName = String.Format("{0}__{1}", namespaceName, userColumnName);
+            }
+
+            DataSelectResult lockTable = DataSelectAll(String.Format("SELECT {0}, {1} FROM {2}", 
+                entityColumnName,
+                userColumnName,
+                tableName));
+            foreach (DataRow row in lockTable.Data.Rows)
+                result.Add(row[entityColumnName] as string, row[userColumnName] as string);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checkout the given file.
+        /// </summary>
+        /// <param name="file">The file to checkout.</param>
+        public void CheckoutFile(SourceFile file)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+            if (String.IsNullOrEmpty(file.Id))
+                throw new ArgumentException("The file doesn't have an id.", "file.Id");
+
+            InitClients();
+
+            string tableName = "Walli_Lock_Table__c";
+            string entityIdColumnName = "Entity_Id__c";
+            string userIdColumnName = "User_Id__c";
+            string userNameColumnName = "User_Name__c";
+
+            string namespaceName = GetOrgInfo().organizationNamespace;
+            if (!String.IsNullOrEmpty(namespaceName))
+            {
+                tableName = String.Format("{0}__{1}", namespaceName, tableName);
+                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
+                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
+                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
+            }
+
+            DataTable table = new DataTable(tableName);
+            table.Columns.Add(entityIdColumnName);
+            table.Columns.Add(userIdColumnName);
+            table.Columns.Add(userNameColumnName);
+
+            DataRow row = table.NewRow();
+            row[entityIdColumnName] = file.Id;
+            row[userIdColumnName] = GetUserId();
+            row[userNameColumnName] = GetUserName();
+            table.Rows.Add(row);
+
+            try
+            {
+                DataInsert(table);
+            }
+            catch (Exception err)
+            {
+                throw new Exception("Could not checkout file: " + err.Message, err);
+            }
+        }
+
+        /// <summary>
+        /// Checkin the given file.
+        /// </summary>
+        /// <param name="file">The file to checkin.</param>
+        public void CheckinFile(SourceFile file)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+            if (String.IsNullOrEmpty(file.Id))
+                throw new ArgumentException("The file doesn't have an id.", "file.Id");
+
+            InitClients();
+
+            string tableName = "Walli_Lock_Table__c";
+            string entityIdColumnName = "Entity_Id__c";
+            string userIdColumnName = "User_Id__c";
+            string userNameColumnName = "User_Name__c";
+
+            string namespaceName = GetOrgInfo().organizationNamespace;
+            if (!String.IsNullOrEmpty(namespaceName))
+            {
+                tableName = String.Format("{0}__{1}", namespaceName, tableName);
+                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
+                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
+                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
+            }
+
+            DataSelectResult result = DataSelectAll(String.Format("SELECT Id FROM {0} WHERE {1} = '{2}' AND {3} = '{4}'",
+                tableName,
+                entityIdColumnName,
+                file.Id,
+                userIdColumnName,
+                GetUserId()));
+
+            if (result.Data.Rows.Count < 1)
+                throw new Exception("Could not checkin file as it appears the file is not checked out to you.");
+
+            DataTable table = new DataTable(tableName);
+            table.Columns.Add("Id");
+
+            DataRow row = table.NewRow();
+            row["Id"] = result.Data.Rows[0]["Id"];
+            table.Rows.Add(row);
+
+            try
+            {
+                DataDelete(table);
+            }
+            catch (Exception err)
+            {
+                throw new Exception("Could not checkin file: " + err.Message, err);
             }
         }
 

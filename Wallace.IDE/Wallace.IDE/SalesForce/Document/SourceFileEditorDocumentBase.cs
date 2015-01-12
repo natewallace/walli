@@ -80,6 +80,9 @@ namespace Wallace.IDE.SalesForce.Document
             View.TextChanged += View_TextChanged;
             View.PreviewKeyDown += View_PreviewKeyDown;
 
+            if (!String.IsNullOrEmpty(file.CheckedOutById) && file.CheckedOutById != project.Client.GetUserId())
+                View.IsReadOnly = true;
+
             OnViewReady();
         }
 

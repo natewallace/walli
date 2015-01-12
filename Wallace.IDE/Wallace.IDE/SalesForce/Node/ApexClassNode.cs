@@ -59,7 +59,13 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void Init()
         {
-            Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentClass.png");
+            if (!String.IsNullOrEmpty(SourceFile.CheckedOutById))
+                if (SourceFile.CheckedOutById == Project.Client.GetUserId())
+                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "LockGreen.png");
+                else
+                    Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "LockRed.png");
+            else
+                Presenter.Header = VisualHelper.CreateIconHeader(SourceFile.Name, "DocumentClass.png");
         }
 
         /// <summary>
