@@ -50,6 +50,25 @@ namespace SalesForceLanguage.Apex
         private static List<Symbol> _genericCompletions;
 
         /// <summary>
+        /// Holds annotation symbols.
+        /// </summary>
+        private static Symbol[] _annotationCompletions = new Symbol[]
+        {
+            new Annotation("deprecated"),
+            new Annotation("future"),
+            new Annotation("httpDelete"),
+            new Annotation("httpGet"),
+            new Annotation("httpPatch"),
+            new Annotation("httpPost"),
+            new Annotation("httpPut"),
+            new Annotation("isTest"),
+            new Annotation("readOnly"),
+            new Annotation("remoteAction"),
+            new Annotation("restsResource"),
+            new Annotation("testVisible")
+        };
+
+        /// <summary>
         /// Tokens for which code completions should be ignored.
         /// </summary>
         private static Tokens[] _tokensToIgnore = new Tokens[] 
@@ -1736,6 +1755,21 @@ namespace SalesForceLanguage.Apex
 
             foreach (string interfaceName in symbolTable.Interfaces)
                 GetInterfaceMethods(_language.GetSymbols(interfaceName), result);
+        }
+
+        /// <summary>
+        /// Get code completions for annotations.
+        /// </summary>
+        /// <param name="text">The text stream to process.</param>
+        /// <param name="className">The name of the class.</param>
+        /// <param name="position">The position in the class text for the code completion.</param>
+        /// <returns>Code completions for annotations.</returns>
+        public Symbol[] GetCodeCompletionsAnnotation(Stream text, string className, TextPosition position)
+        {
+            if (IsInToken(position, text, _tokensToIgnore))
+                return new Symbol[0];
+
+            return _annotationCompletions;
         }
 
         #endregion

@@ -171,6 +171,10 @@ namespace Wallace.IDE.SalesForce.UI
                         return "Keyword.png";
                 }
             }
+            else if (symbol is Annotation)
+            {
+                return "Annotation.png";
+            }
             else
                 return null;
         }

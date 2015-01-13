@@ -1170,6 +1170,14 @@ namespace Wallace.IDE.SalesForce.UI
                             _className,
                             new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)));
                     }
+                    // calculate and show annotations
+                    else if (e.Text == "@")
+                    {
+                        ShowCodeCompletions(LanguageManager.Completion.GetCodeCompletionsAnnotation(
+                            new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset - 1),
+                            _className,
+                            new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)));
+                    }
                     // calculate and show insights
                     else if (e.Text == "(")
                     {

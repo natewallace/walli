@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Apex\CodeModel\Annotation.cs" />
     <Compile Include="Apex\CodeModel\Constructor.cs" />
     <Compile Include="Apex\CodeModel\Field.cs" />
     <Compile Include="Apex\CodeModel\Keyword.cs" />
