@@ -77,6 +77,12 @@ namespace Wallace.IDE.SalesForce.Node
             {
                 using (App.Wait("Opening page..."))
                 {
+                    if (Project.IsCheckoutEnabled)
+                    {
+                        Project.Client.RefreshCheckOutStatus(SourceFile);
+                        UpdateHeader();
+                    }
+
                     VisualForceEditorDocument pageDocument = new VisualForceEditorDocument(Project, SourceFile);
                     App.Instance.Content.OpenDocument(pageDocument);
                 }

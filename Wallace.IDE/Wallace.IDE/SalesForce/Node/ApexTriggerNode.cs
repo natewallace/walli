@@ -77,6 +77,12 @@ namespace Wallace.IDE.SalesForce.Node
             {
                 using (App.Wait("Opening trigger..."))
                 {
+                    if (Project.IsCheckoutEnabled)
+                    {
+                        Project.Client.RefreshCheckOutStatus(SourceFile);
+                        UpdateHeader();
+                    }
+
                     TriggerEditorDocument triggerDocument = new TriggerEditorDocument(Project, SourceFile);
                     App.Instance.Content.OpenDocument(triggerDocument);
                 }

@@ -77,6 +77,12 @@ namespace Wallace.IDE.SalesForce.Node
             {
                 using (App.Wait("Opening class..."))
                 {
+                    if (Project.IsCheckoutEnabled)
+                    {
+                        Project.Client.RefreshCheckOutStatus(SourceFile);
+                        UpdateHeader();
+                    }
+
                     ClassEditorDocument apexDocument = new ClassEditorDocument(Project, SourceFile);
                     App.Instance.Content.OpenDocument(apexDocument);
                 }

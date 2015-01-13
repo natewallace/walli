@@ -78,8 +78,8 @@ namespace Wallace.IDE.SalesForce.Function
             if (project != null)
             {
                 string text = project.IsCheckoutEnabled ?
-                    "Disabling the check out system will impact all Walli users of the organization.  Are you sure you want to proceed?" :
-                    "Enabling the check out system will impact all Walli users of the organization.  Are you sure you want to proceed?";
+                    "Disabling the check out system will delete a previously created custom object and impact all Walli users of the organization.  Are you sure you want to proceed?" :
+                    "Enabling the check out system requires a new custom object be created and will impact all Walli users of the organization.  Are you sure you want to proceed?";
 
                 if (App.MessageUser(text,
                                     "Check out system",

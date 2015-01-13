@@ -2752,6 +2752,49 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Update the checkout status of the given file.
+        /// </summary>
+        /// <param name="file">The file to update the checkout status for.</param>
+        public void RefreshCheckOutStatus(SourceFile file)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+            if (String.IsNullOrEmpty(file.Id))
+                throw new ArgumentException("The file doesn't have an id.", "file.Id");
+
+            if (!IsCheckoutEnabledCached())
+                return;
+
+            string tableName = "Walli_Lock_Table__c";
+            string entityIdColumnName = "Entity_Id__c";
+            string userIdColumnName = "User_Id__c";
+            string userNameColumnName = "User_Name__c";
+
+            string namespaceName = GetOrgInfo().organizationNamespace;
+            if (!String.IsNullOrEmpty(namespaceName))
+            {
+                tableName = String.Format("{0}__{1}", namespaceName, tableName);
+                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
+                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
+                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
+            }
+
+            DataSelectResult lockTable = DataSelectAll(String.Format("SELECT {0}, {1}, {2} FROM {3} WHERE {0} = '{4}'",
+                entityIdColumnName,
+                userIdColumnName,
+                userNameColumnName,
+                tableName,
+                file.Id));
+
+            if (lockTable.Data.Rows.Count == 1)
+                file.CheckedOutBy = new User(
+                    lockTable.Data.Rows[0][userIdColumnName] as string,
+                    lockTable.Data.Rows[0][userNameColumnName] as string);
+            else
+                file.CheckedOutBy = null;
+        }
+
+        /// <summary>
         /// Checkout the given file.
         /// </summary>
         /// <param name="file">The file to checkout.</param>
