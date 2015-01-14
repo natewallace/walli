@@ -73,6 +73,10 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public void LoadFunctions()
         {
+            //
+            // SYSTEM
+            //
+
             NewProjectFunction newLocalProject = new NewProjectFunction();
             App.Instance.Menu.AddFunction(newLocalProject, "SYSTEM", 0);
             App.Instance.ToolBar.AddFunction(newLocalProject);
@@ -86,6 +90,10 @@ namespace Wallace.IDE.SalesForce.Framework
 
             DeleteProjectFunction deleteProject = new DeleteProjectFunction();
             App.Instance.Menu.AddFunction(deleteProject, "SYSTEM", 3);
+
+            //
+            // PROJECT | New
+            //
 
             App.Instance.Menu.AddFunction(new FunctionGrouping("NEWSALESFORCE", "New", true), "PROJECT");
 
@@ -108,6 +116,23 @@ namespace Wallace.IDE.SalesForce.Framework
             NewManifestFunction newManifestFunction = new NewManifestFunction();
             App.Instance.Menu.AddFunction(newManifestFunction, "NEWSALESFORCE");
             App.Instance.RegisterFunction(newManifestFunction);
+
+            //
+            // PROJECT | Team
+            //
+
+            App.Instance.Menu.AddFunction(new FunctionGrouping("TEAMSALESFORCE", "Team", true), "PROJECT");
+
+            CheckOutSystemFunction checkoutSystemFunction = new CheckOutSystemFunction();
+            App.Instance.Menu.AddFunction(checkoutSystemFunction, "TEAMSALESFORCE");
+
+            CheckOutFileFunction checkoutFileFunction = new CheckOutFileFunction();
+            App.Instance.Menu.AddFunction(checkoutFileFunction, "TEAMSALESFORCE");
+            App.Instance.RegisterFunction(checkoutFileFunction);
+
+            //
+            // PROJECT | Open Web Browser
+            //
 
             App.Instance.Menu.AddFunction(new FunctionGrouping("Open Web Browser", "Open Web Browser", true), "PROJECT");
             if (ClientBrowser.GetInstalledBrowsers().Length == 0)
@@ -149,8 +174,8 @@ namespace Wallace.IDE.SalesForce.Framework
             ReloadSymbolsFunction reloadSymbols = new ReloadSymbolsFunction();
             App.Instance.Menu.AddFunction(reloadSymbols, "PROJECT");
 
-            CheckOutSystemFunction checkoutSystemFunction = new CheckOutSystemFunction();
-            App.Instance.Menu.AddFunction(checkoutSystemFunction, "PROJECT");
+            PropertiesFunction propertiesSourceFileFunction = new PropertiesFunction();
+            App.Instance.Menu.AddFunction(new FunctionSeparator(propertiesSourceFileFunction), "PROJECT");
 
             DeleteSourceFileFunction deleteSourceFileFunction = new DeleteSourceFileFunction();
             App.Instance.Menu.AddFunction(deleteSourceFileFunction, "PROJECT");
@@ -167,17 +192,16 @@ namespace Wallace.IDE.SalesForce.Framework
             RefreshFolderFunction refreshFolderFunction = new RefreshFolderFunction();
             App.Instance.RegisterFunction(refreshFolderFunction);
 
-            PropertiesFunction propertiesSourceFileFunction = new PropertiesFunction();
             App.Instance.Menu.AddFunction(propertiesSourceFileFunction, "PROJECT");
-            App.Instance.RegisterFunction(propertiesSourceFileFunction);
-
-            CheckOutFileFunction checkoutFileFunction = new CheckOutFileFunction();
-            App.Instance.Menu.AddFunction(checkoutFileFunction, "PROJECT");
-            App.Instance.RegisterFunction(checkoutFileFunction);
+            App.Instance.RegisterFunction(propertiesSourceFileFunction);            
 
             //ViewCheckpointsFunction viewCheckpointsFunction = new ViewCheckpointsFunction();
             //App.Instance.Menu.AddFunction(viewCheckpointsFunction, "PROJECT");
             //App.Instance.ToolBar.AddFunction(viewCheckpointsFunction);
+
+            //
+            // DOCUMENT
+            //
 
             ExecuteDataQueryFunction executeQueryFunction = new ExecuteDataQueryFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(executeQueryFunction));
@@ -331,6 +355,10 @@ namespace Wallace.IDE.SalesForce.Framework
 
             CloseAllDocumentsFunction closeAllDocumentsFunction = new CloseAllDocumentsFunction();
             App.Instance.Menu.AddFunction(closeAllDocumentsFunction, "DOCUMENT");
+
+            //
+            // HELP
+            //
 
             ApexDocumentationFunction apexDocFunction = new ApexDocumentationFunction();
             App.Instance.Menu.AddFunction(apexDocFunction, "HELP", 0);
