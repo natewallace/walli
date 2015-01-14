@@ -118,29 +118,46 @@ namespace Wallace.IDE
         /// <param name="e">Arguments passed with the event.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            try
+            {
+                base.OnStartup(e);
 
-            Instance = this;
-            _window = new MainWindow();
-            _window.Closing += window_Closing;
+                if (Wallace.IDE.Properties.Settings.Default.UpgradeRequired)
+                {
+                    Wallace.IDE.Properties.Settings.Default.Upgrade();
+                    Wallace.IDE.Properties.Settings.Default.UpgradeRequired = false;
+                    Wallace.IDE.Properties.Settings.Default.Save();
+                }
 
-            _window.WindowState = Wallace.IDE.Properties.Settings.Default.LastWindowState;
+                Instance = this;
+                _window = new MainWindow();
+                _window.Closing += window_Closing;
 
-            _functions = new Dictionary<Type, IFunction>();
+                _window.WindowState = Wallace.IDE.Properties.Settings.Default.LastWindowState;
 
-            Menu = new MenuFunctionManager(_window.MainMenu);
-            ToolBar = new ToolBarFunctionManager(_window.MainToolBar);
-            Navigation = new TabTreeNodeManager(_window.Nodes);
-            Content = new TabControlDocumentManager(_window.Documents);
-            Settings = new SettingsManager();
-            SalesForceApp = new SalesForceApplication();
+                _functions = new Dictionary<Type, IFunction>();
 
-            Navigation.ActiveNodeChanged += Navigation_ActiveNodeChanged;
-            Content.ActiveDocumentChanged += Content_ActiveDocumentChanged;
+                Menu = new MenuFunctionManager(_window.MainMenu);
+                ToolBar = new ToolBarFunctionManager(_window.MainToolBar);
+                Navigation = new TabTreeNodeManager(_window.Nodes);
+                Content = new TabControlDocumentManager(_window.Documents);
+                Settings = new SettingsManager();
+                SalesForceApp = new SalesForceApplication();
 
-            InitializeFunctions();
+                Navigation.ActiveNodeChanged += Navigation_ActiveNodeChanged;
+                Content.ActiveDocumentChanged += Content_ActiveDocumentChanged;
 
-            _window.Show();
+                InitializeFunctions();
+
+                _window.Show();
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+
+                if (Application.Current != null)
+                    Application.Current.Shutdown();
+            }
         }
 
         /// <summary>
@@ -185,7 +202,7 @@ namespace Wallace.IDE
             if (window == null)
                 throw new ArgumentNullException("window");
 
-            if (Instance._window.IsLoaded)
+            if (Instance != null && Instance._window != null && Instance._window.IsLoaded)
             {
                 window.Owner = Instance._window;
                 window.ShowInTaskbar = false;
