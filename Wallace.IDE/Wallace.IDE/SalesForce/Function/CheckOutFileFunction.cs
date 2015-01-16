@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using SalesForceData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,7 @@ using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Node;
+using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
 {
@@ -130,25 +132,87 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null && project.IsCheckoutEnabled)
             {
-                using (App.Wait("Updating checkout state..."))
+                // idenitfy operation being performed
+                bool isCheckIn = false;
+                bool isCheckOut = false;
+
+                SourceFileNode node = GetSelectedNode();
+                if (node != null && node.SourceFile.Id != null)
                 {
-                    SourceFileNode node = GetSelectedNode();
-                    if (node != null && node.SourceFile.Id != null)
+                    if (node.SourceFile.CheckedOutBy != null)
+                        isCheckIn = true;
+                    else
+                        isCheckOut = true;
+                }
+
+                // do a checkin
+                if (isCheckIn)
+                {
+                    // get all checkouts
+                    IDictionary<string, CheckoutFile> checkoutTable = null;
+                    using (App.Wait("Getting check outs."))
+                        checkoutTable = project.Client.GetCheckoutTable();
+
+                    // filter checkouts to current user
+                    CheckoutFile selectedCheckoutFile = null;
+                    List<CheckoutFile> userCheckouts = new List<CheckoutFile>();
+                    foreach (KeyValuePair<string, CheckoutFile> kvp in checkoutTable)
                     {
-                        if (node.SourceFile.CheckedOutBy != null)
+                        if (project.Client.User.Equals(kvp.Value.User))
                         {
-                            if (node.SourceFile.CheckedOutBy.Equals(project.Client.User))
-                                project.Client.CheckInFile(node.SourceFile);
-                        }
-                        else
-                        {
-                            project.Client.CheckOutFile(node.SourceFile);
+                            userCheckouts.Add(kvp.Value);
+                            if (kvp.Value.EntityId == node.SourceFile.Id)
+                                selectedCheckoutFile = kvp.Value;
                         }
                     }
 
-                    node.UpdateHeader();
-                    App.Instance.UpdateWorkspaces();
+                    // show dialog to collect user input
+                    CheckInWindow dlg = new CheckInWindow();
+                    dlg.Files = userCheckouts.ToArray();
+                    if (selectedCheckoutFile != null)
+                        dlg.SelectedFiles = new CheckoutFile[] { selectedCheckoutFile };
+
+                    if (App.ShowDialog(dlg))
+                    {
+                        using (App.Wait("Checking in files."))
+                        {
+                            // commit to repository
+                            if (project.Repository.IsValid)
+                            {
+                                //TODO:
+                            }
+
+                            // commit to salesforce
+                            project.Client.CheckInFiles(dlg.SelectedFiles);
+
+                            // update UI
+                            HashSet<string> ids = new HashSet<string>();
+                            foreach (CheckoutFile f in dlg.SelectedFiles)
+                                ids.Add(f.EntityId);
+
+                            IEnumerable<SourceFileNode> fileNodes = App.Instance.Navigation.GetNodes<SourceFileNode>();
+                            foreach (SourceFileNode fileNode in fileNodes)
+                            {
+                                if (ids.Contains(fileNode.SourceFile.Id))
+                                {
+                                    fileNode.SourceFile.CheckedOutBy = null;
+                                    fileNode.UpdateHeader();
+                                }
+                            }
+                        }
+                    }
                 }
+                // do a checkout
+                else if (isCheckOut)
+                {
+                    using (App.Wait("Checking out file."))
+                    {
+                        project.Client.CheckOutFile(node.SourceFile);
+                    }
+                }
+
+                node.UpdateHeader();
+                App.Instance.UpdateWorkspaces();
             }
         }
 

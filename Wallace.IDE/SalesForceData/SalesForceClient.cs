@@ -2402,16 +2402,16 @@ namespace SalesForceData
             // mark files that are checked out
             if (IsCheckoutEnabled())
             {
-                IDictionary<string, User> checkoutTable = GetCheckoutTable();
+                IDictionary<string, CheckoutFile> checkoutTable = GetCheckoutTable();
 
                 foreach (SourceFile file in result)
                 {
                     if (!String.IsNullOrEmpty(file.Id) && checkoutTable.ContainsKey(file.Id))
-                        file.CheckedOutBy = checkoutTable[file.Id];
+                        file.CheckedOutBy = checkoutTable[file.Id].User;
 
                     foreach (SourceFile childFile in file.Children)
                         if (!String.IsNullOrEmpty(childFile.Id) && checkoutTable.ContainsKey(childFile.Id))
-                            childFile.CheckedOutBy = checkoutTable[childFile.Id];
+                            childFile.CheckedOutBy = checkoutTable[childFile.Id].User;
                 }
             }
 
@@ -2719,10 +2719,10 @@ namespace SalesForceData
         /// <summary>
         /// Get the checkout table entries.
         /// </summary>
-        /// <returns>The checkout table entries.</returns>
-        public IDictionary<string, User> GetCheckoutTable()
+        /// <returns>The checkout table entries with the file id as a key.</returns>
+        public IDictionary<string, CheckoutFile> GetCheckoutTable()
         {
-            Dictionary<string, User> result = new Dictionary<string, User>();
+            Dictionary<string, CheckoutFile> result = new Dictionary<string, CheckoutFile>();
             if (!IsCheckoutEnabledCached())
                 return result;
 
@@ -2746,7 +2746,10 @@ namespace SalesForceData
                 userNameColumnName,
                 tableName));
             foreach (DataRow row in lockTable.Data.Rows)
-                result.Add(row[entityIdColumnName] as string, new User(row[userIdColumnName] as string, row[userNameColumnName] as string));
+                result.Add(row[entityIdColumnName] as string, 
+                           new CheckoutFile(row[entityIdColumnName] as string,
+                                            row[userIdColumnName] as string, 
+                                            row[userNameColumnName] as string));
 
             return result;
         }
@@ -2826,15 +2829,13 @@ namespace SalesForceData
             table.Columns.Add(userIdColumnName);
             table.Columns.Add(userNameColumnName);
 
-            // concat user names that are too long
-            string userName = User.Name ?? String.Empty;
-            if (userName.Length > 128)
-                userName = userName.Substring(0, 128);
+            // create checkout file
+            CheckoutFile checkout = new CheckoutFile(file.Id, User, file.Name);
 
             DataRow row = table.NewRow();
-            row[entityIdColumnName] = file.Id;
-            row[userIdColumnName] = User.Id;
-            row[userNameColumnName] = userName;
+            row[entityIdColumnName] = checkout.EntityId;
+            row[userIdColumnName] = checkout.User.Id;
+            row[userNameColumnName] = checkout.CombinedName;
             table.Rows.Add(row);
 
             try
@@ -2847,6 +2848,50 @@ namespace SalesForceData
             }
 
             file.CheckedOutBy = User;
+        }
+
+        /// <summary>
+        /// Check in the given files.
+        /// </summary>
+        /// <param name="files">The files to checkin.</param>
+        public void CheckInFiles(IEnumerable<CheckoutFile> files)
+        {
+            if (files == null)
+                throw new ArgumentNullException("files");
+
+            InitClients();
+
+            string tableName = "Walli_Lock_Table__c";
+            string entityIdColumnName = "Entity_Id__c";
+            string userIdColumnName = "User_Id__c";
+            string userNameColumnName = "User_Name__c";
+
+            string namespaceName = GetOrgInfo().organizationNamespace;
+            if (!String.IsNullOrEmpty(namespaceName))
+            {
+                tableName = String.Format("{0}__{1}", namespaceName, tableName);
+                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
+                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
+                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
+            }
+
+            List<string> ids = new List<string>();
+            foreach (CheckoutFile file in files)
+                ids.Add(file.EntityId);
+
+            DataSelectResult result = DataSelectAll(String.Format("SELECT Id FROM {0} WHERE {1} IN ('{2}')",
+                tableName,
+                entityIdColumnName,
+                String.Join("','", ids)));
+
+            try
+            {
+                DataDelete(result.Data);
+            }
+            catch (Exception err)
+            {
+                throw new Exception("Could not checkin file: " + err.Message, err);
+            }
         }
 
         /// <summary>

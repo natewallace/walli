@@ -189,7 +189,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             try
             {

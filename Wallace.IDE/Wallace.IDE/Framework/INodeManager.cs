@@ -21,6 +21,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Wallace.IDE.Framework
@@ -56,6 +57,13 @@ namespace Wallace.IDE.Framework
         /// <typeparam name="TType">The type of node to get.</typeparam>
         /// <returns>The first node found of the given type or null if one is not found.</returns>
         TType GetNode<TType>() where TType : INode;
+
+        /// <summary>
+        /// Get all nodes found with the given type.
+        /// </summary>
+        /// <typeparam name="TType">The type of node to get.</typeparam>
+        /// <returns>All nodes found with the given type.</returns>
+        IEnumerable<TType> GetNodes<TType>() where TType : INode;
 
         /// <summary>
         /// Get all nodes that represent the given entity.

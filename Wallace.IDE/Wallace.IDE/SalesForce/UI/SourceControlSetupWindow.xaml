@@ -103,7 +103,7 @@
                 </Button>
                 <Button Margin="5"
                         Padding="10,5,10,5"
-                        Click="Button_Click">
+                        Click="buttonCancel_Click">
                     Cancel
                 </Button>
             </StackPanel>

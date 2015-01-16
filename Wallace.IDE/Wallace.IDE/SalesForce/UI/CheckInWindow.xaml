@@ -1,0 +1,75 @@
+﻿<Window x:Class="Wallace.IDE.SalesForce.UI.CheckInWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Check in files" 
+        Height="450" 
+        Width="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Style="{StaticResource ChromeWindowStyle}"
+        Background="{StaticResource CaptionBackgroundBrush}">
+    <Border Padding="10,5,20,5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0"
+                       FontWeight="Bold"
+                       Text="Comment:" />
+            
+            <TextBox x:Name="textBoxComment"
+                     Grid.Row="1"
+                     FontFamily="Consolas"
+                     FontSize="10pt"
+                     Height="50px"
+                     AcceptsReturn="True"
+                     AcceptsTab="True"
+                     TextChanged="textBoxComment_TextChanged" />
+
+            <DockPanel Grid.Row="2"
+                       Margin="0,10,0,0"                       
+                       LastChildFill="True">
+                <StackPanel Orientation="Horizontal"
+                            DockPanel.Dock="Right">
+                    <Button Click="buttonSelectAll_Click">Select All</Button>
+                    <TextBlock Text="/" 
+                               VerticalAlignment="Center"/>
+                    <Button Click="buttonSelectNone_Click">Select None</Button>
+                </StackPanel>
+                
+                <TextBlock FontWeight="Bold"      
+                           VerticalAlignment="Bottom"
+                           Text="Files:" />
+            </DockPanel>
+
+            <ListBox x:Name="listBoxFiles"
+                     Grid.Row="3" 
+                     CheckBox.Checked="checkBox_CheckChange" 
+                     CheckBox.Unchecked="checkBox_CheckChange" />
+
+            <StackPanel Grid.Row="4"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right">
+                <Button x:Name="buttonCommit"
+                        Margin="5"
+                        Padding="10,5,10,5"
+                        IsEnabled="False"
+                        Click="buttonCommit_Click">
+                    Commit
+                </Button>
+                <Button Margin="5"
+                        Padding="10,5,10,5"
+                        Click="buttonCancel_Click">
+                    Cancel
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

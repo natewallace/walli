@@ -211,6 +211,20 @@ namespace Wallace.IDE.Framework.UI
         }
 
         /// <summary>
+        /// Get all nodes found with the given type.
+        /// </summary>
+        /// <typeparam name="TType">The type of node to get.</typeparam>
+        /// <returns>All nodes found with the given type.</returns>
+        public IEnumerable<TType> GetNodes<TType>() where TType : INode
+        {
+            List<TType> result = new List<TType>();
+            foreach (TabItem item in _tabControl.Items)
+                result.AddRange((item.Tag as INodeManager).GetNodes<TType>());
+
+            return result;
+        }
+
+        /// <summary>
         /// Get the node for the given entity.
         /// </summary>
         /// <param name="entity">The entity to get the corresponding node for.</param>

@@ -246,7 +246,7 @@ namespace SalesForceData
         /// <summary>
         /// The user that has this file checked out or null if it isn't checked out.
         /// </summary>
-        public User CheckedOutBy { get; internal set; }
+        public User CheckedOutBy { get; set; }
 
         #endregion
 

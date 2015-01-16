@@ -819,6 +819,51 @@ namespace Wallace.IDE.Framework.UI
         }
 
         /// <summary>
+        /// Get all nodes found with the given type.
+        /// </summary>
+        /// <typeparam name="TType">The type of node to get.</typeparam>
+        /// <returns>All nodes found with the given type.</returns>
+        public IEnumerable<TType> GetNodes<TType>() where TType : INode
+        {
+            List<TType> result = new List<TType>();
+            GetItems<TType>(null, result);
+            return result;
+        }
+
+        /// <summary>
+        /// Get the items for the given node type.
+        /// </summary>
+        /// <typeparam name="TType">The type of nodes to get.</typeparam>
+        /// <param name="item">The current item being searched.  If null the search starts at the root level.</param>
+        /// <param name="result">The list to add results to.</param>
+        private void GetItems<TType>(TreeViewItem item, List<TType> result) where TType : INode
+        {
+            if (item == null)
+            {
+                foreach (object child in Host.Items)
+                {
+                    if (child is TreeViewItem)
+                    {
+                        GetItems<TType>(child as TreeViewItem, result);
+                    }
+                }
+            }
+            else
+            {
+                if (item.Tag is TType)
+                    result.Add((TType)item.Tag);
+
+                foreach (object child in item.Items)
+                {
+                    if (child is TreeViewItem)
+                    {
+                        GetItems<TType>(child as TreeViewItem, result);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Get all nodes that represent the given entity.
         /// </summary>
         /// <param name="entity">The entity to get nodes for.</param>
