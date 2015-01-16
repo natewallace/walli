@@ -110,6 +110,10 @@ namespace Wallace.IDE.SalesForce.Function
                 SourceFile file = item as SourceFile;
                 PropertiesWindow dlg = new PropertiesWindow();
                 dlg.AddProperty("Name", file.Name);
+
+                if (!String.IsNullOrWhiteSpace(file.Id))
+                    dlg.AddProperty("Id", file.Id);
+
                 dlg.AddProperty("File", file.FileName);
                 dlg.AddProperty("State", file.State.ToString());
                 dlg.AddProperty("Changed by", file.ChangedBy == null ? String.Empty : file.ChangedBy.Name);
