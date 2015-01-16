@@ -281,6 +281,17 @@ namespace SalesForceData
         /// <param name="overwrite">If set to true, files will be overwritten.</param>
         public void ExtractTo(string path, bool overwrite)
         {
+            ExtractTo(path, overwrite, true);
+        }
+
+        /// <summary>
+        /// Extract the contents of this package to the given path.
+        /// </summary>
+        /// <param name="path">The path to extract to.</param>
+        /// <param name="overwrite">If set to true, files will be overwritten.</param>
+        /// <param name="includeManifest">If true, the manifest will be extracted as well.</param>
+        public void ExtractTo(string path, bool overwrite, bool includeManifest)
+        {
             if (!overwrite)
             {
                 ZipFile.ExtractToDirectory(FileName, path);
@@ -292,6 +303,11 @@ namespace SalesForceData
                     foreach (ZipArchiveEntry entry in archive.Entries)
                     {
                         string extractName = Path.Combine(path, entry.FullName);
+                        if (!includeManifest &&
+                            (String.Compare(extractName, "package.xml", true) == 0 ||
+                            String.Compare(extractName, "destructiveChanges.xml", true) == 0))
+                            continue;
+
                         string folderName = Path.GetDirectoryName(extractName);
                         if (!Directory.Exists(folderName))
                             Directory.CreateDirectory(folderName);

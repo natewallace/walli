@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wallace.IDE", "Wallace.IDE\Wallace.IDE.csproj", "{C7DF8A83-463C-4F7C-BF5B-F0106B922B47}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{8E02E6EA-815D-4C89-82D5-1380020F210F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesForceData", "SalesForceData\SalesForceData.csproj", "{F542F46A-3E41-405D-83D1-DF675C810673}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CF65C6C6-2942-4E68-B529-B142EB36D2AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesForceLanguage", "SalesForceLanguage\SalesForceLanguage.csproj", "{DE715101-F43E-4F55-9957-310F36534F28}"
 EndProject

@@ -123,8 +123,8 @@ namespace Wallace.IDE.SalesForce.Framework
 
             App.Instance.Menu.AddFunction(new FunctionGrouping("TEAMSALESFORCE", "Team", true), "PROJECT");
 
-            CheckOutSystemFunction checkoutSystemFunction = new CheckOutSystemFunction();
-            App.Instance.Menu.AddFunction(checkoutSystemFunction, "TEAMSALESFORCE");
+            ConfigureSourceControlFunction sourceControlFunction = new ConfigureSourceControlFunction();
+            App.Instance.Menu.AddFunction(sourceControlFunction, "TEAMSALESFORCE");
 
             CheckOutFileFunction checkoutFileFunction = new CheckOutFileFunction();
             App.Instance.Menu.AddFunction(checkoutFileFunction, "TEAMSALESFORCE");

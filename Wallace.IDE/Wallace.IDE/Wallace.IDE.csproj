@@ -40,6 +40,10 @@
     <Reference Include="ICSharpCode.AvalonEdit">
       <HintPath>..\packages\AvalonEdit.4.4.2.9744\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
+    <Reference Include="LibGit2Sharp, Version=0.21.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\LibGit2Sharp.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -107,6 +111,7 @@
     <Compile Include="SalesForce\Framework\ReportFilterUserDate.cs" />
     <Compile Include="SalesForce\Framework\SalesForceApplication.cs" />
     <Compile Include="SalesForce\Framework\SecureStringUtility.cs" />
+    <Compile Include="SalesForce\Framework\SimpleRepository.cs" />
     <Compile Include="SalesForce\Function\AddCommentFunction.cs" />
     <Compile Include="SalesForce\Function\AddFileToManifestFunction.cs" />
     <Compile Include="SalesForce\Function\ApexDocumentationFunction.cs" />
@@ -117,6 +122,7 @@
     <Compile Include="SalesForce\Function\CloseDocumentFunction.cs" />
     <Compile Include="SalesForce\Function\CloseProjectFunction.cs" />
     <Compile Include="SalesForce\Function\CommitDataChangesFunction.cs" />
+    <Compile Include="SalesForce\Function\ConfigureSourceControlFunction.cs" />
     <Compile Include="SalesForce\Function\CopyPackageDeployResultsFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteAllLogsFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteLogFunction.cs" />
@@ -281,6 +287,9 @@
     <Compile Include="SalesForce\Node\SourceFileFolderNode.cs" />
     <Compile Include="SalesForce\UI\SelectValueWindow.xaml.cs">
       <DependentUpon>SelectValueWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\SourceControlSetupWindow.xaml.cs">
+      <DependentUpon>SourceControlSetupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\SourceFileEditorControl.xaml.cs">
       <DependentUpon>SourceFileEditorControl.xaml</DependentUpon>
@@ -472,6 +481,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\SelectValueWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\SourceControlSetupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -850,6 +863,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Annotation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lib\LibGit2Sharp.dll" />
+    <None Include="Lib\LibGit2Sharp.pdb" />
+    <None Include="Lib\LibGit2Sharp.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NativeBinaries\libgit2.license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NativeBinaries\amd64\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NativeBinaries\x86\git2-dce7b1a.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

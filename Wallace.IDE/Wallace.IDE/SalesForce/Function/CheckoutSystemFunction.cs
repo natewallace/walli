@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,64 +75,76 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         public override void Execute()
         {
-            Project project = App.Instance.SalesForceApp.CurrentProject;
-            if (project != null)
-            {
-                string text = project.IsCheckoutEnabled ?
-                    "Disabling the check out system will delete a previously created custom object and impact all Walli users of the organization.  Are you sure you want to proceed?" :
-                    "Enabling the check out system requires a new custom object be created and will impact all Walli users of the organization.  Are you sure you want to proceed?";
+            //Project project = App.Instance.SalesForceApp.CurrentProject;
 
-                if (App.MessageUser(text,
-                                    "Check out system",
-                                    System.Windows.MessageBoxImage.Warning,
-                                    new string[] { "Yes", "No" }) == "Yes")
-                {
-                    using (App.Wait("Updating check out system"))
-                    {
-                        project.EnableCheckout(!project.IsCheckoutEnabled);
-                        App.Instance.UpdateWorkspaces();
+            //SimpleRepository repo = new SimpleRepository();
+            //repo.WorkingPath = project.RepositoryFolder;
+            //repo.RemoteUrl = "ssh://dux07@caexvd0096:22/app/git/SFDC-CI";
+            //repo.Branch = "NateTest";
+            //repo.Username = "dux07";
+            //repo.Password = "kinghipp0";
+            //repo.Clone();
+            //repo.PushPackage(null);
+            
 
-                        // refresh open folders
-                        IFunction refreshFunction = App.Instance.GetFunction<RefreshFolderFunction>();
-                        INode currentActiveNode = App.Instance.Navigation.ActiveNode;
+            //Project project = App.Instance.SalesForceApp.CurrentProject;
+            //if (project != null)
+            //{
+            //    string text = project.IsCheckoutEnabled ?
+            //        "Disabling the check out system will delete a previously created custom object and impact all Walli users of the organization.  Are you sure you want to proceed?" :
+            //        "Enabling the check out system requires a new custom object be created and will impact all Walli users of the organization.  Are you sure you want to proceed?";
 
-                        ApexClassFolderNode classFolderNode = App.Instance.Navigation.GetNode<ApexClassFolderNode>();
-                        if (classFolderNode != null)
-                        {
-                            App.Instance.Navigation.ActiveNode = classFolderNode;
-                            refreshFunction.Execute();
-                        }
+            //    if (App.MessageUser(text,
+            //                        "Check out system",
+            //                        System.Windows.MessageBoxImage.Warning,
+            //                        new string[] { "Yes", "No" }) == "Yes")
+            //    {
+            //        using (App.Wait("Updating check out system"))
+            //        {
+            //            project.EnableCheckout(!project.IsCheckoutEnabled);
+            //            App.Instance.UpdateWorkspaces();
 
-                        ApexTriggerFolderNode triggerFolderNode = App.Instance.Navigation.GetNode<ApexTriggerFolderNode>();
-                        if (triggerFolderNode != null)
-                        {
-                            App.Instance.Navigation.ActiveNode = triggerFolderNode;
-                            refreshFunction.Execute();
-                        }
+            //            // refresh open folders
+            //            IFunction refreshFunction = App.Instance.GetFunction<RefreshFolderFunction>();
+            //            INode currentActiveNode = App.Instance.Navigation.ActiveNode;
 
-                        ApexPageFolderNode pageFolderNode = App.Instance.Navigation.GetNode<ApexPageFolderNode>();
-                        if (pageFolderNode != null)
-                        {
-                            App.Instance.Navigation.ActiveNode = pageFolderNode;
-                            refreshFunction.Execute();
-                        }
+            //            ApexClassFolderNode classFolderNode = App.Instance.Navigation.GetNode<ApexClassFolderNode>();
+            //            if (classFolderNode != null)
+            //            {
+            //                App.Instance.Navigation.ActiveNode = classFolderNode;
+            //                refreshFunction.Execute();
+            //            }
 
-                        ApexComponentFolderNode componentFolderNode = App.Instance.Navigation.GetNode<ApexComponentFolderNode>();
-                        if (componentFolderNode != null)
-                        {
-                            App.Instance.Navigation.ActiveNode = componentFolderNode;
-                            refreshFunction.Execute();
-                        }
+            //            ApexTriggerFolderNode triggerFolderNode = App.Instance.Navigation.GetNode<ApexTriggerFolderNode>();
+            //            if (triggerFolderNode != null)
+            //            {
+            //                App.Instance.Navigation.ActiveNode = triggerFolderNode;
+            //                refreshFunction.Execute();
+            //            }
 
-                        App.Instance.Navigation.ActiveNode = currentActiveNode;
-                    }
+            //            ApexPageFolderNode pageFolderNode = App.Instance.Navigation.GetNode<ApexPageFolderNode>();
+            //            if (pageFolderNode != null)
+            //            {
+            //                App.Instance.Navigation.ActiveNode = pageFolderNode;
+            //                refreshFunction.Execute();
+            //            }
 
-                    App.MessageUser("The check out system has been changed.  All users that currently have an open project in Walli for this organization will need to close those projects and then reopen them to see the change take effect.",
-                                    "Check out system changed",
-                                    System.Windows.MessageBoxImage.Information,
-                                    new string[] { "OK" });
-                }
-            }
+            //            ApexComponentFolderNode componentFolderNode = App.Instance.Navigation.GetNode<ApexComponentFolderNode>();
+            //            if (componentFolderNode != null)
+            //            {
+            //                App.Instance.Navigation.ActiveNode = componentFolderNode;
+            //                refreshFunction.Execute();
+            //            }
+
+            //            App.Instance.Navigation.ActiveNode = currentActiveNode;
+            //        }
+
+            //        App.MessageUser("The check out system has been changed.  All users that currently have an open project in Walli for this organization will need to close those projects and then reopen them to see the change take effect.",
+            //                        "Check out system changed",
+            //                        System.Windows.MessageBoxImage.Information,
+            //                        new string[] { "OK" });
+            //    }
+            //}
         }
 
         #endregion

@@ -60,7 +60,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SalesForceLanguage\SalesForceLanguage.csproj">
       <Project>{de715101-f43e-4f55-9957-310f36534f28}</Project>
-      <Name>Wallace.Language.Apex</Name>
+      <Name>SalesForceLanguage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

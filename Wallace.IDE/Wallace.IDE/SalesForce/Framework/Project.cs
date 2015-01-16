@@ -138,6 +138,13 @@ namespace Wallace.IDE.SalesForce.Framework
             if (!Directory.Exists(SnippetsFolder))
                 Directory.CreateDirectory(SnippetsFolder);
 
+            RepositoryFolder = Path.Combine(ProjectFolder, "Repository");
+            if (!Directory.Exists(RepositoryFolder))
+                Directory.CreateDirectory(RepositoryFolder);
+
+            Repository = new SimpleRepository();
+            Repository.WorkingPath = RepositoryFolder;
+
             Language = new LanguageManager(SymbolsFolder);
 
             _symbolsDownloaded = new EventWaitHandle(true, EventResetMode.ManualReset);
@@ -224,6 +231,16 @@ namespace Wallace.IDE.SalesForce.Framework
         /// The file path for the snippets folder.
         /// </summary>
         public string SnippetsFolder { get; private set; }
+
+        /// <summary>
+        /// The file path for the repository folder.
+        /// </summary>
+        public string RepositoryFolder { get; private set; }
+
+        /// <summary>
+        /// The repository used to store code in for this project.
+        /// </summary>
+        public SimpleRepository Repository { get; private set; }
 
         /// <summary>
         /// All of the project names of projects that have been saved.
@@ -344,13 +361,27 @@ namespace Wallace.IDE.SalesForce.Framework
                     if (!xml.ReadToDescendant("credential"))
                         throw new Exception("Invalid xml.  No 'credential' element found.");
 
-                    CryptoContainer<SalesForceCredential> crypto = new CryptoContainer<SalesForceCredential>();
-                    crypto.ReadXml(xml);
-                    SalesForceCredential credential = crypto.GetData(PROJECT_PASSWORD);
+                    CryptoContainer<SalesForceCredential> cryptoCredential = new CryptoContainer<SalesForceCredential>();
+                    cryptoCredential.ReadXml(xml);
+                    SalesForceCredential credential = cryptoCredential.GetData(PROJECT_PASSWORD);
+
+                    SimpleRepository repository = null;
+                    if (xml.IsStartElement("repository"))
+                    {
+                        CryptoContainer<SimpleRepository> cryptoRepository = new CryptoContainer<SimpleRepository>();
+                        cryptoRepository.ReadXml(xml);
+                        repository = cryptoRepository.GetData(PROJECT_PASSWORD);
+                    }
 
                     xml.Close();
 
                     project = new Project(credential);
+
+                    if (repository != null)
+                    {
+                        repository.WorkingPath = project.RepositoryFolder;
+                        project.Repository = repository;
+                    }
                 }
 
                 stream.Close();
@@ -679,8 +710,13 @@ namespace Wallace.IDE.SalesForce.Framework
                     xml.WriteStartElement("project");
 
                     xml.WriteStartElement("credential");
-                    CryptoContainer<SalesForceCredential> crypto = new CryptoContainer<SalesForceCredential>(Credential, PROJECT_PASSWORD);
-                    crypto.WriteXml(xml);
+                    CryptoContainer<SalesForceCredential> cryptoCredential = new CryptoContainer<SalesForceCredential>(Credential, PROJECT_PASSWORD);
+                    cryptoCredential.WriteXml(xml);
+                    xml.WriteEndElement();
+
+                    xml.WriteStartElement("repository");
+                    CryptoContainer<SimpleRepository> cryptoRepository = new CryptoContainer<SimpleRepository>(Repository, PROJECT_PASSWORD);
+                    cryptoRepository.WriteXml(xml);
                     xml.WriteEndElement();
 
                     xml.WriteEndElement();
