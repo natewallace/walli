@@ -96,12 +96,23 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null && project.Client.Checkout.IsEnabled())
             {
+                // get all checkouts
+                IDictionary<string, SourceFile> checkoutTable = null;
+                using (App.Wait("Getting check outs."))
+                    checkoutTable = project.Client.Checkout.GetCheckouts();
+
+                // filter checkouts to current user
+                List<SourceFile> userCheckouts = new List<SourceFile>();
+                foreach (KeyValuePair<string, SourceFile> kvp in checkoutTable)
+                    if (project.Client.User.Equals(kvp.Value.CheckedOutBy))
+                        userCheckouts.Add(kvp.Value);
+
                 // show dialog to collect user input
                 CheckInWindow dlg = new CheckInWindow();
                 dlg.Title = "Undo checkout";
                 dlg.CommitTitle = "Undo";
                 dlg.ShowComment = false;
-                dlg.Files = GetSelectedFiles();
+                dlg.Files = userCheckouts.ToArray();
                 dlg.SelectedFiles = GetSelectedFiles();
 
                 if (App.ShowDialog(dlg))

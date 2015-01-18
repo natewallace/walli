@@ -53,8 +53,12 @@ namespace Wallace.IDE.SalesForce.Function
             if (project != null && project.Client.Checkout.IsEnabled())
             {
                 foreach (INode node in App.Instance.Navigation.SelectedNodes)
+                {
                     if (node is SourceFileNode && project.Client.User.Equals((node as SourceFileNode).SourceFile.CheckedOutBy))
                         result.Add((node as SourceFileNode).SourceFile);
+                    else
+                        return new SourceFile[0];
+                }
             }
 
             return result.ToArray();

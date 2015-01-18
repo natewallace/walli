@@ -119,6 +119,7 @@
     <Compile Include="SalesForce\Function\CheckinFileFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutFileFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutFileUndoFunction.cs" />
+    <Compile Include="SalesForce\Function\CheckoutFolderFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutSystemFunction.cs" />
     <Compile Include="SalesForce\Function\CloseAllDocumentsFunction.cs" />
     <Compile Include="SalesForce\Function\CloseDocumentFunction.cs" />
