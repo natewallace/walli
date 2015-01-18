@@ -18,7 +18,8 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             
-            <TextBlock Grid.Row="0"
+            <TextBlock x:Name="textBlockComment" 
+                       Grid.Row="0"
                        FontWeight="Bold"
                        Text="Comment:" />
             

@@ -115,6 +115,8 @@ namespace Wallace.IDE.SalesForce.Function
 
                 foreach (SourceFileNode node in nodes)
                     node.UpdateHeader();
+
+                App.Instance.UpdateWorkspaces();
             }
         }
 

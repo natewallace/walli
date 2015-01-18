@@ -66,6 +66,29 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Show or hide the comment input.
+        /// </summary>
+        public bool ShowComment
+        {
+            get { return textBoxComment.Visibility == Visibility.Visible; }
+            set
+            {
+                textBlockComment.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                textBoxComment.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                UpdateViewState();
+            }
+        }
+
+        /// <summary>
+        /// The text displayed on the button to commit the action.
+        /// </summary>
+        public string CommitTitle
+        {
+            get { return buttonCommit.Content as string; }
+            set { buttonCommit.Content = value; }
+        }
+
+        /// <summary>
         /// The checked out files.
         /// </summary>
         public SourceFile[] Files
@@ -131,7 +154,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private void UpdateViewState()
         {
-            buttonCommit.IsEnabled = !(String.IsNullOrWhiteSpace(Comment) || SelectedFiles.Length == 0);
+            buttonCommit.IsEnabled = !((ShowComment && String.IsNullOrWhiteSpace(Comment)) || SelectedFiles.Length == 0);
         }
 
         #endregion

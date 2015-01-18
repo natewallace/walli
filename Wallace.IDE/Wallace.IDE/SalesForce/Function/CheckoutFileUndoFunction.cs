@@ -34,9 +34,9 @@ using Wallace.IDE.SalesForce.UI;
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Check in a file.
+    /// Undo a checkout.
     /// </summary>
-    public class CheckinFileFunction : FunctionBase
+    public class CheckoutFileUndoFunction : FunctionBase
     {
         #region Methods
 
@@ -68,13 +68,13 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "CheckIn.png");
-                presenter.ToolTip = "Check in file(s)...";
+                presenter.Header = VisualHelper.CreateIconHeader(null, "Undo.png");
+                presenter.ToolTip = "Undo file(s) checkout...";
             }
             else
             {
-                presenter.Header = "Check in file(s)...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckIn.png");
+                presenter.Header = "Undo file(s) checkout...";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "Undo.png");
             }
         }
 
@@ -96,34 +96,18 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null && project.Client.Checkout.IsEnabled())
             {
-                // get all checkouts
-                IDictionary<string, SourceFile> checkoutTable = null;
-                using (App.Wait("Getting check outs."))
-                    checkoutTable = project.Client.Checkout.GetCheckouts();
-
-                // filter checkouts to current user
-                List<SourceFile> userCheckouts = new List<SourceFile>();
-                foreach (KeyValuePair<string, SourceFile> kvp in checkoutTable)
-                    if (project.Client.User.Equals(kvp.Value.CheckedOutBy))
-                        userCheckouts.Add(kvp.Value);
-
                 // show dialog to collect user input
                 CheckInWindow dlg = new CheckInWindow();
-                dlg.Title = "Check in files";
-                dlg.CommitTitle = "Commit";
-                dlg.Files = userCheckouts.ToArray();
+                dlg.Title = "Undo checkout";
+                dlg.CommitTitle = "Undo";
+                dlg.ShowComment = false;
+                dlg.Files = GetSelectedFiles();
                 dlg.SelectedFiles = GetSelectedFiles();
 
                 if (App.ShowDialog(dlg))
                 {
-                    using (App.Wait("Checking in files."))
+                    using (App.Wait("Undoing file(s) checkout."))
                     {
-                        // commit to repository
-                        if (project.Repository.IsValid)
-                        {
-                            //TODO:
-                        }
-
                         // commit to salesforce
                         project.Client.Checkout.CheckinFiles(dlg.SelectedFiles);
 
@@ -141,9 +125,9 @@ namespace Wallace.IDE.SalesForce.Function
                                 fileNode.UpdateHeader();
                             }
                         }
-
-                        App.Instance.UpdateWorkspaces();
                     }
+
+                    App.Instance.UpdateWorkspaces();
                 }
             }
         }

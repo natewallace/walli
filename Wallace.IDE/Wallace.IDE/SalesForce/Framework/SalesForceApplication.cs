@@ -134,6 +134,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(checkinFileFunction, "TEAMSALESFORCE");
             App.Instance.RegisterFunction(checkinFileFunction);
 
+            CheckoutFileUndoFunction checkoutFileUndoFunction = new CheckoutFileUndoFunction();
+            App.Instance.Menu.AddFunction(checkoutFileUndoFunction, "TEAMSALESFORCE");
+            App.Instance.RegisterFunction(checkoutFileUndoFunction);
+
             //
             // PROJECT | Open Web Browser
             //
