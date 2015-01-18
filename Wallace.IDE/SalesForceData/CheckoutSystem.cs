@@ -220,7 +220,7 @@ namespace SalesForceData
         /// </summary>
         /// <param name="refresh">If true the value is refreshed from the server, otherwise a cached value is returned.</param>
         /// <returns>true if checkouts are enabled, false if they are not.</returns>
-        public bool IsCheckoutEnabled(bool refresh)
+        public bool IsEnabled(bool refresh)
         {
             if (refresh || !_isCheckoutEnabled.HasValue)
             {
@@ -243,16 +243,16 @@ namespace SalesForceData
         /// Get the most recent value for IsCheckoutEnabled.
         /// </summary>
         /// <returns>The most recent value for IsCheckoutEnabled.</returns>
-        public bool IsCheckoutEnabled()
+        public bool IsEnabled()
         {
-            return IsCheckoutEnabled(false);
+            return IsEnabled(false);
         }
 
         /// <summary>
         /// Enable checkouts for the entire system.
         /// </summary>
         /// <param name="value">true to enable checkouts, false to disable them.</param>
-        public void EnableCheckout(bool value)
+        public void Enable(bool value)
         {
             byte[] package = null;
             if (value)
@@ -303,27 +303,32 @@ namespace SalesForceData
         }
 
         /// <summary>
-        /// Checkout the given file.
+        /// Checkout the given files.
         /// </summary>
-        /// <param name="file">The file to checkout.</param>
-        public void CheckoutFile(SourceFile file)
+        /// <param name="files">The files to checkout.</param>
+        public void CheckoutFiles(IEnumerable<SourceFile> files)
         {
-            if (file == null)
-                throw new ArgumentNullException("file");
-            if (String.IsNullOrEmpty(file.Id))
-                throw new ArgumentException("The file doesn't have an id.", "file.Id");
+            if (files == null)
+                throw new ArgumentNullException("files");
 
-            if (!IsCheckoutEnabled())
+            if (!IsEnabled())
                 return;
 
             DataTable table = CreateTable();
-            DataRow row = table.NewRow();
-            row[ColumnEntityId] = file.Id;
-            row[ColumnEntityName] = file.Name;
-            row[ColumnEntityTypeName] = file.FileType.Name;
-            row[ColumnUserId] = _client.User.Id;
-            row[ColumnUserName] = _client.User.Name;
-            table.Rows.Add(row);
+
+            foreach (SourceFile file in files)
+            {
+                if (String.IsNullOrEmpty(file.Id))
+                    throw new ArgumentException("The file doesn't have an id.", "file.Id");
+
+                DataRow row = table.NewRow();
+                row[ColumnEntityId] = file.Id;
+                row[ColumnEntityName] = file.Name;
+                row[ColumnEntityTypeName] = file.FileType.Name;
+                row[ColumnUserId] = _client.User.Id;
+                row[ColumnUserName] = _client.User.Name;
+                table.Rows.Add(row);
+            }
 
             try
             {
@@ -331,10 +336,23 @@ namespace SalesForceData
             }
             catch (Exception err)
             {
-                throw new Exception("Could not checkout file: " + err.Message, err);
+                throw new Exception("Could not checkout file(s): " + err.Message, err);
             }
 
-            file.CheckedOutBy = _client.User;
+            foreach (SourceFile file in files)
+                file.CheckedOutBy = _client.User;
+        }
+
+        /// <summary>
+        /// Checkout the given file.
+        /// </summary>
+        /// <param name="file">The file to checkout.</param>
+        public void CheckoutFile(SourceFile file)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            CheckoutFiles(new SourceFile[] { file });
         }
 
         /// <summary>
@@ -348,7 +366,7 @@ namespace SalesForceData
             if (String.IsNullOrEmpty(file.Id))
                 throw new ArgumentException("The file doesn't have an id.", "file.Id");
 
-            if (!IsCheckoutEnabled())
+            if (!IsEnabled())
                 return;
 
             DataSelectResult lockTable = _client.DataSelectAll(String.Format("SELECT {0}, {1}, {2} FROM {3} WHERE {0} = '{4}'",
@@ -375,7 +393,7 @@ namespace SalesForceData
             if (files == null)
                 throw new ArgumentNullException("files");
 
-            if (!IsCheckoutEnabled())
+            if (!IsEnabled())
                 return;
 
             List<string> ids = new List<string>();
@@ -413,7 +431,7 @@ namespace SalesForceData
         public IDictionary<string, SourceFile> GetCheckouts()
         {
             Dictionary<string, SourceFile> result = new Dictionary<string, SourceFile>();
-            if (!IsCheckoutEnabled())
+            if (!IsEnabled())
                 return result;
 
             DataSelectResult lockTable = _client.DataSelectAll(String.Format("SELECT {0}, {1}, {2}, {3}, {4} FROM {5}",

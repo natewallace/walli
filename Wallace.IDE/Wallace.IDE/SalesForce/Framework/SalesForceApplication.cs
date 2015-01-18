@@ -126,9 +126,13 @@ namespace Wallace.IDE.SalesForce.Framework
             ConfigureSourceControlFunction sourceControlFunction = new ConfigureSourceControlFunction();
             App.Instance.Menu.AddFunction(sourceControlFunction, "TEAMSALESFORCE");
 
-            CheckOutFileFunction checkoutFileFunction = new CheckOutFileFunction();
+            CheckoutFileFunction checkoutFileFunction = new CheckoutFileFunction();
             App.Instance.Menu.AddFunction(checkoutFileFunction, "TEAMSALESFORCE");
             App.Instance.RegisterFunction(checkoutFileFunction);
+
+            CheckinFileFunction checkinFileFunction = new CheckinFileFunction();
+            App.Instance.Menu.AddFunction(checkinFileFunction, "TEAMSALESFORCE");
+            App.Instance.RegisterFunction(checkinFileFunction);
 
             //
             // PROJECT | Open Web Browser

@@ -217,7 +217,8 @@ namespace Wallace.IDE.SalesForce.Node
         {
             return new IFunction[]
             {
-                App.Instance.GetFunction<CheckOutFileFunction>(),
+                App.Instance.GetFunction<CheckoutFileFunction>(),
+                App.Instance.GetFunction<CheckinFileFunction>(),
                 App.Instance.GetFunction<PropertiesFunction>()
             };
         }

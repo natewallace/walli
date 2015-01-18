@@ -81,7 +81,7 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.Username = project.Repository.Username;
                 dlg.Password = project.Repository.Password;
                 dlg.BranchName = project.Repository.Branch;
-                dlg.IsCheckoutEnabled = project.Client.Checkouts.IsCheckoutEnabled();
+                dlg.IsCheckoutEnabled = project.Client.Checkout.IsEnabled();
 
                 dlg.ToggleCheckOutSystemClick += ToggleCheckOutSystem;
 
@@ -113,7 +113,7 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null)
             {
-                string text = project.Client.Checkouts.IsCheckoutEnabled() ?
+                string text = project.Client.Checkout.IsEnabled() ?
                     "Disabling the check out system will delete a previously created custom object and impact all Walli users of the organization.  Are you sure you want to proceed?" :
                     "Enabling the check out system requires a new custom object be created and will impact all Walli users of the organization.  Are you sure you want to proceed?";
 
@@ -124,7 +124,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     using (App.Wait("Updating check out system"))
                     {
-                        project.Client.Checkouts.EnableCheckout(!project.Client.Checkouts.IsCheckoutEnabled());
+                        project.Client.Checkout.Enable(!project.Client.Checkout.IsEnabled());
                         App.Instance.UpdateWorkspaces();
 
                         // refresh open folders
@@ -170,7 +170,7 @@ namespace Wallace.IDE.SalesForce.Function
 
                 SourceControlSetupWindow dlg = sender as SourceControlSetupWindow;
                 if (dlg != null)
-                    dlg.IsCheckoutEnabled = project.Client.Checkouts.IsCheckoutEnabled();
+                    dlg.IsCheckoutEnabled = project.Client.Checkout.IsEnabled();
             }
         }
 

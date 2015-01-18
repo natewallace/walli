@@ -116,7 +116,8 @@
     <Compile Include="SalesForce\Function\AddFileToManifestFunction.cs" />
     <Compile Include="SalesForce\Function\ApexDocumentationFunction.cs" />
     <Compile Include="SalesForce\Function\CancelDeployPackageFunction.cs" />
-    <Compile Include="SalesForce\Function\CheckOutFileFunction.cs" />
+    <Compile Include="SalesForce\Function\CheckinFileFunction.cs" />
+    <Compile Include="SalesForce\Function\CheckoutFileFunction.cs" />
     <Compile Include="SalesForce\Function\CheckOutSystemFunction.cs" />
     <Compile Include="SalesForce\Function\CloseAllDocumentsFunction.cs" />
     <Compile Include="SalesForce\Function\CloseDocumentFunction.cs" />

@@ -100,7 +100,7 @@ namespace SalesForceData
             _session = session;
             _isSessionOwned = false;
 
-            Checkouts = new CheckoutSystem(this);
+            Checkout = new CheckoutSystem(this);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace SalesForceData
             _session = new SalesForceSession(credential, GetDefaultConfiguration());
             _isSessionOwned = true;
 
-            Checkouts = new CheckoutSystem(this);
+            Checkout = new CheckoutSystem(this);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace SalesForceData
             _session = new SalesForceSession(credential, configuration);
             _isSessionOwned = true;
 
-            Checkouts = new CheckoutSystem(this);
+            Checkout = new CheckoutSystem(this);
         }
 
         #endregion
@@ -159,7 +159,7 @@ namespace SalesForceData
         /// <summary>
         /// The checkout system.
         /// </summary>
-        public CheckoutSystem Checkouts { get; private set; }
+        public CheckoutSystem Checkout { get; private set; }
 
         #endregion
 
@@ -1003,13 +1003,13 @@ namespace SalesForceData
 
             // do a checkout if checkouts are enabled and it's not currently checked out to anyone
             bool isCheckout = false;
-            if (Checkouts.IsCheckoutEnabled())
+            if (Checkout.IsEnabled())
             {
                 if (file.CheckedOutBy != null && !file.CheckedOutBy.Equals(User))
                     throw new Exception("Unable to delete file: it is checked out by another user.");
 
                 if (!String.IsNullOrWhiteSpace(file.Id) && file.CheckedOutBy == null)
-                    Checkouts.CheckoutFile(file);
+                    Checkout.CheckoutFile(file);
 
                 isCheckout = true;
             }
@@ -1079,7 +1079,7 @@ namespace SalesForceData
             finally
             {
                 if (isCheckout)
-                    Checkouts.CheckinFile(file);
+                    Checkout.CheckinFile(file);
             }
         }
 
@@ -1782,7 +1782,7 @@ namespace SalesForceData
 
             // do a checkout if checkouts are enabled and it's not currently checked out to anyone
             bool isTempCheckout = false;
-            if (Checkouts.IsCheckoutEnabled())
+            if (Checkout.IsEnabled())
             {
                 if (file.CheckedOutBy != null && !file.CheckedOutBy.Equals(User))
                     throw new Exception("Unable to save file: it is checked out by another user.");
@@ -1790,7 +1790,7 @@ namespace SalesForceData
                 if (!String.IsNullOrWhiteSpace(file.Id) && file.CheckedOutBy == null)
                 {
                     isTempCheckout = true;
-                    Checkouts.CheckoutFile(file);
+                    Checkout.CheckoutFile(file);
                 }
             }
 
@@ -2074,7 +2074,7 @@ namespace SalesForceData
             finally
             {
                 if (isTempCheckout)
-                    Checkouts.CheckinFile(file);
+                    Checkout.CheckinFile(file);
             }
         }
 
@@ -2414,9 +2414,9 @@ namespace SalesForceData
             }
 
             // mark files that are checked out
-            if (Checkouts.IsCheckoutEnabled())
+            if (Checkout.IsEnabled())
             {
-                IDictionary<string, SourceFile> checkoutTable = Checkouts.GetCheckouts();
+                IDictionary<string, SourceFile> checkoutTable = Checkout.GetCheckouts();
 
                 foreach (SourceFile file in result)
                 {

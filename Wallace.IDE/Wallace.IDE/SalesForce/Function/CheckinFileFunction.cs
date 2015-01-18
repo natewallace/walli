@@ -34,30 +34,26 @@ using Wallace.IDE.SalesForce.UI;
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Check out a file.
+    /// Check in a file.
     /// </summary>
-    public class CheckoutFileFunction : FunctionBase
+    public class CheckinFileFunction : FunctionBase
     {
         #region Methods
 
         /// <summary>
-        /// Gets the currently selected nodes.
+        /// Gets the currently selected files.
         /// </summary>
-        /// <returns>The currently selected nodes.</returns>
-        private SourceFileNode[] GetSelectedNodes()
+        /// <returns>The currently selected files.</returns>
+        private SourceFile[] GetSelectedFiles()
         {
-            List<SourceFileNode> result = new List<SourceFileNode>();
+            List<SourceFile> result = new List<SourceFile>();
 
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null && project.Client.Checkout.IsEnabled())
             {
                 foreach (INode node in App.Instance.Navigation.SelectedNodes)
-                {
-                    if (node is SourceFileNode && (node as SourceFileNode).SourceFile.CheckedOutBy == null)
-                        result.Add(node as SourceFileNode);
-                    else
-                        return new SourceFileNode[0];
-                }
+                    if (node is SourceFileNode && project.Client.User.Equals((node as SourceFileNode).SourceFile.CheckedOutBy))
+                        result.Add((node as SourceFileNode).SourceFile);
             }
 
             return result.ToArray();
@@ -73,11 +69,11 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "CheckIn.png");
-                presenter.ToolTip = "Check out file(s)";
+                presenter.ToolTip = "Check in file(s)...";
             }
             else
             {
-                presenter.Header = "Check out file(s)";
+                presenter.Header = "Check in file(s)...";
                 presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckIn.png");
             }
         }
@@ -89,32 +85,62 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (GetSelectedNodes().Length > 0);
+            IsVisible = (GetSelectedFiles().Length > 0);
         }
 
         /// <summary>
-        /// Check in or check out the file.
+        /// Check in the file(s).
         /// </summary>
         public override void Execute()
         {
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null && project.Client.Checkout.IsEnabled())
             {
-                SourceFileNode[] nodes = GetSelectedNodes();
-                if (nodes.Length > 0)
-                {
-                    List<SourceFile> files = new List<SourceFile>();
-                    foreach (SourceFileNode node in nodes)
-                        files.Add(node.SourceFile);
+                // get all checkouts
+                IDictionary<string, SourceFile> checkoutTable = null;
+                using (App.Wait("Getting check outs."))
+                    checkoutTable = project.Client.Checkout.GetCheckouts();
 
-                    using (App.Wait("Checking out file."))
+                // filter checkouts to current user
+                List<SourceFile> userCheckouts = new List<SourceFile>();
+                foreach (KeyValuePair<string, SourceFile> kvp in checkoutTable)
+                    if (project.Client.User.Equals(kvp.Value.CheckedOutBy))
+                        userCheckouts.Add(kvp.Value);
+
+                // show dialog to collect user input
+                CheckInWindow dlg = new CheckInWindow();
+                dlg.Files = userCheckouts.ToArray();
+                dlg.SelectedFiles = GetSelectedFiles();
+
+                if (App.ShowDialog(dlg))
+                {
+                    using (App.Wait("Checking in files."))
                     {
-                        project.Client.Checkout.CheckoutFiles(files);
+                        // commit to repository
+                        if (project.Repository.IsValid)
+                        {
+                            //TODO:
+                        }
+
+                        // commit to salesforce
+                        project.Client.Checkout.CheckinFiles(dlg.SelectedFiles);
+
+                        // update UI
+                        HashSet<string> ids = new HashSet<string>();
+                        foreach (SourceFile f in dlg.SelectedFiles)
+                            ids.Add(f.Id);
+
+                        IEnumerable<SourceFileNode> fileNodes = App.Instance.Navigation.GetNodes<SourceFileNode>();
+                        foreach (SourceFileNode fileNode in fileNodes)
+                        {
+                            if (ids.Contains(fileNode.SourceFile.Id))
+                            {
+                                fileNode.SourceFile.CheckedOutBy = null;
+                                fileNode.UpdateHeader();
+                            }
+                        }
                     }
                 }
-
-                foreach (SourceFileNode node in nodes)
-                    node.UpdateHeader();
             }
         }
 
