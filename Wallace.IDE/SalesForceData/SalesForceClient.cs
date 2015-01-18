@@ -84,11 +84,6 @@ namespace SalesForceData
         /// </summary>
         private static readonly TimeSpan SAVE_TIMEOUT = new TimeSpan(0, 1, 0);
 
-        /// <summary>
-        /// Used to cache the last call to IsCheckoutEnabled.
-        /// </summary>
-        private bool? _isCheckoutEnabled = null;
-
         #endregion
 
         #region Constructors
@@ -104,6 +99,8 @@ namespace SalesForceData
 
             _session = session;
             _isSessionOwned = false;
+
+            Checkouts = new CheckoutSystem(this);
         }
 
         /// <summary>
@@ -117,6 +114,8 @@ namespace SalesForceData
 
             _session = new SalesForceSession(credential, GetDefaultConfiguration());
             _isSessionOwned = true;
+
+            Checkouts = new CheckoutSystem(this);
         }
 
         /// <summary>
@@ -133,6 +132,8 @@ namespace SalesForceData
 
             _session = new SalesForceSession(credential, configuration);
             _isSessionOwned = true;
+
+            Checkouts = new CheckoutSystem(this);
         }
 
         #endregion
@@ -146,6 +147,19 @@ namespace SalesForceData
         {
             get { return _session.User; }
         }
+
+        /// <summary>
+        /// The namespace for the organization.
+        /// </summary>
+        public string Namespace
+        {
+            get { return GetOrgInfo().organizationNamespace; }
+        }
+
+        /// <summary>
+        /// The checkout system.
+        /// </summary>
+        public CheckoutSystem Checkouts { get; private set; }
 
         #endregion
 
@@ -989,13 +1003,13 @@ namespace SalesForceData
 
             // do a checkout if checkouts are enabled and it's not currently checked out to anyone
             bool isCheckout = false;
-            if (IsCheckoutEnabledCached())
+            if (Checkouts.IsCheckoutEnabled())
             {
                 if (file.CheckedOutBy != null && !file.CheckedOutBy.Equals(User))
                     throw new Exception("Unable to delete file: it is checked out by another user.");
 
                 if (!String.IsNullOrWhiteSpace(file.Id) && file.CheckedOutBy == null)
-                    CheckOutFile(file);
+                    Checkouts.CheckoutFile(file);
 
                 isCheckout = true;
             }
@@ -1065,7 +1079,7 @@ namespace SalesForceData
             finally
             {
                 if (isCheckout)
-                    CheckInFile(file);
+                    Checkouts.CheckinFile(file);
             }
         }
 
@@ -1768,7 +1782,7 @@ namespace SalesForceData
 
             // do a checkout if checkouts are enabled and it's not currently checked out to anyone
             bool isTempCheckout = false;
-            if (IsCheckoutEnabledCached())
+            if (Checkouts.IsCheckoutEnabled())
             {
                 if (file.CheckedOutBy != null && !file.CheckedOutBy.Equals(User))
                     throw new Exception("Unable to save file: it is checked out by another user.");
@@ -1776,7 +1790,7 @@ namespace SalesForceData
                 if (!String.IsNullOrWhiteSpace(file.Id) && file.CheckedOutBy == null)
                 {
                     isTempCheckout = true;
-                    CheckOutFile(file);
+                    Checkouts.CheckoutFile(file);
                 }
             }
 
@@ -2060,7 +2074,7 @@ namespace SalesForceData
             finally
             {
                 if (isTempCheckout)
-                    CheckInFile(file);
+                    Checkouts.CheckinFile(file);
             }
         }
 
@@ -2400,18 +2414,18 @@ namespace SalesForceData
             }
 
             // mark files that are checked out
-            if (IsCheckoutEnabled())
+            if (Checkouts.IsCheckoutEnabled())
             {
-                IDictionary<string, CheckoutFile> checkoutTable = GetCheckoutTable();
+                IDictionary<string, SourceFile> checkoutTable = Checkouts.GetCheckouts();
 
                 foreach (SourceFile file in result)
                 {
                     if (!String.IsNullOrEmpty(file.Id) && checkoutTable.ContainsKey(file.Id))
-                        file.CheckedOutBy = checkoutTable[file.Id].User;
+                        file.CheckedOutBy = checkoutTable[file.Id].CheckedOutBy;
 
                     foreach (SourceFile childFile in file.Children)
                         if (!String.IsNullOrEmpty(childFile.Id) && checkoutTable.ContainsKey(childFile.Id))
-                            childFile.CheckedOutBy = checkoutTable[childFile.Id].User;
+                            childFile.CheckedOutBy = checkoutTable[childFile.Id].CheckedOutBy;
                 }
             }
 
@@ -2645,303 +2659,7 @@ namespace SalesForceData
                 return new SObjectType(response.result);
 
             throw new Exception("Couldn't get details for the given object: " + objectTypeName);
-        }
-
-        /// <summary>
-        /// Check to see if the checkout system is enabled.
-        /// </summary>
-        /// <returns>true if checkouts are enabled, false if they are not.</returns>
-        public bool IsCheckoutEnabled()
-        {
-            foreach (SObjectTypePartial obj in DataDescribeGlobal())
-            {
-                if (obj.Name != null && obj.Name.EndsWith("Walli_Lock_Table__c"))
-                {
-                    _isCheckoutEnabled = true;
-                    return true;
-                }
-            }
-
-            _isCheckoutEnabled = false;
-            return false;
-        }
-
-        /// <summary>
-        /// Get the most recent value for IsCheckoutEnabled.
-        /// </summary>
-        /// <returns>The most recent value for IsCheckoutEnabled.</returns>
-        private bool IsCheckoutEnabledCached()
-        {
-            if (!_isCheckoutEnabled.HasValue)
-                _isCheckoutEnabled = IsCheckoutEnabled();
-
-            return _isCheckoutEnabled.Value;
-        }
-
-        /// <summary>
-        /// Enable checkouts for the entire system.
-        /// </summary>
-        /// <param name="value">true to enable checkouts, false to disable them.</param>
-        public void EnableCheckout(bool value)
-        {
-            InitClients();
-
-            byte[] package = null;
-            if (value)
-            {
-                using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("SalesForceData.Resources.WalliLockTableCreate.zip"))
-                {
-                    BinaryReader reader = new BinaryReader(stream);
-                    package = reader.ReadBytes((int)stream.Length);
-                }
-            }
-            else
-            {
-                using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("SalesForceData.Resources.WalliLockTableDelete.zip"))
-                {
-                    BinaryReader reader = new BinaryReader(stream);
-                    package = reader.ReadBytes((int)stream.Length);
-                }
-            }
-
-            string id = DeployPackage(package, false, false);
-            bool complete = false;
-            while (!complete)
-            {
-                PackageDeployResult result = CheckPackageDeploy(id);
-                if (result.Status == PackageDeployResultStatus.Failed)
-                    throw new Exception("Could not change checkout system: " + result.ResultMessage);
-
-                complete = result.DeploymentComplete;
-            }
-        }
-
-        /// <summary>
-        /// Get the checkout table entries.
-        /// </summary>
-        /// <returns>The checkout table entries with the file id as a key.</returns>
-        public IDictionary<string, CheckoutFile> GetCheckoutTable()
-        {
-            Dictionary<string, CheckoutFile> result = new Dictionary<string, CheckoutFile>();
-            if (!IsCheckoutEnabledCached())
-                return result;
-
-            string tableName = "Walli_Lock_Table__c";
-            string entityIdColumnName = "Entity_Id__c";
-            string userIdColumnName = "User_Id__c";
-            string userNameColumnName = "User_Name__c";
-
-            string namespaceName = GetOrgInfo().organizationNamespace;
-            if (!String.IsNullOrEmpty(namespaceName))
-            {
-                tableName = String.Format("{0}__{1}", namespaceName, tableName);
-                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
-                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
-                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
-            }
-
-            DataSelectResult lockTable = DataSelectAll(String.Format("SELECT {0}, {1}, {2} FROM {3}", 
-                entityIdColumnName,
-                userIdColumnName,
-                userNameColumnName,
-                tableName));
-            foreach (DataRow row in lockTable.Data.Rows)
-                result.Add(row[entityIdColumnName] as string, 
-                           new CheckoutFile(row[entityIdColumnName] as string,
-                                            row[userIdColumnName] as string, 
-                                            row[userNameColumnName] as string));
-
-            return result;
-        }
-
-        /// <summary>
-        /// Update the checkout status of the given file.
-        /// </summary>
-        /// <param name="file">The file to update the checkout status for.</param>
-        public void RefreshCheckOutStatus(SourceFile file)
-        {
-            if (file == null)
-                throw new ArgumentNullException("file");
-            if (String.IsNullOrEmpty(file.Id))
-                throw new ArgumentException("The file doesn't have an id.", "file.Id");
-
-            if (!IsCheckoutEnabledCached())
-                return;
-
-            string tableName = "Walli_Lock_Table__c";
-            string entityIdColumnName = "Entity_Id__c";
-            string userIdColumnName = "User_Id__c";
-            string userNameColumnName = "User_Name__c";
-
-            string namespaceName = GetOrgInfo().organizationNamespace;
-            if (!String.IsNullOrEmpty(namespaceName))
-            {
-                tableName = String.Format("{0}__{1}", namespaceName, tableName);
-                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
-                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
-                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
-            }
-
-            DataSelectResult lockTable = DataSelectAll(String.Format("SELECT {0}, {1}, {2} FROM {3} WHERE {0} = '{4}'",
-                entityIdColumnName,
-                userIdColumnName,
-                userNameColumnName,
-                tableName,
-                file.Id));
-
-            if (lockTable.Data.Rows.Count == 1)
-                file.CheckedOutBy = new User(
-                    lockTable.Data.Rows[0][userIdColumnName] as string,
-                    lockTable.Data.Rows[0][userNameColumnName] as string);
-            else
-                file.CheckedOutBy = null;
-        }
-
-        /// <summary>
-        /// Checkout the given file.
-        /// </summary>
-        /// <param name="file">The file to checkout.</param>
-        public void CheckOutFile(SourceFile file)
-        {
-            if (file == null)
-                throw new ArgumentNullException("file");
-            if (String.IsNullOrEmpty(file.Id))
-                throw new ArgumentException("The file doesn't have an id.", "file.Id");
-
-            InitClients();
-
-            string tableName = "Walli_Lock_Table__c";
-            string entityIdColumnName = "Entity_Id__c";
-            string userIdColumnName = "User_Id__c";
-            string userNameColumnName = "User_Name__c";
-
-            string namespaceName = GetOrgInfo().organizationNamespace;
-            if (!String.IsNullOrEmpty(namespaceName))
-            {
-                tableName = String.Format("{0}__{1}", namespaceName, tableName);
-                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
-                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
-                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
-            }
-
-            DataTable table = new DataTable(tableName);
-            table.Columns.Add(entityIdColumnName);
-            table.Columns.Add(userIdColumnName);
-            table.Columns.Add(userNameColumnName);
-
-            // create checkout file
-            CheckoutFile checkout = new CheckoutFile(file.Id, User, file.Name);
-
-            DataRow row = table.NewRow();
-            row[entityIdColumnName] = checkout.EntityId;
-            row[userIdColumnName] = checkout.User.Id;
-            row[userNameColumnName] = checkout.CombinedName;
-            table.Rows.Add(row);
-
-            try
-            {
-                DataInsert(table);
-            }
-            catch (Exception err)
-            {
-                throw new Exception("Could not checkout file: " + err.Message, err);
-            }
-
-            file.CheckedOutBy = User;
-        }
-
-        /// <summary>
-        /// Check in the given files.
-        /// </summary>
-        /// <param name="files">The files to checkin.</param>
-        public void CheckInFiles(IEnumerable<CheckoutFile> files)
-        {
-            if (files == null)
-                throw new ArgumentNullException("files");
-
-            InitClients();
-
-            string tableName = "Walli_Lock_Table__c";
-            string entityIdColumnName = "Entity_Id__c";
-            string userIdColumnName = "User_Id__c";
-            string userNameColumnName = "User_Name__c";
-
-            string namespaceName = GetOrgInfo().organizationNamespace;
-            if (!String.IsNullOrEmpty(namespaceName))
-            {
-                tableName = String.Format("{0}__{1}", namespaceName, tableName);
-                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
-                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
-                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
-            }
-
-            List<string> ids = new List<string>();
-            foreach (CheckoutFile file in files)
-                ids.Add(file.EntityId);
-
-            DataSelectResult result = DataSelectAll(String.Format("SELECT Id FROM {0} WHERE {1} IN ('{2}')",
-                tableName,
-                entityIdColumnName,
-                String.Join("','", ids)));
-
-            try
-            {
-                DataDelete(result.Data);
-            }
-            catch (Exception err)
-            {
-                throw new Exception("Could not checkin file: " + err.Message, err);
-            }
-        }
-
-        /// <summary>
-        /// Checkin the given file.
-        /// </summary>
-        /// <param name="file">The file to checkin.</param>
-        public void CheckInFile(SourceFile file)
-        {
-            if (file == null)
-                throw new ArgumentNullException("file");
-            if (String.IsNullOrEmpty(file.Id))
-                throw new ArgumentException("The file doesn't have an id.", "file.Id");
-
-            InitClients();
-
-            string tableName = "Walli_Lock_Table__c";
-            string entityIdColumnName = "Entity_Id__c";
-            string userIdColumnName = "User_Id__c";
-            string userNameColumnName = "User_Name__c";
-
-            string namespaceName = GetOrgInfo().organizationNamespace;
-            if (!String.IsNullOrEmpty(namespaceName))
-            {
-                tableName = String.Format("{0}__{1}", namespaceName, tableName);
-                entityIdColumnName = String.Format("{0}__{1}", namespaceName, entityIdColumnName);
-                userIdColumnName = String.Format("{0}__{1}", namespaceName, userIdColumnName);
-                userNameColumnName = String.Format("{0}__{1}", namespaceName, userNameColumnName);
-            }
-
-            DataSelectResult result = DataSelectAll(String.Format("SELECT Id FROM {0} WHERE {1} = '{2}' AND {3} = '{4}'",
-                tableName,
-                entityIdColumnName,
-                file.Id,
-                userIdColumnName,
-                User.Id));
-
-            if (result.Data.Rows.Count < 1)
-                throw new Exception("Could not checkin file as it appears the file is not checked out to you.");
-
-            try
-            {
-                DataDelete(result.Data);
-            }
-            catch (Exception err)
-            {
-                throw new Exception("Could not checkin file: " + err.Message, err);
-            }
-
-            file.CheckedOutBy = null;
-        }
+        }       
 
         /// <summary>
         /// Execute a select query on the server.

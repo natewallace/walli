@@ -82,11 +82,6 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         private volatile bool _symbolsDownloadCancel;
 
-        /// <summary>
-        /// Holds check enabled state.
-        /// </summary>
-        private bool? _isCheckoutEnabled;
-
         #endregion
 
         #region Constructors
@@ -148,8 +143,6 @@ namespace Wallace.IDE.SalesForce.Framework
             Language = new LanguageManager(SymbolsFolder);
 
             _symbolsDownloaded = new EventWaitHandle(true, EventResetMode.ManualReset);
-
-            _isCheckoutEnabled = null;
         }
 
         #endregion
@@ -265,21 +258,6 @@ namespace Wallace.IDE.SalesForce.Framework
         public bool IsDownloadingSymbols
         {
             get { return _symbolsDownloading; }
-        }
-
-        /// <summary>
-        /// Determine if checkouts are enabled.
-        /// </summary>
-        /// <returns>true if checkouts are enabled, false if they are not.</returns>
-        public bool IsCheckoutEnabled
-        {
-            get
-            {
-                if (!_isCheckoutEnabled.HasValue)
-                    _isCheckoutEnabled = Client.IsCheckoutEnabled();
-
-                return _isCheckoutEnabled.Value;
-            }
         }
 
         #endregion
@@ -727,16 +705,6 @@ namespace Wallace.IDE.SalesForce.Framework
 
                 stream.Close();
             }
-        }
-
-        /// <summary>
-        /// Enable or disable the checkout system.
-        /// </summary>
-        /// <param name="value">true to enable checkouts, false to disable them.</param>
-        public void EnableCheckout(bool value)
-        {
-            Client.EnableCheckout(value);
-            _isCheckoutEnabled = value;
         }
 
         /// <summary>

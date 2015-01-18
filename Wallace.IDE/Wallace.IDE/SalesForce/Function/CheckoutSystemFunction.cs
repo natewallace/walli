@@ -53,7 +53,7 @@ namespace Wallace.IDE.SalesForce.Function
             }
             else
             {
-                string text = project.IsCheckoutEnabled ? "Disable check out system" : "Enable check out system";
+                string text = project.Client.Checkouts.IsCheckoutEnabled() ? "Disable check out system" : "Enable check out system";
 
                 if (host == FunctionHost.Toolbar)
                 {

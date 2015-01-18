@@ -68,13 +68,13 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The checked out files.
         /// </summary>
-        public CheckoutFile[] Files
+        public SourceFile[] Files
         {
             get
             {
-                List<CheckoutFile> files = new List<CheckoutFile>();
+                List<SourceFile> files = new List<SourceFile>();
                 foreach (CheckBox cb in listBoxFiles.Items)
-                    files.Add(cb.Tag as CheckoutFile);
+                    files.Add(cb.Tag as SourceFile);
 
                 return files.ToArray();
             }
@@ -83,11 +83,11 @@ namespace Wallace.IDE.SalesForce.UI
                 listBoxFiles.Items.Clear();
                 if (value != null)
                 {
-                    foreach (CheckoutFile file in value.OrderBy(f => f.FullEntityName))
+                    foreach (SourceFile file in value.OrderBy(f => f.FullName))
                     {
                         CheckBox checkbox = new CheckBox();
                         checkbox.Tag = file;
-                        checkbox.Content = file.FullEntityName;
+                        checkbox.Content = file.FullName;
                         listBoxFiles.Items.Add(checkbox);
                     }
                 }
@@ -97,15 +97,15 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The files that are currently selected.
         /// </summary>
-        public CheckoutFile[] SelectedFiles
+        public SourceFile[] SelectedFiles
         {
             get
             {
-                List<CheckoutFile> files = new List<CheckoutFile>();
+                List<SourceFile> files = new List<SourceFile>();
                 foreach (CheckBox cb in listBoxFiles.Items)
                 {
                     if (cb.IsChecked.HasValue && cb.IsChecked.Value == true)
-                        files.Add(cb.Tag as CheckoutFile);
+                        files.Add(cb.Tag as SourceFile);
                 }
 
                 return files.ToArray();
@@ -114,11 +114,11 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 HashSet<string> ids = new HashSet<string>();
                 if (value != null)
-                    foreach (CheckoutFile file in value)
-                        ids.Add(file.EntityId);
+                    foreach (SourceFile file in value)
+                        ids.Add(file.Id);
 
                 foreach (CheckBox cb in listBoxFiles.Items)
-                    cb.IsChecked = ids.Contains((cb.Tag as CheckoutFile).EntityId);
+                    cb.IsChecked = ids.Contains((cb.Tag as SourceFile).Id);
             }
         }
 

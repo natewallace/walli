@@ -73,7 +73,7 @@ namespace Wallace.IDE.SalesForce.Function
             string name = String.Empty;
 
             Project project = App.Instance.SalesForceApp.CurrentProject;
-            if (project != null && project.IsCheckoutEnabled)
+            if (project != null && project.Client.Checkouts.IsCheckoutEnabled())
             {
                 SourceFileNode node = GetSelectedNode();
                 if (node != null && !String.IsNullOrWhiteSpace(node.SourceFile.Id))
@@ -130,7 +130,7 @@ namespace Wallace.IDE.SalesForce.Function
         public override void Execute()
         {
             Project project = App.Instance.SalesForceApp.CurrentProject;
-            if (project != null && project.IsCheckoutEnabled)
+            if (project != null && project.Client.Checkouts.IsCheckoutEnabled())
             {
                 // idenitfy operation being performed
                 bool isCheckIn = false;
@@ -149,19 +149,19 @@ namespace Wallace.IDE.SalesForce.Function
                 if (isCheckIn)
                 {
                     // get all checkouts
-                    IDictionary<string, CheckoutFile> checkoutTable = null;
+                    IDictionary<string, SourceFile> checkoutTable = null;
                     using (App.Wait("Getting check outs."))
-                        checkoutTable = project.Client.GetCheckoutTable();
+                        checkoutTable = project.Client.Checkouts.GetCheckouts();
 
                     // filter checkouts to current user
-                    CheckoutFile selectedCheckoutFile = null;
-                    List<CheckoutFile> userCheckouts = new List<CheckoutFile>();
-                    foreach (KeyValuePair<string, CheckoutFile> kvp in checkoutTable)
+                    SourceFile selectedCheckoutFile = null;
+                    List<SourceFile> userCheckouts = new List<SourceFile>();
+                    foreach (KeyValuePair<string, SourceFile> kvp in checkoutTable)
                     {
-                        if (project.Client.User.Equals(kvp.Value.User))
+                        if (project.Client.User.Equals(kvp.Value.CheckedOutBy))
                         {
                             userCheckouts.Add(kvp.Value);
-                            if (kvp.Value.EntityId == node.SourceFile.Id)
+                            if (kvp.Value.Id == node.SourceFile.Id)
                                 selectedCheckoutFile = kvp.Value;
                         }
                     }
@@ -170,7 +170,7 @@ namespace Wallace.IDE.SalesForce.Function
                     CheckInWindow dlg = new CheckInWindow();
                     dlg.Files = userCheckouts.ToArray();
                     if (selectedCheckoutFile != null)
-                        dlg.SelectedFiles = new CheckoutFile[] { selectedCheckoutFile };
+                        dlg.SelectedFiles = new SourceFile[] { selectedCheckoutFile };
 
                     if (App.ShowDialog(dlg))
                     {
@@ -183,12 +183,12 @@ namespace Wallace.IDE.SalesForce.Function
                             }
 
                             // commit to salesforce
-                            project.Client.CheckInFiles(dlg.SelectedFiles);
+                            project.Client.Checkouts.CheckinFiles(dlg.SelectedFiles);
 
                             // update UI
                             HashSet<string> ids = new HashSet<string>();
-                            foreach (CheckoutFile f in dlg.SelectedFiles)
-                                ids.Add(f.EntityId);
+                            foreach (SourceFile f in dlg.SelectedFiles)
+                                ids.Add(f.Id);
 
                             IEnumerable<SourceFileNode> fileNodes = App.Instance.Navigation.GetNodes<SourceFileNode>();
                             foreach (SourceFileNode fileNode in fileNodes)
@@ -207,7 +207,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     using (App.Wait("Checking out file."))
                     {
-                        project.Client.CheckOutFile(node.SourceFile);
+                        project.Client.Checkouts.CheckoutFile(node.SourceFile);
                     }
                 }
 

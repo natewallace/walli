@@ -123,7 +123,7 @@ namespace Wallace.IDE.SalesForce.Function
 
                 if (!String.IsNullOrWhiteSpace(file.Id) && 
                     App.Instance.SalesForceApp.CurrentProject != null &&
-                    App.Instance.SalesForceApp.CurrentProject.IsCheckoutEnabled)
+                    App.Instance.SalesForceApp.CurrentProject.Client.Checkouts.IsCheckoutEnabled())
                     dlg.AddProperty("Checked out by", file.CheckedOutBy == null ? String.Empty : file.CheckedOutBy.Name);
 
                 App.ShowDialog(dlg);

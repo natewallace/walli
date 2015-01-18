@@ -160,6 +160,7 @@ namespace SalesForceData
             FileType = new SourceFileType(type, null);
             Name = name;
 
+            Id = null;
             FileName = null;
             Parent = null;
             ChangedBy = null;
@@ -169,6 +170,35 @@ namespace SalesForceData
             Children = new SourceFile[0];
             State = SourceFileState.None;
             CheckedOutBy = null;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="type">The file type name.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="checkedOutBy">CheckedOutBy.</param>
+        public SourceFile(string id, string type, string name, User checkedOutBy)
+        {
+            if (String.IsNullOrWhiteSpace(type))
+                throw new ArgumentException("type is null or whitespace.", "type");
+            if (String.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("name is null or whitespace.", "name");
+
+            FileType = new SourceFileType(type, null);
+            Name = name;
+
+            Id = id;
+            FileName = null;
+            Parent = null;
+            ChangedBy = null;
+            ChangedOn = DateTime.MinValue;
+            CreatedBy = null;
+            CreatedOn = DateTime.MinValue;
+            Children = new SourceFile[0];
+            State = SourceFileState.None;
+            CheckedOutBy = checkedOutBy;
         }
 
         #endregion
@@ -247,6 +277,14 @@ namespace SalesForceData
         /// The user that has this file checked out or null if it isn't checked out.
         /// </summary>
         public User CheckedOutBy { get; set; }
+
+        /// <summary>
+        /// The file type name and name.
+        /// </summary>
+        public string FullName
+        {
+            get { return String.Format("{0}/{1}", FileType.Name, Name); }
+        }
 
         #endregion
 

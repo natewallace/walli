@@ -77,9 +77,9 @@ namespace Wallace.IDE.SalesForce.Node
             {
                 using (App.Wait("Opening trigger..."))
                 {
-                    if (Project.IsCheckoutEnabled)
+                    if (Project.Client.Checkouts.IsCheckoutEnabled())
                     {
-                        Project.Client.RefreshCheckOutStatus(SourceFile);
+                        Project.Client.Checkouts.RefreshCheckoutStatus(SourceFile);
                         UpdateHeader();
                     }
 
