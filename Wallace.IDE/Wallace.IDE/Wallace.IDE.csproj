@@ -882,11 +882,14 @@
   <ItemGroup>
     <None Include="NativeBinaries\libgit2.license.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NativeBinaries\amd64\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="NativeBinaries\x86\git2-dce7b1a.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NativeBinaries\amd64\git2-dce7b1a.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
