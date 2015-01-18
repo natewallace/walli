@@ -27,6 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.Framework;
+using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Node;
 using Wallace.IDE.SalesForce.UI;
@@ -121,7 +122,27 @@ namespace Wallace.IDE.SalesForce.Function
                         // commit to repository
                         if (project.Repository.IsValid)
                         {
-                            //TODO:
+                            // check for unsaved changes
+                            foreach (SourceFile file in dlg.SelectedFiles)
+                            {
+                                IDocument[] documents = App.Instance.Content.GetDocumentsByEntity(file);
+                                foreach (IDocument document in documents)
+                                {
+                                    if (document is ISourceFileEditorDocument &&
+                                        (document as ISourceFileEditorDocument).IsDirty)
+                                        throw new Exception(String.Format("The file '{0}' has unsaved changes.  You must save your changes before you can check it in.", file.FullName));
+                                }
+                            }
+
+                            // download the files in a package
+                            byte[] packageBits = project.Client.GetSourceFileContentAsPackage(dlg.SelectedFiles);                            
+
+                            // commit and push the package
+                            project.Repository.PushPackage(
+                                packageBits, 
+                                dlg.Comment, 
+                                project.Client.User.Name,
+                                project.Client.UserEmail);
                         }
 
                         // commit to salesforce

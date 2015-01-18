@@ -21,6 +21,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
@@ -304,8 +305,8 @@ namespace SalesForceData
                     {
                         string extractName = Path.Combine(path, entry.FullName);
                         if (!includeManifest &&
-                            (String.Compare(extractName, "package.xml", true) == 0 ||
-                            String.Compare(extractName, "destructiveChanges.xml", true) == 0))
+                            (String.Compare(entry.FullName, "package.xml", true) == 0 ||
+                            String.Compare(entry.FullName, "destructiveChanges.xml", true) == 0))
                             continue;
 
                         string folderName = Path.GetDirectoryName(extractName);
@@ -316,6 +317,59 @@ namespace SalesForceData
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Extract the contents of this package to the given path.
+        /// </summary>
+        /// <param name="package">The package to extract.</param>
+        /// <param name="path">The path to extract to.</param>
+        /// <param name="overwrite">If set to true, files will be overwritten.</param>
+        /// <returns>The files that were extracted.</returns>
+        public static string[] Extract(byte[] package, string path, bool overwrite)
+        {
+            return Extract(package, path, overwrite, true);
+        }
+
+        /// <summary>
+        /// Extract the contents of this package to the given path.
+        /// </summary>
+        /// <param name="package">The package to extract.</param>
+        /// <param name="path">The path to extract to.</param>
+        /// <param name="overwrite">If set to true, files will be overwritten.</param>
+        /// <param name="includeManifest">If true, the manifest will be extracted as well.</param>
+        /// <returns>The files that were extracted.</returns>
+        public static string[] Extract(byte[] package, string path, bool overwrite, bool includeManifest)
+        {
+            if (package == null)
+                throw new ArgumentNullException("package");
+
+            List<string> result = new List<string>();
+
+            using (MemoryStream ms = new MemoryStream(package))
+            {
+                using (ZipArchive archive = new ZipArchive(ms))
+                {
+                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    {
+                        string extractName = Path.Combine(path, entry.FullName);
+                        result.Add(extractName);
+
+                        if (!includeManifest &&
+                            (String.Compare(entry.FullName, "package.xml", true) == 0 ||
+                            String.Compare(entry.FullName, "destructiveChanges.xml", true) == 0))
+                            continue;
+
+                        string folderName = Path.GetDirectoryName(extractName);
+                        if (!Directory.Exists(folderName))
+                            Directory.CreateDirectory(folderName);
+
+                        entry.ExtractToFile(extractName, true);
+                    }
+                }
+            }
+
+            return result.ToArray();
         }
 
         /// <summary>

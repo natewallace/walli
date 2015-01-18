@@ -129,6 +129,11 @@ namespace SalesForceData
         public User User { get; private set; }
 
         /// <summary>
+        /// The email of the user that is logged in.
+        /// </summary>
+        public string UserEmail { get; private set; }
+
+        /// <summary>
         /// A uri that can be used to login to the salesforce website using this session.
         /// </summary>
         public string WebsiteAutoLoginUri
@@ -247,6 +252,7 @@ namespace SalesForceData
             RestBaseUrl = String.Format("https://{0}/services/data/v{1:N1}", new Uri(_session.serverUrl).Host, SalesForceClient.METADATA_VERSION);
 
             User = new User(_session.userId, _session.userInfo.userFullName);
+            UserEmail = _session.userInfo.userEmail;
         }
 
         /// <summary>

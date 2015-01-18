@@ -161,7 +161,10 @@ namespace Wallace.IDE.SalesForce.Framework
         /// Push the contents of the package to the remote.
         /// </summary>
         /// <param name="package">The package to push.</param>
-        public void PushPackage(Package package)
+        /// <param name="comment">The comment for the commit.</param>
+        /// <param name="authorName">The author of the commit.</param>
+        /// <param name="authorEmail">The author's email.</param>
+        public void PushPackage(byte[] package, string comment, string authorName, string authorEmail)
         {
             if (package == null)
                 throw new ArgumentNullException("package");
@@ -171,6 +174,7 @@ namespace Wallace.IDE.SalesForce.Framework
             using (Repository repo = Init())
             {
                 FetchOptions fetchOptions = null;
+                PushOptions pushOptions = null;
 
                 try
                 {
@@ -199,14 +203,24 @@ namespace Wallace.IDE.SalesForce.Framework
                     repo.Checkout(localBranch, checkoutOptions);
 
                     // extract package to the working directory
-                    package.ExtractTo(WorkingPath, true, false);
+                    string[] files = Package.Extract(package, WorkingPath, true, false);
 
+                    // stage, commit, and then push
+                    repo.Stage(files);
 
+                    Signature author = new Signature(authorName, authorEmail, DateTime.Now);
+                    repo.Commit(comment, author);
+
+                    pushOptions = new PushOptions();
+                    pushOptions.CredentialsProvider += ProvideCredentials;
+                    repo.Network.Push(localBranch, pushOptions);
                 }
                 finally
                 {
                     if (fetchOptions != null)
                         fetchOptions.CredentialsProvider -= ProvideCredentials;
+                    if (pushOptions != null)
+                        pushOptions.CredentialsProvider -= ProvideCredentials;
                 }
             }
         }

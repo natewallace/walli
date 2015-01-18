@@ -149,6 +149,14 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// The user email.
+        /// </summary>
+        public string UserEmail
+        {
+            get { return _session.UserEmail; }
+        }
+
+        /// <summary>
         /// The namespace for the organization.
         /// </summary>
         public string Namespace
