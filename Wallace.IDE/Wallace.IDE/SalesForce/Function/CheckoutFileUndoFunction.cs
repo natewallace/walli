@@ -52,11 +52,32 @@ namespace Wallace.IDE.SalesForce.Function
             if (project != null && project.Client.Checkout.IsEnabled())
             {
                 foreach (INode node in App.Instance.Navigation.SelectedNodes)
+                {
                     if (node is SourceFileNode && project.Client.User.Equals((node as SourceFileNode).SourceFile.CheckedOutBy))
                         result.Add((node as SourceFileNode).SourceFile);
+                    else
+                        return new SourceFile[0];
+                }
             }
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Check to see if the root node is the currently selected node.
+        /// </summary>
+        /// <returns>true if the root node is the currently selected node.</returns>
+        private bool IsRootNodeSelected()
+        {
+            Project project = App.Instance.SalesForceApp.CurrentProject;
+            if (project != null && project.Client.Checkout.IsEnabled())
+            {
+                if (App.Instance.Navigation.SelectedNodes.Count == 1 &&
+                    App.Instance.Navigation.SelectedNodes[0] is SourceFolderNode)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -85,7 +106,7 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (GetSelectedFiles().Length > 0);
+            IsVisible = (IsRootNodeSelected() || GetSelectedFiles().Length > 0);
         }
 
         /// <summary>
@@ -113,7 +134,7 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.CommitTitle = "Undo";
                 dlg.ShowComment = false;
                 dlg.Files = userCheckouts.ToArray();
-                dlg.SelectedFiles = GetSelectedFiles();
+                dlg.SelectedFiles = IsRootNodeSelected() ? userCheckouts.ToArray() : GetSelectedFiles();
 
                 if (App.ShowDialog(dlg))
                 {

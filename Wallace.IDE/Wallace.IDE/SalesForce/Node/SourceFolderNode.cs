@@ -26,6 +26,7 @@ using System.Linq;
 using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
@@ -126,6 +127,24 @@ namespace Wallace.IDE.SalesForce.Node
             }
 
             return nodes.ToArray();
+        }
+
+        /// <summary>
+        /// Get functions available.
+        /// </summary>
+        /// <returns>The functions that can be executed on this node.</returns>
+        public override IFunction[] GetContextFunctions()
+        {
+            List<IFunction> functions = new List<IFunction>(base.GetContextFunctions());
+            functions.AddRange(
+                new IFunction[] 
+                {
+                    App.Instance.GetFunction<CheckinFileFunction>(),
+                    App.Instance.GetFunction<CheckoutFileUndoFunction>()
+                }
+            );
+
+            return functions.ToArray();
         }
 
         #endregion
