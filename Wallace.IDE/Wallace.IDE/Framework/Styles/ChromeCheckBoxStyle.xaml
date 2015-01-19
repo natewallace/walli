@@ -29,7 +29,7 @@
                                           StrokeThickness="2"
                                           Data="M 4 8 L 7 1 M 5 8 L 1 5">
                                         <Path.Stroke>
-                                            <SolidColorBrush Color="DimGray" />
+                                            <SolidColorBrush Color="SteelBlue" />
                                         </Path.Stroke>
                                     </Path>
                                 </Grid>
