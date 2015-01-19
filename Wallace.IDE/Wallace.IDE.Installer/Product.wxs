@@ -19,7 +19,12 @@
     <!-- Define the directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="APPLICATIONFOLDER" Name="Walli"/>
+        <Directory Id="APPLICATIONFOLDER" Name="Walli">
+          <Directory Id="NATIVEBINARIES" Name="NativeBinaries">
+            <Directory Id="GIT64" Name="amd64" />
+            <Directory Id="GIT32" Name="x86" />
+          </Directory>
+        </Directory>
       </Directory>      
       <Directory Id="ProgramMenuFolder">
         <Directory Id="ApplicationMenuFolder" Name="Walli" />
@@ -45,6 +50,12 @@
       <Component Id="Newtonsoft.Json.xml" Guid="B19A2DB3-1463-450D-8803-F8FCDF84ACA9">
         <File Id="Newtonsoft.Json.xml" Source="..\Wallace.IDE\bin\Release\Newtonsoft.Json.xml" KeyPath="yes" Checksum="yes"/>
       </Component>
+      <Component Id="LibGit2Sharp.dll" Guid="58095232-5C95-425A-A8A1-88C413BB86EC">
+        <File Id="LibGit2Sharp.dll" Source="..\Wallace.IDE\bin\Release\LibGit2Sharp.dll" KeyPath="yes" Checksum="yes" />
+      </Component>
+      <Component Id="LibGit2Sharp.xml" Guid="49D4457B-265B-4B90-8C94-46EE87D38815">
+        <File Id="LibGit2Sharp.xml" Source="..\Wallace.IDE\bin\Release\LibGit2Sharp.xml" KeyPath="yes" Checksum="yes" />
+      </Component>
       <Component Id="SalesForceData.dll" Guid="C456DA60-D451-40EC-8BE7-96865A3242CE">
         <File Id="SalesForceData.dll" Source="..\Wallace.IDE\bin\Release\SalesForceData.dll" KeyPath="yes" Checksum="yes"/>
       </Component>
@@ -65,6 +76,16 @@
       </Component>
       <Component Id="Walli.pdb" Guid="DE83A058-1CDD-4628-B1EF-254830F04331">
         <File Id="Walli.pdb" Source="..\Wallace.IDE\bin\Release\Walli.pdb" KeyPath="yes" Checksum="yes"/>
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="GIT32">
+      <Component Id="git2.32.dll" Guid="57CF6391-1C82-4019-A532-93A6410930DF">
+        <File Id="git2.32.dll" Source="..\Wallace.IDE\bin\Release\NativeBinaries\x86\git2-dce7b1a.dll" KeyPath="yes" Checksum="yes"/>
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="GIT64">
+      <Component Id="git2.64.dll" Guid="D43A2E0F-2C48-4CBF-B2D1-7074F9B837A7">
+        <File Id="git2.64.dll" Source="..\Wallace.IDE\bin\Release\NativeBinaries\amd64\git2-dce7b1a.dll" KeyPath="yes" Checksum="yes"/>
       </Component>
     </DirectoryRef>
 
@@ -100,6 +121,8 @@
       <ComponentRef Id="ICSharpCode.AvalonEdit.xml" />
       <ComponentRef Id="Newtonsoft.Json.dll" />
       <ComponentRef Id="Newtonsoft.Json.xml" />
+      <ComponentRef Id="LibGit2Sharp.dll" />
+      <ComponentRef Id="LibGit2Sharp.xml" />
       <ComponentRef Id="SalesForceData.dll" />
       <ComponentRef Id="SalesForceData.dll.config" />
       <ComponentRef Id="SalesForceData.pdb" />
@@ -107,6 +130,8 @@
       <ComponentRef Id="SalesForceLanguage.pdb" />
       <ComponentRef Id="Walli.exe.config" />
       <ComponentRef Id="Walli.pdb" />
+      <ComponentRef Id="git2.32.dll" />
+      <ComponentRef Id="git2.64.dll" />
     </Feature>
 
     <!-- UI configuration -->
