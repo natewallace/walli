@@ -35,14 +35,22 @@
             <DockPanel Grid.Row="2"
                        Margin="0,10,0,0"                       
                        LastChildFill="True">
-                <StackPanel Orientation="Horizontal"
-                            DockPanel.Dock="Right">
-                    <Button Click="buttonSelectAll_Click">Select All</Button>
-                    <TextBlock Text="/" 
-                               VerticalAlignment="Center"/>
-                    <Button Click="buttonSelectNone_Click">Select None</Button>
-                </StackPanel>
                 
+                <StackPanel DockPanel.Dock="Right" 
+                            Orientation="Horizontal">
+                    <TextBlock Foreground="Gray">[</TextBlock>
+                    <Button Style="{StaticResource ChromeLinkButtonStyle}"
+                        Click="buttonSelectAll_Click">
+                        check all
+                    </Button>
+                    <TextBlock Foreground="Gray"> |</TextBlock>
+                    <Button Style="{StaticResource ChromeLinkButtonStyle}"
+                        Click="buttonSelectNone_Click">
+                        uncheck all
+                    </Button>
+                    <TextBlock Foreground="Gray"> ]</TextBlock>
+                </StackPanel>
+
                 <TextBlock FontWeight="Bold"      
                            VerticalAlignment="Bottom"
                            Text="Files:" />

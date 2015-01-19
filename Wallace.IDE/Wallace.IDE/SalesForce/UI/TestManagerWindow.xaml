@@ -22,17 +22,17 @@
             <StackPanel Grid.Row="0" 
                         Orientation="Horizontal"
                         Margin="0,0,0,5">
-                <TextBlock>[ </TextBlock>
+                <TextBlock Foreground="Gray">[ </TextBlock>
                 <Button Style="{StaticResource ChromeLinkButtonStyle}"
                         Click="buttonCheckAll_Click">
                     check all
                 </Button>
-                <TextBlock> | </TextBlock>
+                <TextBlock Foreground="Gray"> | </TextBlock>
                 <Button Style="{StaticResource ChromeLinkButtonStyle}"
                         Click="buttonUncheckAll_Click">
                     uncheck all
                 </Button>
-                <TextBlock> ]</TextBlock>
+                <TextBlock Foreground="Gray"> ]</TextBlock>
             </StackPanel>
         
             <ListBox x:Name="listBoxTestNames"
