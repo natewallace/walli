@@ -1988,6 +1988,10 @@ namespace SalesForceData
                                     file.UpdateName(name);
                                 }
 
+                                // update checkout with new file name
+                                if (file.IsNameUpdated && Checkout.IsEnabled() && !isTempCheckout)
+                                    Checkout.UpdateCheckout(file);
+
                                 return new SalesForceError[0];
 
                             default:

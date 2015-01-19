@@ -385,6 +385,47 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Update an existing checkout on a file.
+        /// </summary>
+        /// <param name="file">The file to update the checkout on.</param>
+        public void UpdateCheckout(SourceFile file)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+            if (String.IsNullOrEmpty(file.Id))
+                throw new ArgumentException("The file doesn't have an id.", "file.Id");
+
+            if (!IsEnabled())
+                return;
+
+            DataSelectResult lockTable = _client.DataSelectAll(String.Format("SELECT Id, {0}, {1}, {2}, {3}, {4} FROM {5} WHERE {0} = '{6}' AND {3} = '{7}'",
+                ColumnEntityId,
+                ColumnEntityName,
+                ColumnEntityTypeName,
+                ColumnUserId,
+                ColumnUserName,
+                TableName,
+                file.Id,
+                _client.User.Id));
+
+            if (lockTable.Data.Rows.Count != 1)
+                return; // file isn't checked out to the current user
+
+            lockTable.Data.Rows[0][ColumnEntityTypeName] = file.FileType.Name;
+            lockTable.Data.Rows[0][ColumnEntityName] = file.Name;
+            lockTable.Data.Rows[0][ColumnUserName] = _client.User.Name;
+
+            try
+            {
+                _client.DataUpdate(lockTable.Data);
+            }
+            catch (Exception err)
+            {
+                throw new Exception("Could not update checkout file: " + err.Message, err);
+            }
+        }
+
+        /// <summary>
         /// Check in the given files.
         /// </summary>
         /// <param name="files">The files to checkin.</param>
