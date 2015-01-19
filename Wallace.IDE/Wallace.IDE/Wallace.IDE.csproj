@@ -362,6 +362,10 @@
     <Compile Include="Framework\Win32\MINMAXINFO.cs" />
     <Compile Include="Framework\Win32\POINT.cs" />
     <Compile Include="Framework\Win32\RECT.cs" />
+    <Page Include="Framework\Styles\ChromeCheckBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Framework\Styles\ChromeComboBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

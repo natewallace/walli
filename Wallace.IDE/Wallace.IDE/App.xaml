@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Framework/Styles/ChromeTabStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/ChromeMenuStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/ChromeComboBoxStyle.xaml" />
+                <ResourceDictionary Source="Framework/Styles/ChromeCheckBoxStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/ChromeToolbarStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/ChromeLinkButtonStyle.xaml" />
                 <ResourceDictionary Source="Framework/Styles/TreeViewMultiSelectItemStyle.xaml" />
@@ -30,7 +31,10 @@
 
             <Style BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" TargetType="ComboBox">                
             </Style>
-            
+
+            <Style BasedOn="{StaticResource ChromeCheckBoxStyle}" TargetType="CheckBox">
+            </Style>
+
             <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="Button">
                 <Setter Property="Padding" Value="3" />
             </Style>
