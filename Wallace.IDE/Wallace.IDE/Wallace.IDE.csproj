@@ -91,6 +91,7 @@
       <DependentUpon>WindowIconImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\CommitListDocument.cs" />
     <Compile Include="SalesForce\Document\DataEditorDocument.cs" />
     <Compile Include="SalesForce\Document\ISourceFileEditorDocument.cs" />
     <Compile Include="SalesForce\Document\LogViewerDocument.cs" />
@@ -112,12 +113,14 @@
     <Compile Include="SalesForce\Framework\SalesForceApplication.cs" />
     <Compile Include="SalesForce\Framework\SecureStringUtility.cs" />
     <Compile Include="SalesForce\Framework\SimpleRepository.cs" />
+    <Compile Include="SalesForce\Framework\SimpleRepositoryCommit.cs" />
     <Compile Include="SalesForce\Function\AddCommentFunction.cs" />
     <Compile Include="SalesForce\Function\AddFileToManifestFunction.cs" />
     <Compile Include="SalesForce\Function\ApexDocumentationFunction.cs" />
     <Compile Include="SalesForce\Function\CancelDeployPackageFunction.cs" />
     <Compile Include="SalesForce\Function\CheckinFileFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutFileFunction.cs" />
+    <Compile Include="SalesForce\Function\CheckoutFileHistoryFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutFileUndoFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutFolderFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutSystemFunction.cs" />
@@ -216,6 +219,12 @@
     </Compile>
     <Compile Include="SalesForce\UI\ColorSelectWindow.xaml.cs">
       <DependentUpon>ColorSelectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\CommitHeaderControl.xaml.cs">
+      <DependentUpon>CommitHeaderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\CommitHeaderListControl.xaml.cs">
+      <DependentUpon>CommitHeaderListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\DataEditorControl.xaml.cs">
       <DependentUpon>DataEditorControl.xaml</DependentUpon>
@@ -407,6 +416,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\ColorSelectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\CommitHeaderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\CommitHeaderListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -886,7 +903,9 @@
   <ItemGroup>
     <None Include="NativeBinaries\libgit2.license.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\History.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="NativeBinaries\x86\git2-dce7b1a.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -896,6 +915,9 @@
     <None Include="NativeBinaries\amd64\git2-dce7b1a.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\User.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

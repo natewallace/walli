@@ -80,7 +80,7 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.RepositoryUrl = project.Repository.RemoteUrl;
                 dlg.Username = project.Repository.Username;
                 dlg.Password = project.Repository.Password;
-                dlg.BranchName = project.Repository.Branch;
+                dlg.BranchName = project.Repository.BranchName;
                 dlg.IsCheckoutEnabled = project.Client.Checkout.IsEnabled();
 
                 dlg.ToggleCheckOutSystemClick += ToggleCheckOutSystem;
@@ -92,7 +92,7 @@ namespace Wallace.IDE.SalesForce.Function
                         project.Repository.RemoteUrl = dlg.RepositoryUrl;
                         project.Repository.Username = dlg.Username;
                         project.Repository.Password = dlg.Password;
-                        project.Repository.Branch = dlg.BranchName;
+                        project.Repository.BranchName = dlg.BranchName;
                         project.Save();
                     }
                 }
