@@ -64,32 +64,26 @@ namespace Wallace.IDE.SalesForce.Function
         }
 
         /// <summary>
-        /// Setup header.
-        /// </summary>
-        /// <param name="host">The type of host.</param>
-        /// <param name="presenter">The presenter to use.</param>
-        public override void Init(FunctionHost host, IFunctionPresenter presenter)
-        {
-            if (host == FunctionHost.Toolbar)
-            {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "CheckIn.png");
-                presenter.ToolTip = "Check out file(s)";
-            }
-            else
-            {
-                presenter.Header = "Check out file(s)";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckIn.png");
-            }
-        }
-
-        /// <summary>
         /// Set the header based on the currently selected file(s).
         /// </summary>
         /// <param name="host">The type of host.</param>
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (GetSelectedNodes().Length > 0);
+            SourceFileNode[] selectedNodes = GetSelectedNodes();
+
+            if (host == FunctionHost.Toolbar)
+            {
+                presenter.Header = VisualHelper.CreateIconHeader(null, "CheckIn.png");
+                presenter.ToolTip = (selectedNodes.Length > 1) ? "Check out files" : "Check out file";
+            }
+            else
+            {
+                presenter.Header = (selectedNodes.Length > 1) ? "Check out files" : "Check out file";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckIn.png");
+            }
+
+            IsVisible = (selectedNodes.Length > 0);
         }
 
         /// <summary>

@@ -82,32 +82,27 @@ namespace Wallace.IDE.SalesForce.Function
         }
 
         /// <summary>
-        /// Setup header.
-        /// </summary>
-        /// <param name="host">The type of host.</param>
-        /// <param name="presenter">The presenter to use.</param>
-        public override void Init(FunctionHost host, IFunctionPresenter presenter)
-        {
-            if (host == FunctionHost.Toolbar)
-            {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "CheckIn.png");
-                presenter.ToolTip = "Check in file(s)...";
-            }
-            else
-            {
-                presenter.Header = "Check in file(s)...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckIn.png");
-            }
-        }
-
-        /// <summary>
         /// Set the header based on the currently selected file(s).
         /// </summary>
         /// <param name="host">The type of host.</param>
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (IsRootNodeSelected() || GetSelectedFiles().Length > 0);
+            bool isRootNodeSelected = IsRootNodeSelected();
+            SourceFile[] selectedFiles = GetSelectedFiles();
+
+            if (host == FunctionHost.Toolbar)
+            {
+                presenter.Header = VisualHelper.CreateIconHeader(null, "CheckIn.png");
+                presenter.ToolTip = (isRootNodeSelected || selectedFiles.Length > 1) ? "Check in files..." : "Check in file...";
+            }
+            else
+            {
+                presenter.Header = (isRootNodeSelected || selectedFiles.Length > 1) ? "Check in files..." : "Check in file...";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckIn.png");
+            }
+
+            IsVisible = (isRootNodeSelected || selectedFiles.Length > 0);
         }
 
         /// <summary>

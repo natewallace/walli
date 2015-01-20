@@ -81,32 +81,27 @@ namespace Wallace.IDE.SalesForce.Function
         }
 
         /// <summary>
-        /// Setup header.
-        /// </summary>
-        /// <param name="host">The type of host.</param>
-        /// <param name="presenter">The presenter to use.</param>
-        public override void Init(FunctionHost host, IFunctionPresenter presenter)
-        {
-            if (host == FunctionHost.Toolbar)
-            {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "Undo.png");
-                presenter.ToolTip = "Undo file(s) checkout...";
-            }
-            else
-            {
-                presenter.Header = "Undo file(s) checkout...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "Undo.png");
-            }
-        }
-
-        /// <summary>
         /// Set the header based on the currently selected file(s).
         /// </summary>
         /// <param name="host">The type of host.</param>
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (IsRootNodeSelected() || GetSelectedFiles().Length > 0);
+            bool isRootNodeSelected = IsRootNodeSelected();
+            SourceFile[] selectedFiles = GetSelectedFiles();
+
+            if (host == FunctionHost.Toolbar)
+            {
+                presenter.Header = VisualHelper.CreateIconHeader(null, "Undo.png");
+                presenter.ToolTip = (isRootNodeSelected || selectedFiles.Length > 1) ? "Undo file check outs..." : "Undo file check out...";
+            }
+            else
+            {
+                presenter.Header = (isRootNodeSelected || selectedFiles.Length > 1) ? "Undo file check outs..." : "Undo file check out...";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "Undo.png");
+            }
+
+            IsVisible = (isRootNodeSelected || selectedFiles.Length > 0);
         }
 
         /// <summary>

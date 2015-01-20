@@ -259,6 +259,7 @@ namespace Wallace.IDE.SalesForce.Framework
                 using (Repository repo = Init())
                 {
                     Commit commit = repo.Head.Tip;
+                    Commit lastCommitFound = null;
                     string targetSha = null;
 
                     HashSet<string> shaSet = new HashSet<string>();
@@ -275,7 +276,10 @@ namespace Wallace.IDE.SalesForce.Framework
                         // get target sha
                         TreeEntry target = commit[file.FileName];
                         if (target != null)
+                        {
                             targetSha = target.Target.Sha;
+                            lastCommitFound = commit;
+                        }
 
                         // compare the target sha against parent commits
                         foreach (Commit parent in commit.Parents)
@@ -286,6 +290,8 @@ namespace Wallace.IDE.SalesForce.Framework
                             TreeEntry tree = parent[file.FileName];
                             if (tree == null)
                                 continue;
+
+                            lastCommitFound = parent;
 
                             if (tree.Target.Sha != targetSha && shaSet.Add(commit.Sha))
                             {
@@ -302,6 +308,10 @@ namespace Wallace.IDE.SalesForce.Framework
                                 go = false;
                         }
                     }
+
+                    // if there was only one commit found then it gets added here
+                    if (result.Count == 0 && lastCommitFound != null)
+                        result.Add(new SimpleRepositoryCommit(lastCommitFound));
                 }
             }
 
