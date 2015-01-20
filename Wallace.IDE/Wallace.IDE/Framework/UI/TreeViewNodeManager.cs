@@ -1060,8 +1060,17 @@ namespace Wallace.IDE.Framework.UI
                 }
 
                 TreeViewMultiSelectItem item = Host.SelectedItem as TreeViewMultiSelectItem;
+
+                // item was deselected (special case)
                 if (item == null)
+                {
+                    item = e.OldValue as TreeViewMultiSelectItem;
+                    if (item != null && item.Tag is INode)
+                        SelectedNodes.Remove(item.Tag as INode);
+
+                    OnActiveNodeChanged(EventArgs.Empty);
                     return;
+                }
 
                 INode node = item.Tag as INode;
                 if (node == null)
@@ -1097,9 +1106,12 @@ namespace Wallace.IDE.Framework.UI
                         }
                         break;
 
-                    default:                        
-                        SelectedNodes.Clear();
-                        SelectedNodes.Add(node);
+                    default:
+                        if (!item.IsMultiSelected && item.IsSelected)
+                        {
+                            SelectedNodes.Clear();
+                            SelectedNodes.Add(node);
+                        }
                         _lastSelectedTreeViewItem = item;
                         break;
                 }
@@ -1181,6 +1193,9 @@ namespace Wallace.IDE.Framework.UI
                                 e.Handled = true;
                                 item.IsMultiSelected = false;
                                 item.IsSelected = false;
+
+                                if (item.Tag is INode)
+                                    SelectedNodes.Remove(item.Tag as INode);
                             }
                         }
 
@@ -1252,7 +1267,13 @@ namespace Wallace.IDE.Framework.UI
                 if (_suspendSelectionChange)
                 {
                     _suspendSelectionChange = false;
-                    Host_SelectedItemChanged(null, _delayedSelection);
+                    if (_delayedSelection != null)
+                    {
+                        TreeViewMultiSelectItem item = _delayedSelection.NewValue as TreeViewMultiSelectItem;
+                        if (item != null)
+                            item.IsMultiSelected = false;
+                        Host_SelectedItemChanged(null, _delayedSelection);
+                    }
                     _delayedSelection = null;
                 }
 
