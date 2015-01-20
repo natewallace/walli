@@ -45,6 +45,11 @@ namespace Wallace.IDE.SalesForce.Document
         bool IsDirty { get; }
 
         /// <summary>
+        /// Flag that indicates if the document is read only.
+        /// </summary>
+        bool IsReadOnly { get; }
+
+        /// <summary>
         /// The file being edited.
         /// </summary>
         SourceFile File { get; }

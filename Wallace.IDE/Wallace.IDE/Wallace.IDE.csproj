@@ -48,6 +48,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +61,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -93,6 +95,7 @@
     <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
     <Compile Include="SalesForce\Document\CommitListDocument.cs" />
     <Compile Include="SalesForce\Document\DataEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\TextViewDocument.cs" />
     <Compile Include="SalesForce\Document\ISourceFileEditorDocument.cs" />
     <Compile Include="SalesForce\Document\LogViewerDocument.cs" />
     <Compile Include="SalesForce\Document\ManifestEditorDocument.cs" />
@@ -107,6 +110,7 @@
     <Compile Include="SalesForce\Document\VisualForceEditorDocument.cs" />
     <Compile Include="Framework\ClientBrowser.cs" />
     <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
+    <Compile Include="SalesForce\Framework\DiffMatchPatch.cs" />
     <Compile Include="SalesForce\Framework\IReportFilter.cs" />
     <Compile Include="SalesForce\Framework\Project.cs" />
     <Compile Include="SalesForce\Framework\ReportFilterUserDate.cs" />
@@ -235,6 +239,10 @@
     <Compile Include="SalesForce\Function\NewProjectFunction.cs" />
     <Compile Include="SalesForce\UI\DefaultHeaderControl.xaml.cs">
       <DependentUpon>DefaultHeaderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\DiffDocumentColorizingTransformer.cs" />
+    <Compile Include="SalesForce\UI\TextViewControl.xaml.cs">
+      <DependentUpon>TextViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\FontAndColorSettingsControl.xaml.cs">
       <DependentUpon>FontAndColorSettingsControl.xaml</DependentUpon>
@@ -432,6 +440,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\DefaultHeaderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\TextViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -918,6 +930,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\User.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Compare.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

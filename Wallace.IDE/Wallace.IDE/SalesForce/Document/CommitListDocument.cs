@@ -60,11 +60,7 @@ namespace Wallace.IDE.SalesForce.Document
             View = new CommitHeaderListControl();
             View.Commits = Commits;
             View.OpenClick += View_OpenClick;
-        }
-
-        private void View_OpenClick(object sender, EventArgs e)
-        {
-            string text = Project.Repository.GetContent(File, View.SelectedCommits[0]);
+            View.CompareClick += View_CompareClick;
         }
 
         #endregion
@@ -106,6 +102,40 @@ namespace Wallace.IDE.SalesForce.Document
                 Presenter.Header = VisualHelper.CreateIconHeader(File.FullName, "History.png");
                 Presenter.Content = View;
             }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Open the version of the file currently selected.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_OpenClick(object sender, EventArgs e)
+        {
+            string text = null;
+            using (App.Wait("Getting older version."))
+                text = Project.Repository.GetContent(File, View.SelectedCommits[0]);
+
+            TextViewDocument document = new TextViewDocument(Project, File, text, "History.png", false);
+            App.Instance.Content.OpenDocument(document);
+        }
+
+        /// <summary>
+        /// Compare the two versions of the file currently selected.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_CompareClick(object sender, EventArgs e)
+        {
+            string text = null;
+            using (App.Wait("Creating diff."))
+                text = Project.Repository.Diff(File, View.SelectedCommits[1], View.SelectedCommits[0]);
+
+            TextViewDocument document = new TextViewDocument(Project, File, text, "Compare.png", true);
+            App.Instance.Content.OpenDocument(document);
         }
 
         #endregion

@@ -378,10 +378,40 @@ namespace Wallace.IDE.SalesForce.Framework
                 string newerText = File.ReadAllText(Path.Combine(WorkingPath, file.FileName));
 
                 // do diff
-                //TODO:
-            }
+                diff_match_patch dmp = new diff_match_patch();
+                List<Diff> diffs = dmp.diff_main_line(olderText, newerText);
 
-            return null;   
+                StringBuilder result = new StringBuilder();
+                foreach (Diff d in diffs)
+                {
+                    // get prefix
+                    string prefix = null;
+                    switch (d.operation)
+                    {
+                        case Operation.EQUAL:
+                            prefix = "    ";
+                            break;
+
+                        case Operation.DELETE:
+                            prefix = "-   ";
+                            break;
+
+                        default:
+                            prefix = "+   ";
+                            break;
+                    }
+
+                    // format the lines
+                    using (StringReader reader = new StringReader(d.text))
+                    {
+                        string line = null;
+                        while ((line = reader.ReadLine()) != null)
+                            result.AppendFormat("{0}{1}{2}", prefix, line, Environment.NewLine);
+                    }
+                }
+
+                return result.ToString();
+            }
         }
 
         #endregion

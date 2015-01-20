@@ -21,6 +21,7 @@
  */
 
 using Wallace.IDE.Framework;
+using Wallace.IDE.SalesForce.Document;
 
 namespace Wallace.IDE.SalesForce.Function
 {
@@ -38,7 +39,9 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            if (CurrentDocument != null)
+            ISourceFileEditorDocument document = CurrentDocument;
+
+            if (document != null)
             {
                 if (host == FunctionHost.Toolbar)
                 {
@@ -53,6 +56,7 @@ namespace Wallace.IDE.SalesForce.Function
                 }
 
                 IsVisible = true;
+                IsEnabled = !document.IsReadOnly;
             }
             else
             {
