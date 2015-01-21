@@ -376,6 +376,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(commitCompareFunction, "DOCUMENT");
             App.Instance.RegisterFunction(commitCompareFunction);
 
+            CommitFileShaCopyFunction commitCopyShaFunction = new CommitFileShaCopyFunction();
+            App.Instance.Menu.AddFunction(commitCopyShaFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(commitCopyShaFunction);
+
             CloseDocumentFunction closeDocumentFunction = new CloseDocumentFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(closeDocumentFunction), "DOCUMENT");
             App.Instance.Menu.AddFunction(closeDocumentFunction, "DOCUMENT");

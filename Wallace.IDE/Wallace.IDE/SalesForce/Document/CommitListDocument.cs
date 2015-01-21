@@ -66,6 +66,7 @@ namespace Wallace.IDE.SalesForce.Document
             MenuFunctionManager menuManager = new MenuFunctionManager(View.ListContextMenu);
             menuManager.AddFunction(App.Instance.GetFunction<CommitFileOpenFunction>());
             menuManager.AddFunction(App.Instance.GetFunction<CommitFileCompareFunction>());
+            menuManager.AddFunction(App.Instance.GetFunction<CommitFileShaCopyFunction>());
         }
 
         #endregion

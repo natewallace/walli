@@ -134,6 +134,7 @@
     <Compile Include="SalesForce\Function\CommitDataChangesFunction.cs" />
     <Compile Include="SalesForce\Function\CommitFileCompareFunction.cs" />
     <Compile Include="SalesForce\Function\CommitFileOpenFunction.cs" />
+    <Compile Include="SalesForce\Function\CommitFileShaCopyFunction.cs" />
     <Compile Include="SalesForce\Function\ConfigureSourceControlFunction.cs" />
     <Compile Include="SalesForce\Function\CopyPackageDeployResultsFunction.cs" />
     <Compile Include="SalesForce\Function\DeleteAllLogsFunction.cs" />
