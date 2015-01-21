@@ -28,6 +28,7 @@ using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Function;
+using System.Text;
 
 namespace Wallace.IDE.SalesForce.Node
 {
@@ -125,7 +126,30 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void DragStart()
         {
-            Presenter.DoDragDrop(DataObject.Name, DragDropEffects.Copy);
+            StringBuilder sb = new StringBuilder();
+
+            foreach (INode node in Presenter.NodeManager.SelectedNodes)
+            {
+                if (node is DataObjectFieldNode)
+                    sb.AppendFormat("{0}, ", (node as DataObjectFieldNode).DataObjectField.Name);
+            }
+
+            if (sb.Length > 2)
+                sb.Length -= 2;
+
+            if (sb.Length > 0)
+            {
+                sb.Insert(0, "SELECT ");
+                sb.Append(" FROM ");
+                sb.Append(DataObject.Name);
+            }
+            else
+            {
+                sb.Append(DataObject.Name);
+            }
+
+            if (sb.Length > 0)
+                Presenter.DoDragDrop(sb.ToString(), DragDropEffects.Copy);
         }
 
         /// <summary>
