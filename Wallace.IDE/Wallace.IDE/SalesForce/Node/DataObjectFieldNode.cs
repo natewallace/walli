@@ -105,15 +105,28 @@ namespace Wallace.IDE.SalesForce.Node
         public override void DragStart()
         {
             StringBuilder sb = new StringBuilder();
+            string objectName = null;
+
             foreach (INode node in Presenter.NodeManager.SelectedNodes)
+            {
                 if (node is DataObjectFieldNode)
                     sb.AppendFormat("{0}, ", (node as DataObjectFieldNode).DataObjectField.Name);
+                else if (node is DataObjectNode)
+                    objectName = (node as DataObjectNode).DataObject.Name;
+            }
 
             if (sb.Length > 2)
-            {
                 sb.Length -= 2;
-                Presenter.DoDragDrop(sb.ToString(), DragDropEffects.Copy);
+
+            if (objectName != null)
+            {
+                sb.Insert(0, "SELECT ");
+                sb.Append(" FROM ");
+                sb.Append(objectName);
             }
+
+            if (sb.Length > 0)
+                Presenter.DoDragDrop(sb.ToString(), DragDropEffects.Copy);
         }
 
         /// <summary>
