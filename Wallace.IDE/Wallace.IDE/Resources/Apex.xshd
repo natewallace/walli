@@ -145,35 +145,41 @@
         </Span>
 
         <Keywords color="SOQLKeyword">
-          <Word>SELECT</Word>
           <Word>AND</Word>
-          <Word>OR</Word>
-          <Word>NULL</Word>
+          <Word>ASC</Word>
+          <Word>BY</Word>
+          <Word>CUBE</Word>
+          <Word>DESC</Word>
           <Word>END</Word>
-          <Word>TYPEOF</Word>
+          <Word>EXCLUDES</Word>
+          <Word>FIRST</Word>
+          <Word>FOR</Word>
           <Word>FROM</Word>
+          <Word>GROUP</Word>
+          <Word>HAVING</Word>
+          <Word>IN</Word>
+          <Word>INCLUDES</Word>
+          <Word>LAST</Word>
+          <Word>LIKE</Word>
+          <Word>LIMIT</Word>
+          <Word>NOT</Word>
+          <Word>NULL</Word>
+          <Word>NULLS</Word>
+          <Word>OFFSET</Word>
+          <Word>OR</Word>
+          <Word>ORDER</Word>
+          <Word>REFERENCE</Word>
+          <Word>ROLLUP</Word>
+          <Word>SCOPE</Word>
+          <Word>SELECT</Word>
+          <Word>TRACKING</Word>
+          <Word>TYPEOF</Word>
+          <Word>UPDATE</Word>
+          <Word>USING</Word>
+          <Word>VIEW</Word>
+          <Word>VIEWSTAT</Word>
           <Word>WHERE</Word>
           <Word>WITH</Word>
-          <Word>GROUP</Word>
-          <Word>BY</Word>
-          <Word>ROLLUP</Word>
-          <Word>CUBE</Word>
-          <Word>HAVING</Word>
-          <Word>ORDER</Word>
-          <Word>ASC</Word>
-          <Word>DESC</Word>
-          <Word>NULLS</Word>
-          <Word>FIRST</Word>
-          <Word>LAST</Word>
-          <Word>LIMIT</Word>
-          <Word>LIKE</Word>
-          <Word>VIEW</Word>
-          <Word>REFERENCE</Word>
-          <Word>OFFSET</Word>
-          <Word>VIEWSTAT</Word>
-          <Word>FOR</Word>
-          <Word>UPDATE</Word>
-          <Word>IN</Word>
         </Keywords>
       </RuleSet>
     </Span>
