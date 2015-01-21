@@ -59,6 +59,14 @@ namespace Wallace.IDE.SalesForce.UI
         #region Properties
 
         /// <summary>
+        /// The context menu in the view.
+        /// </summary>
+        public ContextMenu ListContextMenu
+        {
+            get { return listBoxContextMenu; }
+        }
+
+        /// <summary>
         /// The commits to display in a list.
         /// </summary>
         public IEnumerable<SimpleRepositoryCommit> Commits
@@ -121,36 +129,9 @@ namespace Wallace.IDE.SalesForce.UI
                 OpenClick(this, e);
         }
 
-        /// <summary>
-        /// Raises the CompareClick event.
-        /// </summary>
-        /// <param name="e">Arguments passed with the event.</param>
-        protected virtual void OnCompareClick(EventArgs e)
-        {
-            if (CompareClick != null)
-                CompareClick(this, e);
-        }
-
         #endregion
 
         #region Event Handlers
-
-        /// <summary>
-        /// Raises the OpenClick event.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void menuItemOpen_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                OnOpenClick(EventArgs.Empty);
-            }
-            catch (Exception err)
-            {
-                App.HandleException(err);
-            }
-        }
 
         /// <summary>
         /// Raises the OpenClick event.
@@ -163,41 +144,6 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 if (SelectedCommits.Length == 1)
                     OnOpenClick(EventArgs.Empty);
-            }
-            catch (Exception err)
-            {
-                App.HandleException(err);
-            }
-        }
-
-        /// <summary>
-        /// Raises the CompareClick event.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void menuItemCompare_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                OnCompareClick(EventArgs.Empty);
-            }
-            catch (Exception err)
-            {
-                App.HandleException(err);
-            }
-        }
-
-        /// <summary>
-        /// Update menu items.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void listBoxItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                menuItemCompare.IsEnabled = (SelectedCommits.Length == 2);
-                menuItemOpen.IsEnabled = (SelectedCommits.Length == 1);
             }
             catch (Exception err)
             {
@@ -237,6 +183,23 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Update menu items.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void listBoxItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                App.Instance.UpdateWorkspaces();
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
 
         #region Events
@@ -245,11 +208,6 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the user clicks to open an entry.
         /// </summary>
         public event EventHandler OpenClick;
-
-        /// <summary>
-        /// Raised when the user clicks to compare two entries.
-        /// </summary>
-        public event EventHandler CompareClick;
 
         #endregion
     }

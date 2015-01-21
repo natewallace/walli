@@ -27,7 +27,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.Framework;
+using Wallace.IDE.Framework.UI;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Document
@@ -60,7 +62,10 @@ namespace Wallace.IDE.SalesForce.Document
             View = new CommitHeaderListControl();
             View.Commits = Commits;
             View.OpenClick += View_OpenClick;
-            View.CompareClick += View_CompareClick;
+
+            MenuFunctionManager menuManager = new MenuFunctionManager(View.ListContextMenu);
+            menuManager.AddFunction(App.Instance.GetFunction<CommitFileOpenFunction>());
+            menuManager.AddFunction(App.Instance.GetFunction<CommitFileCompareFunction>());
         }
 
         #endregion
@@ -86,6 +91,14 @@ namespace Wallace.IDE.SalesForce.Document
         /// The document view.
         /// </summary>
         public CommitHeaderListControl View { get; private set; }
+
+        /// <summary>
+        /// Get the currently selected commits.
+        /// </summary>
+        public SimpleRepositoryCommit[] SelectedCommits
+        {
+            get { return View.SelectedCommits; }
+        }
 
         #endregion
 
@@ -115,27 +128,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// <param name="e">Event arguments.</param>
         private void View_OpenClick(object sender, EventArgs e)
         {
-            string text = null;
-            using (App.Wait("Getting older version."))
-                text = Project.Repository.GetContent(File, View.SelectedCommits[0]);
-
-            TextViewDocument document = new TextViewDocument(Project, File, text, "History.png", false);
-            App.Instance.Content.OpenDocument(document);
-        }
-
-        /// <summary>
-        /// Compare the two versions of the file currently selected.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void View_CompareClick(object sender, EventArgs e)
-        {
-            string text = null;
-            using (App.Wait("Creating diff."))
-                text = Project.Repository.Diff(File, View.SelectedCommits[1], View.SelectedCommits[0]);
-
-            TextViewDocument document = new TextViewDocument(Project, File, text, "Compare.png", true);
-            App.Instance.Content.OpenDocument(document);
+            App.Instance.GetFunction<CommitFileOpenFunction>().Execute();
         }
 
         #endregion

@@ -40,6 +40,11 @@ namespace Wallace.IDE.SalesForce.Document
         #region Fields
 
         /// <summary>
+        /// Holds the title for the document.
+        /// </summary>
+        private string _title;
+
+        /// <summary>
         /// The icon to display.
         /// </summary>
         private string _icon;
@@ -54,13 +59,15 @@ namespace Wallace.IDE.SalesForce.Document
         /// <param name="project">Project.</param>
         /// <param name="file">File.</param>
         /// <param name="text">Text.</param>
+        /// <param name="title">The title to display.</param>
         /// <param name="icon">The icon to display.</param>
         /// <param name="highlightDiffs">If true, the diffs in the text are highlighted.</param>
-        public TextViewDocument(Project project, SourceFile file, string text, string icon, bool highlightDiffs)
+        public TextViewDocument(Project project, SourceFile file, string text, string title, string icon, bool highlightDiffs)
             : base(project, file)
         {
             View.Text = text;
             View.HighlightDiffs = highlightDiffs;
+            _title = title;
             _icon = icon;
         }
 
@@ -69,12 +76,17 @@ namespace Wallace.IDE.SalesForce.Document
         #region Methods
 
         /// <summary>
-        /// Return the compare icon.
+        /// Do nothing on update.
         /// </summary>
-        /// <returns></returns>
-        protected override string GetIcon()
+        /// <param name="isFirstUpdate">Ignored.</param>
+        public override void Update(bool isFirstUpdate)
         {
-            return _icon;
+            if (isFirstUpdate)
+            {
+                Presenter.Header = VisualHelper.CreateIconHeader(_title, _icon);
+                Presenter.ToolTip = _title;
+                Presenter.Content = View;
+            }
         }
 
         /// <summary>

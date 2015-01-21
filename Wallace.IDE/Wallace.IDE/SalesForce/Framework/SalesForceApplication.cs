@@ -368,6 +368,14 @@ namespace Wallace.IDE.SalesForce.Framework
             SelectLogUnitLineFunction selectLogUnitTextFunction = new SelectLogUnitLineFunction();
             App.Instance.RegisterFunction(selectLogUnitTextFunction);
 
+            CommitFileOpenFunction commitOpenFunction = new CommitFileOpenFunction();
+            App.Instance.Menu.AddFunction(commitOpenFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(commitOpenFunction);
+
+            CommitFileCompareFunction commitCompareFunction = new CommitFileCompareFunction();
+            App.Instance.Menu.AddFunction(commitCompareFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(commitCompareFunction);
+
             CloseDocumentFunction closeDocumentFunction = new CloseDocumentFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(closeDocumentFunction), "DOCUMENT");
             App.Instance.Menu.AddFunction(closeDocumentFunction, "DOCUMENT");

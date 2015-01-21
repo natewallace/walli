@@ -252,66 +252,68 @@ namespace Wallace.IDE.SalesForce.Framework
             List<SimpleRepositoryCommit> result = new List<SimpleRepositoryCommit>();
             const int MAX_RESULTS = 50;
             const int MAX_COMMITS = 1000;
-            const int MAX_DEPTH = 20;
 
             using (App.Wait("Getting history."))
             {
                 using (Repository repo = Init())
                 {
-                    Commit commit = repo.Head.Tip;
-                    Commit lastCommitFound = null;
-                    string targetSha = null;
+                    Commit currentCommit = repo.Head.Tip;
+                    string currentSha = null;
+                    TreeEntry currentEntry = null;
 
-                    HashSet<string> shaSet = new HashSet<string>();
-                    Queue<Commit> commitQueue = new Queue<Commit>();                    
+                    Commit lastCommit = null;
+                    string lastSha = null;
+                    TreeEntry lastEntry = null;
 
-                    bool go = true;
-                    int commitCount = 0;
-
-                    commitQueue.Enqueue(commit);
-                    while (go && commitQueue.Count > 0)
+                    int count = 0;
+                    while (currentCommit != null && count <= MAX_COMMITS && result.Count < MAX_RESULTS)
                     {
-                        commit = commitQueue.Dequeue();
+                        count++;
 
-                        // get target sha
-                        TreeEntry target = commit[file.FileName];
-                        if (target != null)
+                        // get values
+                        currentEntry = currentCommit[file.FileName];
+                        currentSha = (currentEntry != null) ? currentEntry.Target.Sha : null;
+
+                        if (lastCommit != null)
                         {
-                            targetSha = target.Target.Sha;
-                            lastCommitFound = commit;
+                            lastEntry = lastCommit[file.FileName];
+                            lastSha = (lastEntry != null) ? lastEntry.Target.Sha : null;
+                        }
+                        else
+                        {
+                            lastEntry = null;
+                            lastSha = null;
                         }
 
-                        // compare the target sha against parent commits
-                        foreach (Commit parent in commit.Parents)
-                        {
-                            if (!go)
-                                break;
+                        // add commit if it's different
+                        if (lastEntry != null && lastSha != currentSha)
+                            result.Add(new SimpleRepositoryCommit(lastCommit));
+                            
+                        // move to next
+                        if (currentCommit.Parents == null || currentCommit.Parents.Count() != 1)
+                            break;
 
-                            TreeEntry tree = parent[file.FileName];
-                            if (tree == null)
-                                continue;
-
-                            lastCommitFound = parent;
-
-                            if (tree.Target.Sha != targetSha && shaSet.Add(commit.Sha))
-                            {
-                                result.Add(new SimpleRepositoryCommit(commit));
-                                if (result.Count >= MAX_RESULTS)
-                                    go = false;
-                            }
-
-                            if (commitQueue.Count < MAX_DEPTH)
-                                commitQueue.Enqueue(parent);
-
-                            commitCount++;
-                            if (commitCount >= MAX_COMMITS)
-                                go = false;
-                        }
+                        lastCommit = currentCommit;
+                        currentCommit = currentCommit.Parents.ElementAt(0);
                     }
 
-                    // if there was only one commit found then it gets added here
-                    if (result.Count == 0 && lastCommitFound != null)
-                        result.Add(new SimpleRepositoryCommit(lastCommitFound));
+                    // check for final entry
+                    currentEntry = currentCommit[file.FileName];
+                    currentSha = (currentEntry != null) ? currentEntry.Target.Sha : null;
+
+                    if (lastCommit != null)
+                    {
+                        lastEntry = lastCommit[file.FileName];
+                        lastSha = (lastEntry != null) ? lastEntry.Target.Sha : null;
+                    }
+                    else
+                    {
+                        lastEntry = null;
+                        lastSha = null;
+                    }
+
+                    if (currentEntry != null && lastSha != currentSha)
+                        result.Add(new SimpleRepositoryCommit(currentCommit));
                 }
             }
 

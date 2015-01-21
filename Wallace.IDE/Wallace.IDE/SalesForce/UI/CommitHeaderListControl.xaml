@@ -21,14 +21,8 @@
                 </Style>
             </ListBox.Style>            
             <ListBox.ContextMenu>
-                <ContextMenu Style="{StaticResource ChromeContextMenuStyle}">
-                    <MenuItem x:Name="menuItemOpen" Header="Open" Click="menuItemOpen_Click"/>
-                    <MenuItem x:Name="menuItemCompare" Header="Compare" Click="menuItemCompare_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Resources/Compare.png" Width="16px" Height="16px" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
+                <ContextMenu x:Name="listBoxContextMenu" 
+                             Style="{StaticResource ChromeContextMenuStyle}" />
             </ListBox.ContextMenu>
         </ListBox>
     </Grid>

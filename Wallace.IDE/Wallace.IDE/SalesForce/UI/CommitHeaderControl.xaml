@@ -32,6 +32,7 @@
                    Grid.Column="1"
                    VerticalAlignment="Bottom"
                    Margin="0,5,5,0"
+                   FontWeight="Bold"
                    Text="Comment" />
         
         <TextBlock x:Name="textBlockAuthor"

@@ -65,6 +65,17 @@ namespace Wallace.IDE.SalesForce.Framework
         public string Sha { get; private set; }
 
         /// <summary>
+        /// A shortened representation of the Sha property.
+        /// </summary>
+        public string ShaShort
+        {
+            get
+            {
+                return (Sha == null || Sha.Length < 7) ? String.Empty : Sha.Substring(0, 7);
+            }
+        }
+
+        /// <summary>
         /// The comment for the commit.
         /// </summary>
         public string Comment { get; private set; }
