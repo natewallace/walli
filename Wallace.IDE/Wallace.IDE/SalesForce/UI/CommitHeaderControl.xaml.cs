@@ -34,6 +34,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wallace.IDE.SalesForce.Framework;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -88,6 +89,7 @@ namespace Wallace.IDE.SalesForce.UI
             set
             {
                 _author = value;
+                identiconUser.Identicon = Identicon.Get(value);
                 textBlockAuthor.Text = String.Format("{0} - {1}", _author, _sha);
             }
         }

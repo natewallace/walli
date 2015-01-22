@@ -3,50 +3,57 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Wallace.IDE.SalesForce.UI"
              mc:Ignorable="d" 
              d:DesignHeight="50" 
              d:DesignWidth="600">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>    
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Border Padding="2">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>    
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="2"
+                    Background="White"
+                    Height="34px"
+                    Width="34px"
+                    Padding="2px"
+                    Margin="2,2,4,2">
+            <local:IdenticonControl x:Name="identiconUser"
+                                    Height="32px"
+                                    Width="32px" 
+                                    VerticalAlignment="Center"/>
+            </Border>
         
-        <Image x:Name="imageIcon"
-               Grid.Row="0"
-               Grid.Column="0"
-               Grid.RowSpan="2"
-               Height="32px"
-               Width="32px" 
-               VerticalAlignment="Center"
-               Source="/Resources/User.png"
-               Margin="5"/>
+            <TextBlock x:Name="textBlockComment"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       VerticalAlignment="Bottom"
+                       Margin="0,5,5,0"
+                       FontWeight="Bold"
+                       Text="Comment" />
         
-        <TextBlock x:Name="textBlockComment"
-                   Grid.Row="0"
-                   Grid.Column="1"
-                   VerticalAlignment="Bottom"
-                   Margin="0,5,5,0"
-                   FontWeight="Bold"
-                   Text="Comment" />
+            <TextBlock x:Name="textBlockAuthor"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       VerticalAlignment="Top"
+                       Margin="0,0,5,5"
+                       Text="author - abcd" />
         
-        <TextBlock x:Name="textBlockAuthor"
-                   Grid.Row="1"
-                   Grid.Column="1"
-                   VerticalAlignment="Top"
-                   Margin="0,0,5,5"
-                   Text="author - abcd" />
-        
-        <TextBlock x:Name="textBlockDate"
-                   Grid.Row="1"
-                   Grid.Column="2"
-                   VerticalAlignment="Top"
-                   Margin="5,0,5,5"
-                   Text="Fri 1/16/2015" />
-    </Grid>
+            <TextBlock x:Name="textBlockDate"
+                       Grid.Row="1"
+                       Grid.Column="2"
+                       VerticalAlignment="Top"
+                       Margin="5,0,5,5"
+                       Text="Fri 1/16/2015" />
+        </Grid>
+    </Border>
 </UserControl>

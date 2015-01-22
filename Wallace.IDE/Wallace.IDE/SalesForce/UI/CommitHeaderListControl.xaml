@@ -8,6 +8,7 @@
     <Grid>
         <ListBox x:Name="listBoxItems"
                  SelectionMode="Extended"
+                 BorderThickness="0"
                  HorizontalContentAlignment="Stretch"
                  SelectionChanged="listBoxItems_SelectionChanged"
                  PreviewMouseRightButtonDown="listBoxItems_PreviewMouseRightButtonDown"
