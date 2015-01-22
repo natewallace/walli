@@ -28,8 +28,8 @@
                     Padding="2px"
                     Margin="2,2,4,2">
             <local:IdenticonControl x:Name="identiconUser"
-                                    Height="32px"
-                                    Width="32px" 
+                                    Height="30px"
+                                    Width="30px" 
                                     VerticalAlignment="Center"/>
             </Border>
         
