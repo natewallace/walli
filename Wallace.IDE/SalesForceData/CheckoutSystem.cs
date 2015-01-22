@@ -449,6 +449,9 @@ namespace SalesForceData
             try
             {
                 _client.DataDelete(result.Data);
+
+                foreach (SourceFile file in files)
+                    file.CheckedOutBy = null;
             }
             catch (Exception err)
             {
