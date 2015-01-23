@@ -39,20 +39,27 @@ namespace Wallace.IDE.SalesForce.Function
         #region Methods
 
         /// <summary>
-        /// Gets the currently selected manifest or null if there isn't one.
+        /// Gets the currently selected manifests.
         /// </summary>
-        /// <returns>The currently selected manifest or null if there isn't one.</returns>
-        private Manifest GetSelectedManifest()
+        /// <returns>The currently selected manifests.</returns>
+        private Manifest[] GetSelectedManifests()
         {
-            if (App.Instance.SalesForceApp.CurrentProject != null &&
-                App.Instance.Navigation.SelectedNodes.Count == 1 &&
-                App.Instance.Navigation.SelectedNodes[0] is ManifestNode)
+            if (App.Instance.SalesForceApp.CurrentProject != null)
             {
-                return (App.Instance.Navigation.SelectedNodes[0] as ManifestNode).Manifest;
+                List<Manifest> result = new List<Manifest>();
+                foreach (INode node in App.Instance.Navigation.SelectedNodes)
+                {
+                    if (node is ManifestNode)
+                        result.Add((node as ManifestNode).Manifest);
+                    else
+                        return new Manifest[0];
+                }
+
+                return result.ToArray();
             }
             else
             {
-                return null;
+                return new Manifest[0];
             }
         }
 
@@ -65,17 +72,21 @@ namespace Wallace.IDE.SalesForce.Function
         {
             bool canDelete = false;
 
-            Manifest manifest = GetSelectedManifest();
-            if (manifest != null)
+            Manifest[] manifests = GetSelectedManifests();
+            if (manifests.Length > 0)
             {
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "Delete.png");
-                    presenter.ToolTip = String.Format("Delete {0}", manifest.Name);
+                    presenter.ToolTip = (manifests.Length == 1 ) ?
+                        String.Format("Delete {0}", manifests[0].Name) :
+                        "Delete selected manifests";
                 }
                 else
                 {
-                    presenter.Header = String.Format("Delete {0}", manifest.Name);
+                    presenter.Header = (manifests.Length == 1) ?
+                        String.Format("Delete {0}", manifests[0].Name) :
+                        "Delete selected manifests";
                     presenter.Icon = VisualHelper.CreateIconHeader(null, "Delete.png");
                 }
 
@@ -90,29 +101,34 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         public override void Execute()
         {
-            Manifest manifest = GetSelectedManifest();
-            if (manifest != null && App.Instance.SalesForceApp.CurrentProject != null)
+            Manifest[] manifests = GetSelectedManifests();
+            if (manifests.Length > 0 && App.Instance.SalesForceApp.CurrentProject != null)
             {
-                if (App.MessageUser(String.Format("Are you sure you want to delete the {0} manifest?", manifest.Name),
+                if (App.MessageUser((manifests.Length == 1) ?
+                                        String.Format("Are you sure you want to delete the {0} manifest?", manifests[0].Name) :
+                                        String.Format("Are you sure you want to delete the {0} selected manifests?", manifests.Length),
                                     "Confirm delete",
                                     System.Windows.MessageBoxImage.Warning,
                                     new string[] { "Yes", "No" }) == "Yes")
                 {
-                    // close any open documents
-                    IDocument[] documents = App.Instance.Content.GetDocumentsByEntity(manifest);
-                    foreach (IDocument document in documents)
-                        if (!App.Instance.Content.CloseDocument(document))
-                            return;
-
-                    using (App.Wait("Deleting manifest"))
+                    foreach (Manifest manifest in manifests)
                     {
-                        // delete the manifest
-                        manifest.Delete();
+                        using (App.Wait("Deleting manifest(s)"))
+                        {
+                            // close any open documents
+                            IDocument[] documents = App.Instance.Content.GetDocumentsByEntity(manifest);
+                            foreach (IDocument document in documents)
+                                if (!App.Instance.Content.CloseDocument(document))
+                                    return;
 
-                        // remove nodes
-                        INode[] nodes = App.Instance.Navigation.GetNodesByEntity(manifest);
-                        foreach (INode node in nodes)
-                            node.Presenter.Remove();
+                            // delete the manifest
+                            manifest.Delete();
+
+                            // remove nodes
+                            INode[] nodes = App.Instance.Navigation.GetNodesByEntity(manifest);
+                            foreach (INode node in nodes)
+                                node.Presenter.Remove();
+                        }
                     }
                 }
 

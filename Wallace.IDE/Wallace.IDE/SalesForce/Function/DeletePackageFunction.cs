@@ -42,17 +42,24 @@ namespace Wallace.IDE.SalesForce.Function
         /// Gets the currently selected manifest or null if there isn't one.
         /// </summary>
         /// <returns>The currently selected manifest or null if there isn't one.</returns>
-        private Package GetSelectedPackage()
+        private Package[] GetSelectedPackages()
         {
-            if (App.Instance.SalesForceApp.CurrentProject != null &&
-                App.Instance.Navigation.SelectedNodes.Count == 1 &&
-                App.Instance.Navigation.SelectedNodes[0] is PackageNode)
+            if (App.Instance.SalesForceApp.CurrentProject != null)
             {
-                return (App.Instance.Navigation.SelectedNodes[0] as PackageNode).Package;
+                List<Package> result = new List<Package>();
+                foreach (INode node in App.Instance.Navigation.SelectedNodes)
+                {
+                    if (node is PackageNode)
+                        result.Add((node as PackageNode).Package);
+                    else
+                        return new Package[0];
+                }
+
+                return result.ToArray();
             }
             else
             {
-                return null;
+                return new Package[0];
             }
         }
 
@@ -65,17 +72,21 @@ namespace Wallace.IDE.SalesForce.Function
         {
             bool canDelete = false;
 
-            Package package = GetSelectedPackage();
-            if (package != null)
+            Package[] packages = GetSelectedPackages();
+            if (packages.Length > 0)
             {
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "Delete.png");
-                    presenter.ToolTip = String.Format("Delete {0}", package.Name);
+                    presenter.ToolTip = (packages.Length == 1) ?
+                        String.Format("Delete {0}", packages[0].Name) :
+                        "Delete selected packages";
                 }
                 else
                 {
-                    presenter.Header = String.Format("Delete {0}", package.Name);
+                    presenter.Header = (packages.Length == 1) ?
+                        String.Format("Delete {0}", packages[0].Name) :
+                        "Delete selected packages";
                     presenter.Icon = VisualHelper.CreateIconHeader(null, "Delete.png");
                 }
 
@@ -90,29 +101,34 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         public override void Execute()
         {
-            Package package = GetSelectedPackage();
-            if (package != null && App.Instance.SalesForceApp.CurrentProject != null)
+            Package[] packages = GetSelectedPackages();
+            if (packages.Length > 0 && App.Instance.SalesForceApp.CurrentProject != null)
             {
-                if (App.MessageUser(String.Format("Are you sure you want to delete the {0} package?", package.Name),
+                if (App.MessageUser((packages.Length == 1) ?
+                                        String.Format("Are you sure you want to delete the {0} package?", packages[0].Name) :
+                                        String.Format("Are you sure you want to delete the {0} selected packages?", packages.Length),
                                     "Confirm delete",
                                     System.Windows.MessageBoxImage.Warning,
                                     new string[] { "Yes", "No" }) == "Yes")
                 {
-                    // close any open documents
-                    IDocument[] documents = App.Instance.Content.GetDocumentsByEntity(package);
-                    foreach (IDocument document in documents)
-                        if (!App.Instance.Content.CloseDocument(document))
-                            return;
-
-                    using (App.Wait("Deleting package"))
+                    foreach (Package package in packages)
                     {
-                        // delete the package
-                        package.Delete();
+                        using (App.Wait("Deleting package(s)"))
+                        {
+                            // close any open documents
+                            IDocument[] documents = App.Instance.Content.GetDocumentsByEntity(package);
+                            foreach (IDocument document in documents)
+                                if (!App.Instance.Content.CloseDocument(document))
+                                    return;
 
-                        // remove nodes
-                        INode[] nodes = App.Instance.Navigation.GetNodesByEntity(package);
-                        foreach (INode node in nodes)
-                            node.Presenter.Remove();
+                            // delete the manifest
+                            package.Delete();
+
+                            // remove nodes
+                            INode[] nodes = App.Instance.Navigation.GetNodesByEntity(package);
+                            foreach (INode node in nodes)
+                                node.Presenter.Remove();
+                        }
                     }
                 }
 
