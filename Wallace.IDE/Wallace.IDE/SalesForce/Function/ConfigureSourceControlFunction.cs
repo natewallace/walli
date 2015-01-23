@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,10 +83,7 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.Password = project.Repository.Password;
                 dlg.BranchName = project.Repository.BranchName;
                 dlg.IsCheckoutEnabled = project.Client.Checkout.IsEnabled();
-
-                string[] files = System.IO.Directory.GetFiles(project.RepositoryFolder);
-                string[] folders = System.IO.Directory.GetFiles(project.RepositoryFolder);
-                dlg.IsDeleteRepositoryEnabled = (files.Length > 0 || folders.Length > 0);
+                dlg.IsDeleteRepositoryEnabled = !FileUtility.IsFolderEmpty(project.RepositoryFolder);
 
                 dlg.ToggleCheckOutSystemClick += ToggleCheckOutSystem;
                 dlg.DeleteRepositoryClick += DeleteRepository;
@@ -119,16 +117,8 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null)
             {
-                string[] files = System.IO.Directory.GetFiles(project.RepositoryFolder);
-                string[] folders = System.IO.Directory.GetFiles(project.RepositoryFolder);
-                if (files.Length > 0 || folders.Length > 0)
-                {
-                    foreach (string file in files)
-                        System.IO.File.Delete(file);
-
-                    foreach (string folder in folders)
-                        System.IO.Directory.Delete(folder, true);
-                }
+                using (App.Wait("Deleting local repository."))
+                    FileUtility.DeleteFolderContents(project.RepositoryFolder);                
             }
 
             App.MessageUser("Local repository deleted", 

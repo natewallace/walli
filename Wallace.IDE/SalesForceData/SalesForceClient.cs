@@ -145,7 +145,11 @@ namespace SalesForceData
         /// </summary>
         public User User
         {
-            get { return _session.User; }
+            get 
+            {
+                InitClients();
+                return _session.User; 
+            }
         }
 
         /// <summary>
@@ -153,7 +157,11 @@ namespace SalesForceData
         /// </summary>
         public string UserEmail
         {
-            get { return _session.UserEmail; }
+            get 
+            {
+                InitClients();
+                return _session.UserEmail; 
+            }
         }
 
         /// <summary>

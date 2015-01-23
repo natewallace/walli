@@ -425,6 +425,8 @@ namespace Wallace.IDE.SalesForce.Framework
                     using (App.Wait("Verifying credentials..."))
                         SalesForceClient.TestLogin(credential);
 
+                    project.Repository.AuthorName = project.Client.User.Name;
+                    project.Repository.AuthorEmail = project.Client.UserEmail;
                     project.LoadSymbolsAsync(false);
 
                     break;

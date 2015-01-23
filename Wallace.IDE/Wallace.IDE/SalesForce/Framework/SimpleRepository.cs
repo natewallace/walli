@@ -45,7 +45,6 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public SimpleRepository()
         {
-
         }
 
         #endregion
@@ -83,6 +82,16 @@ namespace Wallace.IDE.SalesForce.Framework
         public string Password { get; set; }
 
         /// <summary>
+        /// The author name for any repository changes.
+        /// </summary>
+        public string AuthorName { get; set; }
+
+        /// <summary>
+        /// The author email for any repository changes.
+        /// </summary>
+        public string AuthorEmail { get; set; }
+
+        /// <summary>
         /// If true then this repository is valid.
         /// </summary>
         public bool IsValid
@@ -110,6 +119,10 @@ namespace Wallace.IDE.SalesForce.Framework
                 throw new Exception("Branch is not set.");
             if (!Directory.Exists(WorkingPath))
                 throw new Exception("WorkingPath doesn't exist: " + WorkingPath);
+            if (String.IsNullOrWhiteSpace(AuthorName))
+                throw new Exception("AuthorName is null or whitespace.");
+            if (String.IsNullOrWhiteSpace(AuthorEmail))
+                throw new Exception("AuthorEmail is null or whitespace.");
         }
 
         /// <summary>
@@ -117,28 +130,31 @@ namespace Wallace.IDE.SalesForce.Framework
         /// </summary>
         public Repository Init()
         {
+            return Init(false);
+        }
+
+        /// <summary>
+        /// Get repository.
+        /// </summary>
+        public Repository Init(bool reset)
+        {
             Validate();
 
             Repository repo = null;
 
-            // clean out existing repository if it doesn't match current settings
-            string[] existingFiles = Directory.GetFiles(WorkingPath);
-            string[] existingFolders = Directory.GetDirectories(WorkingPath);
+            // delete existing repository so we will start from scratch
+            if (reset)
+                FileUtility.DeleteFolderContents(WorkingPath);
 
-            if ((existingFiles != null && existingFiles.Length > 0) ||
-                (existingFolders != null && existingFolders.Length > 0))
+            // clean out existing repository if it doesn't match current settings
+            if (!FileUtility.IsFolderEmpty(WorkingPath))
             {
                 repo = new Repository(WorkingPath);
                 Remote remote = repo.Network.Remotes["origin"];
                 if (remote == null || remote.Url != RemoteUrl)
                 {
                     repo = null;
-
-                    foreach (string file in existingFiles)
-                        File.Delete(file);
-
-                    foreach (string directory in existingFolders)
-                        Directory.Delete(directory, true);
+                    FileUtility.DeleteFolderContents(WorkingPath);
                 }
             }
 
@@ -164,7 +180,10 @@ namespace Wallace.IDE.SalesForce.Framework
                 // get latest changes
                 fetchOptions = new FetchOptions();
                 fetchOptions.CredentialsProvider += ProvideCredentials;
-                repo.Fetch("origin", fetchOptions);
+
+                PullOptions pullOptions = new PullOptions();
+                pullOptions.FetchOptions = fetchOptions;
+                repo.Network.Pull(new Signature(AuthorName, AuthorEmail, DateTime.Now), pullOptions);
 
                 // get branch or create new one if needed
                 Branch localBranch = repo.Branches[BranchName];
@@ -180,9 +199,20 @@ namespace Wallace.IDE.SalesForce.Framework
                         b => b.TrackedBranch = remoteBranch.CanonicalName);
                 }
 
+                // if the local branch is ahead of the remote branch then we need to start from scratch
+                if (localBranch.TrackingDetails.AheadBy.HasValue &&
+                    localBranch.TrackingDetails.AheadBy.Value > 0)
+                {
+                    if (!reset)
+                        return Init(true);
+
+                    throw new Exception("It appears the local repository is out of sync with the remote repository.");
+                }
+
                 Branch = localBranch;
 
                 // checkout branch and wipe out any uncommitted changes
+                repo.Reset(ResetMode.Hard);
                 CheckoutOptions checkoutOptions = new CheckoutOptions();
                 checkoutOptions.CheckoutModifiers = CheckoutModifiers.Force;
                 repo.Checkout(localBranch, checkoutOptions);
@@ -203,7 +233,7 @@ namespace Wallace.IDE.SalesForce.Framework
         /// <param name="comment">The comment for the commit.</param>
         /// <param name="authorName">The author of the commit.</param>
         /// <param name="authorEmail">The author's email.</param>
-        public void PushPackage(byte[] package, string comment, string authorName, string authorEmail)
+        public void PushPackage(byte[] package, string comment)
         {
             if (package == null)
                 throw new ArgumentNullException("package");
@@ -219,10 +249,12 @@ namespace Wallace.IDE.SalesForce.Framework
                     // extract package to the working directory
                     string[] files = Package.Extract(package, WorkingPath, true, false);
 
+                    // TODO: push any commits that didn't get pushed
+
                     // stage, commit, and then push
                     repo.Stage(files);
 
-                    Signature author = new Signature(authorName, authorEmail, DateTime.Now);
+                    Signature author = new Signature(AuthorName, AuthorEmail, DateTime.Now);
                     repo.Commit(comment, author);
 
                     pushOptions = new PushOptions();

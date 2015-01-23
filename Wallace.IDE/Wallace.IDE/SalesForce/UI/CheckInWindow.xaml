@@ -30,6 +30,7 @@
                      Height="50px"
                      AcceptsReturn="True"
                      AcceptsTab="True"
+                     TextWrapping="Wrap"
                      TextChanged="textBoxComment_TextChanged" />
 
             <DockPanel Grid.Row="2"

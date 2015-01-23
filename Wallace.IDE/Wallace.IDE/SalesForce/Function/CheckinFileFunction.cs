@@ -154,11 +154,7 @@ namespace Wallace.IDE.SalesForce.Function
                             byte[] packageBits = project.Client.GetSourceFileContentAsPackage(dlg.SelectedFiles);                            
 
                             // commit and push the package
-                            project.Repository.PushPackage(
-                                packageBits, 
-                                dlg.Comment, 
-                                project.Client.User.Name,
-                                project.Client.UserEmail);
+                            project.Repository.PushPackage(packageBits, dlg.Comment);
                         }
 
                         // commit to salesforce

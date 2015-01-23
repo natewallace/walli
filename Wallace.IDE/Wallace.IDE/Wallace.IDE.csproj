@@ -111,6 +111,7 @@
     <Compile Include="Framework\ClientBrowser.cs" />
     <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
     <Compile Include="SalesForce\Framework\DiffMatchPatch.cs" />
+    <Compile Include="SalesForce\Framework\FileUtility.cs" />
     <Compile Include="SalesForce\Framework\Identicon.cs" />
     <Compile Include="SalesForce\Framework\IReportFilter.cs" />
     <Compile Include="SalesForce\Framework\Project.cs" />
