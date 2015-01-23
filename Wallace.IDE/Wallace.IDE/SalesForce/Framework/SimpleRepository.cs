@@ -207,7 +207,10 @@ namespace Wallace.IDE.SalesForce.Framework
                     localBranch.TrackingDetails.AheadBy.Value > 0)
                 {
                     if (!reset)
+                    {
+                        repo.Dispose();
                         return Init(true);
+                    }
 
                     throw new Exception("It appears the local repository is out of sync with the remote repository.");
                 }
@@ -251,8 +254,6 @@ namespace Wallace.IDE.SalesForce.Framework
                 {
                     // extract package to the working directory
                     string[] files = Package.Extract(package, WorkingPath, true, false);
-
-                    // TODO: push any commits that didn't get pushed
 
                     // stage, commit, and then push
                     repo.Stage(files);
