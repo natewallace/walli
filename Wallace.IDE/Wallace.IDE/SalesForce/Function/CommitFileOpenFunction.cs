@@ -48,7 +48,7 @@ namespace Wallace.IDE.SalesForce.Function
                 return null;
 
             CommitListDocument document = App.Instance.Content.ActiveDocument as CommitListDocument;
-            if (document == null)
+            if (document == null || document.File == null)
                 return null;
 
             if (document.SelectedCommits.Length == 1)

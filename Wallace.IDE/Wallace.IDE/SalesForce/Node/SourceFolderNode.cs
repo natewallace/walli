@@ -139,6 +139,7 @@ namespace Wallace.IDE.SalesForce.Node
             functions.AddRange(
                 new IFunction[] 
                 {
+                    App.Instance.GetFunction<CheckoutHistoryFunction>(),
                     App.Instance.GetFunction<CheckinFileFunction>(),
                     App.Instance.GetFunction<CheckoutFileUndoFunction>()
                 }

@@ -50,8 +50,6 @@ namespace Wallace.IDE.SalesForce.Document
         {
             if (project == null)
                 throw new ArgumentNullException("project");
-            if (file == null)
-                throw new ArgumentNullException("file");
             if (commits == null)
                 throw new ArgumentNullException("commits");
 
@@ -62,6 +60,7 @@ namespace Wallace.IDE.SalesForce.Document
             View = new CommitHeaderListControl();
             View.Commits = Commits;
             View.OpenClick += View_OpenClick;
+            View.SelectionChanged += View_SelectionChanged;
 
             MenuFunctionManager menuManager = new MenuFunctionManager(View.ListContextMenu);
             menuManager.AddFunction(App.Instance.GetFunction<CommitFileOpenFunction>());
@@ -113,7 +112,9 @@ namespace Wallace.IDE.SalesForce.Document
         {
             if (isFirstUpdate)
             {
-                Presenter.Header = VisualHelper.CreateIconHeader(File.FullName, "History.png");
+                Presenter.Header = (File == null) ?
+                    VisualHelper.CreateIconHeader("History", "History.png") : 
+                    VisualHelper.CreateIconHeader(File.FullName, "History.png");
                 Presenter.Content = View;
             }
         }
@@ -130,6 +131,24 @@ namespace Wallace.IDE.SalesForce.Document
         private void View_OpenClick(object sender, EventArgs e)
         {
             App.Instance.GetFunction<CommitFileOpenFunction>().Execute();
+        }
+
+        /// <summary>
+        /// Update the view and other workspaces.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_SelectionChanged(object sender, EventArgs e)
+        {
+            using (App.Wait("Getting details"))
+            {
+                if (View.SelectedCommits.Length == 1)
+                    View.Details = Project.Repository.GetChangedFiles(View.SelectedCommits[0]);
+                else
+                    View.Details = null;
+
+                App.Instance.UpdateWorkspaces();
+            }
         }
 
         #endregion

@@ -115,6 +115,37 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// The details displayed.
+        /// </summary>
+        public string[] Details
+        {
+            get
+            {
+                List<string> result = new List<string>();
+                foreach (TextBlock tb in listBoxDetails.Items)
+                    result.Add(tb.Text);
+
+                return result.ToArray();
+            }
+            set
+            {
+                listBoxDetails.Items.Clear();
+                if (value != null)
+                {
+                    FontFamily ff = new FontFamily("Consolas");
+
+                    foreach (string item in value)
+                    {
+                        TextBlock tb = new TextBlock();
+                        tb.Text = item;
+                        tb.FontFamily = ff;
+                        listBoxDetails.Items.Add(tb);
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -127,6 +158,16 @@ namespace Wallace.IDE.SalesForce.UI
         {
             if (OpenClick != null)
                 OpenClick(this, e);
+        }
+
+        /// <summary>
+        /// Raises the SelectionChanged event.
+        /// </summary>
+        /// <param name="e">Arguments passed with the event.</param>
+        protected virtual void OnSelectionChanged(EventArgs e)
+        {
+            if (SelectionChanged != null)
+                SelectionChanged(this, e);
         }
 
         #endregion
@@ -192,7 +233,7 @@ namespace Wallace.IDE.SalesForce.UI
         {
             try
             {
-                App.Instance.UpdateWorkspaces();
+                OnSelectionChanged(EventArgs.Empty);
             }
             catch (Exception err)
             {
@@ -208,6 +249,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the user clicks to open an entry.
         /// </summary>
         public event EventHandler OpenClick;
+
+        /// <summary>
+        /// Raised when the selected commits change.
+        /// </summary>
+        public event EventHandler SelectionChanged;
 
         #endregion
     }

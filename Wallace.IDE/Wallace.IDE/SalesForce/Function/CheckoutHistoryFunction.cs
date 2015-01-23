@@ -20,7 +20,6 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,37 +28,15 @@ using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.Node;
 
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Show the history for the given file.
+    /// Show overall history.
     /// </summary>
-    public class CheckoutFileHistoryFunction : FunctionBase
+    public class CheckoutHistoryFunction : FunctionBase
     {
         #region Methods
-
-        /// <summary>
-        /// Gets the currently selected file.
-        /// </summary>
-        /// <returns>The currently selected file.</returns>
-        private SourceFile GetSelectedFile()
-        {
-            Project project = App.Instance.SalesForceApp.CurrentProject;
-            if (project != null && project.Repository.IsValid)
-            {
-                if (App.Instance.Navigation.SelectedNodes.Count == 1 &&
-                    App.Instance.Navigation.SelectedNodes[0] is SourceFileNode)
-                {
-                    SourceFileNode node = (App.Instance.Navigation.SelectedNodes[0] as SourceFileNode);
-                    if (!String.IsNullOrEmpty(node.SourceFile.Id))
-                        return node.SourceFile;
-                }
-            }
-
-            return null;
-        }
 
         /// <summary>
         /// Setup header.
@@ -71,11 +48,11 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "History.png");
-                presenter.ToolTip = "Show file history";
+                presenter.ToolTip = "Show repository history";
             }
             else
             {
-                presenter.Header = "Show file history";
+                presenter.Header = "Show repository history";
                 presenter.Icon = VisualHelper.CreateIconHeader(null, "History.png");
             }
         }
@@ -87,20 +64,20 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (GetSelectedFile() != null);
+            Project project = App.Instance.SalesForceApp.CurrentProject;
+            IsVisible = (project != null && project.Repository.IsValid);
         }
 
         /// <summary>
-        /// Show history for the file.
+        /// Check in or check out the file.
         /// </summary>
         public override void Execute()
         {
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null && project.Repository.IsValid)
             {
-                SourceFile file = GetSelectedFile();
-                SimpleRepositoryCommit[] history = project.Repository.GetHistory(file);
-                CommitListDocument document = new CommitListDocument(project, file, history);
+                SimpleRepositoryCommit[] history = project.Repository.GetHistory(50);
+                CommitListDocument document = new CommitListDocument(project, null, history);
                 App.Instance.Content.OpenDocument(document);
             }
         }

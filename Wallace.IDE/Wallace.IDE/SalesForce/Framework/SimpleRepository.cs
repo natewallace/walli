@@ -128,17 +128,27 @@ namespace Wallace.IDE.SalesForce.Framework
         /// <summary>
         /// Get repository.
         /// </summary>
-        public Repository Init()
+        /// <param name="latest">If true, ensure the repository is up to date.</param>
+        public Repository Init(bool latest)
         {
-            return Init(false);
+            return Init(latest, false);
         }
 
         /// <summary>
         /// Get repository.
         /// </summary>
-        public Repository Init(bool reset)
+        public Repository Init(bool latest, bool reset)
         {
             Validate();
+
+            // don't get latest our clone from remote
+            if (!latest)
+            {
+                if (FileUtility.IsFolderEmpty(WorkingPath))
+                    throw new Exception("Repository doesn't exist.");
+
+                return new Repository(WorkingPath);
+            }
 
             Repository repo = null;
 
@@ -209,7 +219,7 @@ namespace Wallace.IDE.SalesForce.Framework
                     if (!reset)
                     {
                         repo.Dispose();
-                        return Init(true);
+                        return Init(latest, true);
                     }
 
                     throw new Exception("It appears the local repository is out of sync with the remote repository.");
@@ -246,7 +256,7 @@ namespace Wallace.IDE.SalesForce.Framework
 
             Validate();
 
-            using (Repository repo = Init())
+            using (Repository repo = Init(true))
             {
                 PushOptions pushOptions = null;
 
@@ -291,7 +301,7 @@ namespace Wallace.IDE.SalesForce.Framework
 
             using (App.Wait("Getting history."))
             {
-                using (Repository repo = Init())
+                using (Repository repo = Init(true))
                 {
                     Commit currentCommit = repo.Head.Tip;
                     string currentSha = null;
@@ -357,6 +367,78 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
+        /// Get the most recent number of commits.
+        /// </summary>
+        /// <param name="max">The max number of commits to return.</param>
+        /// <returns>The recent commits.</returns>
+        public SimpleRepositoryCommit[] GetHistory(int max)
+        {
+            if (max <= 0)
+                throw new ArgumentException("max must be greater than zero.", "max");
+
+            List<SimpleRepositoryCommit> result = new List<SimpleRepositoryCommit>();
+
+            using (App.Wait("Getting history."))
+            {
+                using (Repository repo = Init(true))
+                {
+                    foreach (Commit commit in repo.Commits)
+                    {
+                        result.Add(new SimpleRepositoryCommit(commit));
+                        if (result.Count >= max)
+                            break;
+                    }
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Get a list of the files that were changed in the commit.
+        /// </summary>
+        /// <param name="commit">The commit to get changed files for.</param>
+        /// <returns>The changed files.</returns>
+        public string[] GetChangedFiles(SimpleRepositoryCommit commit)
+        {
+            if (commit == null)
+                throw new ArgumentNullException("commit");
+
+            List<string> result = new List<string>();
+
+            using (Repository repo = Init(false))
+            {
+                Commit c = repo.Lookup(commit.Sha) as Commit;
+                if (c == null)
+                    return result.ToArray();
+
+                Commit p = null;
+                if (c.Parents != null && c.Parents.Count() == 1)
+                    p = c.Parents.ElementAt(0);
+                if (p == null)
+                    return result.ToArray();
+
+                TreeChanges changes = repo.Diff.Compare<TreeChanges>(p.Tree, c.Tree);
+                if (changes == null)
+                    return result.ToArray();
+
+                if (changes.Modified != null)
+                    foreach (TreeEntryChanges tec in changes.Modified)
+                        result.Add(String.Format("  {0}", tec.Path));
+
+                if (changes.Added != null)
+                    foreach (TreeEntryChanges tec in changes.Added)
+                        result.Add(String.Format("+ {0}", tec.Path));
+
+                if (changes.Deleted != null)
+                    foreach (TreeEntryChanges tec in changes.Deleted)
+                        result.Add(String.Format("- {0}", tec.Path));
+            }
+
+            return result.OrderBy(f => f.Substring(1)).ToArray();
+        }
+
+        /// <summary>
         /// Get the content of the file for the given commit.
         /// </summary>
         /// <param name="file">The file to get content for.</param>
@@ -371,7 +453,7 @@ namespace Wallace.IDE.SalesForce.Framework
 
             Validate();
 
-            using (Repository repo = Init())
+            using (Repository repo = Init(false))
             {
                 Commit c = repo.Lookup(commit.Sha) as Commit;
                 if (c != null)
@@ -407,7 +489,7 @@ namespace Wallace.IDE.SalesForce.Framework
 
             StringBuilder result = new StringBuilder();
 
-            using (Repository repo = Init())
+            using (Repository repo = Init(false))
             {
                 // get the different versions of the file
                 Commit olderCommit = repo.Lookup(older.Sha) as Commit;

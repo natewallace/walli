@@ -129,15 +129,16 @@ namespace Wallace.IDE.SalesForce.Framework
             CheckoutFolderFunction checkoutFolderFunction = new CheckoutFolderFunction();
             App.Instance.Menu.AddFunction(checkoutFolderFunction, "TEAMSALESFORCE");
 
+            CheckoutHistoryFunction checkoutHistoryFunction = new CheckoutHistoryFunction();
+            App.Instance.Menu.AddFunction(new FunctionSeparator(checkoutHistoryFunction), "TEAMSALESFORCE");
+            App.Instance.Menu.AddFunction(checkoutHistoryFunction, "TEAMSALESFORCE");
+            App.Instance.RegisterFunction(checkoutHistoryFunction);
+
             CheckoutFileFunction checkoutFileFunction = new CheckoutFileFunction();
-            CheckinFileFunction checkinFileFunction = new CheckinFileFunction();
-
-            App.Instance.Menu.AddFunction(new FunctionSeparator(checkoutFileFunction), "TEAMSALESFORCE");
-            App.Instance.Menu.AddFunction(new FunctionSeparator(checkinFileFunction), "TEAMSALESFORCE");
-
             App.Instance.Menu.AddFunction(checkoutFileFunction, "TEAMSALESFORCE");
             App.Instance.RegisterFunction(checkoutFileFunction);
-            
+
+            CheckinFileFunction checkinFileFunction = new CheckinFileFunction();
             App.Instance.Menu.AddFunction(checkinFileFunction, "TEAMSALESFORCE");
             App.Instance.RegisterFunction(checkinFileFunction);
 
