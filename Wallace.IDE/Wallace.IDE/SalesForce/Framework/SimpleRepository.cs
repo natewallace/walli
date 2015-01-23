@@ -337,17 +337,18 @@ namespace Wallace.IDE.SalesForce.Framework
 
             using (Repository repo = Init())
             {
-                CheckoutOptions checkoutOptions = new CheckoutOptions();
-                checkoutOptions.CheckoutModifiers = CheckoutModifiers.Force;
-
-                // get older version text
-                repo.CheckoutPaths(
-                    commit.Sha,
-                    new string[] { file.FileName },
-                    checkoutOptions);
-
-                return File.ReadAllText(Path.Combine(WorkingPath, file.FileName));
+                Commit c = repo.Lookup(commit.Sha) as Commit;
+                if (c != null)
+                {
+                    TreeEntry entry = c[file.FileName];
+                    if (entry != null && entry.Target is Blob)
+                    {
+                        return (entry.Target as Blob).GetContentText();
+                    }
+                }
             }
+
+            return String.Empty;
         }
 
         /// <summary>
@@ -368,62 +369,61 @@ namespace Wallace.IDE.SalesForce.Framework
 
             Validate();
 
+            StringBuilder result = new StringBuilder();
+
             using (Repository repo = Init())
             {
-                CheckoutOptions checkoutOptions = new CheckoutOptions();
-                checkoutOptions.CheckoutModifiers = CheckoutModifiers.Force;
+                // get the different versions of the file
+                Commit olderCommit = repo.Lookup(older.Sha) as Commit;
+                Commit newerCommit = repo.Lookup(newer.Sha) as Commit;
 
-                // get older version text
-                repo.CheckoutPaths(
-                    older.Sha,
-                    new string[] { file.FileName },
-                    checkoutOptions);
-
-                string olderText = File.ReadAllText(Path.Combine(WorkingPath, file.FileName));
-
-                // get newer version text
-                repo.CheckoutPaths(
-                    newer.Sha,
-                    new string[] { file.FileName },
-                    checkoutOptions);
-
-                string newerText = File.ReadAllText(Path.Combine(WorkingPath, file.FileName));
-
-                // do diff
-                diff_match_patch dmp = new diff_match_patch();
-                List<Diff> diffs = dmp.diff_main_line(olderText, newerText);
-
-                StringBuilder result = new StringBuilder();
-                foreach (Diff d in diffs)
+                if (olderCommit != null && newerCommit != null)
                 {
-                    // get prefix
-                    string prefix = null;
-                    switch (d.operation)
+                    TreeEntry olderEntry = olderCommit[file.FileName];
+                    TreeEntry newerEntry = newerCommit[file.FileName];
+
+                    if (olderEntry != null && olderEntry.Target is Blob && 
+                        newerEntry != null && newerEntry.Target is Blob)
                     {
-                        case Operation.EQUAL:
-                            prefix = "    ";
-                            break;
+                        string olderText = (olderEntry.Target as Blob).GetContentText();
+                        string newerText = (newerEntry.Target as Blob).GetContentText();
 
-                        case Operation.DELETE:
-                            prefix = "-   ";
-                            break;
+                        // do diff
+                        diff_match_patch dmp = new diff_match_patch();
+                        List<Diff> diffs = dmp.diff_main_line(olderText, newerText);
 
-                        default:
-                            prefix = "+   ";
-                            break;
-                    }
+                        foreach (Diff d in diffs)
+                        {
+                            // get prefix
+                            string prefix = null;
+                            switch (d.operation)
+                            {
+                                case Operation.EQUAL:
+                                    prefix = "    ";
+                                    break;
 
-                    // format the lines
-                    using (StringReader reader = new StringReader(d.text))
-                    {
-                        string line = null;
-                        while ((line = reader.ReadLine()) != null)
-                            result.AppendFormat("{0}{1}{2}", prefix, line, Environment.NewLine);
+                                case Operation.DELETE:
+                                    prefix = "-   ";
+                                    break;
+
+                                default:
+                                    prefix = "+   ";
+                                    break;
+                            }
+
+                            // format the lines
+                            using (StringReader reader = new StringReader(d.text))
+                            {
+                                string line = null;
+                                while ((line = reader.ReadLine()) != null)
+                                    result.AppendFormat("{0}{1}{2}", prefix, line, Environment.NewLine);
+                            }
+                        }
                     }
                 }
-
-                return result.ToString();
             }
+
+            return result.ToString();
         }
 
         #endregion
