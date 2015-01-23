@@ -153,6 +153,9 @@ namespace Wallace.IDE.SalesForce.Framework
                 Remote remote = repo.Network.Remotes["origin"];
                 if (remote == null || remote.Url != RemoteUrl)
                 {
+                    if (repo != null)
+                        repo.Dispose();
+
                     repo = null;
                     FileUtility.DeleteFolderContents(WorkingPath);
                 }
