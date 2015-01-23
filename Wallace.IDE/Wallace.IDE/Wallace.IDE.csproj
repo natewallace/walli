@@ -128,7 +128,6 @@
     <Compile Include="SalesForce\Function\CheckoutFileHistoryFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutFileUndoFunction.cs" />
     <Compile Include="SalesForce\Function\CheckoutFolderFunction.cs" />
-    <Compile Include="SalesForce\Function\CheckoutSystemFunction.cs" />
     <Compile Include="SalesForce\Function\CloseAllDocumentsFunction.cs" />
     <Compile Include="SalesForce\Function\CloseDocumentFunction.cs" />
     <Compile Include="SalesForce\Function\CloseProjectFunction.cs" />

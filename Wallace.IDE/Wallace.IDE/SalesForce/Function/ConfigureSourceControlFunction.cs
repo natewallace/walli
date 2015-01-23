@@ -83,7 +83,12 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.BranchName = project.Repository.BranchName;
                 dlg.IsCheckoutEnabled = project.Client.Checkout.IsEnabled();
 
+                string[] files = System.IO.Directory.GetFiles(project.RepositoryFolder);
+                string[] folders = System.IO.Directory.GetFiles(project.RepositoryFolder);
+                dlg.IsDeleteRepositoryEnabled = (files.Length > 0 || folders.Length > 0);
+
                 dlg.ToggleCheckOutSystemClick += ToggleCheckOutSystem;
+                dlg.DeleteRepositoryClick += DeleteRepository;
 
                 try
                 {
@@ -99,8 +104,40 @@ namespace Wallace.IDE.SalesForce.Function
                 finally
                 {
                     dlg.ToggleCheckOutSystemClick -= ToggleCheckOutSystem;
+                    dlg.DeleteRepositoryClick -= DeleteRepository;
                 }
             }
+        }
+
+        /// <summary>
+        /// Delete the repository for this project.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void DeleteRepository(object sender, EventArgs e)
+        {
+            Project project = App.Instance.SalesForceApp.CurrentProject;
+            if (project != null)
+            {
+                string[] files = System.IO.Directory.GetFiles(project.RepositoryFolder);
+                string[] folders = System.IO.Directory.GetFiles(project.RepositoryFolder);
+                if (files.Length > 0 || folders.Length > 0)
+                {
+                    foreach (string file in files)
+                        System.IO.File.Delete(file);
+
+                    foreach (string folder in folders)
+                        System.IO.Directory.Delete(folder, true);
+                }
+            }
+
+            App.MessageUser("Local repository deleted", 
+                            "Delete repository", 
+                            System.Windows.MessageBoxImage.Information, 
+                            new string[] { "OK" });
+
+            if (sender is SourceControlSetupWindow)
+                (sender as SourceControlSetupWindow).IsDeleteRepositoryEnabled = false;
         }
 
         /// <summary>

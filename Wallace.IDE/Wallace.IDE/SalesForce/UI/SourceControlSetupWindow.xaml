@@ -89,24 +89,33 @@
                      Grid.Column="1"
                      Margin="5"/>
 
-            <StackPanel Grid.Row="5"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Right">
+            <DockPanel Grid.Row="5"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       VerticalAlignment="Bottom"
+                       LastChildFill="False">
+                <Button Margin="5"
+                        DockPanel.Dock="Right"
+                        Padding="10,5,10,5"
+                        Click="buttonCancel_Click">
+                    Cancel
+                </Button>
                 <Button x:Name="buttonSave"
+                        DockPanel.Dock="Right"
                         Margin="5"
                         Padding="10,5,10,5"
                         Click="buttonSave_Click">
                     Save
                 </Button>
-                <Button Margin="5"
+                <Button x:Name="buttonDelete"
+                        Margin="5"
                         Padding="10,5,10,5"
-                        Click="buttonCancel_Click">
-                    Cancel
+                        IsEnabled="False"
+                        DockPanel.Dock="Left"
+                        Click="buttonDelete_Click">
+                    Delete Repository
                 </Button>
-            </StackPanel>
+            </DockPanel>
 
         </Grid>
     </Border>

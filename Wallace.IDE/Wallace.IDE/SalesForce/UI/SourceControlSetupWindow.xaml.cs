@@ -148,6 +148,15 @@ namespace Wallace.IDE.SalesForce.UI
             set { textBoxBranchName.Text = value; }
         }
 
+        /// <summary>
+        /// Enables/Disables the delete repository button.
+        /// </summary>
+        public bool IsDeleteRepositoryEnabled
+        {
+            get { return buttonDelete.IsEnabled; }
+            set { buttonDelete.IsEnabled = value; }
+        }
+
         #endregion
 
         #region Methods
@@ -160,6 +169,16 @@ namespace Wallace.IDE.SalesForce.UI
         {
             if (ToggleCheckOutSystemClick != null)
                 ToggleCheckOutSystemClick(this, e);
+        }
+
+        /// <summary>
+        /// Raises the DeleteRepositoryClick event.
+        /// </summary>
+        /// <param name="e">Arguments to pass with the event.</param>
+        protected virtual void OnDeleteRepositoryClick(EventArgs e)
+        {
+            if (DeleteRepositoryClick != null)
+                DeleteRepositoryClick(this, e);
         }
 
         #endregion
@@ -219,6 +238,23 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Raise the DeleteRepositoryClick event.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OnDeleteRepositoryClick(EventArgs.Empty);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
 
         #region Events
@@ -227,6 +263,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the user clicks to toggle on/off the check out system.
         /// </summary>
         public event EventHandler ToggleCheckOutSystemClick;
+
+        /// <summary>
+        /// Raised when the user clicks the delete repository button.
+        /// </summary>
+        public event EventHandler DeleteRepositoryClick;
 
         #endregion
     }
