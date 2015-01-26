@@ -53,7 +53,7 @@ namespace Wallace.IDE.SalesForce.Function
                     App.Instance.Navigation.SelectedNodes[0] is SourceFileNode)
                 {
                     SourceFileNode node = (App.Instance.Navigation.SelectedNodes[0] as SourceFileNode);
-                    if (!String.IsNullOrEmpty(node.SourceFile.Id))
+                    if (node.SourceFile.Parent == null && !String.IsNullOrEmpty(node.SourceFile.Id))
                         return node.SourceFile;
                 }
             }

@@ -53,7 +53,9 @@ namespace Wallace.IDE.SalesForce.Function
             {
                 foreach (INode node in App.Instance.Navigation.SelectedNodes)
                 {
-                    if (node is SourceFileNode && (node as SourceFileNode).SourceFile.CheckedOutBy == null)
+                    if (node is SourceFileNode &&
+                        (node as SourceFileNode).SourceFile.Parent == null &&
+                        (node as SourceFileNode).SourceFile.CheckedOutBy == null)
                         result.Add(node as SourceFileNode);
                     else
                         return new SourceFileNode[0];
