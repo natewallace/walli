@@ -415,24 +415,54 @@ namespace Wallace.IDE.SalesForce.Framework
                 Commit p = null;
                 if (c.Parents != null && c.Parents.Count() == 1)
                     p = c.Parents.ElementAt(0);
+
+                // initial commit
                 if (p == null)
-                    return result.ToArray();
+                {
+                    Stack<TreeEntry> folderStack = new Stack<TreeEntry>();
+                    foreach (TreeEntry te in c.Tree)
+                    {
+                        if (te.Mode == Mode.Directory)
+                            folderStack.Push(te);
+                        else
+                            result.Add(String.Format("+ {0}", te.Path));
+                    }
 
-                TreeChanges changes = repo.Diff.Compare<TreeChanges>(p.Tree, c.Tree);
-                if (changes == null)
-                    return result.ToArray();
+                    while (folderStack.Count > 0)
+                    {
+                        TreeEntry te = folderStack.Pop();
+                        Tree tree = te.Target as Tree;
+                        if (tree != null)
+                        {
+                            foreach (TreeEntry child in tree)
+                            {
+                                if (child.Mode == Mode.Directory)
+                                    folderStack.Push(child);
+                                else
+                                    result.Add(String.Format("+ {0}", child.Path));
+                            }
+                        }
+                    }
+                }
+                // normal compare
+                else
+                {
+                    TreeChanges changes = repo.Diff.Compare<TreeChanges>(p.Tree, c.Tree);
+                    if (changes == null)
+                        return result.ToArray();
 
-                if (changes.Modified != null)
-                    foreach (TreeEntryChanges tec in changes.Modified)
-                        result.Add(String.Format("  {0}", tec.Path));
+                    if (changes.Modified != null)
+                        foreach (TreeEntryChanges tec in changes.Modified)
+                            result.Add(String.Format("  {0}", tec.Path));
 
-                if (changes.Added != null)
-                    foreach (TreeEntryChanges tec in changes.Added)
-                        result.Add(String.Format("+ {0}", tec.Path));
+                    if (changes.Added != null)
+                        foreach (TreeEntryChanges tec in changes.Added)
+                            result.Add(String.Format("+ {0}", tec.Path));
 
-                if (changes.Deleted != null)
-                    foreach (TreeEntryChanges tec in changes.Deleted)
-                        result.Add(String.Format("- {0}", tec.Path));
+                    if (changes.Deleted != null)
+                        foreach (TreeEntryChanges tec in changes.Deleted)
+                            result.Add(String.Format("- {0}", tec.Path));
+                }
             }
 
             return result.OrderBy(f => f.Substring(1)).ToArray();
