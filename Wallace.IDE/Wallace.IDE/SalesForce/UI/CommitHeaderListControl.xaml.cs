@@ -123,8 +123,8 @@ namespace Wallace.IDE.SalesForce.UI
             get
             {
                 List<string> result = new List<string>();
-                foreach (TextBlock tb in listBoxDetails.Items)
-                    result.Add(tb.Text);
+                foreach (ListViewItem lvi in listBoxDetails.Items)
+                    result.Add((lvi.Content as TextBlock).Text);
 
                 return result.ToArray();
             }
@@ -140,7 +140,24 @@ namespace Wallace.IDE.SalesForce.UI
                         TextBlock tb = new TextBlock();
                         tb.Text = item;
                         tb.FontFamily = ff;
-                        listBoxDetails.Items.Add(tb);
+
+                        ListViewItem lvi = new ListViewItem();
+                        lvi.Content = tb;
+                        if (item != null)
+                        {
+                            if (item.StartsWith("+"))
+                            {
+                                lvi.Background = DiffDocumentColorizingTransformer.ADD_BRUSH_BACKGROUND;
+                                lvi.Foreground = DiffDocumentColorizingTransformer.ADD_BRUSH_FOREGROUND;
+                            }
+                            else if (item.StartsWith("-"))
+                            {
+                                lvi.Background = DiffDocumentColorizingTransformer.DELETE_BRUSH_BACKGROUND;
+                                lvi.Foreground = DiffDocumentColorizingTransformer.DELETE_BRUSH_FOREGROUND;
+                            }
+                        }
+
+                        listBoxDetails.Items.Add(lvi);
                     }
                 }
             }

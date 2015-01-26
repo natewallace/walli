@@ -38,19 +38,24 @@
                       VerticalAlignment="Top"
                       HorizontalAlignment="Stretch"/>
         
-        <StackPanel Grid.Row="1" 
-                    Orientation="Vertical">
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
             
             <TextBlock Text="Details:"
-                       Grid.Row="1"
+                       Grid.Row="0"
                        Background="LightGray"
                        Foreground="Black"
                        FontWeight="Bold"
                        Height="15px"
                        Margin="0,4,0,0"/>                 
         
-            <ListBox x:Name="listBoxDetails"
-                     BorderThickness="0" />
-        </StackPanel>
+            <ScrollViewer Grid.Row="1">
+                <ListBox x:Name="listBoxDetails"
+                         BorderThickness="0" />
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>

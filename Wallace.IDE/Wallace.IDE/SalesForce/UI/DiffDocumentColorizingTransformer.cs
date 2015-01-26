@@ -51,22 +51,22 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The brush to paint backgrounds for deletes with.
         /// </summary>
-        private static SolidColorBrush DELETE_BRUSH_BACKGROUND = new SolidColorBrush(Color.FromRgb(255, 221, 221));
+        public static SolidColorBrush DELETE_BRUSH_BACKGROUND = new SolidColorBrush(Color.FromRgb(255, 221, 221));
 
         /// <summary>
         /// The brush to paint foregrounds for deletes with.
         /// </summary>
-        private static SolidColorBrush DELETE_BRUSH_FOREGROUND = new SolidColorBrush(Color.FromRgb(116, 0, 0));
+        public static SolidColorBrush DELETE_BRUSH_FOREGROUND = new SolidColorBrush(Color.FromRgb(116, 0, 0));
 
         /// <summary>
         /// The brush to paint a backgrounds for adds with.
         /// </summary>
-        private static SolidColorBrush ADD_BRUSH_BACKGROUND = new SolidColorBrush(Color.FromRgb(219, 255, 219));
+        public static SolidColorBrush ADD_BRUSH_BACKGROUND = new SolidColorBrush(Color.FromRgb(219, 255, 219));
 
         /// <summary>
         /// The brush to paint foregrounds for adds with.
         /// </summary>
-        private static SolidColorBrush ADD_BRUSH_FOREGROUND = Brushes.Black;
+        public static SolidColorBrush ADD_BRUSH_FOREGROUND = Brushes.Black;
 
         #endregion
 
