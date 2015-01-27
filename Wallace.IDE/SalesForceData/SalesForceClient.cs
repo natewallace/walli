@@ -283,6 +283,57 @@ namespace SalesForceData
             return _orgInfo;
         }
 
+        public User[] SearchUsers(string query)
+        {
+            if (String.IsNullOrWhiteSpace(query))
+                throw new ArgumentException("query is null or whitespace", "query");
+
+            InitClients();
+
+            SalesForceAPI.Partner.searchRequest request = new SalesForceAPI.Partner.searchRequest(
+                new SalesForceAPI.Partner.SessionHeader() { sessionId = _session.Id },
+                null,
+                null,
+                String.Format("FIND {{{0}}} IN ALL FIELDS RETURNING User (Id, Name)", query));
+
+            SalesForceAPI.Partner.searchResponse response = _partnerClient.search(request);
+
+            if (response == null || response.result == null)
+                throw new Exception("Invalid response received.");
+
+            List<User> results = new List<User>();
+            if (response.result.searchRecords != null)
+            {
+                foreach (SalesForceAPI.Partner.SearchRecord searchRecord in response.result.searchRecords)
+                {
+                    if (searchRecord.record != null && searchRecord.record.Any != null)
+                    {
+                        string id = null;
+                        string name = null;
+
+                        foreach (System.Xml.XmlElement e in searchRecord.record.Any)
+                        {
+                            string value = null;
+                            if (searchRecord.record.fieldsToNull != null && searchRecord.record.fieldsToNull.Contains(e.LocalName))
+                                value = null;
+                            else
+                                value = e.InnerText;
+
+                            if (String.Compare("Id", e.LocalName, true) == 0)
+                                id = value;
+                            else if (String.Compare("Name", e.LocalName, true) == 0)
+                                name = value;
+                        }
+
+                        if (id != null && name != null)
+                            results.Add(new User(id, name));
+                    }
+                }
+            }
+
+            return results.ToArray();
+        }
+
         /// <summary>
         /// Delete a checkpoint.
         /// </summary>

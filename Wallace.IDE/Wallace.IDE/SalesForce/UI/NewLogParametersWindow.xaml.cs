@@ -55,10 +55,19 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The traced entity.
         /// </summary>
-        public string TracedEntity
+        public object TracedEntity
         {
-            get { return textBoxTracedEntity.Text; }
-            set { textBoxTracedEntity.Text = value; }
+            get { return buttonTracedEntity.Content; }
+            set { buttonTracedEntity.Content = value; }
+        }
+
+        /// <summary>
+        /// Enable/Disable the traced entity input.
+        /// </summary>
+        public bool IsTracedEntityReadOnly
+        {
+            get { return !buttonTracedEntity.IsEnabled; }
+            set { buttonTracedEntity.IsEnabled = !value; }
         }
 
         /// <summary>
@@ -161,6 +170,20 @@ namespace Wallace.IDE.SalesForce.UI
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Raises the UserSearch event.
+        /// </summary>
+        /// <param name="e">Arguments passed with the event.</param>
+        protected virtual void OnUserSearch(UserSearchEventArgs e)
+        {
+            if (UserSearch != null)
+                UserSearch(this, e);
+        }
+
+        #endregion
+
         #region Event Handlers
 
         /// <summary>
@@ -184,6 +207,41 @@ namespace Wallace.IDE.SalesForce.UI
             DialogResult = true;
             Close();
         }
+
+        /// <summary>
+        /// Select a new user.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonTracedEntity_Click(object sender, RoutedEventArgs e)
+        {
+            UserSelectWindow dlg = new UserSelectWindow();
+            dlg.UserSearch += dialog_UserSearch;
+            if (App.ShowDialog(dlg))
+            {
+                TracedEntity = dlg.SelectedUser;
+            }
+            dlg.UserSearch -= dialog_UserSearch;
+        }
+
+        /// <summary>
+        /// Forward UserSearch events.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void dialog_UserSearch(object sender, UserSearchEventArgs e)
+        {
+            OnUserSearch(e);
+        }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Raised when a user search needs to be done.
+        /// </summary>
+        public event UserSearchEventHandler UserSearch;
 
         #endregion
     }

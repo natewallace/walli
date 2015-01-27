@@ -92,6 +92,7 @@
     <Compile Include="Framework\UI\WindowIconImage.xaml.cs">
       <DependentUpon>WindowIconImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\UI\UserSearchEventArgs.cs" />
     <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
     <Compile Include="SalesForce\Document\CommitListDocument.cs" />
     <Compile Include="SalesForce\Document\DataEditorDocument.cs" />
@@ -337,6 +338,10 @@
     </Compile>
     <Compile Include="SalesForce\UI\TestRunItemResultStatusIconConverter.cs" />
     <Compile Include="SalesForce\UI\TestRunItemStatusIconConverter.cs" />
+    <Compile Include="SalesForce\UI\UserSearchEventHandler.cs" />
+    <Compile Include="SalesForce\UI\UserSelectWindow.xaml.cs">
+      <DependentUpon>UserSelectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\ViewCheckpointItemControl.xaml.cs">
       <DependentUpon>ViewCheckpointItemControl.xaml</DependentUpon>
     </Compile>
@@ -556,6 +561,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\TestRunControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\UserSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

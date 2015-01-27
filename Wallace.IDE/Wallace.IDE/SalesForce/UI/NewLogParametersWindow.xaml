@@ -50,6 +50,7 @@
                        FontWeight="Bold"
                        Margin="5"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Grid.Column="0"/>
             
             <TextBox x:Name="textBoxScope"                      
@@ -64,20 +65,25 @@
                        FontWeight="Bold"
                        Margin="5"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Grid.Column="0"/>
 
-            <TextBox x:Name="textBoxTracedEntity" 
-                     Grid.Row="1"
-                     Grid.Column="1"
-                     Grid.ColumnSpan="7"
-                     Margin="0,5,5,5"
-                     IsReadOnly="True"/>
+            <Button x:Name="buttonTracedEntity" 
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="7"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    Margin="0,5,5,5"
+                    Click="buttonTracedEntity_Click"/>
 
             <TextBlock Text="Expiration Date:"
                        Grid.Row="2"
                        FontWeight="Bold"
                        Margin="5"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Grid.Column="0"/>
             
             <TextBox x:Name="textBoxExpirationDate" 
@@ -99,6 +105,7 @@
                        Grid.Column="0"
                        FontWeight="Bold"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Margin="5"/>
             
             <ComboBox x:Name="comboBoxCode"
@@ -113,6 +120,7 @@
                        Grid.Column="0"
                        FontWeight="Bold"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Margin="5"/>
 
             <ComboBox x:Name="comboBoxVisualForce"
@@ -127,6 +135,7 @@
                        Grid.Column="0"
                        FontWeight="Bold"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Margin="5"/>
 
             <ComboBox x:Name="comboBoxProfiling"
@@ -141,6 +150,7 @@
                        Grid.Column="0"
                        FontWeight="Bold"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Margin="8"/>
 
             <ComboBox x:Name="comboBoxCallout"
@@ -155,6 +165,7 @@
                        Grid.Column="0"
                        FontWeight="Bold"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Margin="5"/>
 
             <ComboBox x:Name="comboBoxDatabase"
@@ -169,6 +180,7 @@
                        Grid.Column="0"
                        FontWeight="Bold"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Margin="5"/>
 
             <ComboBox x:Name="comboBoxSystem"
@@ -183,6 +195,7 @@
                        Grid.Column="0"
                        FontWeight="Bold"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Margin="5"/>
 
             <ComboBox x:Name="comboBoxValidation"
@@ -197,6 +210,7 @@
                        Grid.Column="0"
                        FontWeight="Bold"
                        HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                        Margin="5"/>
 
             <ComboBox x:Name="comboBoxWorkflow"

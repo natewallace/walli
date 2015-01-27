@@ -82,8 +82,8 @@ namespace SalesForceData
         /// Constructor.
         /// </summary>
         /// <param name="traceFlag">The TraceFlag to build this object from.</param>
-        /// <param name="tracedEntityName">TracedEntityName.</param>
         /// <param name="scopeName">ScopeName.</param>
+        /// <param name="tracedEntityName">TracedEntityName.</param>        
         internal LogParameters(
             SalesForceData.SalesForceAPI.Tooling.TraceFlag traceFlag, 
             string scopeName, 

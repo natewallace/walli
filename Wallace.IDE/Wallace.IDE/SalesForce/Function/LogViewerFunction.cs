@@ -149,36 +149,44 @@ namespace Wallace.IDE.SalesForce.Function
                     NewLogParametersWindow newDlg = new NewLogParametersWindow();
                     newDlg.Title = "New Log Parameters";
                     newDlg.SaveButtonText = "Create";
-                    newDlg.TracedEntity = String.Format("{0} (user)", App.Instance.SalesForceApp.CurrentProject.Client.User.Name);
+                    newDlg.TracedEntity = App.Instance.SalesForceApp.CurrentProject.Client.User;
                     newDlg.Scope = String.Empty;
                     newDlg.ExpirationDate = DateTime.Now.AddDays(1);
                     newDlg.LogLevelCode = LogLevel.Info;
                     newDlg.LogLevelProfiling = LogLevel.Info;
                     newDlg.LogLevelDatabase = LogLevel.Info;
+                    newDlg.UserSearch += UserSearch;
 
-                    if (App.ShowDialog(newDlg))
+                    try
                     {
-                        using (App.Wait("Creating Log Paramters"))
+                        if (App.ShowDialog(newDlg))
                         {
-                            LogParameters log = App.Instance.SalesForceApp.CurrentProject.Client.CreateLogParameters(
-                                App.Instance.SalesForceApp.CurrentProject.Client.User.Id,
-                                newDlg.TracedEntity,
-                                String.Empty,
-                                String.Empty,
-                                (newDlg.ExpirationDate.HasValue) ? newDlg.ExpirationDate.Value : DateTime.Now.AddHours(4),
-                                newDlg.LogLevelCode,
-                                newDlg.LogLevelVisualForce,
-                                newDlg.LogLevelProfiling,
-                                newDlg.LogLevelCallout,
-                                newDlg.LogLevelDatabase,
-                                newDlg.LogLevelSystem,
-                                newDlg.LogLevelValidation,
-                                newDlg.LogLevelWorkflow);
+                            using (App.Wait("Creating Log Paramters"))
+                            {
+                                LogParameters log = App.Instance.SalesForceApp.CurrentProject.Client.CreateLogParameters(
+                                    (newDlg.TracedEntity as User).Id,
+                                    String.Format("{0} (user)", newDlg.TracedEntity),
+                                    String.Empty,
+                                    String.Empty,
+                                    (newDlg.ExpirationDate.HasValue) ? newDlg.ExpirationDate.Value : DateTime.Now.AddHours(4),
+                                    newDlg.LogLevelCode,
+                                    newDlg.LogLevelVisualForce,
+                                    newDlg.LogLevelProfiling,
+                                    newDlg.LogLevelCallout,
+                                    newDlg.LogLevelDatabase,
+                                    newDlg.LogLevelSystem,
+                                    newDlg.LogLevelValidation,
+                                    newDlg.LogLevelWorkflow);
 
-                            List<LogParameters> list = new List<LogParameters>(dlg.LogParameters);
-                            list.Add(log);
-                            dlg.LogParameters = list;
+                                List<LogParameters> list = new List<LogParameters>(dlg.LogParameters);
+                                list.Add(log);
+                                dlg.LogParameters = list;
+                            }
                         }
+                    }
+                    finally
+                    {
+                        newDlg.UserSearch -= UserSearch;
                     }
                 }
             }
@@ -186,6 +194,17 @@ namespace Wallace.IDE.SalesForce.Function
             {
                 App.HandleException(err);
             }
+        }
+
+        /// <summary>
+        /// Do a user search.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void UserSearch(object sender, UserSearchEventArgs e)
+        {
+            if (App.Instance.SalesForceApp.CurrentProject != null)
+                e.Results = App.Instance.SalesForceApp.CurrentProject.Client.SearchUsers(e.Query);
         }
 
         /// <summary>
@@ -206,6 +225,7 @@ namespace Wallace.IDE.SalesForce.Function
                     editDlg.Title = "Edit Log Parameters";
                     editDlg.SaveButtonText = "Save";
                     editDlg.TracedEntity = dlg.SelectedLogParameters.TracedEntityName;
+                    editDlg.IsTracedEntityReadOnly = true;
                     editDlg.Scope = dlg.SelectedLogParameters.ScopeName;
                     editDlg.ExpirationDate = dlg.SelectedLogParameters.ExpirationDate;
                     editDlg.LogLevelCallout = dlg.SelectedLogParameters.CalloutLevel;
