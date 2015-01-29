@@ -122,7 +122,7 @@ namespace SalesForceLanguage.Apex.CodeModel
         /// Zero - This instance occurs in the same position in the sort order as obj. 
         /// Greater than zero - This instance follows obj in the sort order.
         /// </returns>
-        public int CompareTo(object obj)
+        public virtual int CompareTo(object obj)
         {
             Symbol other = obj as Symbol;
             if (other == null)

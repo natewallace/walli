@@ -146,6 +146,39 @@ namespace SalesForceLanguage.Apex.CodeModel
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Evaluate parameters in comparison.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>
+        /// A value that indicates the relative order of the objects being compared.
+        /// The return value has these meanings: 
+        /// Less than zero - This instance precedes obj in the sort order. 
+        /// Zero - This instance occurs in the same position in the sort order as obj. 
+        /// Greater than zero - This instance follows obj in the sort order.
+        /// </returns>
+        public override int CompareTo(object obj)
+        {
+            int result = base.CompareTo(obj);
+            if (result != 0)
+                return result;
+
+            Method other = obj as Method;
+            if (other == null)
+                return -1;
+
+            if (other.Parameters.Length != this.Parameters.Length)
+                return -1;
+
+            for (int i = 0; i < this.Parameters.Length; i++)
+            {
+                if (String.Compare(other.Parameters[i].FullType, this.Parameters[i].FullType, true) != 0)
+                    return -1;
+            }
+
+            return 0;
+        }
+
         #endregion
 
         #region IXmlSerializable Members
