@@ -73,6 +73,18 @@ namespace Wallace.IDE.SalesForce.Document
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Returns true if the document is for diffs.
+        /// </summary>
+        public bool IsDiffView
+        {
+            get { return View.HighlightDiffs; }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -113,6 +125,22 @@ namespace Wallace.IDE.SalesForce.Document
         public override bool RepresentsEntity(object entity)
         {
             return false;
+        }
+
+        /// <summary>
+        /// Navigate to the next diff.
+        /// </summary>
+        public void GotToNextDiff()
+        {
+            View.GotToNextDiff();
+        }
+
+        /// <summary>
+        /// Navigate to the previous diff.
+        /// </summary>
+        public void GotToPreviousDiff()
+        {
+            View.GotToPreviousDiff();
         }
 
         #endregion

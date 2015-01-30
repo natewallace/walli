@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Search;
 using System;
 using System.Collections.Generic;
@@ -97,9 +98,96 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Returns the next diff line number from the caret or -1 if there isn't a next.
+        /// </summary>
+        public int NextDiffLine
+        {
+            get
+            {
+                if (_colorTransformer == null)
+                    return -1;
+
+                // combine the adds and deletes
+                List<int> lineChanges = new List<int>();
+                lineChanges.AddRange(_colorTransformer.LineAdds);
+                lineChanges.AddRange(_colorTransformer.LineDeletes);
+                lineChanges.Sort();
+
+                // find the first line from the caret with a diff
+                int currentLine = textEditor.TextArea.Caret.Line;
+                foreach (int line in lineChanges)
+                {
+                    if (currentLine > line)
+                        continue;
+
+                    if (currentLine == line)
+                        currentLine++;
+                    else
+                        return line;
+                }
+
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Returns the previous diff line number from the caret or -1 if there isn't a previous.
+        /// </summary>
+        public int PreviousDiffLine
+        {
+            get
+            {
+                if (_colorTransformer == null)
+                    return -1;
+
+                // combine the adds and deletes
+                List<int> lineChanges = new List<int>();
+                lineChanges.AddRange(_colorTransformer.LineAdds);
+                lineChanges.AddRange(_colorTransformer.LineDeletes);
+                lineChanges.Sort();
+                lineChanges.Reverse();
+
+                // find the first line from the caret with a diff
+                int currentLine = textEditor.TextArea.Caret.Line;
+                foreach (int line in lineChanges)
+                {
+                    if (currentLine < line)
+                        continue;
+
+                    if (currentLine == line)
+                        currentLine--;
+                    else
+                        return line;
+                }
+
+                return -1;
+            }
+        }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Navigate to the next diff from the current cursor position.
+        /// </summary>
+        public void GotToNextDiff()
+        {
+            int line = NextDiffLine;
+            if (line != -1)
+                GotToLine(line);
+        }
+
+        /// <summary>
+        /// Navigate to the previous diff from the current cursor position.
+        /// </summary>
+        public void GotToPreviousDiff()
+        {
+            int line = PreviousDiffLine;
+            if (line != -1)
+                GotToLine(line);
+        }
 
         /// <summary>
         /// Update the highlights.

@@ -381,6 +381,14 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(commitCopyShaFunction, "DOCUMENT");
             App.Instance.RegisterFunction(commitCopyShaFunction);
 
+            DiffPreviousFunction diffPreviousFunction = new DiffPreviousFunction();
+            App.Instance.Menu.AddFunction(diffPreviousFunction, "DOCUMENT");
+            App.Instance.ToolBar.AddFunction(diffPreviousFunction);
+
+            DiffNextFunction diffNextFunction = new DiffNextFunction();
+            App.Instance.Menu.AddFunction(diffNextFunction, "DOCUMENT");
+            App.Instance.ToolBar.AddFunction(diffNextFunction);
+
             CloseDocumentFunction closeDocumentFunction = new CloseDocumentFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(closeDocumentFunction), "DOCUMENT");
             App.Instance.Menu.AddFunction(closeDocumentFunction, "DOCUMENT");

@@ -85,6 +85,26 @@ namespace Wallace.IDE.SalesForce.UI
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// The line adds.
+        /// </summary>
+        public HashSet<int> LineAdds
+        {
+            get { return _lineAdds; }
+        }
+
+        /// <summary>
+        /// The line deletes.
+        /// </summary>
+        public HashSet<int> LineDeletes
+        {
+            get { return _lineDeletes; }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>

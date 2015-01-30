@@ -92,6 +92,8 @@
     <Compile Include="Framework\UI\WindowIconImage.xaml.cs">
       <DependentUpon>WindowIconImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\Function\DiffNextFunction.cs" />
+    <Compile Include="SalesForce\Function\DiffPreviousFunction.cs" />
     <Compile Include="SalesForce\UI\UserSearchEventArgs.cs" />
     <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
     <Compile Include="SalesForce\Document\CommitListDocument.cs" />
@@ -954,6 +956,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Compare.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Previous.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
