@@ -87,7 +87,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     using (App.Wait("Starting tests..."))
                     {
-                        TestRun testRun = App.Instance.SalesForceApp.CurrentProject.Client.StartTests(dlg.SelectedTestNames);
+                        TestRun testRun = App.Instance.SalesForceApp.CurrentProject.Client.Test.StartTests(dlg.SelectedTestNames);
                         App.Instance.Content.OpenDocument(new TestRunDocument(App.Instance.SalesForceApp.CurrentProject, testRun));
                     }
                 }

@@ -85,7 +85,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     using (App.Wait("Deleting log"))
                     {
-                        App.Instance.SalesForceApp.CurrentProject.Client.DeleteLogs(new Log[] { document.SelectedLog });
+                        App.Instance.SalesForceApp.CurrentProject.Client.Diagnostic.DeleteLogs(new Log[] { document.SelectedLog });
                         document.Refresh();
                     }
                 }

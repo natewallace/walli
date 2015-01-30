@@ -323,11 +323,11 @@ namespace Wallace.IDE.SalesForce.Document
                             using (App.Wait("Saving..."))
                             {
                                 if (addTable.Rows.Count > 0)
-                                    Project.Client.DataInsert(addTable);
+                                    Project.Client.Data.Insert(addTable);
                                 if (updateTable.Rows.Count > 0)
-                                    Project.Client.DataUpdate(updateTable);
+                                    Project.Client.Data.Update(updateTable);
                                 if (deleteTable.Rows.Count > 0)
-                                    Project.Client.DataDelete(deleteTable);
+                                    Project.Client.Data.Delete(deleteTable);
 
                                 // set the id fields for adds
                                 if (DataResult.Data.Columns.Contains("Id"))
@@ -370,7 +370,7 @@ namespace Wallace.IDE.SalesForce.Document
                 {
                     using (App.Wait("Executing query..."))
                     {
-                        DataResult = Project.Client.DataSelect(View.SOQLText, true);
+                        DataResult = Project.Client.Data.Select(View.SOQLText, true);
                         UpdateDataDisplay();
                         UpdateDisplay();
                     }
@@ -446,7 +446,7 @@ namespace Wallace.IDE.SalesForce.Document
 
                             // check for more data
                             if (result.IsMore && allData)
-                                result = Project.Client.DataSelect(result);
+                                result = Project.Client.Data.Select(result);
                             else
                                 result = null;
                         }
@@ -512,7 +512,7 @@ namespace Wallace.IDE.SalesForce.Document
                     {
                         using (App.Wait("Fetching next page..."))
                         {
-                            DataResult = Project.Client.DataSelect(DataResult);
+                            DataResult = Project.Client.Data.Select(DataResult);
                             UpdateDataDisplay();
                             UpdateDisplay();
                         }

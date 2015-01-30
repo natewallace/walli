@@ -54,7 +54,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// Constructor.
         /// </summary>
         /// <param name="parameters">Parameters.</param>
-        public LogViewerDocument(Project project, LogParameters parameters)
+        public LogViewerDocument(Project project, LogListener parameters)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -80,7 +80,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// <summary>
         /// The log parameters that this document is displaying logs for.
         /// </summary>
-        public LogParameters Parameters { get; private set; }
+        public LogListener Parameters { get; private set; }
 
         /// <summary>
         /// The view used by the document.
@@ -142,7 +142,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// <returns>true if this document represents the given entity.</returns>
         public override bool RepresentsEntity(object entity)
         {
-            LogParameters otherParameters = entity as LogParameters;
+            LogListener otherParameters = entity as LogListener;
             if (otherParameters == null)
                 return false;
 
@@ -155,7 +155,7 @@ namespace Wallace.IDE.SalesForce.Document
         public void Refresh()
         {
             View.TracedEntity = Parameters.TracedEntityName;
-            View.Logs = Project.Client.GetLogs(Parameters.TracedEntityId);
+            View.Logs = Project.Client.Diagnostic.GetLogs(Parameters.TracedEntityId);
             App.Instance.UpdateWorkspaces();
         }
 
@@ -199,7 +199,7 @@ namespace Wallace.IDE.SalesForce.Document
 
                     if (View.SelectedLog != null)
                     {
-                        View.LogContentText = Project.Client.GetLogContent(View.SelectedLog);
+                        View.LogContentText = Project.Client.Diagnostic.GetLogContent(View.SelectedLog);
 
                         LogData data = new LogData(View.LogContentText);
                         _logNodeManager.Nodes.Clear();

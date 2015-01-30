@@ -92,8 +92,14 @@
     <Compile Include="Framework\UI\WindowIconImage.xaml.cs">
       <DependentUpon>WindowIconImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SalesForce\Document\CodeCoverageDocument.cs" />
+    <Compile Include="SalesForce\Function\CodeCoverageAllFunction.cs" />
     <Compile Include="SalesForce\Function\DiffNextFunction.cs" />
     <Compile Include="SalesForce\Function\DiffPreviousFunction.cs" />
+    <Compile Include="SalesForce\Function\RefreshCodeCoverageFunction.cs" />
+    <Compile Include="SalesForce\UI\CodeCoverageControl.xaml.cs">
+      <DependentUpon>CodeCoverageControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SalesForce\UI\UserSearchEventArgs.cs" />
     <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
     <Compile Include="SalesForce\Document\CommitListDocument.cs" />
@@ -435,6 +441,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\CheckInWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\CodeCoverageControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -959,6 +969,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CodeCoverage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

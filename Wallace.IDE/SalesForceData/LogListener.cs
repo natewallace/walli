@@ -27,7 +27,7 @@ namespace SalesForceData
     /// <summary>
     /// Parameters for what to log.
     /// </summary>
-    public class LogParameters
+    public class LogListener
     {
         #region Constructors
 
@@ -47,7 +47,7 @@ namespace SalesForceData
         /// <param name="systemLevel">SystemLevel.</param>
         /// <param name="validationLevel">ValidationLevel.</param>
         /// <param name="workflowLevel">WorkflowLevel.</param>
-        public LogParameters(
+        public LogListener(
             string traceEntityId,
             string tracedEntityName,
             string scopeId,
@@ -84,7 +84,7 @@ namespace SalesForceData
         /// <param name="traceFlag">The TraceFlag to build this object from.</param>
         /// <param name="scopeName">ScopeName.</param>
         /// <param name="tracedEntityName">TracedEntityName.</param>        
-        internal LogParameters(
+        internal LogListener(
             SalesForceData.SalesForceAPI.Tooling.TraceFlag traceFlag, 
             string scopeName, 
             string tracedEntityName)
@@ -264,7 +264,7 @@ namespace SalesForceData
         /// <returns>true if the given object is logically equal to this one.</returns>
         public override bool Equals(object obj)
         {
-            LogParameters other = obj as LogParameters;
+            LogListener other = obj as LogListener;
             if (other == null)
                 return false;
 

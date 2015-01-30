@@ -99,7 +99,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             List<INode> nodes = new List<INode>();
 
-            var sourceFileTypes = Project.Client.GetSourceFileTypes().OrderBy(sft => sft.Name);
+            var sourceFileTypes = Project.Client.Meta.GetSourceFileTypes().OrderBy(sft => sft.Name);
             foreach (SourceFileType sft in sourceFileTypes)
             {
                 switch (sft.Name)

@@ -51,13 +51,17 @@
     <Compile Include="CheckoutSystem.cs" />
     <Compile Include="Checkpoint.cs" />
     <Compile Include="CheckpointScriptType.cs" />
+    <Compile Include="CodeCoverage.cs" />
     <Compile Include="DataSelectResult.cs" />
+    <Compile Include="DataSystem.cs" />
+    <Compile Include="DiagnosticSystem.cs" />
     <Compile Include="FieldType.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogData.cs" />
     <Compile Include="LogLevel.cs" />
-    <Compile Include="LogParameters.cs" />
+    <Compile Include="LogListener.cs" />
     <Compile Include="LogUnit.cs" />
+    <Compile Include="MetaSystem.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Manifest.cs" />
     <Compile Include="ManifestItem.cs" />
@@ -119,6 +123,7 @@
     <Compile Include="TestRunItemResult.cs" />
     <Compile Include="TestRunItemResultStatus.cs" />
     <Compile Include="TestRunItemStatus.cs" />
+    <Compile Include="TestSystem.cs" />
     <Compile Include="TriggerEvents.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>

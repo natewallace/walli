@@ -151,7 +151,7 @@ namespace Wallace.IDE.SalesForce.Function
                             }
 
                             // download the files in a package
-                            byte[] packageBits = project.Client.GetSourceFileContentAsPackage(dlg.SelectedFiles);                            
+                            byte[] packageBits = project.Client.Meta.GetSourceFileContentAsPackage(dlg.SelectedFiles);                            
 
                             // commit and push the package
                             project.Repository.PushPackage(packageBits, dlg.Comment);

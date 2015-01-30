@@ -101,7 +101,7 @@ namespace Wallace.IDE.SalesForce.Document
             switch (File.FileType.Name)
             {
                 case "Profile":
-                    dataTask = Task.Run<SourceFileData>(() => Project.Client.GetSourceFileData(File));
+                    dataTask = Task.Run<SourceFileData>(() => Project.Client.Meta.GetSourceFileData(File));
                     break;
 
                 default:
@@ -145,7 +145,7 @@ namespace Wallace.IDE.SalesForce.Document
             if (Data != null)
             {
                 using (App.Wait("Saving data"))
-                    Project.Client.SaveSourceFileData(Data);
+                    Project.Client.Meta.SaveSourceFileData(Data);
             }
         }
 

@@ -20,19 +20,20 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
-using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.Node;
-using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Create a new apex class.
+    /// Refresh a code coverage document.
     /// </summary>
-    public class NewClassFunction : FunctionBase
+    public class RefreshCodeCoverageFunction : FunctionBase
     {
         #region Methods
 
@@ -45,51 +46,35 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "NewDocumentClass.png");
-                presenter.ToolTip = "New class...";
+                presenter.Header = VisualHelper.CreateIconHeader(null, "Refresh.png");
+                presenter.ToolTip = "Refresh code coverage";
             }
             else
             {
-                presenter.Header = "New class...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "NewDocumentClass.png");
+                presenter.Header = "Refresh code coverage";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "Refresh.png");
             }
         }
 
         /// <summary>
-        /// Set visibility.
+        /// Set the header based on the current document.
         /// </summary>
         /// <param name="host">The type of host.</param>
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (App.Instance.SalesForceApp.CurrentProject != null);
+            IsVisible = (App.Instance.Content.ActiveDocument is CodeCoverageDocument);
         }
 
         /// <summary>
-        /// Create a new class.
+        /// Refresh the code coverage.
         /// </summary>
         public override void Execute()
         {
-            EnterValueWindow dlg = new EnterValueWindow();
-            dlg.Title = "Create Class";
-            dlg.InputLabel = "Class Name:";
-            dlg.ActionLabel = "Create";
-            dlg.InputMaxLength = 255;
-            if (App.ShowDialog(dlg))
+            if (App.Instance.Content.ActiveDocument is CodeCoverageDocument)
             {
-                Project project = App.Instance.SalesForceApp.CurrentProject;
-                if (project != null)
-                {
-                    using (App.Wait("Creating Class"))
-                    {
-                        SourceFile file = project.Client.Meta.CreateClass(dlg.EnteredValue, EditorSettings.ApexSettings.CreateHeader());
-                        ApexClassFolderNode folder = App.Instance.Navigation.GetNode<ApexClassFolderNode>();
-                        if (folder != null)
-                            folder.AddApexClass(file);
-
-                        App.Instance.Content.OpenDocument(new ClassEditorDocument(project, file));
-                    }
-                }
+                using (App.Wait("Refreshing code coverage"))
+                    (App.Instance.Content.ActiveDocument as CodeCoverageDocument).RefreshCodeCoverage();
             }
         }
 

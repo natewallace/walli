@@ -38,7 +38,7 @@ namespace SalesForceData
         #region Fields
 
         /// <summary>
-        /// The client for the checktout table.
+        /// The client for the checkout table.
         /// </summary>
         private SalesForceClient _client;
 
@@ -226,7 +226,7 @@ namespace SalesForceData
             {
                 _isCheckoutEnabled = false;
 
-                foreach (SObjectTypePartial obj in _client.DataDescribeGlobal())
+                foreach (SObjectTypePartial obj in _client.Data.DescribeGlobal())
                 {
                     if (obj.Name != null && obj.Name.EndsWith("Walli_Lock_Table__c"))
                     {
@@ -272,11 +272,11 @@ namespace SalesForceData
                 }
             }
 
-            string id = _client.DeployPackage(package, false, false);
+            string id = _client.Meta.DeployPackage(package, false, false);
             bool complete = false;
             while (!complete)
             {
-                PackageDeployResult result = _client.CheckPackageDeploy(id);
+                PackageDeployResult result = _client.Meta.CheckPackageDeploy(id);
                 if (result.Status == PackageDeployResultStatus.Failed)
                     throw new Exception("Could not change checkout system: " + result.ResultMessage);
 
@@ -332,7 +332,7 @@ namespace SalesForceData
 
             try
             {
-                _client.DataInsert(table);
+                _client.Data.Insert(table);
             }
             catch (Exception err)
             {
@@ -369,7 +369,7 @@ namespace SalesForceData
             if (!IsEnabled())
                 return;
 
-            DataSelectResult lockTable = _client.DataSelectAll(String.Format("SELECT {0}, {1}, {2} FROM {3} WHERE {0} = '{4}'",
+            DataSelectResult lockTable = _client.Data.SelectAll(String.Format("SELECT {0}, {1}, {2} FROM {3} WHERE {0} = '{4}'",
                 ColumnEntityId,
                 ColumnUserId,
                 ColumnUserName,
@@ -398,7 +398,7 @@ namespace SalesForceData
             if (!IsEnabled())
                 return;
 
-            DataSelectResult lockTable = _client.DataSelectAll(String.Format("SELECT Id, {0}, {1}, {2}, {3}, {4} FROM {5} WHERE {0} = '{6}' AND {3} = '{7}'",
+            DataSelectResult lockTable = _client.Data.SelectAll(String.Format("SELECT Id, {0}, {1}, {2}, {3}, {4} FROM {5} WHERE {0} = '{6}' AND {3} = '{7}'",
                 ColumnEntityId,
                 ColumnEntityName,
                 ColumnEntityTypeName,
@@ -417,7 +417,7 @@ namespace SalesForceData
 
             try
             {
-                _client.DataUpdate(lockTable.Data);
+                _client.Data.Update(lockTable.Data);
             }
             catch (Exception err)
             {
@@ -441,14 +441,14 @@ namespace SalesForceData
             foreach (SourceFile file in files)
                 ids.Add(file.Id);
 
-            DataSelectResult result = _client.DataSelectAll(String.Format("SELECT Id FROM {0} WHERE {1} IN ('{2}')",
+            DataSelectResult result = _client.Data.SelectAll(String.Format("SELECT Id FROM {0} WHERE {1} IN ('{2}')",
                 TableName,
                 ColumnEntityId,
                 String.Join("','", ids)));
 
             try
             {
-                _client.DataDelete(result.Data);
+                _client.Data.Delete(result.Data);
 
                 foreach (SourceFile file in files)
                     file.CheckedOutBy = null;
@@ -478,7 +478,7 @@ namespace SalesForceData
             if (!IsEnabled())
                 return result;
 
-            DataSelectResult lockTable = _client.DataSelectAll(String.Format("SELECT {0}, {1}, {2}, {3}, {4} FROM {5}",
+            DataSelectResult lockTable = _client.Data.SelectAll(String.Format("SELECT {0}, {1}, {2}, {3}, {4} FROM {5}",
                 ColumnEntityId,
                 ColumnEntityName,
                 ColumnEntityTypeName,

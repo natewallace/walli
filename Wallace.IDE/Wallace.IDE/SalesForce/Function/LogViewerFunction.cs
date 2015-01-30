@@ -72,10 +72,10 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (App.Instance.SalesForceApp.CurrentProject != null)
             {
-                LogParameters[] lps = null;
+                LogListener[] lps = null;
                 using (App.Wait("Loading log parameters"))
                 {
-                    lps = App.Instance.SalesForceApp.CurrentProject.Client.GetLogParameters();
+                    lps = App.Instance.SalesForceApp.CurrentProject.Client.Diagnostic.GetLogListeners();
                 }
 
                 LogParametersManagerWindow dlg = new LogParametersManagerWindow();
@@ -119,8 +119,8 @@ namespace Wallace.IDE.SalesForce.Function
                     {
                         using (App.Wait("Deleting Log Paramters"))
                         {
-                            App.Instance.SalesForceApp.CurrentProject.Client.DeleteLogParameters(dlg.SelectedLogParameters);
-                            List<LogParameters> list = new List<LogParameters>(dlg.LogParameters);
+                            App.Instance.SalesForceApp.CurrentProject.Client.Diagnostic.DeleteLogListener(dlg.SelectedLogParameters);
+                            List<LogListener> list = new List<LogListener>(dlg.LogParameters);
                             list.Remove(dlg.SelectedLogParameters);
                             dlg.LogParameters = list;
                         }
@@ -163,7 +163,7 @@ namespace Wallace.IDE.SalesForce.Function
                         {
                             using (App.Wait("Creating Log Paramters"))
                             {
-                                LogParameters log = App.Instance.SalesForceApp.CurrentProject.Client.CreateLogParameters(
+                                LogListener log = App.Instance.SalesForceApp.CurrentProject.Client.Diagnostic.CreateLogListener(
                                     (newDlg.TracedEntity as User).Id,
                                     String.Format("{0} (user)", newDlg.TracedEntity),
                                     String.Empty,
@@ -178,7 +178,7 @@ namespace Wallace.IDE.SalesForce.Function
                                     newDlg.LogLevelValidation,
                                     newDlg.LogLevelWorkflow);
 
-                                List<LogParameters> list = new List<LogParameters>(dlg.LogParameters);
+                                List<LogListener> list = new List<LogListener>(dlg.LogParameters);
                                 list.Add(log);
                                 dlg.LogParameters = list;
                             }
@@ -250,7 +250,7 @@ namespace Wallace.IDE.SalesForce.Function
                             dlg.SelectedLogParameters.VisualForceLevel = editDlg.LogLevelVisualForce;
                             dlg.SelectedLogParameters.WorkflowLevel = editDlg.LogLevelWorkflow;
 
-                            App.Instance.SalesForceApp.CurrentProject.Client.UpdateLogParameters(dlg.SelectedLogParameters);
+                            App.Instance.SalesForceApp.CurrentProject.Client.Diagnostic.UpdateLogListener(dlg.SelectedLogParameters);
                         }
                     }
                 }

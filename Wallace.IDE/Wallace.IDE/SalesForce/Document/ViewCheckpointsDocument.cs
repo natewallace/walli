@@ -95,7 +95,7 @@ namespace Wallace.IDE.SalesForce.Document
             while (View.Children.Count > 0)
                 Remove((View.Children[0] as ViewCheckpointItemControl).Tag as Checkpoint);
 
-            foreach (Checkpoint checkpoint in Project.Client.GetCheckpoints())
+            foreach (Checkpoint checkpoint in Project.Client.Diagnostic.GetCheckpoints())
                 Add(checkpoint);
         }
 
@@ -174,7 +174,7 @@ namespace Wallace.IDE.SalesForce.Document
                 ViewCheckpointItemControl item = sender as ViewCheckpointItemControl;
                 Checkpoint checkpoint = item.Tag as Checkpoint;
                 using (App.Wait("Deleting checkpoint"))
-                    Project.Client.DeleteCheckpoint(checkpoint);
+                    Project.Client.Diagnostic.DeleteCheckpoint(checkpoint);
                 Remove(checkpoint);
             }
         }
@@ -206,7 +206,7 @@ namespace Wallace.IDE.SalesForce.Document
                     checkpoint.HeapDump = dlg.HeapDump;
                     checkpoint.ScriptType = dlg.ScriptType;
                     checkpoint.Script = dlg.Script;
-                    Project.Client.SaveCheckpoint(checkpoint);
+                    Project.Client.Diagnostic.SaveCheckpoint(checkpoint);
                 }
             }
         }

@@ -172,6 +172,18 @@ namespace Wallace.IDE.SalesForce.Framework
             OpenRecentWebBrowserFunction recentWebBrowserFunction = new OpenRecentWebBrowserFunction();
             App.Instance.ToolBar.AddFunction(recentWebBrowserFunction);
 
+            //
+            // Project | Test
+            //
+
+            App.Instance.Menu.AddFunction(new FunctionGrouping("TESTSALESFORCE", "Test", true), "PROJECT");
+
+            TestManagerFunction testManager = new TestManagerFunction();
+            App.Instance.Menu.AddFunction(testManager, "TESTSALESFORCE");
+
+            CodeCoverageAllFunction codeCoverageAllFunction = new CodeCoverageAllFunction();
+            App.Instance.Menu.AddFunction(codeCoverageAllFunction, "TESTSALESFORCE");
+
             DataEditFunction dataEdit = new DataEditFunction();
             App.Instance.ToolBar.AddFunction(dataEdit);
             App.Instance.Menu.AddFunction(dataEdit, "PROJECT");
@@ -183,9 +195,6 @@ namespace Wallace.IDE.SalesForce.Framework
             MergeManifestFunction mergeManifestFunction = new MergeManifestFunction();
             App.Instance.Menu.AddFunction(mergeManifestFunction, "PROJECT");
             App.Instance.RegisterFunction(mergeManifestFunction);
-
-            TestManagerFunction testManager = new TestManagerFunction();
-            App.Instance.Menu.AddFunction(testManager, "PROJECT");
 
             LogViewerFunction logViewerFunction = new LogViewerFunction();
             App.Instance.Menu.AddFunction(logViewerFunction, "PROJECT");
@@ -388,6 +397,11 @@ namespace Wallace.IDE.SalesForce.Framework
             DiffNextFunction diffNextFunction = new DiffNextFunction();
             App.Instance.Menu.AddFunction(diffNextFunction, "DOCUMENT");
             App.Instance.ToolBar.AddFunction(diffNextFunction);
+
+            RefreshCodeCoverageFunction refreshCodeCoverageFunction = new RefreshCodeCoverageFunction();
+            App.Instance.Menu.AddFunction(refreshCodeCoverageFunction, "DOCUMENT");
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(refreshCodeCoverageFunction));
+            App.Instance.ToolBar.AddFunction(refreshCodeCoverageFunction);
 
             CloseDocumentFunction closeDocumentFunction = new CloseDocumentFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(closeDocumentFunction), "DOCUMENT");

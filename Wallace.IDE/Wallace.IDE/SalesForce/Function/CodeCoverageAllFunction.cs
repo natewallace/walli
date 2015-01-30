@@ -20,19 +20,20 @@
  * THE SOFTWARE.
  */
 
-using SalesForceData;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
-using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.Node;
-using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Create a new apex class.
+    /// Show the code coverage for the entire org.
     /// </summary>
-    public class NewClassFunction : FunctionBase
+    public class CodeCoverageAllFunction : FunctionBase
     {
         #region Methods
 
@@ -45,13 +46,13 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "NewDocumentClass.png");
-                presenter.ToolTip = "New class...";
+                presenter.Header = VisualHelper.CreateIconHeader(null, "CodeCoverage.png");
+                presenter.ToolTip = "Show code coverage";
             }
             else
             {
-                presenter.Header = "New class...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "NewDocumentClass.png");
+                presenter.Header = "Show code coverage";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "CodeCoverage.png");
             }
         }
 
@@ -66,30 +67,28 @@ namespace Wallace.IDE.SalesForce.Function
         }
 
         /// <summary>
-        /// Create a new class.
+        /// Comment out selected lines.
         /// </summary>
         public override void Execute()
         {
-            EnterValueWindow dlg = new EnterValueWindow();
-            dlg.Title = "Create Class";
-            dlg.InputLabel = "Class Name:";
-            dlg.ActionLabel = "Create";
-            dlg.InputMaxLength = 255;
-            if (App.ShowDialog(dlg))
-            {
-                Project project = App.Instance.SalesForceApp.CurrentProject;
-                if (project != null)
-                {
-                    using (App.Wait("Creating Class"))
-                    {
-                        SourceFile file = project.Client.Meta.CreateClass(dlg.EnteredValue, EditorSettings.ApexSettings.CreateHeader());
-                        ApexClassFolderNode folder = App.Instance.Navigation.GetNode<ApexClassFolderNode>();
-                        if (folder != null)
-                            folder.AddApexClass(file);
+            if (App.Instance.SalesForceApp.CurrentProject == null)
+                return;
 
-                        App.Instance.Content.OpenDocument(new ClassEditorDocument(project, file));
-                    }
+            // if the document is already open make it the active document
+            foreach (IDocument document in App.Instance.Content.OpenDocuments)
+            {
+                if (document is CodeCoverageDocument)
+                {
+                    App.Instance.Content.OpenDocument(document);
+                    return;
                 }
+            }
+
+            // open a new document
+            using (App.Wait("downloading code coverage"))
+            {
+                CodeCoverageDocument document = new CodeCoverageDocument(App.Instance.SalesForceApp.CurrentProject);
+                App.Instance.Content.OpenDocument(document);
             }
         }
 

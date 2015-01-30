@@ -78,7 +78,7 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.Title = "Create Trigger";
 
                 using (App.Wait("Getting Objects"))
-                    dlg.TriggerObjects = project.Client.DataDescribeGlobal();
+                    dlg.TriggerObjects = project.Client.Data.DescribeGlobal();
 
                 if (App.ShowDialog(dlg))
                 {
@@ -91,7 +91,7 @@ namespace Wallace.IDE.SalesForce.Function
 
                     using (App.Wait("Creating Trigger"))
                     {
-                        SourceFile file = project.Client.CreateTrigger(
+                        SourceFile file = project.Client.Meta.CreateTrigger(
                             dlg.TriggerName,
                             (dlg.TriggerObject as SObjectTypePartial).Name,
                             dlg.TriggerEvents,

@@ -82,7 +82,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     using (App.Wait("Creating Component"))
                     {
-                        SourceFile file = project.Client.CreateComponent(dlg.EnteredValue, EditorSettings.VisualForceSettings.CreateHeader());
+                        SourceFile file = project.Client.Meta.CreateComponent(dlg.EnteredValue, EditorSettings.VisualForceSettings.CreateHeader());
                         ApexComponentFolderNode folder = App.Instance.Navigation.GetNode<ApexComponentFolderNode>();
                         if (folder != null)
                             folder.AddApexComponent(file);

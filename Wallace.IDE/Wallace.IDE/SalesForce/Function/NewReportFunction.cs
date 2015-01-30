@@ -79,7 +79,7 @@ namespace Wallace.IDE.SalesForce.Function
                 // setup type names
                 SourceFileType[] types = null;
                 using (App.Wait("Getting types"))
-                    types = App.Instance.SalesForceApp.CurrentProject.Client.GetSourceFileTypes();
+                    types = App.Instance.SalesForceApp.CurrentProject.Client.Meta.GetSourceFileTypes();
 
                 List<string> typeNames = new List<string>();
                 foreach (SourceFileType sft in types)
@@ -100,7 +100,7 @@ namespace Wallace.IDE.SalesForce.Function
                             if (!exclusions.Contains(sft.Name))
                                 typeList.Add(sft);
 
-                        SourceFile[] allFiles = dlg.Project.Client.GetSourceFiles(
+                        SourceFile[] allFiles = dlg.Project.Client.Meta.GetSourceFiles(
                             typeList.ToArray(),
                             true);
                         SourceFile[] filteredFiles = dlg.ReportFilter.Filter(allFiles);

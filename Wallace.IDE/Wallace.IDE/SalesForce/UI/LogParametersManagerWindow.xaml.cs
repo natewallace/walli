@@ -60,18 +60,18 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The log paramters displayed.
         /// </summary>
-        public IList<LogParameters> LogParameters
+        public IList<LogListener> LogParameters
         {
-            get { return listViewLogParameters.ItemsSource as IList<LogParameters>; }
+            get { return listViewLogParameters.ItemsSource as IList<LogListener>; }
             set { listViewLogParameters.ItemsSource = value; }
         }
 
         /// <summary>
         /// The currently selected LogParameters or null if there isn't one currently selected.
         /// </summary>
-        public LogParameters SelectedLogParameters
+        public LogListener SelectedLogParameters
         {
-            get { return listViewLogParameters.SelectedItem as LogParameters; }
+            get { return listViewLogParameters.SelectedItem as LogListener; }
         }
 
         #endregion

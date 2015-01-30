@@ -109,7 +109,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             List<INode> nodes = new List<INode>();
 
-            SObjectType fullObject = Project.Client.DataDescribeObjectType(DataObject);
+            SObjectType fullObject = Project.Client.Data.DescribeObjectType(DataObject);
             foreach (SObjectFieldType field in fullObject.Fields.OrderBy(f => f.Name))
                 nodes.Add(new DataObjectFieldNode(Project, field));
 

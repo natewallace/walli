@@ -134,7 +134,7 @@ namespace Wallace.IDE.SalesForce.Node
 
             // get source files for the current type
             if (SourceFile == null)
-                sourceFiles = Project.Client.GetSourceFiles(new SourceFileType[] { SourceFileType }, true).OrderBy(sf => sf.Name);
+                sourceFiles = Project.Client.Meta.GetSourceFiles(new SourceFileType[] { SourceFileType }, true).OrderBy(sf => sf.Name);
             // get source files for the current type within the current file
             else
                 sourceFiles = SourceFile.Children.Where(sf => sf.FileType.Name == SourceFileType.Name).OrderBy(sf => sf.Name);

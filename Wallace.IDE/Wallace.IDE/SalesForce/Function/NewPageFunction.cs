@@ -82,7 +82,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     using (App.Wait("Creating Page"))
                     {
-                        SourceFile file = project.Client.CreatePage(dlg.EnteredValue, EditorSettings.VisualForceSettings.CreateHeader());
+                        SourceFile file = project.Client.Meta.CreatePage(dlg.EnteredValue, EditorSettings.VisualForceSettings.CreateHeader());
                         ApexPageFolderNode folder = App.Instance.Navigation.GetNode<ApexPageFolderNode>();
                         if (folder != null)
                             folder.AddApexPage(file);

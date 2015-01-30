@@ -75,7 +75,7 @@ namespace Wallace.IDE.SalesForce.Document
             Package = package;
             Project = Project.OpenProject(target);
 
-            DeployId = Project.Client.DeployPackage(package, isCheckOnly, isRunAlltests);
+            DeployId = Project.Client.Meta.DeployPackage(package, isCheckOnly, isRunAlltests);
             IsCheckOnly = isCheckOnly;
             IsRunAllTests = isRunAlltests;
             Text = "Deployment";
@@ -89,7 +89,7 @@ namespace Wallace.IDE.SalesForce.Document
             View = new PackageDeployStatusControl();
 
             IsDeploymentRunning = true;
-            UpdateStatus(Project.Client.CheckPackageDeploy(DeployId));
+            UpdateStatus(Project.Client.Meta.CheckPackageDeploy(DeployId));
         }
 
         #endregion
@@ -200,7 +200,7 @@ namespace Wallace.IDE.SalesForce.Document
         {
             if (IsDeploymentRunning)
             {
-                Project.Client.CancelPackageDeploy(DeployId);
+                Project.Client.Meta.CancelPackageDeploy(DeployId);
                 IsDeploymentRunning = false;
                 View.StatusText = "Canceling";
                 App.Instance.UpdateWorkspaces();
@@ -353,7 +353,7 @@ namespace Wallace.IDE.SalesForce.Document
         {
             if (Project != null)
             {
-                PackageDeployResult result = Project.Client.CheckPackageDeploy(DeployId);
+                PackageDeployResult result = Project.Client.Meta.CheckPackageDeploy(DeployId);
                 App.Instance.Dispatcher.Invoke(new Action(() => UpdateStatus(result)));
             }
         }

@@ -120,7 +120,7 @@ namespace Wallace.IDE.SalesForce.Document
             if (_isClosed)
                 return;
 
-            Project.Client.UpdateTests(TestRun);
+            Project.Client.Test.UpdateTests(TestRun);
             View.UpdateView();
             _updateCount++;
 

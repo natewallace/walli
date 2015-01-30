@@ -120,7 +120,7 @@ namespace Wallace.IDE.SalesForce.Function
                     using (App.Wait("Deleting source file"))
                     {
                         // delete the file
-                        App.Instance.SalesForceApp.CurrentProject.Client.DeleteSourceFile(file);
+                        App.Instance.SalesForceApp.CurrentProject.Client.Meta.DeleteSourceFile(file);
 
                         // remove nodes
                         INode[] nodes = App.Instance.Navigation.GetNodesByEntity(file);

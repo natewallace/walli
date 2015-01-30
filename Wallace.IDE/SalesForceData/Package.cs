@@ -248,7 +248,7 @@ namespace SalesForceData
 
                 using (FileStream fs = new FileStream(FileName, FileMode.Create))
                 {
-                    byte[] bits = client.GetSourceFileContentAsPackage(Manifest);
+                    byte[] bits = client.Meta.GetSourceFileContentAsPackage(Manifest);
                     fs.Write(bits, 0, bits.Length);
                 }
             }

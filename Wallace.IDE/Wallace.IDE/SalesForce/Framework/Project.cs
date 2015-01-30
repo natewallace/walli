@@ -583,7 +583,7 @@ namespace Wallace.IDE.SalesForce.Framework
                                 project._symbolsDownloaded.Reset();
 
                                 // get class ids
-                                DataSelectResult data = client.DataSelect("SELECT Id FROM ApexClass");
+                                DataSelectResult data = client.Data.Select("SELECT Id FROM ApexClass");
                                 Queue<string> classIds = new Queue<string>();
                                 foreach (DataRow row in data.Data.Rows)
                                     classIds.Enqueue(row["Id"] as string);
@@ -601,7 +601,7 @@ namespace Wallace.IDE.SalesForce.Framework
                                     query.Length = query.Length - 1;
                                     query.Append(")");
 
-                                    DataSelectResult classData = client.DataSelect(query.ToString());
+                                    DataSelectResult classData = client.Data.Select(query.ToString());
                                     foreach (DataRow row in classData.Data.Rows)
                                         language.ParseApex(row["Body"] as string, false, true);
                                 }
@@ -609,13 +609,13 @@ namespace Wallace.IDE.SalesForce.Framework
                                 // download symbols for SObjects
                                 if (!project._symbolsDownloadCancel)
                                 {
-                                    SObjectTypePartial[] sObjects = client.DataDescribeGlobal();
+                                    SObjectTypePartial[] sObjects = client.Data.DescribeGlobal();
                                     foreach (SObjectTypePartial sObject in sObjects)
                                     {
                                         if (project._symbolsDownloadCancel)
                                             break;
 
-                                        SObjectType sObjectDetail = client.DataDescribeObjectType(sObject);
+                                        SObjectType sObjectDetail = client.Data.DescribeObjectType(sObject);
                                         
                                         language.UpdateSymbols(
                                             ConvertToSymbolTable(sObjectDetail), 

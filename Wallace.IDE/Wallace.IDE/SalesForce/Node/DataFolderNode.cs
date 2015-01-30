@@ -98,7 +98,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             List<INode> nodes = new List<INode>();
 
-            var dataObjects = Project.Client.DataDescribeGlobal().OrderBy(dObj => dObj.Name);
+            var dataObjects = Project.Client.Data.DescribeGlobal().OrderBy(dObj => dObj.Name);
             foreach (SObjectTypePartial dObj in dataObjects)
                 nodes.Add(new DataObjectNode(Project, dObj));
 

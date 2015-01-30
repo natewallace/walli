@@ -362,6 +362,15 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Returns the full name of the file.
+        /// </summary>
+        /// <returns>The full name of the file.</returns>
+        public override string ToString()
+        {
+            return FullName;
+        }
+
+        /// <summary>
         /// Compare the 2 source files.
         /// </summary>
         /// <param name="fileA">The file to compare.</param>

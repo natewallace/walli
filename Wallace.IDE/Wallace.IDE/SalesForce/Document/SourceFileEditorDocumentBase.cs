@@ -256,7 +256,7 @@ namespace Wallace.IDE.SalesForce.Document
                 // check for conflict first
                 string currentTimeStamp = null;
                 using (App.Wait("Checking for conflicts..."))
-                    currentTimeStamp = Project.Client.GetSourceFileContentLastModifiedTimeStamp(File);
+                    currentTimeStamp = Project.Client.Meta.GetSourceFileContentLastModifiedTimeStamp(File);
                 if (currentTimeStamp != _serverContent.LastModifiedTimeStamp)
                 {
                     if (App.MessageUser(
@@ -270,7 +270,7 @@ namespace Wallace.IDE.SalesForce.Document
                 using (App.Wait("Saving..."))
                 {
                     // save changes
-                    SalesForceError[] errors = Project.Client.SaveSourceFileContent(
+                    SalesForceError[] errors = Project.Client.Meta.SaveSourceFileContent(
                         File, 
                         View.Text, 
                         _serverContent.MetadataValue);
@@ -284,7 +284,7 @@ namespace Wallace.IDE.SalesForce.Document
                     // update content
                     if (errors.Length == 0)
                     {
-                        currentTimeStamp = Project.Client.GetSourceFileContentLastModifiedTimeStamp(File);
+                        currentTimeStamp = Project.Client.Meta.GetSourceFileContentLastModifiedTimeStamp(File);
                         _serverContent = new SourceFileContent(
                             File.FileType.Name,
                             View.Text,
@@ -320,7 +320,7 @@ namespace Wallace.IDE.SalesForce.Document
             {
                 using (App.Wait("Refreshing document."))
                 {
-                    _serverContent = Project.Client.GetSourceFileContent(File);
+                    _serverContent = Project.Client.Meta.GetSourceFileContent(File);
                     View.Text = _serverContent.ContentValue;
                     View.IsReadOnly = _serverContent.IsReadOnly;
                     IsDirty = false;
