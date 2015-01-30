@@ -104,6 +104,30 @@ namespace SalesForceData
         }
 
         /// <summary>
+        /// Get the overall code coverage percent.
+        /// </summary>
+        /// <returns>The overall code coverage percent.</returns>
+        public int GetOverallCodeCoveragePercent()
+        {
+            // get the code coverage
+            SalesForceAPI.Tooling.queryResponse response = _client.ToolingClient.query(new SalesForceAPI.Tooling.queryRequest(
+                new SalesForceAPI.Tooling.SessionHeader() { sessionId = _client.SessionId },
+                "SELECT PercentCovered FROM ApexOrgWideCoverage"));
+
+            if (response != null && 
+                response.result != null && 
+                response.result.records != null &&
+                response.result.records.Length == 1)
+            {
+                SalesForceAPI.Tooling.ApexOrgWideCoverage coverage = response.result.records[0] as SalesForceAPI.Tooling.ApexOrgWideCoverage;
+                if (coverage != null && coverage.PercentCovered.HasValue)
+                    return coverage.PercentCovered.Value;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
         /// Start tests for a given class.
         /// </summary>
         /// <param name="names">The names of the classes to start tests for.</param>

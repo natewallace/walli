@@ -40,14 +40,14 @@ namespace Wallace.IDE.SalesForce.UI
     /// <summary>
     /// Interaction logic for LogParametersManagerWindow.xaml
     /// </summary>
-    public partial class LogParametersManagerWindow : Window
+    public partial class LogListenerManagerWindow : Window
     {
         #region Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public LogParametersManagerWindow()
+        public LogListenerManagerWindow()
         {
             InitializeComponent();
             UpdateView();

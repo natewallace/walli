@@ -90,7 +90,8 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         public void RefreshCodeCoverage()
         {
-            View.CodeCoverage = Project.Client.Test.GetCodeCoverage();
+            View.CodeCoverage = Project.Client.Test.GetCodeCoverage().OrderBy(c => c.File.FullName).ToArray();
+            View.OrganizationWideCoveragePercent = Project.Client.Test.GetOverallCodeCoveragePercent();
         }
 
         #endregion

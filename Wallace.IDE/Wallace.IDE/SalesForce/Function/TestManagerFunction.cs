@@ -45,13 +45,13 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "Test.png");
+                presenter.Header = VisualHelper.CreateIconHeader(null, "TestManager.png");
                 presenter.ToolTip = "Test manager...";
             }
             else
             {
                 presenter.Header = "Test manager...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "Test.png");
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "TestManager.png");
             }
         }
 

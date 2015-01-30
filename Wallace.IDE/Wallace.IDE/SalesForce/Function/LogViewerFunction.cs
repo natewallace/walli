@@ -78,7 +78,7 @@ namespace Wallace.IDE.SalesForce.Function
                     lps = App.Instance.SalesForceApp.CurrentProject.Client.Diagnostic.GetLogListeners();
                 }
 
-                LogParametersManagerWindow dlg = new LogParametersManagerWindow();
+                LogListenerManagerWindow dlg = new LogListenerManagerWindow();
                 dlg.LogParameters = lps;
                 dlg.DeleteClick += DeleteLogParameters;
                 dlg.NewClick += NewLogParameters;
@@ -107,17 +107,17 @@ namespace Wallace.IDE.SalesForce.Function
         {
             try
             {
-                LogParametersManagerWindow dlg = sender as LogParametersManagerWindow;
+                LogListenerManagerWindow dlg = sender as LogListenerManagerWindow;
                 if (App.Instance.SalesForceApp.CurrentProject != null &&
                     dlg != null &&
                     dlg.SelectedLogParameters != null)
                 {
-                    if (App.MessageUser("Are you sure you want to delete the selected Log Parameters?",
+                    if (App.MessageUser("Are you sure you want to delete the selected Log Listener?",
                                         "Confirm Delete",
                                         System.Windows.MessageBoxImage.Question,
                                         new string[] { "Yes", "No" }) == "Yes")
                     {
-                        using (App.Wait("Deleting Log Paramters"))
+                        using (App.Wait("Deleting Log Listener"))
                         {
                             App.Instance.SalesForceApp.CurrentProject.Client.Diagnostic.DeleteLogListener(dlg.SelectedLogParameters);
                             List<LogListener> list = new List<LogListener>(dlg.LogParameters);
@@ -142,12 +142,12 @@ namespace Wallace.IDE.SalesForce.Function
         {
             try
             {
-                LogParametersManagerWindow dlg = sender as LogParametersManagerWindow;
+                LogListenerManagerWindow dlg = sender as LogListenerManagerWindow;
 
                 if (App.Instance.SalesForceApp.CurrentProject != null && dlg != null)
                 {
                     NewLogParametersWindow newDlg = new NewLogParametersWindow();
-                    newDlg.Title = "New Log Parameters";
+                    newDlg.Title = "New Log Listener";
                     newDlg.SaveButtonText = "Create";
                     newDlg.TracedEntity = App.Instance.SalesForceApp.CurrentProject.Client.User;
                     newDlg.Scope = String.Empty;
@@ -161,7 +161,7 @@ namespace Wallace.IDE.SalesForce.Function
                     {
                         if (App.ShowDialog(newDlg))
                         {
-                            using (App.Wait("Creating Log Paramters"))
+                            using (App.Wait("Creating Log Listener"))
                             {
                                 LogListener log = App.Instance.SalesForceApp.CurrentProject.Client.Diagnostic.CreateLogListener(
                                     (newDlg.TracedEntity as User).Id,
@@ -216,13 +216,13 @@ namespace Wallace.IDE.SalesForce.Function
         {
             try
             {
-                LogParametersManagerWindow dlg = sender as LogParametersManagerWindow;
+                LogListenerManagerWindow dlg = sender as LogListenerManagerWindow;
                 if (App.Instance.SalesForceApp.CurrentProject != null &&
                     dlg != null &&
                     dlg.SelectedLogParameters != null)
                 {
                     NewLogParametersWindow editDlg = new NewLogParametersWindow();
-                    editDlg.Title = "Edit Log Parameters";
+                    editDlg.Title = "Edit Log Listener";
                     editDlg.SaveButtonText = "Save";
                     editDlg.TracedEntity = dlg.SelectedLogParameters.TracedEntityName;
                     editDlg.IsTracedEntityReadOnly = true;
@@ -239,7 +239,7 @@ namespace Wallace.IDE.SalesForce.Function
 
                     if (App.ShowDialog(editDlg))
                     {
-                        using (App.Wait("Updating Log Paramters"))
+                        using (App.Wait("Updating Log Listener"))
                         {
                             dlg.SelectedLogParameters.CalloutLevel = editDlg.LogLevelCallout;
                             dlg.SelectedLogParameters.CodeLevel = editDlg.LogLevelCode;
@@ -270,7 +270,7 @@ namespace Wallace.IDE.SalesForce.Function
         {
             try
             {
-                LogParametersManagerWindow dlg = sender as LogParametersManagerWindow;
+                LogListenerManagerWindow dlg = sender as LogListenerManagerWindow;
                 if (App.Instance.SalesForceApp.CurrentProject != null &&
                     dlg != null &&
                     dlg.SelectedLogParameters != null)

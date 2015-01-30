@@ -66,6 +66,28 @@ namespace Wallace.IDE.SalesForce.UI
             set { dataGridFiles.ItemsSource = value; }
         }
 
+        /// <summary>
+        /// The organization wide coverage percent.
+        /// </summary>
+        public int OrganizationWideCoveragePercent
+        {
+            get { return Convert.ToInt32(textBlockOrgCoverage.Text); }
+            set 
+            { 
+                textBlockOrgCoverage.Text = value.ToString();
+                if (value < 75)
+                {
+                    textBlockOrgCoverage.Foreground = new SolidColorBrush(Color.FromRgb(116, 0, 0));
+                    textBlockOrgCoverage.Background = new SolidColorBrush(Color.FromRgb(255, 221, 221));
+                }
+                else
+                {
+                    textBlockOrgCoverage.Foreground = Brushes.Black;
+                    textBlockOrgCoverage.Background = null;
+                }
+            }
+        }
+
         #endregion
     }
 }

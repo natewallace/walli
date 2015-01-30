@@ -11,22 +11,42 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="0,5,0,5">
+            <TextBlock Text="Organization wide coverage(%):"
+                       Foreground="Black"
+                       FontWeight="Bold" />
+            <TextBlock x:Name="textBlockOrgCoverage"
+                       Margin="5,0,0,0"
+                       Padding="5,0,5,0"
+                       Text="0" />
+        </StackPanel>
+        
         <DataGrid x:Name="dataGridFiles"
-                  Grid.Row="1"
-                  AutoGenerateColumns="False"
-                  RowHeaderWidth="0"
-                  HorizontalGridLinesBrush="Gray"
-                  VerticalGridLinesBrush="Gray"
-                  SelectionMode="Single"
-                  SelectionUnit="Cell"
-                  AlternationCount="2"
-                  AlternatingRowBackground="#F1F1F1">
+                Grid.Row="1"
+                AutoGenerateColumns="False"
+                RowHeaderWidth="0"
+                HorizontalGridLinesBrush="Gray"
+                VerticalGridLinesBrush="Gray"
+                SelectionMode="Single"
+                SelectionUnit="Cell">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="File" Binding="{Binding File}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Coverage(%)" Binding="{Binding CoveragePercent}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Lines covered" Binding="{Binding NumberOfLinesCovered}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Lines uncovered" Binding="{Binding NumberOfLinesUncovered}" IsReadOnly="True" />
             </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsBelowCoverageMinimum}" Value="True">
+                            <Setter Property="Background" Value="#FFDDDD"/>
+                            <Setter Property="Foreground" Value="#740000"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
         </DataGrid>
     </Grid>
 </UserControl>

@@ -280,8 +280,8 @@
     <Compile Include="SalesForce\UI\EditCheckpointWindow.xaml.cs">
       <DependentUpon>EditCheckpointWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SalesForce\UI\LogParametersManagerWindow.xaml.cs">
-      <DependentUpon>LogParametersManagerWindow.xaml</DependentUpon>
+    <Compile Include="SalesForce\UI\LogListenerManagerWindow.xaml.cs">
+      <DependentUpon>LogListenerManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\LogViewerControl.xaml.cs">
       <DependentUpon>LogViewerControl.xaml</DependentUpon>
@@ -492,7 +492,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SalesForce\UI\LogParametersManagerWindow.xaml">
+    <Page Include="SalesForce\UI\LogListenerManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -972,6 +972,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\CodeCoverage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\TestManager.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

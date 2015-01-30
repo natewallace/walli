@@ -106,6 +106,14 @@ namespace SalesForceData
         /// </summary>
         public int CoveragePercent { get; private set; }
 
+        /// <summary>
+        /// Returns true if the coverage percent is less than 75.
+        /// </summary>
+        public bool IsBelowCoverageMinimum
+        {
+            get { return (CoveragePercent < 75); }
+        }
+
         #endregion
     }
 }

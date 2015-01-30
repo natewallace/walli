@@ -67,7 +67,7 @@ namespace Wallace.IDE.SalesForce.UI
                 foreach (object item in listBoxTestNames.Items)
                 {
                     if (item is CheckBox)
-                        result.Add((item as CheckBox).Content as string);
+                        result.Add((item as CheckBox).Tag as string);
                 }
 
                 return result;
@@ -81,7 +81,16 @@ namespace Wallace.IDE.SalesForce.UI
                 else
                 {
                     foreach (string testName in value)
-                        listBoxTestNames.Items.Add(new CheckBox() { Content = testName });
+                    {
+                        TextBlock textBlock = new TextBlock();
+                        textBlock.Text = testName;
+                        textBlock.FontSize = 14;
+                        listBoxTestNames.Items.Add(new CheckBox() 
+                        {
+                            Content = textBlock,
+                            Tag = testName
+                        });
+                    }
                 }
             }
         }
@@ -97,7 +106,7 @@ namespace Wallace.IDE.SalesForce.UI
                 foreach (object item in listBoxTestNames.Items)
                 {
                     if (item is CheckBox && (item as CheckBox).IsChecked.Value)
-                        result.Add((item as CheckBox).Content as string);
+                        result.Add((item as CheckBox).Tag as string);
                 }
 
                 return result;
