@@ -170,6 +170,7 @@ namespace Wallace.IDE.SalesForce.Framework
             }
 
             OpenRecentWebBrowserFunction recentWebBrowserFunction = new OpenRecentWebBrowserFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(recentWebBrowserFunction));
             App.Instance.ToolBar.AddFunction(recentWebBrowserFunction);
 
             //
