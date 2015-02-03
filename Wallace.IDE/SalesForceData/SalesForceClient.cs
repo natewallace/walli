@@ -391,6 +391,8 @@ namespace SalesForceData
 
             InitClients();
 
+            query = query.Replace("'", "\\'");
+
             SalesForceAPI.Partner.searchRequest request = new SalesForceAPI.Partner.searchRequest(
                 new SalesForceAPI.Partner.SessionHeader() { sessionId = _session.Id },
                 null,
