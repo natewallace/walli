@@ -3029,10 +3029,10 @@
 	}
 
 	public class Messaging {
-		public Void reserveMassEmailCapacity(Integer amountReserved);
-		public Void reserveSingleEmailCapacity(Integer amountReserved);
-		public Messaging.SendEmailResult[] sendEmail(Messaging.Email[] emails, Boolean allOrNothing);
-		public Messaging.SendEmailResult[] sendEmailMessage(List <ID> emailMessageIds, Boolean allOrNothing);
+		public static Void reserveMassEmailCapacity(Integer amountReserved);
+		public static Void reserveSingleEmailCapacity(Integer amountReserved);
+		public static Messaging.SendEmailResult[] sendEmail(Messaging.Email[] emails, Boolean allOrNothing);
+		public static Messaging.SendEmailResult[] sendEmailMessage(List <ID> emailMessageIds, Boolean allOrNothing);
 
 		public class Email {
 			public Void setBccSender(Boolean bcc);
@@ -3102,7 +3102,7 @@
 			public String toAddress {get; set;}
 		}
 
-		public class MassEmailMessage {
+		public class MassEmailMessage extends Messaging.Email {
 			public MassEmailMessage();
 			public Void setDescription(String description);
 			public Void setTargetObjectIds(ID[] targetObjectIds);
@@ -3134,7 +3134,7 @@
 			public Boolean isSuccess();
 		}
 
-		public class SingleEmailMessage {
+		public class SingleEmailMessage extends Messaging.Email {
 			public SingleEmailMessage();
 			public Void setBccAddresses(String[] bccAddresses);
 			public Void setCcAddresses(String[] ccAddresses);
