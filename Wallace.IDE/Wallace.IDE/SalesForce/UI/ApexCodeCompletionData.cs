@@ -72,7 +72,7 @@ namespace Wallace.IDE.SalesForce.UI
             ModifiedSymbol modifiedSymbol = symbol as ModifiedSymbol;
 
             if (symbol is Field || symbol is Parameter)
-            {
+            {                
                 if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Final))
                 {
                     if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
@@ -84,12 +84,19 @@ namespace Wallace.IDE.SalesForce.UI
                 }
                 else
                 {
-                    if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
-                        return "FieldPrivate.png";
-                    else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
-                        return "FieldProtected.png";
+                    if (modifiedSymbol.Name.EndsWith("__r", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        return "Relationship.png";
+                    }
                     else
-                        return "Field.png";
+                    {
+                        if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Private))
+                            return "FieldPrivate.png";
+                        else if (modifiedSymbol.Modifier.HasFlag(SymbolModifier.Protected))
+                            return "FieldProtected.png";
+                        else
+                            return "Field.png";
+                    }
                 }
             }
             else if (symbol is Property)

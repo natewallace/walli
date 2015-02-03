@@ -69,6 +69,18 @@ namespace SalesForceData
 
             Fields = fields.ToArray();
             Array.Sort(Fields);
+
+            ChildRelationships = new Dictionary<string, string>();
+            if (result.childRelationships != null)
+            {
+                foreach (SalesForceData.SalesForceAPI.Partner.ChildRelationship child in result.childRelationships)
+                {
+                    if (!String.IsNullOrWhiteSpace(child.relationshipName) &&
+                        !String.IsNullOrWhiteSpace(child.childSObject) &&
+                        !ChildRelationships.ContainsKey(child.relationshipName))
+                        ChildRelationships.Add(child.relationshipName, child.childSObject);
+                }
+            }
         }
 
         #endregion
@@ -179,6 +191,11 @@ namespace SalesForceData
         /// The fields on the object type.
         /// </summary>
         public SObjectFieldType[] Fields { get; private set; }
+
+        /// <summary>
+        /// The child releationships for this object with the name being the key and the value being the type.
+        /// </summary>
+        public IDictionary<string, string> ChildRelationships { get; private set; }
 
         #endregion
 

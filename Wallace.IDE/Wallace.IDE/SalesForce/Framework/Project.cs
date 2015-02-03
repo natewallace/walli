@@ -533,6 +533,18 @@ namespace Wallace.IDE.SalesForce.Framework
                 }
             }
 
+            // add child relationships as fields
+            foreach (KeyValuePair<string, string> kvp in objectType.ChildRelationships)
+            {
+                fields.Add(new Field(
+                    new TextPosition(0, 0),
+                    kvp.Key,
+                    null,
+                    SymbolModifier.Public,
+                    String.Format("{0}[]", kvp.Value),
+                    false));
+            }
+
             // return the symbol table
             return new SymbolTable(new TextPosition(0, 0),
                                    objectType.Name,
