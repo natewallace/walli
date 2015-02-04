@@ -22,53 +22,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SalesForceData
+namespace Wallace.IDE.Framework
 {
     /// <summary>
-    /// Page access.
+    /// Settings for the application.
     /// </summary>
-    public class ProfileDataPageAccess : SourceFileDataElement<SalesForceAPI.Metadata.ProfileApexPageAccess>
+    public class Settings
     {
-        #region Constructors
+        #region Methods
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="data">The object to build this object from.</param>
-        internal ProfileDataPageAccess(SalesForceAPI.Metadata.ProfileApexPageAccess data)
-            : base(data)
+        public static object GetSetting(string name)
         {
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// The name of the page.
-        /// </summary>
-        [DisplayName("Page")]
-        public string PageName
-        {
-            get { return Data.apexPage; }
-        }
-
-        /// <summary>
-        /// Indicates if the class is enabled.
-        /// </summary>
-        public bool Enabled
-        {
-            get { return Data.enabled; }
-            set 
-            { 
-                Data.enabled = value;
-                OnPropertyChanged("Enabled");
-            }
+            Properties.Settings.Default.
         }
 
         #endregion

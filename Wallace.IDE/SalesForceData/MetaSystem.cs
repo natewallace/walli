@@ -28,6 +28,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SalesForceData
 {
@@ -234,65 +235,7 @@ namespace SalesForceData
                 if (isCheckout)
                     _client.Checkout.CheckinFile(file);
             }
-        }
-
-        /// <summary>
-        /// Get the data for the given file.
-        /// </summary>
-        /// <param name="file">The file to get data for.</param>
-        /// <returns>The requested data or null if it isn't supported.</returns>
-        public SourceFileData GetSourceFileData(SourceFile file)
-        {
-            if (file == null)
-                throw new ArgumentNullException("file");
-
-            SalesForceAPI.Metadata.readMetadataRequest request = new SalesForceAPI.Metadata.readMetadataRequest(
-                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _client.SessionId },
-                null,
-                file.FileType.Name,
-                new string[] { file.Name });
-
-            SalesForceAPI.Metadata.readMetadataResponse response = _client.MetadataClient.readMetadata(request);
-            if (response == null || response.result.Length != 1)
-                return null;
-
-            return SourceFileData.Create(file, response.result[0]);
-        }
-
-        /// <summary>
-        /// Save the source file data.
-        /// </summary>
-        /// <param name="data">The data to save.</param>
-        public void SaveSourceFileData(SourceFileData data)
-        {
-            if (data == null)
-                throw new ArgumentNullException("data");
-
-            SalesForceAPI.Metadata.updateMetadataRequest request = new SalesForceAPI.Metadata.updateMetadataRequest(
-                new SalesForceAPI.Metadata.SessionHeader() { sessionId = _client.SessionId },
-                null,
-                new SalesForceAPI.Metadata.Metadata[] { data.GetMetadata() });
-
-            SalesForceAPI.Metadata.updateMetadataResponse response = _client.MetadataClient.updateMetadata(request);
-            if (response != null && response.result != null && response.result.Length == 1)
-            {
-                if (!response.result[0].success)
-                {
-                    if (response.result[0].errors != null && response.result[0].errors.Length > 0)
-                    {
-                        StringBuilder msg = new StringBuilder();
-                        foreach (SalesForceAPI.Metadata.Error err in response.result[0].errors)
-                            msg.AppendLine(String.Format("{0}:{1}", err.statusCode, err.message));
-
-                        throw new Exception(msg.ToString());
-                    }
-                    else
-                    {
-                        throw new Exception("An unknown exception occured when trying to update MetaData.");
-                    }
-                }
-            }
-        }
+        }        
 
         /// <summary>
         /// Get the content for the given source file.
@@ -432,6 +375,36 @@ namespace SalesForceData
                         componentResult.Data.Rows[0]["LastModifiedDate"] as string,
                         null,
                         isComponentReadOnly);
+
+                case "Profile":
+                    SalesForceAPI.Metadata.readMetadataRequest profileRequest = new SalesForceAPI.Metadata.readMetadataRequest(
+                        new SalesForceAPI.Metadata.SessionHeader() { sessionId = _client.SessionId },
+                        null,
+                        file.FileType.Name,
+                        new string[] { file.Name });
+
+                    SalesForceAPI.Metadata.readMetadataResponse profileResponse = _client.MetadataClient.readMetadata(profileRequest);
+                    if (profileResponse == null || profileResponse.result.Length != 1)
+                        throw new Exception("Couldn't get profile: " + file.Name);
+
+                    if (profileResponse.result[0] is SalesForceAPI.Metadata.Profile)
+                    {
+                        using (StringWriter profileWriter = new StringWriter())
+                        {
+                            XmlSerializer ser = new XmlSerializer(typeof(SalesForceAPI.Metadata.Profile));
+                            ser.Serialize(profileWriter, profileResponse.result[0]);
+                            return new SourceFileContent(
+                                file.FileType.Name,
+                                profileWriter.ToString(),
+                                GetSourceFileContentLastModifiedTimeStamp(file),
+                                String.Empty,
+                                false);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Returned object is not a Profile.");
+                    }
 
                 default:
 
@@ -1130,6 +1103,55 @@ namespace SalesForceData
                                     errors.Add(new SalesForceError("COMPILE ERROR", apexSaveRequest.CompilerErrors, null));
                                 return errors.ToArray();
                         }
+
+                    // profiles
+                    case "Profile":
+
+                        // deserialize
+                        SalesForceAPI.Metadata.Profile profileData = null;
+                        using (StringReader reader = new StringReader(contentValue))
+                        {
+                            XmlSerializer ser = new XmlSerializer(typeof(SalesForceAPI.Metadata.Profile));
+                            profileData = ser.Deserialize(reader) as SalesForceAPI.Metadata.Profile;
+                        }
+                        if (profileData == null)
+                            throw new Exception("Could not deserialize profile object.");
+
+                        // send request
+                        SalesForceAPI.Metadata.updateMetadataRequest profileRequest = new SalesForceAPI.Metadata.updateMetadataRequest(
+                            new SalesForceAPI.Metadata.SessionHeader() { sessionId = _client.SessionId },
+                            null,
+                            new SalesForceAPI.Metadata.Metadata[] { profileData });
+
+                        SalesForceAPI.Metadata.updateMetadataResponse profileResponse = _client.MetadataClient.updateMetadata(profileRequest);
+
+                        // process response
+                        if (profileResponse != null && profileResponse.result != null && profileResponse.result.Length == 1)
+                        {
+                            if (!profileResponse.result[0].success)
+                            {
+                                if (profileResponse.result[0].errors != null && profileResponse.result[0].errors.Length > 0)
+                                {
+                                    List<SalesForceError> errors = new List<SalesForceError>();
+                                    foreach (SalesForceAPI.Metadata.Error err in profileResponse.result[0].errors)
+                                        errors.Add(new SalesForceError(err.statusCode.ToString(), err.message, err.fields));
+
+                                    return errors.ToArray();
+                                }
+                                else
+                                {
+                                    return new SalesForceError[] 
+                                    { 
+                                        new SalesForceError(
+                                            String.Empty,
+                                            "An unknown exception occured when trying to update MetaData.",
+                                            null) 
+                                    };
+                                }
+                            }
+                        }
+
+                        return new SalesForceError[0];
 
                     // all other source files
                     default:

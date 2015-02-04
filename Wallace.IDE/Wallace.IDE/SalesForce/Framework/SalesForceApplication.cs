@@ -268,11 +268,6 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(saveSourceFileFunction);
             App.Instance.Menu.AddFunction(saveSourceFileFunction, "DOCUMENT");
 
-            SaveSourceFileDataFunction saveSourceFileDataFunction = new SaveSourceFileDataFunction();
-            App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSourceFileDataFunction));
-            App.Instance.ToolBar.AddFunction(saveSourceFileDataFunction);
-            App.Instance.Menu.AddFunction(saveSourceFileDataFunction, "DOCUMENT");
-
             SaveManifestFunction saveManifestFunction = new SaveManifestFunction();
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveManifestFunction));
             App.Instance.ToolBar.AddFunction(saveManifestFunction);
@@ -303,16 +298,18 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(refreshDocumentFunction);
             App.Instance.Menu.AddFunction(refreshDocumentFunction, "DOCUMENT");
 
-            CompareServerContentFunction compareServerContentFunction = new CompareServerContentFunction();
-            App.Instance.Menu.AddFunction(compareServerContentFunction, "DOCUMENT");
-
             ExportSourceFileDataFunction exportDataFunction = new ExportSourceFileDataFunction();
-            App.Instance.ToolBar.AddFunction(exportDataFunction);
             App.Instance.Menu.AddFunction(exportDataFunction, "DOCUMENT");
 
             ImportSourceFileDataFunction importDataFunction = new ImportSourceFileDataFunction();
-            App.Instance.ToolBar.AddFunction(importDataFunction);
             App.Instance.Menu.AddFunction(importDataFunction, "DOCUMENT");
+
+            CompareServerContentFunction compareServerContentFunction = new CompareServerContentFunction();
+            App.Instance.Menu.AddFunction(new FunctionSeparator(compareServerContentFunction), "DOCUMENT");
+            App.Instance.Menu.AddFunction(compareServerContentFunction, "DOCUMENT");
+
+            CompareLocalContentFunction compareLocalContentFunction = new CompareLocalContentFunction();
+            App.Instance.Menu.AddFunction(compareLocalContentFunction, "DOCUMENT");
 
             TextUndoFunction undoTextFunction = new TextUndoFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(undoTextFunction), "DOCUMENT");

@@ -97,48 +97,6 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
-        /// <summary>
-        /// Indicates if the source view is visible.
-        /// </summary>
-        public bool IsSourceVisible
-        {
-            get { return tabItemSource.IsSelected; }
-            set { tabItemSource.IsSelected = value; }
-        }
-
-        /// <summary>
-        /// Indicates if the data view is visible.
-        /// </summary>
-        public bool IsDataVisible
-        {
-            get { return tabItemData.IsSelected; }
-            set { tabItemData.IsSelected = value; }
-        }
-
-        /// <summary>
-        /// Indicates if the tab strip is visible.
-        /// </summary>
-        public bool IsTabStripVisible
-        {
-            get { return ChromeTab.GetShowTabStrip(tabControlContent); }
-            set { ChromeTab.SetShowTabStrip(tabControlContent, value); }
-        }
-
-        /// <summary>
-        /// The data view.
-        /// </summary>
-        public object DataView
-        {
-            get
-            {
-                return tabItemData.Content;
-            }
-            set
-            {
-                tabItemData.Content = value;
-            }
-        }
-
         #endregion
 
         #region Methods
@@ -258,16 +216,6 @@ namespace Wallace.IDE.SalesForce.UI
                 TextChanged(this, e);
         }
 
-        /// <summary>
-        /// Raises the ViewChanged event.
-        /// </summary>
-        /// <param name="e">Event arguments.</param>
-        protected virtual void OnViewChanged(EventArgs e)
-        {
-            if (ViewChanged != null)
-                ViewChanged(this, e);
-        }
-
         #endregion
 
         #region Event Handlers
@@ -289,23 +237,6 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
-        /// <summary>
-        /// Raises the ViewChanged event.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void tabControlContent_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                OnViewChanged(EventArgs.Empty);
-            }
-            catch (Exception err)
-            {
-                App.HandleException(err);
-            }
-        }
-
         #endregion
 
         #region Events
@@ -314,11 +245,6 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the text has been changed.
         /// </summary>
         public event EventHandler TextChanged;
-
-        /// <summary>
-        /// Raised when the user changes between the Source and Data views.
-        /// </summary>
-        public event EventHandler ViewChanged;
 
         #endregion
     }

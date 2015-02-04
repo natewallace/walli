@@ -43,28 +43,11 @@ namespace Wallace.IDE.SalesForce.Function
         /// <summary>
         /// The current document if there is one, null if there isn't.
         /// </summary>
-        public SourceFileEditorDocument CurrentDocument
+        public ISourceFileEditorDocument CurrentDocument
         {
             get
             {
-                if (App.Instance.Content.ActiveDocument is SourceFileEditorDocument)
-                    return App.Instance.Content.ActiveDocument as SourceFileEditorDocument;
-                else
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// The current data if there is any, null if there isn't.
-        /// </summary>
-        public SourceFileData CurrentData
-        {
-            get
-            {
-                if (CurrentDocument != null && !CurrentDocument.IsTextVisible)
-                    return CurrentDocument.Data;
-                else
-                    return null;
+                return (App.Instance.Content.ActiveDocument as ISourceFileEditorDocument);
             }
         }
 
@@ -79,16 +62,16 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use when updating the view.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            if (CurrentData != null)
+            if (CurrentDocument != null)
             {
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "ImportDocument.png");
-                    presenter.ToolTip = "Import data";
+                    presenter.ToolTip = "Import file...";
                 }
                 else
                 {
-                    presenter.Header = "Import data";
+                    presenter.Header = "Import file...";
                     presenter.Icon = VisualHelper.CreateIconHeader(null, "ImportDocument.png");
                 }
 
@@ -110,17 +93,21 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null)
             {
-                SourceFileEditorDocument document = CurrentDocument;
+                ISourceFileEditorDocument document = CurrentDocument;
                 if (document != null)
                 {
+                    string extension = System.IO.Path.GetExtension(document.File.FileName);
+                    if (extension.StartsWith("."))
+                        extension = extension.Substring(1);
+
                     OpenFileDialog dlg = new OpenFileDialog();
-                    dlg.Title = "Import data";
+                    dlg.Title = "Import file";
                     dlg.Multiselect = false;
-                    dlg.Filter = "XML Files|*.xml|All Files|*.*";
+                    dlg.Filter = String.Format("{0} Files|*.{1}|All Files|*.*", extension.ToUpper(), extension);
 
                     bool? result = dlg.ShowDialog();
                     if (result.HasValue && result.Value)
-                        document.ImportData(dlg.FileName);
+                        document.Content = System.IO.File.ReadAllText(dlg.FileName);
                 }
             }
         }

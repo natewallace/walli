@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="SalesForce\Document\CodeCoverageDocument.cs" />
     <Compile Include="SalesForce\Function\CodeCoverageAllFunction.cs" />
+    <Compile Include="SalesForce\Function\CompareLocalContentFunction.cs" />
     <Compile Include="SalesForce\Function\CompareServerContentFunction.cs" />
     <Compile Include="SalesForce\Function\DiffNextFunction.cs" />
     <Compile Include="SalesForce\Function\DiffPreviousFunction.cs" />
@@ -183,7 +184,6 @@
     <Compile Include="SalesForce\Function\RemoveCommentFunction.cs" />
     <Compile Include="SalesForce\Function\RunTestsFunction.cs" />
     <Compile Include="SalesForce\Function\SaveManifestFunction.cs" />
-    <Compile Include="SalesForce\Function\SaveSourceFileDataFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSourceFileFunction.cs" />
     <Compile Include="SalesForce\Function\PropertiesFunction.cs" />
     <Compile Include="SalesForce\Function\SelectLogUnitLineFunction.cs" />
@@ -314,9 +314,6 @@
     </Compile>
     <Compile Include="SalesForce\UI\PackageViewControl.xaml.cs">
       <DependentUpon>PackageViewControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SalesForce\UI\ProfileEditorControl.xaml.cs">
-      <DependentUpon>ProfileEditorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\ReportControl.xaml.cs">
       <DependentUpon>ReportControl.xaml</DependentUpon>
@@ -534,10 +531,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\PackageViewControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SalesForce\UI\ProfileEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

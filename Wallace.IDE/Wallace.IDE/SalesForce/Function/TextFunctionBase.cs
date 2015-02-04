@@ -40,11 +40,7 @@ namespace Wallace.IDE.SalesForce.Function
             get
             {
                 if (App.Instance.SalesForceApp.CurrentProject != null)
-                {
-                    ISourceFileEditorDocument document = App.Instance.Content.ActiveDocument as ISourceFileEditorDocument;
-                    if (document != null && document.IsTextVisible)
-                        return document;
-                }
+                    return (App.Instance.Content.ActiveDocument as ISourceFileEditorDocument);
 
                 return null;
             }

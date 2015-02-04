@@ -25,27 +25,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wallace.IDE.Framework;
 
-namespace SalesForceData
+namespace Wallace.IDE.SalesForce.Document
 {
     /// <summary>
-    /// Possible tab visibility values.
+    /// The splash page for the app.
     /// </summary>
-    public enum ProfileDataTabVisibilityValue
+    public class SplashPageDocument : DocumentBase
     {
-        /// <summary>
-        /// Hidden.
-        /// </summary>
-        Hidden,
-
-        /// <summary>
-        /// Default on.
-        /// </summary>
-        DefaultOn,
-
-        /// <summary>
-        /// Default off.
-        /// </summary>
-        DefaultOff
     }
 }

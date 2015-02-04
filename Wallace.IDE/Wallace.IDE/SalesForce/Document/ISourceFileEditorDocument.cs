@@ -32,12 +32,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// <summary>
         /// The text displayed.
         /// </summary>
-        string Content { get; }
-
-        /// <summary>
-        /// Returns false when a text document isn't displaying it's text.
-        /// </summary>
-        bool IsTextVisible { get; }
+        string Content { get; set; }
 
         /// <summary>
         /// Gets the current line number.

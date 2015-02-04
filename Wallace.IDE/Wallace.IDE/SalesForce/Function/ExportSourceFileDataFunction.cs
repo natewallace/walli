@@ -21,12 +21,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Win32;
-using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
@@ -43,28 +38,11 @@ namespace Wallace.IDE.SalesForce.Function
         /// <summary>
         /// The current document if there is one, null if there isn't.
         /// </summary>
-        public SourceFileEditorDocument CurrentDocument
+        public ISourceFileEditorDocument CurrentDocument
         {
             get
             {
-                if (App.Instance.Content.ActiveDocument is SourceFileEditorDocument)
-                    return App.Instance.Content.ActiveDocument as SourceFileEditorDocument;
-                else
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// The current data if there is any, null if there isn't.
-        /// </summary>
-        public SourceFileData CurrentData
-        {
-            get
-            {
-                if (CurrentDocument != null && !CurrentDocument.IsTextVisible)
-                    return CurrentDocument.Data;
-                else
-                    return null;
+                return (App.Instance.Content.ActiveDocument as ISourceFileEditorDocument);
             }
         }
 
@@ -79,16 +57,16 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use when updating the view.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            if (CurrentData != null)
+            if (CurrentDocument != null)
             {
                 if (host == FunctionHost.Toolbar)
                 {
                     presenter.Header = VisualHelper.CreateIconHeader(null, "ExportDocument.png");
-                    presenter.ToolTip = String.Format("Export {0} data", CurrentData.Name);
+                    presenter.ToolTip = "Export file...";
                 }
                 else
                 {
-                    presenter.Header = String.Format("Export {0} data", CurrentData.Name);
+                    presenter.Header = "Export file...";
                     presenter.Icon = VisualHelper.CreateIconHeader(null, "ExportDocument.png");
                 }
 
@@ -110,23 +88,24 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null)
             {
-                SourceFileEditorDocument document = CurrentDocument;
-                if (document != null && CurrentData != null)
+                ISourceFileEditorDocument document = CurrentDocument;
+                if (document != null)
                 {
-                    StringBuilder name = new StringBuilder(CurrentData.Name);
-                    foreach (char c in System.IO.Path.GetInvalidFileNameChars())
-                        name.Replace(c, '_');
+                    string name = System.IO.Path.GetFileName(document.File.FileName);
+                    string extension = System.IO.Path.GetExtension(name);
+                    if (extension.StartsWith("."))
+                        extension = extension.Substring(1);
 
                     SaveFileDialog dlg = new SaveFileDialog();
-                    dlg.Title = "Export data";
+                    dlg.Title = "Export file";
                     dlg.OverwritePrompt = true;
                     dlg.AddExtension = true;
-                    dlg.Filter = "XML Files|*.xml|All Files|*.*";
-                    dlg.FileName = name.ToString();
-                    
+                    dlg.Filter = String.Format("{0} Files|*.{1}|All Files|*.*", extension.ToUpper(), extension);
+                    dlg.FileName = name;
+
                     bool? result = dlg.ShowDialog();
                     if (result.HasValue && result.Value)
-                        document.ExportData(dlg.FileName);
+                        System.IO.File.WriteAllText(dlg.FileName, document.Content);
                 }
             }
         }

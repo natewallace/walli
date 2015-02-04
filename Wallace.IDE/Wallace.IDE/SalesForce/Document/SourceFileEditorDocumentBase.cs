@@ -70,7 +70,6 @@ namespace Wallace.IDE.SalesForce.Document
 
             _isDirty = false;
             Text = File.Name;
-            IsTextVisible = true;
 
             View = Activator.CreateInstance<TView>();
             OnViewCreated();
@@ -106,11 +105,6 @@ namespace Wallace.IDE.SalesForce.Document
         protected TView View { get; set; }
 
         /// <summary>
-        /// Returns false when a text document isn't displaying it's text.
-        /// </summary>
-        public bool IsTextVisible { get; protected set; }
-
-        /// <summary>
         /// The text displayed.
         /// </summary>
         public string Content
@@ -121,6 +115,11 @@ namespace Wallace.IDE.SalesForce.Document
                     return String.Empty;
                 else
                     return View.Text;
+            }
+            set
+            {
+                if (View != null)
+                    View.Text = value;
             }
         }
 
