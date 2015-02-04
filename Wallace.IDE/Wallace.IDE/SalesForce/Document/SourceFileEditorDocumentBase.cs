@@ -111,6 +111,20 @@ namespace Wallace.IDE.SalesForce.Document
         public bool IsTextVisible { get; protected set; }
 
         /// <summary>
+        /// The text displayed.
+        /// </summary>
+        public string Content
+        {
+            get
+            {
+                if (View == null)
+                    return String.Empty;
+                else
+                    return View.Text;
+            }
+        }
+
+        /// <summary>
         /// When true the view will be read only.
         /// </summary>
         public bool IsReadOnly

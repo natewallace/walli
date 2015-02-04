@@ -303,6 +303,9 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(refreshDocumentFunction);
             App.Instance.Menu.AddFunction(refreshDocumentFunction, "DOCUMENT");
 
+            CompareServerContentFunction compareServerContentFunction = new CompareServerContentFunction();
+            App.Instance.Menu.AddFunction(compareServerContentFunction, "DOCUMENT");
+
             ExportSourceFileDataFunction exportDataFunction = new ExportSourceFileDataFunction();
             App.Instance.ToolBar.AddFunction(exportDataFunction);
             App.Instance.Menu.AddFunction(exportDataFunction, "DOCUMENT");

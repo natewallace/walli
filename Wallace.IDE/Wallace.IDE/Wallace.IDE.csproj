@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="SalesForce\Document\CodeCoverageDocument.cs" />
     <Compile Include="SalesForce\Function\CodeCoverageAllFunction.cs" />
+    <Compile Include="SalesForce\Function\CompareServerContentFunction.cs" />
     <Compile Include="SalesForce\Function\DiffNextFunction.cs" />
     <Compile Include="SalesForce\Function\DiffPreviousFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshCodeCoverageFunction.cs" />

@@ -30,6 +30,11 @@ namespace Wallace.IDE.SalesForce.Document
     public interface ISourceFileEditorDocument
     {
         /// <summary>
+        /// The text displayed.
+        /// </summary>
+        string Content { get; }
+
+        /// <summary>
         /// Returns false when a text document isn't displaying it's text.
         /// </summary>
         bool IsTextVisible { get; }
