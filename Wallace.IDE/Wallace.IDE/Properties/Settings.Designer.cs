@@ -131,5 +131,29 @@ namespace Wallace.IDE.Properties {
                 this["UpgradeRequired"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Patience")]
+        public string DiffAlgorithm {
+            get {
+                return ((string)(this["DiffAlgorithm"]));
+            }
+            set {
+                this["DiffAlgorithm"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoCheckoutFile {
+            get {
+                return ((bool)(this["AutoCheckoutFile"]));
+            }
+            set {
+                this["AutoCheckoutFile"] = value;
+            }
+        }
     }
 }

@@ -34,6 +34,27 @@ namespace Wallace.IDE.SalesForce.Framework
     /// </summary>
     public class DiffUtility
     {
+        #region Methods
+
+        /// <summary>
+        /// Get the difference between the two versions of text using the system defined algorithm.
+        /// </summary>
+        /// <param name="olderText">The older version of the text in the comparison.</param>
+        /// <param name="newerText">The newer version of the text in the comparison.</param>
+        /// <returns>A patch file that describes the differences.</returns>
+        public static string Diff(string olderText, string newerText)
+        {
+            string algorithm = Properties.Settings.Default["DiffAlgorithm"] as string;
+            switch (algorithm)
+            {
+                case "Myer":
+                    return DiffUtility.Myer(olderText, newerText);
+
+                default:
+                    return DiffUtility.Patience(olderText, newerText);
+            }
+        }
+
         /// <summary>
         /// Get the difference between the two versions of text using the Myer algorithm.
         /// </summary>
@@ -151,5 +172,7 @@ namespace Wallace.IDE.SalesForce.Framework
 
             return result.ToString();
         }
+
+        #endregion
     }
 }

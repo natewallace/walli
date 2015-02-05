@@ -27,6 +27,7 @@ using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.UI;
+using Wallace.IDE.SalesForce.Node;
 
 namespace Wallace.IDE.SalesForce.Document
 {    
@@ -429,7 +430,26 @@ namespace Wallace.IDE.SalesForce.Document
         /// <param name="e">Event arguments.</param>
         private void View_TextChanged(object sender, EventArgs e)
         {
+            bool isFirstChange = !IsDirty;
             IsDirty = true;
+
+            if (isFirstChange &&
+                Project.Client.Checkout.IsEnabled(false) &&
+                (bool)Properties.Settings.Default["AutoCheckoutFile"] &&
+                File.CheckedOutBy == null)
+            {
+                using (App.Wait("Checking out file"))
+                {
+                    Project.Client.Checkout.CheckoutFile(File);
+                    foreach (INode node in App.Instance.Navigation.GetNodesByEntity(File))
+                    {
+                        if (node is SourceFileNode)
+                            (node as SourceFileNode).UpdateHeader();
+                    }
+
+                    App.Instance.UpdateWorkspaces();
+                }
+            }
         }
 
         /// <summary>

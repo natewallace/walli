@@ -66,6 +66,7 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Settings.RegisterSettings(new FontAndColorVisualForceSettings());
             App.Instance.Settings.RegisterSettings(new DefaultHeaderApexSettings());
             App.Instance.Settings.RegisterSettings(new DefaultHeaderVisualForceSettings());
+            App.Instance.Settings.RegisterSettings(new TeamSettings());
         }
 
         /// <summary>

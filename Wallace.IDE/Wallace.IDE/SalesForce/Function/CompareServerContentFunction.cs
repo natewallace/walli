@@ -104,7 +104,7 @@ namespace Wallace.IDE.SalesForce.Function
                 }
                 else
                 {
-                    string diff = DiffUtility.Patience(content.ContentValue, currentDocument.Content);
+                    string diff = DiffUtility.Diff(content.ContentValue, currentDocument.Content);
                     TextViewDocument document = new TextViewDocument(
                         project,
                         currentDocument.File,

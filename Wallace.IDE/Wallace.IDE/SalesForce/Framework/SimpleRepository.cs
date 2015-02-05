@@ -535,7 +535,7 @@ namespace Wallace.IDE.SalesForce.Framework
                         string newerText = (newerEntry.Target as Blob).GetContentText();
 
                         // do diff
-                        return DiffUtility.Patience(olderText, newerText);
+                        return DiffUtility.Diff(olderText, newerText);
                     }
                 }
             }

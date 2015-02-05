@@ -109,8 +109,12 @@
     <Compile Include="SalesForce\Function\DiffNextFunction.cs" />
     <Compile Include="SalesForce\Function\DiffPreviousFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshCodeCoverageFunction.cs" />
+    <Compile Include="SalesForce\Settings\TeamSettings.cs" />
     <Compile Include="SalesForce\UI\CodeCoverageControl.xaml.cs">
       <DependentUpon>CodeCoverageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\TeamSettingsControl.xaml.cs">
+      <DependentUpon>TeamSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\UserSearchEventArgs.cs" />
     <Compile Include="SalesForce\Document\ClassEditorDocument.cs" />
@@ -477,6 +481,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\IdenticonControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\TeamSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
