@@ -182,6 +182,7 @@
 %token grammar_declaration_statement
 %token grammar_dim_separators
 %token grammar_dml_expression
+%token grammar_dml_expression_list
 %token grammar_do_statement
 %token grammar_element_access
 %token grammar_embedded_statement
@@ -645,13 +646,17 @@ statement_expression:
 	pre_decrement_expression |
 	dml_expression ;
 
+dml_expression_list:
+	expression |
+	dml_expression_list expression ;
+
 dml_expression:
-	KEYWORD_INSERT expression |
-    KEYWORD_UPDATE expression |
-    KEYWORD_UPSERT expression |
-    KEYWORD_DELETE expression |
-    KEYWORD_UNDELETE expression |
-    KEYWORD_MERGE expression ;
+	KEYWORD_INSERT dml_expression_list |
+    KEYWORD_UPDATE dml_expression_list |
+    KEYWORD_UPSERT dml_expression_list |
+    KEYWORD_DELETE dml_expression_list |
+    KEYWORD_UNDELETE dml_expression_list |
+    KEYWORD_MERGE dml_expression_list ;
 
 selection_statement:
 	if_statement ;
