@@ -269,7 +269,7 @@ namespace Wallace.IDE.SalesForce.Framework
                     repo.Stage(files);
 
                     Signature author = new Signature(AuthorName, AuthorEmail, DateTime.Now);
-                    repo.Commit(comment, author);
+                    repo.Commit(comment, author, author);
 
                     pushOptions = new PushOptions();
                     pushOptions.CredentialsProvider += ProvideCredentials;
