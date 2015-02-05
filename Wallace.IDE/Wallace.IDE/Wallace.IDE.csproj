@@ -93,6 +93,16 @@
       <DependentUpon>WindowIconImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\Document\CodeCoverageDocument.cs" />
+    <Compile Include="SalesForce\Framework\DiffUtility.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\DifferenceInstruction.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\DifferenceOperation.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\Differencer.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\IDifferenceFormatter.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\IDifferenceSimplifier.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\ISequenceMatcher.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\PatienceSequenceMatcher.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\SubList.cs" />
+    <Compile Include="SalesForce\Framework\DiffLib\SubSequence.cs" />
     <Compile Include="SalesForce\Function\CodeCoverageAllFunction.cs" />
     <Compile Include="SalesForce\Function\CompareLocalContentFunction.cs" />
     <Compile Include="SalesForce\Function\CompareServerContentFunction.cs" />
@@ -121,7 +131,7 @@
     <Compile Include="SalesForce\Document\VisualForceEditorDocument.cs" />
     <Compile Include="Framework\ClientBrowser.cs" />
     <Compile Include="SalesForce\Framework\CryptoContainer.cs" />
-    <Compile Include="SalesForce\Framework\DiffMatchPatch.cs" />
+    <Compile Include="SalesForce\Framework\DiffMatchPatch\Differencer.cs" />
     <Compile Include="SalesForce\Framework\FileUtility.cs" />
     <Compile Include="SalesForce\Framework\Identicon.cs" />
     <Compile Include="SalesForce\Framework\IReportFilter.cs" />
@@ -972,6 +982,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Relationship.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SalesForce\Framework\DiffLib\license.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

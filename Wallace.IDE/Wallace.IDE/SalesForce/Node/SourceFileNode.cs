@@ -199,7 +199,9 @@ namespace Wallace.IDE.SalesForce.Node
             // look for already open document
             foreach (IDocument document in App.Instance.Content.OpenDocuments)
             {
-                if (document is ISourceFileEditorDocument && (document as ISourceFileEditorDocument).File.Equals(SourceFile))
+                if (document is ISourceFileEditorDocument && 
+                    !(document is TextViewDocument) &&
+                    (document as ISourceFileEditorDocument).File.Equals(SourceFile))
                 {
                     App.Instance.Content.OpenDocument(document);
                     return true;

@@ -500,50 +500,6 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
-        /// Get the difference between the two versions of text.
-        /// </summary>
-        /// <param name="olderText">The older version of the text in the comparison.</param>
-        /// <param name="newerText">The newer version of the text in the comparison.</param>
-        /// <returns>A patch file that describes the differences.</returns>
-        public static string Diff(string olderText, string newerText)
-        {
-            StringBuilder result = new StringBuilder();
-
-            diff_match_patch dmp = new diff_match_patch();
-            List<Diff> diffs = dmp.diff_main_line(olderText, newerText);
-
-            foreach (Diff d in diffs)
-            {
-                // get prefix
-                string prefix = null;
-                switch (d.operation)
-                {
-                    case Operation.EQUAL:
-                        prefix = "    ";
-                        break;
-
-                    case Operation.DELETE:
-                        prefix = "-   ";
-                        break;
-
-                    default:
-                        prefix = "+   ";
-                        break;
-                }
-
-                // format the lines
-                using (StringReader reader = new StringReader(d.text))
-                {
-                    string line = null;
-                    while ((line = reader.ReadLine()) != null)
-                        result.AppendFormat("{0}{1}{2}", prefix, line, Environment.NewLine);
-                }
-            }
-
-            return result.ToString();
-        }
-
-        /// <summary>
         /// Get the difference between the two versions of the same file.
         /// </summary>
         /// <param name="file">The file to get differences for.</param>
@@ -579,7 +535,7 @@ namespace Wallace.IDE.SalesForce.Framework
                         string newerText = (newerEntry.Target as Blob).GetContentText();
 
                         // do diff
-                        return Diff(olderText, newerText);
+                        return DiffUtility.Patience(olderText, newerText);
                     }
                 }
             }

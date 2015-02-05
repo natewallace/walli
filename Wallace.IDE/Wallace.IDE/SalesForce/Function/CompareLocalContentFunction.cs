@@ -101,7 +101,7 @@ namespace Wallace.IDE.SalesForce.Function
                 bool? result = dlg.ShowDialog();
                 if (result.HasValue && result.Value)
                 {
-                    string diff = SimpleRepository.Diff(
+                    string diff = DiffUtility.Patience(
                         System.IO.File.ReadAllText(dlg.FileName),
                         currentDocument.Content);
 

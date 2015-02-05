@@ -26,7 +26,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace Wallace.IDE.SalesForce.Framework
+namespace Wallace.IDE.SalesForce.Framework.DiffMatchPatch
 {
   internal static class CompatibilityExtensions {
     // JScript splice function
@@ -175,7 +175,7 @@ namespace Wallace.IDE.SalesForce.Framework
             new UTF8Encoding()).Replace('+', ' ')).Append("\n");
       }
 
-      return diff_match_patch.unescapeForEncodeUriCompatability(
+      return Differencer.unescapeForEncodeUriCompatability(
           text.ToString());
     }
   }
@@ -185,9 +185,9 @@ namespace Wallace.IDE.SalesForce.Framework
    * Class containing the diff, match and patch methods.
    * Also Contains the behaviour settings.
    */
-  public class diff_match_patch {
+  public class Differencer {
     // Defaults.
-    // Set these on your diff_match_patch instance to override the defaults.
+    // Set these on your Differencer instance to override the defaults.
 
     // Number of seconds to map a diff before giving up (0 for infinity).
     public float Diff_Timeout = 1.0f;
