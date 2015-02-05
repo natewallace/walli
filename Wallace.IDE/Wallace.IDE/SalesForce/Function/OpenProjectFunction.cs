@@ -56,7 +56,7 @@ namespace Wallace.IDE.SalesForce.Function
         /// Opens a new project.
         /// </summary>
         public override void Execute()
-        {            
+        {
             SelectProjectWindow dlg = new SelectProjectWindow();
             dlg.ProjectNames = Project.Projects;
             dlg.SelectLabel = "Open";

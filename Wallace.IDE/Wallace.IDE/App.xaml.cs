@@ -34,6 +34,7 @@ using Wallace.IDE.Framework;
 using Wallace.IDE.Framework.Function;
 using Wallace.IDE.Framework.UI;
 using System.Windows.Threading;
+using System.Text;
 
 namespace Wallace.IDE
 {
@@ -251,9 +252,18 @@ namespace Wallace.IDE
         public static void HandleException(Exception err)
         {
             if (err == null)
+            {
                 App.MessageUser("Error message is null.", "Error", MessageBoxImage.Error, new string[] { "OK" });
+            }
             else
-                App.MessageUser(err.Message, "Error", MessageBoxImage.Error, new string[] { "OK" });
+            {
+                if (App.MessageUser(err.Message, "Error", MessageBoxImage.Error, new string[] { "Details", "OK" }) == "Details")
+                {
+                    ErrorDetailsWindow dlg = new ErrorDetailsWindow();
+                    dlg.Error = err;
+                    App.ShowDialog(dlg);
+                }
+            }
         }
 
         /// <summary>
