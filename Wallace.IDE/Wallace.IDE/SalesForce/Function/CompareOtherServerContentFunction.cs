@@ -29,13 +29,14 @@ using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Compare the current text with the text on the server.
+    /// Compare the current text with the text on another server.
     /// </summary>
-    public class CompareServerContentFunction : FunctionBase
+    public class CompareOtherServerContentFunction : FunctionBase
     {
         #region Properties
 
@@ -44,7 +45,7 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         private ISourceFileEditorDocument CurrentDocument
         {
-            get 
+            get
             {
                 if (App.Instance.Content.ActiveDocument is ISourceFileEditorDocument &&
                     (App.Instance.Content.ActiveDocument as ISourceFileEditorDocument).File != null)
@@ -68,11 +69,11 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "Compare.png");
-                presenter.ToolTip = "Compare with version on server";
+                presenter.ToolTip = "Compare with version in another project...";
             }
             else
             {
-                presenter.Header = "Compare with version on server";
+                presenter.Header = "Compare with version in another project...";
                 presenter.Icon = VisualHelper.CreateIconHeader(null, "Compare.png");
             }
         }
@@ -97,30 +98,65 @@ namespace Wallace.IDE.SalesForce.Function
 
             if (project != null && currentDocument != null)
             {
-                SourceFileContent content = null;
+                string otherText = null;
 
-                using (App.Wait("Comparing files"))
-                    content = project.Client.Meta.GetSourceFileContent(currentDocument.File);
+                // get the project to compare with
+                List<string> projectNames = new List<string>(Project.Projects);
+                projectNames.Remove(project.ProjectName);
 
-                if (currentDocument.Content == content.ContentValue)
+                SelectProjectWindow dlg = new SelectProjectWindow();
+                dlg.ProjectNames = projectNames.ToArray();
+                dlg.SelectLabel = "Select";
+                if (App.ShowDialog(dlg))
                 {
-                    App.MessageUser("The version on the server is identical to your current version.",
-                                    "Compare",
-                                    System.Windows.MessageBoxImage.Information,
-                                    new string[] { "OK" });
+                    // get the other text from the selected project
+                    using (App.Wait("Getting file for comparison"))
+                    {
+                        using (Project otherProject = Project.OpenProject(dlg.SelectedProjectName))
+                        {
+                            SourceFile[] otherFiles = otherProject.Client.Meta.GetSourceFiles(
+                                new SourceFileType[] { currentDocument.File.FileType },
+                                false);
+
+                            foreach (SourceFile otherFile in otherFiles)
+                            {
+                                if (otherFile.Name == currentDocument.File.Name)
+                                {
+                                    SourceFileContent otherContent = otherProject.Client.Meta.GetSourceFileContent(otherFile);
+                                    otherText = otherContent.ContentValue;
+                                    break;
+                                }
+                            }
+
+                            if (otherText == null)
+                                otherText = String.Empty;
+                        }
+                    }
                 }
-                else
-                {
-                    string diff = DiffUtility.Diff(content.ContentValue, currentDocument.Content);
-                    TextViewDocument document = new TextViewDocument(
-                        project,
-                        currentDocument.File,
-                        diff,
-                        currentDocument.File.Name,
-                        "Compare.png",
-                        true);
 
-                    App.Instance.Content.OpenDocument(document);
+                // do comparison
+                if (otherText != null)
+                {
+                    if (currentDocument.Content == otherText)
+                    {
+                        App.MessageUser("The version in the other project is identical to your current version.",
+                                        "Compare",
+                                        System.Windows.MessageBoxImage.Information,
+                                        new string[] { "OK" });
+                    }
+                    else
+                    {
+                        string diff = DiffUtility.Diff(otherText, currentDocument.Content);
+                        TextViewDocument document = new TextViewDocument(
+                            project,
+                            currentDocument.File,
+                            diff,
+                            currentDocument.File.Name,
+                            "Compare.png",
+                            true);
+
+                        App.Instance.Content.OpenDocument(document);
+                    }
                 }
             }
         }

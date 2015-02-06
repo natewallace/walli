@@ -44,7 +44,14 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         private ISourceFileEditorDocument CurrentDocument
         {
-            get { return App.Instance.Content.ActiveDocument as ISourceFileEditorDocument; }
+            get
+            {
+                if (App.Instance.Content.ActiveDocument is ISourceFileEditorDocument &&
+                    (App.Instance.Content.ActiveDocument as ISourceFileEditorDocument).File != null)
+                    return App.Instance.Content.ActiveDocument as ISourceFileEditorDocument;
+                else
+                    return null;
+            }
         }
 
         #endregion

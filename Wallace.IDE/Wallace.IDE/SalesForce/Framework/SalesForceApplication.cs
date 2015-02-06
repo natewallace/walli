@@ -305,12 +305,16 @@ namespace Wallace.IDE.SalesForce.Framework
             ImportSourceFileDataFunction importDataFunction = new ImportSourceFileDataFunction();
             App.Instance.Menu.AddFunction(importDataFunction, "DOCUMENT");
 
+            App.Instance.Menu.AddFunction(new FunctionGrouping("COMPARESALESFORCE", "Compare", true), "DOCUMENT");
+
             CompareServerContentFunction compareServerContentFunction = new CompareServerContentFunction();
-            App.Instance.Menu.AddFunction(new FunctionSeparator(compareServerContentFunction), "DOCUMENT");
-            App.Instance.Menu.AddFunction(compareServerContentFunction, "DOCUMENT");
+            App.Instance.Menu.AddFunction(compareServerContentFunction, "COMPARESALESFORCE");
+
+            CompareOtherServerContentFunction compareOtherServerContentFunction = new CompareOtherServerContentFunction();
+            App.Instance.Menu.AddFunction(compareOtherServerContentFunction, "COMPARESALESFORCE");
 
             CompareLocalContentFunction compareLocalContentFunction = new CompareLocalContentFunction();
-            App.Instance.Menu.AddFunction(compareLocalContentFunction, "DOCUMENT");
+            App.Instance.Menu.AddFunction(compareLocalContentFunction, "COMPARESALESFORCE");
 
             TextUndoFunction undoTextFunction = new TextUndoFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(undoTextFunction), "DOCUMENT");
