@@ -121,7 +121,7 @@ namespace SalesForceLanguage.Apex
             List<SymbolTable> result = new List<SymbolTable>();
             result.AddRange(_classes.Values);
             result.AddRange(_predefinedClasses.Values);
-            return result.ToArray();
+            return result.Where(s => s.Name != "WalliSnippetPlaceHolder52724597325").ToArray();
         }
 
         /// <summary>

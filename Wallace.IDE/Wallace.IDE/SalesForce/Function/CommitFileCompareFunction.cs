@@ -103,7 +103,7 @@ namespace Wallace.IDE.SalesForce.Function
                     commits[1].ShaShort,
                     commits[0].ShaShort);
 
-                TextViewDocument doc = new TextViewDocument(project, document.File, text, title, "Compare.png", true);
+                TextViewDocument doc = new TextViewDocument(project, text, title, "Compare.png", true);
                 App.Instance.Content.OpenDocument(doc);
             }
         }

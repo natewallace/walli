@@ -69,6 +69,15 @@ namespace SalesForceLanguage
             return String.Format("{0} {1}", Location, Message);
         }
 
+        /// <summary>
+        /// Apply an offset to the line positions.
+        /// </summary>
+        /// <param name="offset">The offset to apply to the line positions.</param>
+        public void ApplyLineOffset(int offset)
+        {
+            Location = Location.CreateLineOffset(offset);
+        }
+
         #endregion
     }
 }

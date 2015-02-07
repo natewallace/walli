@@ -21,6 +21,7 @@
  */
 
 using SalesForceData;
+using System;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Function;
@@ -53,7 +54,6 @@ namespace Wallace.IDE.SalesForce.Document
         public TriggerEditorDocument(Project project, SourceFile apexFile)
             : base(project, apexFile)
         {
-            View.MarginDoubleClick += View_MarginDoubleClick;
         }
 
         #endregion
@@ -103,6 +103,8 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         protected override void OnViewCreated()
         {
+            View.ParseRequested += View_ParseRequested;
+            View.MarginDoubleClick += View_MarginDoubleClick;
             View.LanguageManager = Project.Language;
         }
 
@@ -146,6 +148,17 @@ namespace Wallace.IDE.SalesForce.Document
         #endregion
 
         #region Event Handlers
+
+        /// <summary>
+        /// Perform parse and update workspace.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_ParseRequested(object sender, EventArgs e)
+        {
+            View.ParseData = Project.Language.ParseApex(View.Text, true, false);
+            App.Instance.UpdateWorkspaces();
+        }
 
         /// <summary>
         /// Create a new checkpoint when a user clicks in the margin.

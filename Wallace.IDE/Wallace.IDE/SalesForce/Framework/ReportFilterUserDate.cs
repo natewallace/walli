@@ -37,9 +37,9 @@ namespace Wallace.IDE.SalesForce.Framework
         #region Fields
 
         /// <summary>
-        /// The id of the user to use for filter.
+        /// The user to use for filter.
         /// </summary>
-        private string _userId;
+        private User _user;
 
         /// <summary>
         /// The date to use for filter.
@@ -53,11 +53,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="userId">The id of the user to filter with.</param>
+        /// <param name="user">The user to filter with.</param>
         /// <param name="date">The date to filter with.</param>
-        public ReportFilterUserDate(string userId, DateTime date)
+        public ReportFilterUserDate(User user, DateTime date)
         {
-            _userId = userId;
+            _user = user;
             _date = date;
         }
 
@@ -79,11 +79,11 @@ namespace Wallace.IDE.SalesForce.Framework
 
             foreach (SourceFile file in files)
             {
-                if ((_userId == "*" || file.ChangedBy != null && file.ChangedBy.Id == _userId) && file.ChangedOn >= _date)
+                if ((_user == null || file.ChangedBy != null && file.ChangedBy.Id == _user.Id) && file.ChangedOn >= _date)
                     result.Add(file);
 
                 foreach (SourceFile child in file.Children)
-                    if (child.ChangedBy != null && child.ChangedBy.Id == _userId && child.ChangedOn >= _date)
+                    if ((_user == null || child.ChangedBy != null && child.ChangedBy.Id == _user.Id) && child.ChangedOn >= _date)
                         result.Add(child);
             }
 

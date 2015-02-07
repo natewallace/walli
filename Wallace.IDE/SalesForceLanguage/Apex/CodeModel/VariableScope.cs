@@ -50,5 +50,21 @@ namespace SalesForceLanguage.Apex.CodeModel
         public Field[] Variables { get; private set; }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Apply an offset to the line positions.
+        /// </summary>
+        /// <param name="offset">The offset to apply to the line positions.</param>
+        public override void ApplyLineOffset(int offset)
+        {
+            base.ApplyLineOffset(offset);
+
+            foreach (Field v in Variables)
+                v.ApplyLineOffset(offset);
+        }
+
+        #endregion
     }
 }

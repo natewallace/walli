@@ -105,6 +105,16 @@ namespace SalesForceLanguage.Apex.CodeModel
             return Name;
         }
 
+        /// <summary>
+        /// Apply an offset to the line positions.
+        /// </summary>
+        /// <param name="offset">The offset to apply to the line positions.</param>
+        public virtual void ApplyLineOffset(int offset)
+        {
+            Location = Location.CreateLineOffset(offset);
+            Span = Span.CreateLineOffset(offset);
+        }
+
         #endregion
 
         #region IComparable Members

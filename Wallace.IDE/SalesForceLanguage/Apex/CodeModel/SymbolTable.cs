@@ -305,6 +305,33 @@ namespace SalesForceLanguage.Apex.CodeModel
             return Methods.Where(m => m.Modifier.HasFlag(modifiers)).ToArray();
         }
 
+        /// <summary>
+        /// Apply an offset to the line positions.
+        /// </summary>
+        /// <param name="offset">The offset to apply to the line positions.</param>
+        public override void ApplyLineOffset(int offset)
+        {
+            base.ApplyLineOffset(offset);
+
+            foreach (Constructor c in Constructors)
+                c.ApplyLineOffset(offset);
+
+            foreach (Field f in Fields)
+                f.ApplyLineOffset(offset);
+
+            foreach (Method m in Methods)
+                m.ApplyLineOffset(offset);
+
+            foreach (Property p in Properties)
+                p.ApplyLineOffset(offset);
+
+            foreach (VariableScope vs in VariableScopes)
+                vs.ApplyLineOffset(offset);
+
+            foreach (SymbolTable innerTable in InnerClasses)
+                innerTable.ApplyLineOffset(offset);       
+        }
+
         #endregion
 
         #region IXmlSerializable Members

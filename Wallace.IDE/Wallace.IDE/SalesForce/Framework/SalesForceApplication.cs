@@ -118,6 +118,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(newManifestFunction, "NEWSALESFORCE");
             App.Instance.RegisterFunction(newManifestFunction);
 
+            NewSnippetFunction newSnippetFunction = new NewSnippetFunction();
+            App.Instance.Menu.AddFunction(newSnippetFunction, "NEWSALESFORCE");
+            App.Instance.RegisterFunction(newSnippetFunction);
+
             //
             // PROJECT | Team
             //
@@ -485,7 +489,7 @@ namespace Wallace.IDE.SalesForce.Framework
 
                 App.Instance.Navigation.Nodes.Add(new SourceFolderNode(project));
                 App.Instance.Navigation.Nodes.Add(new DataFolderNode(project));
-                App.Instance.Navigation.Nodes.Add(new DeployFolderNode(project));
+                App.Instance.Navigation.Nodes.Add(new LocalFolderNode(project));
                 //App.Instance.Navigation.Nodes.Add(new SnippetsFolderNode(project));
 
                 App.Instance.Menu.UpdateFunctions();

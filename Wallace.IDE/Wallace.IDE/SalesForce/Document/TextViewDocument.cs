@@ -35,7 +35,7 @@ namespace Wallace.IDE.SalesForce.Document
     /// <summary>
     /// Document used to view diffs.
     /// </summary>
-    public class TextViewDocument : SourceFileEditorDocumentBase<TextViewControl>
+    public class TextViewDocument : TextEditorDocumentBase<TextViewControl>
     {
         #region Fields
 
@@ -57,13 +57,12 @@ namespace Wallace.IDE.SalesForce.Document
         /// Constructor.
         /// </summary>
         /// <param name="project">Project.</param>
-        /// <param name="file">File.</param>
         /// <param name="text">Text.</param>
         /// <param name="title">The title to display.</param>
         /// <param name="icon">The icon to display.</param>
         /// <param name="highlightDiffs">If true, the diffs in the text are highlighted.</param>
-        public TextViewDocument(Project project, SourceFile file, string text, string title, string icon, bool highlightDiffs)
-            : base(project, file)
+        public TextViewDocument(Project project, string text, string title, string icon, bool highlightDiffs)
+            : base(project)
         {
             View.Text = text;
             View.HighlightDiffs = highlightDiffs;

@@ -98,6 +98,16 @@ namespace SalesForceLanguage
         #region Methods
 
         /// <summary>
+        /// Shift the line positions by the given offset.
+        /// </summary>
+        /// <param name="offset">The offset to apply to line positions.</param>
+        /// <returns>The new text position with the given offset.</returns>
+        public TextPosition CreateLineOffset(int offset)
+        {
+            return new TextPosition(Line + offset, Column);
+        }
+
+        /// <summary>
         /// Returns a human readible string for this object.
         /// </summary>
         /// <returns>A human readible string for this object.</returns>

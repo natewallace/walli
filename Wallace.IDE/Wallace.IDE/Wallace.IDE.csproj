@@ -93,6 +93,9 @@
       <DependentUpon>WindowIconImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\Document\CodeCoverageDocument.cs" />
+    <Compile Include="SalesForce\Document\ITextEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\SnippetEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\TextEditorDocumentBase.cs" />
     <Compile Include="SalesForce\Framework\DiffUtility.cs" />
     <Compile Include="SalesForce\Framework\DiffLib\DifferenceInstruction.cs" />
     <Compile Include="SalesForce\Framework\DiffLib\DifferenceOperation.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="SalesForce\Function\CompareServerContentFunction.cs" />
     <Compile Include="SalesForce\Function\DiffNextFunction.cs" />
     <Compile Include="SalesForce\Function\DiffPreviousFunction.cs" />
+    <Compile Include="SalesForce\Function\NewSnippetFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshCodeCoverageFunction.cs" />
     <Compile Include="SalesForce\Settings\TeamSettings.cs" />
     <Compile Include="SalesForce\UI\CodeCoverageControl.xaml.cs">
@@ -228,16 +232,16 @@
     <Compile Include="SalesForce\Node\ApexTriggerFolderNode.cs" />
     <Compile Include="SalesForce\Node\ApexTriggerNode.cs" />
     <Compile Include="SalesForce\Node\DataFolderNode.cs" />
-    <Compile Include="SalesForce\Node\DeployFolderNode.cs" />
+    <Compile Include="SalesForce\Node\LocalFolderNode.cs" />
     <Compile Include="SalesForce\Node\LogUnitNode.cs" />
     <Compile Include="SalesForce\Node\ManifestFolderNode.cs" />
     <Compile Include="SalesForce\Node\ManifestNode.cs" />
     <Compile Include="SalesForce\Node\PackageFolderNode.cs" />
     <Compile Include="SalesForce\Node\PackageNode.cs" />
     <Compile Include="SalesForce\Node\SnippetNode.cs" />
-    <Compile Include="SalesForce\Node\SnippetsFolderNode.cs" />
-    <Compile Include="SalesForce\Node\SnippetsGlobalFolderNode.cs" />
-    <Compile Include="SalesForce\Node\SnippetsProjectFolderNode.cs" />
+    <Compile Include="SalesForce\Node\SnippetFolderNode.cs" />
+    <Compile Include="SalesForce\Node\SnippetGlobalFolderNode.cs" />
+    <Compile Include="SalesForce\Node\SnippetProjectFolderNode.cs" />
     <Compile Include="SalesForce\Node\SourceFolderNode.cs" />
     <Compile Include="SalesForce\Settings\DefaultHeaderApexSettings.cs" />
     <Compile Include="SalesForce\Settings\DefaultHeaderVisualForceSettings.cs" />
@@ -1001,6 +1005,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SalesForce\Framework\DiffLib\license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NewSnippet.png" />
+    <Resource Include="Resources\Snippet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

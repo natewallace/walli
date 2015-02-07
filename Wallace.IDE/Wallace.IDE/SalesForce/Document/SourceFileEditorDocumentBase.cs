@@ -35,7 +35,7 @@ namespace Wallace.IDE.SalesForce.Document
     /// Abstract base class for text editor documents.
     /// </summary>
     /// <typeparam name="TView">The view for the document.</typeparam>
-    public abstract class SourceFileEditorDocumentBase<TView> : DocumentBase, ISourceFileEditorDocument 
+    public abstract class SourceFileEditorDocumentBase<TView> : TextEditorDocumentBase<TView>, ISourceFileEditorDocument 
         where TView : Control, ITextEditorView
     {
         #region Fields
@@ -44,11 +44,6 @@ namespace Wallace.IDE.SalesForce.Document
         /// Holds the text that was last retrieved from the server.
         /// </summary>
         private SourceFileContent _serverContent;
-
-        /// <summary>
-        /// Supports the IsDirty property.
-        /// </summary>
-        private bool _isDirty;
 
         #endregion
 
@@ -60,25 +55,15 @@ namespace Wallace.IDE.SalesForce.Document
         /// <param name="project">The project to edit the file on.</param>
         /// <param name="file">The file that is being edited.</param>
         public SourceFileEditorDocumentBase(Project project, SourceFile file)
+            : base(project)
         {
-            if (project == null)
-                throw new ArgumentNullException("project");
             if (file == null)
                 throw new ArgumentNullException("file");
 
-            Project = project;
             File = file;
-
-            _isDirty = false;
             Text = File.Name;
 
-            View = Activator.CreateInstance<TView>();
-            OnViewCreated();
-
             Reload();
-
-            View.TextChanged += View_TextChanged;
-            View.PreviewKeyDown += View_PreviewKeyDown;
 
             if (file.CheckedOutBy != null && !file.CheckedOutBy.Equals(project.Client.User))
                 View.IsReadOnly = true;
@@ -91,123 +76,19 @@ namespace Wallace.IDE.SalesForce.Document
         #region Properties
 
         /// <summary>
-        /// The project to edit the file on.
-        /// </summary>
-        public Project Project { get; private set; }
-
-        /// <summary>
         /// The file being edited.
         /// </summary>
         public SourceFile File { get; private set; }
-
-        /// <summary>
-        /// The control that is used for display.
-        /// </summary>
-        protected TView View { get; set; }
-
-        /// <summary>
-        /// The text displayed.
-        /// </summary>
-        public string Content
-        {
-            get
-            {
-                if (View == null)
-                    return String.Empty;
-                else
-                    return View.Text;
-            }
-            set
-            {
-                if (View != null)
-                    View.Text = value;
-            }
-        }
-
-        /// <summary>
-        /// When true the view will be read only.
-        /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                return View.IsReadOnly;
-            }
-            set
-            {
-                View.IsReadOnly = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the current line number
-        /// </summary>
-        public int CurrentLineNumber
-        {
-            get { return View.CurrentLineNumber; }
-        }
-
-        /// <summary>
-        /// Flag that indicates if there are unsaved changes.
-        /// </summary>
-        public bool IsDirty
-        {
-            get
-            {
-                return _isDirty;
-            }
-            set
-            {
-                if (_isDirty != value)
-                {
-                    _isDirty = value;
-                    Presenter.Header = _isDirty ? VisualHelper.CreateIconHeader(GetTitle(), GetIcon(), "*") :
-                                                  VisualHelper.CreateIconHeader(GetTitle(), GetIcon());
-                    Presenter.ToolTip = File.FileName;
-                    App.Instance.UpdateWorkspaces();
-                }
-            }
-        }
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// Called right after the view has been created.
-        /// </summary>
-        protected virtual void OnViewCreated()
-        {
-
-        }
-
-        /// <summary>
-        /// Called when the view is ready.
-        /// </summary>
-        protected virtual void OnViewReady()
-        {
-
-        }
-
-        /// <summary>
-        /// Set the title and view.
-        /// </summary>
-        /// <param name="isFirstUpdate">true if this is the first update.</param>
-        public override void Update(bool isFirstUpdate)
-        {
-            if (isFirstUpdate)
-            {
-                Presenter.Header = VisualHelper.CreateIconHeader(GetTitle(), GetIcon());
-                Presenter.ToolTip = File.FileName;
-                Presenter.Content = View;
-            }
-        }
-
-        /// <summary>
         /// Gets the title to display for this document.
         /// </summary>
         /// <returns>The title to display for this document.</returns>
-        protected virtual string GetTitle()
+        protected override string GetTitle()
         {
             return File.Name;
         }
@@ -216,51 +97,15 @@ namespace Wallace.IDE.SalesForce.Document
         /// Gets the icon to display for this document.
         /// </summary>
         /// <returns>The icon to display for this document.</returns>
-        protected virtual string GetIcon()
+        protected override string GetIcon()
         {
             return "Document.png";
         }
 
         /// <summary>
-        /// Give focus to the text input when the document is made active.
-        /// </summary>
-        public override void Activated()
-        {
-            View.FocusText();
-        }
-
-        /// <summary>
-        /// Display warning if the document has unsaved changes.
-        /// </summary>
-        /// <returns>true if its ok to proceed with the closing.</returns>
-        public override bool Closing()
-        {
-            if (IsDirty)
-            {
-                return (App.MessageUser(
-                    "You have unsaved changes which will be lost.  Do you want to proceed?",
-                    "Data Loss",
-                    System.Windows.MessageBoxImage.Warning,
-                    new string[] { "Yes", "No" }) == "Yes");
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Update the editor settings.
-        /// </summary>
-        public void UpdateEditorSettings()
-        {
-            View.ApplyEditorSettings();
-        }
-
-        /// <summary>
         /// Save changes made to the content.
         /// </summary>
-        public virtual void Save()
+        public override void Save()
         {
             if (!IsDirty)
                 return;
@@ -318,7 +163,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// Reload the document.
         /// </summary>
         /// <returns>true if the document was reloaded.</returns>
-        public virtual bool Reload()
+        public override bool Reload()
         {
             bool canReload = true;
             if (IsDirty)
@@ -345,71 +190,6 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
-        /// Open the text search dialog.
-        /// </summary>
-        public virtual void SearchText()
-        {
-            View.SearchText();
-        }
-
-        /// <summary>
-        /// Copy selected text to the clipboard.
-        /// </summary>
-        public virtual void CopyText()
-        {
-            View.CopyText();
-        }
-
-        /// <summary>
-        /// Delete selected text and copy it to the clipboard.
-        /// </summary>
-        public virtual void CutText()
-        {
-            View.CutText();
-        }
-
-        /// <summary>
-        /// Paste text from the clipboard to the editor.
-        /// </summary>
-        public virtual void PasteText()
-        {
-            View.PasteText();
-        }
-
-        /// <summary>
-        /// Undo the last test change.
-        /// </summary>
-        public void UndoText()
-        {
-            View.UndoText();
-        }
-
-        /// <summary>
-        /// Redo the last text change.
-        /// </summary>
-        public void RedoText()
-        {
-            View.RedoText();
-        }
-
-        /// <summary>
-        /// Select all text.
-        /// </summary>
-        public void SelectAllText()
-        {
-            View.SelectAllText();
-        }
-
-        /// <summary>
-        /// Go to the given line number in the document.
-        /// </summary>
-        /// <param name="line">The line number to go to. (1 based)</param>
-        public void GotToLine(int line)
-        {
-            View.GotToLine(line);
-        }
-
-        /// <summary>
         /// If this document represents the given entity this method should return true.
         /// </summary>
         /// <param name="entity">The entity to check.</param>
@@ -419,16 +199,10 @@ namespace Wallace.IDE.SalesForce.Document
             return (File.CompareTo(entity) == 0);
         }
 
-        #endregion
-
-        #region Event Handlers
-
         /// <summary>
-        /// Update the display to indicate the text has been changed.
+        /// Set the dirty status and checkout the file if needed.
         /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void View_TextChanged(object sender, EventArgs e)
+        protected override void OnTextChanged()
         {
             bool isFirstChange = !IsDirty;
             IsDirty = true;
@@ -448,27 +222,6 @@ namespace Wallace.IDE.SalesForce.Document
                     }
 
                     App.Instance.UpdateWorkspaces();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Respond to shortcut keys.
-        /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void View_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
-            {
-                switch (e.Key)
-                {
-                    case System.Windows.Input.Key.S:
-                        Save();
-                        break;
-
-                    default:
-                        break;
                 }
             }
         }

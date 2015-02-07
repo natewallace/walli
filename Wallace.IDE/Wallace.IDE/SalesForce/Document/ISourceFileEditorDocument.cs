@@ -27,88 +27,11 @@ namespace Wallace.IDE.SalesForce.Document
     /// <summary>
     /// Interface for text editors
     /// </summary>
-    public interface ISourceFileEditorDocument
+    public interface ISourceFileEditorDocument : ITextEditorDocument
     {
-        /// <summary>
-        /// The text displayed.
-        /// </summary>
-        string Content { get; set; }
-
-        /// <summary>
-        /// Gets the current line number.
-        /// </summary>
-        int CurrentLineNumber { get; }
-
-        /// <summary>
-        /// Flag that indicates if there are unsaved changes.
-        /// </summary>
-        bool IsDirty { get; }
-
-        /// <summary>
-        /// Flag that indicates if the document is read only.
-        /// </summary>
-        bool IsReadOnly { get; }
-
         /// <summary>
         /// The file being edited.
         /// </summary>
         SourceFile File { get; }
-
-        /// <summary>
-        /// Save changes made to the content.
-        /// </summary>
-        void Save();
-
-        /// <summary>
-        /// Reload the document.
-        /// </summary>
-        /// <returns>true if the document was reloaded.</returns>
-        bool Reload();
-
-        /// <summary>
-        /// Open the text search dialog.
-        /// </summary>
-        void SearchText();
-
-        /// <summary>
-        /// Copy selected text to the clipboard.
-        /// </summary>
-        void CopyText();
-
-        /// <summary>
-        /// Delete selected text and copy it to the clipboard.
-        /// </summary>
-        void CutText();
-
-        /// <summary>
-        /// Paste text from the clipboard to the editor.
-        /// </summary>
-        void PasteText();
-
-        /// <summary>
-        /// Undo the last test change.
-        /// </summary>
-        void UndoText();
-
-        /// <summary>
-        /// Redo the last text change.
-        /// </summary>
-        void RedoText();
-
-        /// <summary>
-        /// Select all text.
-        /// </summary>
-        void SelectAllText();
-
-        /// <summary>
-        /// Go to the given line number in the document.
-        /// </summary>
-        /// <param name="line">The line number to go to. (1 based)</param>
-        void GotToLine(int line);
-
-        /// <summary>
-        /// Update the editor settings.
-        /// </summary>
-        void UpdateEditorSettings();
     }
 }

@@ -196,10 +196,13 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 return _parseData;
             }
-            private set
+            set
             {
                 _parseData = value;
-                OnParseDataChanged(EventArgs.Empty);
+                _colorTransformer.ParseData = value;
+
+                if (_parseData != null && _parseData.Symbols != null)
+                    _className = _parseData.Symbols.Name;
             }
         }
 
@@ -230,10 +233,11 @@ namespace Wallace.IDE.SalesForce.UI
             }
             set 
             {
-                ParseText(value);
                 _suspendParse = true;
                 textEditor.Text = value;
                 _suspendParse = false;
+
+                OnParseRequested(EventArgs.Empty);
 
                 _foldingStrategy.UpdateFoldings(_foldingManager, textEditor.Document);
 
@@ -414,7 +418,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// </summary>
         private void UpdateView()
         {
-            ParseText(Text);
+            OnParseRequested(EventArgs.Empty);
 
             _foldingStrategy.UpdateFoldings(_foldingManager, textEditor.Document);
 
@@ -425,22 +429,6 @@ namespace Wallace.IDE.SalesForce.UI
                 SetNavigationClasses(null);
                 UpdateNavigation();
             }
-        }
-
-        /// <summary>
-        /// Parse the given text.
-        /// </summary>
-        /// <param name="text">The text to parse.</param>
-        private void ParseText(string text)
-        {
-            if (LanguageManager != null)
-            {
-                ParseData = LanguageManager.ParseApex(text, true, false);
-                _colorTransformer.ParseData = ParseData;
-            }
-
-            if (ParseData != null && ParseData.Symbols != null)
-                _className = ParseData.Symbols.Name;
         }
 
         /// <summary>
@@ -910,6 +898,16 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Raises the ParseRequested event.
+        /// </summary>
+        /// <param name="e">Event arguments.</param>
+        protected virtual void OnParseRequested(EventArgs e)
+        {
+            if (ParseRequested != null)
+                ParseRequested(this, e);
+        }
+
+        /// <summary>
         /// Raises the ParseDataChanged event.
         /// </summary>
         /// <param name="e">Event arguments.</param>
@@ -1277,7 +1275,7 @@ namespace Wallace.IDE.SalesForce.UI
                 {
                     // do an immediate parse after entering newlines to insure correct spans for members
                     if ((e.Text != "\r\n" && e.Text != "\n") && (_lastTextEntered == "\r\n" || _lastTextEntered == "\n"))
-                        ParseText(Text);
+                        OnParseRequested(EventArgs.Empty);
 
                     // show completions
                     ShowCodeCompletions(LanguageManager.Completion.GetCodeCompletionsLetter(
@@ -1342,6 +1340,11 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the text has been changed.
         /// </summary>
         public event EventHandler TextChanged;
+
+        /// <summary>
+        /// Raised when the text should be parsed.
+        /// </summary>
+        public event EventHandler ParseRequested;
 
         /// <summary>
         /// Raised when the parse data has been changed.

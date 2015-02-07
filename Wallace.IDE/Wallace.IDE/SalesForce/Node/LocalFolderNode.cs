@@ -21,19 +21,16 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
     /// <summary>
-    /// Folder for snippets.
+    /// Node that holds local objects.
     /// </summary>
-    public class SnippetsFolderNode : NodeBase
+    public class LocalFolderNode : NodeBase
     {
         #region Constructors
 
@@ -41,7 +38,7 @@ namespace Wallace.IDE.SalesForce.Node
         /// Constructor.
         /// </summary>
         /// <param name="project">Project.</param>
-        public SnippetsFolderNode(Project project)
+        public LocalFolderNode(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -65,7 +62,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             get
             {
-                return "Snippets ";
+                return "Local ";
             }
         }
 
@@ -78,8 +75,8 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void Init()
         {
-            Presenter.Header = VisualHelper.CreateIconHeader("Snippets", "FolderClosed.png");
-            Presenter.ExpandedHeader = VisualHelper.CreateIconHeader("Snippets", "FolderOpen.png");
+            Presenter.Header = VisualHelper.CreateIconHeader("Local", "FolderClosed.png");
+            Presenter.ExpandedHeader = VisualHelper.CreateIconHeader("Local", "FolderOpen.png");
         }
 
         /// <summary>
@@ -98,8 +95,10 @@ namespace Wallace.IDE.SalesForce.Node
         public override INode[] GetChildren()
         {
             return new INode[] { 
-                new SnippetsGlobalFolderNode(Project), 
-                new SnippetsProjectFolderNode(Project) };
+                new ManifestFolderNode(Project), 
+                new PackageFolderNode(Project),
+                new SnippetFolderNode(Project)
+            };
         }
 
         #endregion

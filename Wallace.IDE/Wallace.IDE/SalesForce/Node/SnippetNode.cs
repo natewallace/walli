@@ -27,6 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.Framework;
+using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
 
 namespace Wallace.IDE.SalesForce.Node
@@ -88,7 +89,7 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void Init()
         {
-            Presenter.Header = VisualHelper.CreateIconHeader(Text, "Document.png");
+            Presenter.Header = VisualHelper.CreateIconHeader(Text, "Snippet.png");
         }
 
         /// <summary>
@@ -96,17 +97,18 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void DoubleClick()
         {
-            //foreach (IDocument document in App.Instance.Content.OpenDocuments)
-            //{
-            //    if (document is ManifestEditorDocument && (document as ManifestEditorDocument).Manifest.Equals(Manifest))
-            //    {
-            //        App.Instance.Content.OpenDocument(document);
-            //        return;
-            //    }
-            //}
+            foreach (IDocument document in App.Instance.Content.OpenDocuments)
+            {
+                if (document is SnippetEditorDocument && 
+                    System.IO.Path.Equals(Path, (document as SnippetEditorDocument).Path))
+                {
+                    App.Instance.Content.OpenDocument(document);
+                    return;
+                }
+            }
 
-            //ManifestEditorDocument manifestDocument = new ManifestEditorDocument(Project, Manifest);
-            //App.Instance.Content.OpenDocument(manifestDocument);            
+            SnippetEditorDocument snippetDocument = new SnippetEditorDocument(Project, Path);
+            App.Instance.Content.OpenDocument(snippetDocument);            
         }
 
         /// <summary>

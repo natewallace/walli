@@ -54,8 +54,6 @@ namespace Wallace.IDE.SalesForce.Document
         public ClassEditorDocument(Project project, SourceFile classFile)
             : base(project, classFile)
         {
-            View.ParseDataChanged += View_ParseDataChanged;
-            View.MarginDoubleClick += View_MarginDoubleClick;
         }
 
         #endregion
@@ -110,6 +108,8 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         protected override void OnViewCreated()
         {
+            View.ParseRequested += View_ParseRequested;
+            View.MarginDoubleClick += View_MarginDoubleClick;
             View.LanguageManager = Project.Language;
         }
 
@@ -178,12 +178,13 @@ namespace Wallace.IDE.SalesForce.Document
         #region Event Handlers
 
         /// <summary>
-        /// Update the workspace view when the parse data has been changed.
+        /// Perform parse and update workspace.
         /// </summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
-        private void View_ParseDataChanged(object sender, System.EventArgs e)
+        private void View_ParseRequested(object sender, EventArgs e)
         {
+            View.ParseData = Project.Language.ParseApex(View.Text, true, false);
             App.Instance.UpdateWorkspaces();
         }
 

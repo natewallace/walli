@@ -114,7 +114,6 @@ namespace Wallace.IDE.SalesForce.Function
                     string diff = DiffUtility.Diff(content.ContentValue, currentDocument.Content);
                     TextViewDocument document = new TextViewDocument(
                         project,
-                        currentDocument.File,
                         diff,
                         currentDocument.File.Name,
                         "Compare.png",

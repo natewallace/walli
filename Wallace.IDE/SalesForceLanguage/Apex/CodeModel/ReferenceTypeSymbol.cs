@@ -52,5 +52,21 @@ namespace SalesForceLanguage.Apex.CodeModel
         public TextSpan[] Parts { get; private set; }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Apply an offset to the line positions.
+        /// </summary>
+        /// <param name="offset">The offset to apply to the line positions.</param>
+        public override void ApplyLineOffset(int offset)
+        {
+            base.ApplyLineOffset(offset);
+
+            for (int i = 0; i < Parts.Length; i++)
+                Parts[i] = Parts[i].CreateLineOffset(offset);
+        }
+
+        #endregion
     }
 }

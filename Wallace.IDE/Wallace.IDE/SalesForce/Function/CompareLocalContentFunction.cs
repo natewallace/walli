@@ -114,7 +114,6 @@ namespace Wallace.IDE.SalesForce.Function
 
                     TextViewDocument document = new TextViewDocument(
                         App.Instance.SalesForceApp.CurrentProject,
-                        currentDocument.File,
                         diff,
                         currentDocument.File.Name,
                         "Compare.png",

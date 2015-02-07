@@ -98,7 +98,7 @@ namespace Wallace.IDE.SalesForce.Function
                     text = project.Repository.GetContent(document.File, commit);
 
                 string title = String.Format("{0} [{1}]", document.File.Name, commit.ShaShort);
-                TextViewDocument doc = new TextViewDocument(project, document.File, text, title, "History.png", false);
+                TextViewDocument doc = new TextViewDocument(project, text, title, "History.png", false);
                 App.Instance.Content.OpenDocument(doc);
             }
         }

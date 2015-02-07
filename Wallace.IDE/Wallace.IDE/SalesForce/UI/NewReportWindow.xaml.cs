@@ -43,6 +43,15 @@ namespace Wallace.IDE.SalesForce.UI
     /// </summary>
     public partial class NewReportWindow : Window
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the Project property.
+        /// </summary>
+        private Project _project;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -60,7 +69,20 @@ namespace Wallace.IDE.SalesForce.UI
         /// <summary>
         /// The project to use for setting report filters.
         /// </summary>
-        public Project Project { get; set; }
+        public Project Project
+        {
+            get { return _project; }
+            set
+            {
+                _project = value;
+                if (_project != null)
+                {
+                    buttonUserModifiedToday.Content = _project.Client.User;
+                    buttonUserModifiedWeek.Content = _project.Client.User;
+                    buttonUserModifiedAll.Content = _project.Client.User;
+                }
+            }
+        }
 
         /// <summary>
         /// The report filter entered by the user.
@@ -183,18 +205,16 @@ namespace Wallace.IDE.SalesForce.UI
 
                 if (tabItemBasic.IsSelected)
                 {
-                    string userId = Project.Client.User.Id;
-
                     if (radioButtonBasicUserModifiedToday.IsChecked.Value)
-                        ReportFilter = new ReportFilterUserDate(userId, DateTime.Today);
+                        ReportFilter = new ReportFilterUserDate(buttonUserModifiedToday.Content as User, DateTime.Today);
                     else if (radioButtonBasicUserModifiedWeek.IsChecked.Value)
-                        ReportFilter = new ReportFilterUserDate(userId, DateTime.Today.AddDays(-7));
+                        ReportFilter = new ReportFilterUserDate(buttonUserModifiedWeek.Content as User, DateTime.Today.AddDays(-7));
                     else if (radioButtonBasicUserModifiedAll.IsChecked.Value)
-                        ReportFilter = new ReportFilterUserDate(userId, DateTime.MinValue);
+                        ReportFilter = new ReportFilterUserDate(buttonUserModifiedAll.Content as User, DateTime.MinValue);
                     else if (radioButtonBasicUserAnyModifiedToday.IsChecked.Value)
-                        ReportFilter = new ReportFilterUserDate("*", DateTime.Today);
+                        ReportFilter = new ReportFilterUserDate(null, DateTime.Today);
                     else if (radioButtonBasicUserAnyModifiedWeek.IsChecked.Value)
-                        ReportFilter = new ReportFilterUserDate("*", DateTime.Today.AddDays(-7));
+                        ReportFilter = new ReportFilterUserDate(null, DateTime.Today.AddDays(-7));
                     else
                         throw new Exception("No report selected.");
                 }
@@ -309,6 +329,47 @@ namespace Wallace.IDE.SalesForce.UI
                             break;
                     }
                 }
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Do user search.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void dialog_UserSearch(object sender, UserSearchEventArgs e)
+        {
+            e.Results = Project.Client.SearchUsers(e.Query);
+        }
+
+        /// <summary>
+        /// Let user select user.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void buttonUserModified_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // user search
+                UserSelectWindow dlg = new UserSelectWindow();
+                dlg.UserSearch += dialog_UserSearch;
+                if (App.ShowDialog(dlg))
+                {
+                    (sender as Button).Content = dlg.SelectedUser;
+
+                    if (sender == buttonUserModifiedToday)
+                        radioButtonBasicUserModifiedToday.IsChecked = true;
+                    else if (sender == buttonUserModifiedWeek)
+                        radioButtonBasicUserModifiedWeek.IsChecked = true;
+                    else if (sender == buttonUserModifiedAll)
+                        radioButtonBasicUserModifiedAll.IsChecked = true;
+                }
+                dlg.UserSearch -= dialog_UserSearch;
             }
             catch (Exception err)
             {

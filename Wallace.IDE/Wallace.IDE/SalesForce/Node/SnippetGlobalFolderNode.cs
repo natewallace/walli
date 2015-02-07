@@ -33,7 +33,7 @@ namespace Wallace.IDE.SalesForce.Node
     /// <summary>
     /// Folder for global snippets.
     /// </summary>
-    public class SnippetsGlobalFolderNode : NodeBase
+    public class SnippetGlobalFolderNode : NodeBase
     {
         #region Constructors
 
@@ -41,7 +41,7 @@ namespace Wallace.IDE.SalesForce.Node
         /// Constructor.
         /// </summary>
         /// <param name="project">Project.</param>
-        public SnippetsGlobalFolderNode(Project project)
+        public SnippetGlobalFolderNode(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -65,7 +65,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             get
             {
-                return "Global";
+                return "System";
             }
         }
 

@@ -148,5 +148,30 @@ namespace SalesForceLanguage.Apex
         }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Shift the lines of all text positions by the given offset.
+        /// </summary>
+        /// <param name="offset">The offset to apply to all text position lines.</param>
+        public void ApplyLineOffset(int offset)
+        {
+            // type references
+            foreach (ReferenceTypeSymbol symbol in TypeReferences)
+                symbol.ApplyLineOffset(offset);
+            _typeReferencesByLine = null;
+
+            // errors
+            foreach (LanguageError error in Errors)
+                error.ApplyLineOffset(offset);
+            _errorsByLine = null;
+
+            // symbols
+            if (Symbols != null)
+                Symbols.ApplyLineOffset(offset);
+        }
+
+        #endregion
     }
 }

@@ -21,6 +21,10 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Function;
@@ -28,9 +32,9 @@ using Wallace.IDE.SalesForce.Function;
 namespace Wallace.IDE.SalesForce.Node
 {
     /// <summary>
-    /// Node that holds deployment objects.
+    /// Folder for snippets.
     /// </summary>
-    public class DeployFolderNode : NodeBase
+    public class SnippetFolderNode : NodeBase
     {
         #region Constructors
 
@@ -38,7 +42,7 @@ namespace Wallace.IDE.SalesForce.Node
         /// Constructor.
         /// </summary>
         /// <param name="project">Project.</param>
-        public DeployFolderNode(Project project)
+        public SnippetFolderNode(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -62,7 +66,7 @@ namespace Wallace.IDE.SalesForce.Node
         {
             get
             {
-                return "Deploy ";
+                return "Snippet";
             }
         }
 
@@ -75,8 +79,8 @@ namespace Wallace.IDE.SalesForce.Node
         /// </summary>
         public override void Init()
         {
-            Presenter.Header = VisualHelper.CreateIconHeader("Deploy", "FolderClosed.png");
-            Presenter.ExpandedHeader = VisualHelper.CreateIconHeader("Deploy", "FolderOpen.png");
+            Presenter.Header = VisualHelper.CreateIconHeader("Snippet", "FolderClosed.png");
+            Presenter.ExpandedHeader = VisualHelper.CreateIconHeader("Snippet", "FolderOpen.png");
         }
 
         /// <summary>
@@ -95,8 +99,22 @@ namespace Wallace.IDE.SalesForce.Node
         public override INode[] GetChildren()
         {
             return new INode[] { 
-                new ManifestFolderNode(Project), 
-                new PackageFolderNode(Project) };
+                new SnippetGlobalFolderNode(Project), 
+                new SnippetProjectFolderNode(Project) };
+        }
+
+        /// <summary>
+        /// Get the context functions.
+        /// </summary>
+        /// <returns>The context functions for this node.</returns>
+        public override IFunction[] GetContextFunctions()
+        {
+            return MergeFunctions(
+                base.GetContextFunctions(),
+                new IFunction[]
+                {
+                    App.Instance.GetFunction<NewSnippetFunction>()
+                });
         }
 
         #endregion

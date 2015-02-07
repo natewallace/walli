@@ -179,6 +179,18 @@ namespace SalesForceLanguage.Apex.CodeModel
             return 0;
         }
 
+        /// <summary>
+        /// Apply an offset to the line positions.
+        /// </summary>
+        /// <param name="offset">The offset to apply to the line positions.</param>
+        public override void ApplyLineOffset(int offset)
+        {
+            base.ApplyLineOffset(offset);
+
+            foreach (Parameter p in Parameters)
+                p.ApplyLineOffset(offset);
+        }
+
         #endregion
 
         #region IXmlSerializable Members

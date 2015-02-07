@@ -141,6 +141,18 @@ namespace SalesForceLanguage
         }
 
         /// <summary>
+        /// Shift the line positions by the given offset.
+        /// </summary>
+        /// <param name="offset">The offset to apply to line positions.</param>
+        /// <returns>The new text span with the given offset.</returns>
+        public TextSpan CreateLineOffset(int offset)
+        {
+            return new TextSpan(
+                StartPosition.CreateLineOffset(offset),
+                EndPosition.CreateLineOffset(offset));
+        }
+
+        /// <summary>
         /// Returns a human readible string for this object.
         /// </summary>
         /// <returns>A human readible string for this object.</returns>

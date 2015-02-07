@@ -32,23 +32,50 @@
                         <RadioButton x:Name="radioButtonBasicUserModifiedToday" 
                                      Margin="5,20,5,5"
                                      IsChecked="True">
-                            Files I have modified today.
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Files that " 
+                                           VerticalAlignment="Center"/>
+                                <Button x:Name="buttonUserModifiedToday"
+                                        FontWeight="Bold"
+                                        Click="buttonUserModified_Click">
+                                </Button>
+                                <TextBlock Text=" has modified today." 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
                         </RadioButton>
                         <RadioButton x:Name="radioButtonBasicUserModifiedWeek" 
                                      Margin="5">
-                            Files I have modified this week.
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Files that " 
+                                           VerticalAlignment="Center"/>
+                                <Button x:Name="buttonUserModifiedWeek"
+                                        FontWeight="Bold"
+                                        Click="buttonUserModified_Click">
+                                </Button>
+                                <TextBlock Text=" has modified this week." 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
                         </RadioButton>
                         <RadioButton x:Name="radioButtonBasicUserModifiedAll" 
                                      Margin="5">
-                            Files I have modified at any point.
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Files that " 
+                                           VerticalAlignment="Center"/>
+                                <Button x:Name="buttonUserModifiedAll"
+                                        FontWeight="Bold"
+                                        Click="buttonUserModified_Click">
+                                </Button>
+                                <TextBlock Text=" has modified at any point." 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
                         </RadioButton>
                         <RadioButton x:Name="radioButtonBasicUserAnyModifiedToday" 
                                      Margin="5,20,5,5">
-                            Files that have been modified today.
+                            <TextBlock Text="All files that have been modified today." />
                         </RadioButton>
                         <RadioButton x:Name="radioButtonBasicUserAnyModifiedWeek" 
                                      Margin="5">
-                            Files that have been modified this week.
+                            <TextBlock Text="All files that have been modified this week." />
                         </RadioButton>
                     </StackPanel>
                 </TabItem>
