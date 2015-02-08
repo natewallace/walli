@@ -29,6 +29,7 @@ using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
@@ -118,7 +119,10 @@ namespace Wallace.IDE.SalesForce.Node
         /// <returns>true if this node represents the given entity.</returns>
         public override bool RepresentsEntity(object entity)
         {
-            return (Path == (entity as string));
+            if (!(entity is string))
+                return false;
+
+            return System.IO.Path.Equals(Path, entity as string);
         }
 
         /// <summary>
@@ -131,8 +135,7 @@ namespace Wallace.IDE.SalesForce.Node
                 base.GetContextFunctions(),
                 new IFunction[] 
                 {
-                    //App.Instance.GetFunction<MergeManifestFunction>(),
-                    //App.Instance.GetFunction<DeleteManifestFunction>()
+                    App.Instance.GetFunction<DeleteSnippetFunction>()
                 });
         }
 

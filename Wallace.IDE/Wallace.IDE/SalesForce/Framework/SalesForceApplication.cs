@@ -228,6 +228,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(deletePackageFunction, "PROJECT");
             App.Instance.RegisterFunction(deletePackageFunction);
 
+            DeleteSnippetFunction deleteSnippetFunction = new DeleteSnippetFunction();
+            App.Instance.Menu.AddFunction(deleteSnippetFunction, "PROJECT");
+            App.Instance.RegisterFunction(deleteSnippetFunction);
+
             RefreshFolderFunction refreshFolderFunction = new RefreshFolderFunction();
             App.Instance.RegisterFunction(refreshFolderFunction);
 

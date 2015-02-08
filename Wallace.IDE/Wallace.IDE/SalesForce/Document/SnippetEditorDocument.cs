@@ -298,6 +298,19 @@ namespace Wallace.IDE.SalesForce.Document
             }
         }
 
+        /// <summary>
+        /// If this document represents the given entity this method should return true.
+        /// </summary>
+        /// <param name="entity">The entity to check.</param>
+        /// <returns>true if this document represents the given entity.</returns>
+        public override bool RepresentsEntity(object entity)
+        {
+            if (!(entity is string))
+                return false;
+
+            return System.IO.Path.Equals(Path, entity as string);
+        }
+
         #endregion
 
         #region Event Handlers

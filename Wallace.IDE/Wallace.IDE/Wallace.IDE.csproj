@@ -110,6 +110,7 @@
     <Compile Include="SalesForce\Function\CompareLocalContentFunction.cs" />
     <Compile Include="SalesForce\Function\CompareOtherServerContentFunction.cs" />
     <Compile Include="SalesForce\Function\CompareServerContentFunction.cs" />
+    <Compile Include="SalesForce\Function\DeleteSnippetFunction.cs" />
     <Compile Include="SalesForce\Function\DiffNextFunction.cs" />
     <Compile Include="SalesForce\Function\DiffPreviousFunction.cs" />
     <Compile Include="SalesForce\Function\ExecuteSnippetFunction.cs" />
