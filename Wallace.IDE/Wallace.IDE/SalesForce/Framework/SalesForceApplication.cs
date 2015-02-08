@@ -118,9 +118,13 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(newManifestFunction, "NEWSALESFORCE");
             App.Instance.RegisterFunction(newManifestFunction);
 
-            NewSnippetFunction newSnippetFunction = new NewSnippetFunction();
-            App.Instance.Menu.AddFunction(newSnippetFunction, "NEWSALESFORCE");
-            App.Instance.RegisterFunction(newSnippetFunction);
+            NewSnippetSystemFunction newSnippetSystemFunction = new NewSnippetSystemFunction();
+            App.Instance.Menu.AddFunction(newSnippetSystemFunction, "NEWSALESFORCE");
+            App.Instance.RegisterFunction(newSnippetSystemFunction);
+
+            NewSnippetProjectFunction newSnippetProjectFunction = new NewSnippetProjectFunction();
+            App.Instance.Menu.AddFunction(newSnippetProjectFunction, "NEWSALESFORCE");
+            App.Instance.RegisterFunction(newSnippetProjectFunction);
 
             //
             // PROJECT | Team
@@ -242,6 +246,20 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(executeQueryFunction));
             App.Instance.ToolBar.AddFunction(executeQueryFunction);
             App.Instance.Menu.AddFunction(executeQueryFunction, "DOCUMENT");
+
+            SaveSnippetFunction saveSnippetFunction = new SaveSnippetFunction();
+            App.Instance.ToolBar.AddFunction(new FunctionSeparator(saveSnippetFunction));
+            App.Instance.ToolBar.AddFunction(saveSnippetFunction);
+            App.Instance.Menu.AddFunction(saveSnippetFunction, "DOCUMENT");
+
+            RefreshSnippetFunction refreshSnippetFunction = new RefreshSnippetFunction();
+            App.Instance.ToolBar.AddFunction(refreshSnippetFunction);
+            App.Instance.Menu.AddFunction(refreshSnippetFunction, "DOCUMENT");
+
+            ExecuteSnippetFunction executeSnippetFunction = new ExecuteSnippetFunction();
+            App.Instance.ToolBar.AddFunction(executeSnippetFunction);
+            App.Instance.Menu.AddFunction(executeSnippetFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(executeSnippetFunction);
 
             CommitDataChangesFunction commitDataFunction = new CommitDataChangesFunction();
             App.Instance.ToolBar.AddFunction(commitDataFunction);
@@ -490,7 +508,6 @@ namespace Wallace.IDE.SalesForce.Framework
                 App.Instance.Navigation.Nodes.Add(new SourceFolderNode(project));
                 App.Instance.Navigation.Nodes.Add(new DataFolderNode(project));
                 App.Instance.Navigation.Nodes.Add(new LocalFolderNode(project));
-                //App.Instance.Navigation.Nodes.Add(new SnippetsFolderNode(project));
 
                 App.Instance.Menu.UpdateFunctions();
                 App.Instance.ToolBar.UpdateFunctions();

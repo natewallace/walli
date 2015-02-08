@@ -27,6 +27,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
@@ -102,6 +103,20 @@ namespace Wallace.IDE.SalesForce.Node
                 snippets.Add(new SnippetNode(Project, file));
 
             return snippets.ToArray();
+        }
+
+        /// <summary>
+        /// Get the context functions.
+        /// </summary>
+        /// <returns>The context functions for this node.</returns>
+        public override IFunction[] GetContextFunctions()
+        {
+            return MergeFunctions(
+                base.GetContextFunctions(),
+                new IFunction[]
+                {
+                    App.Instance.GetFunction<NewSnippetProjectFunction>()
+                });
         }
 
         /// <summary>

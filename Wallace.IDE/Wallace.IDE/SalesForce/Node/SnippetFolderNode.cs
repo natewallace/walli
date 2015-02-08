@@ -99,22 +99,8 @@ namespace Wallace.IDE.SalesForce.Node
         public override INode[] GetChildren()
         {
             return new INode[] { 
-                new SnippetGlobalFolderNode(Project), 
+                new SnippetSystemFolderNode(Project), 
                 new SnippetProjectFolderNode(Project) };
-        }
-
-        /// <summary>
-        /// Get the context functions.
-        /// </summary>
-        /// <returns>The context functions for this node.</returns>
-        public override IFunction[] GetContextFunctions()
-        {
-            return MergeFunctions(
-                base.GetContextFunctions(),
-                new IFunction[]
-                {
-                    App.Instance.GetFunction<NewSnippetFunction>()
-                });
         }
 
         #endregion

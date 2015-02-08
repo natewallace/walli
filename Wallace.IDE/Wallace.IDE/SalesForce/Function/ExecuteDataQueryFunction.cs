@@ -76,7 +76,7 @@ namespace Wallace.IDE.SalesForce.Function
         }
 
         /// <summary>
-        /// Comment out selected lines.
+        /// Run the query.
         /// </summary>
         public override void Execute()
         {

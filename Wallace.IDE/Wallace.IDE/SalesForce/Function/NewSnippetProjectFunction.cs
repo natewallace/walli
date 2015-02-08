@@ -36,7 +36,7 @@ namespace Wallace.IDE.SalesForce.Function
     /// <summary>
     /// Create a new snippet.
     /// </summary>
-    public class NewSnippetFunction : FunctionBase
+    public class NewSnippetProjectFunction : FunctionBase
     {
         #region Methods
 
@@ -50,11 +50,11 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "NewSnippet.png");
-                presenter.ToolTip = "New snippet...";
+                presenter.ToolTip = "New  project snippet...";
             }
             else
             {
-                presenter.Header = "New snippet...";
+                presenter.Header = "New project snippet...";
                 presenter.Icon = VisualHelper.CreateIconHeader(null, "NewSnippet.png");
             }
         }

@@ -27,13 +27,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 
 namespace Wallace.IDE.SalesForce.Node
 {
     /// <summary>
     /// Folder for global snippets.
     /// </summary>
-    public class SnippetGlobalFolderNode : NodeBase
+    public class SnippetSystemFolderNode : NodeBase
     {
         #region Constructors
 
@@ -41,7 +42,7 @@ namespace Wallace.IDE.SalesForce.Node
         /// Constructor.
         /// </summary>
         /// <param name="project">Project.</param>
-        public SnippetGlobalFolderNode(Project project)
+        public SnippetSystemFolderNode(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -98,10 +99,24 @@ namespace Wallace.IDE.SalesForce.Node
         public override INode[] GetChildren()
         {
             List<INode> snippets = new List<INode>();
-            foreach (string file in Project.GetGlobalSnippets())
+            foreach (string file in Project.GetSystemSnippets())
                 snippets.Add(new SnippetNode(Project, file));
 
             return snippets.ToArray();
+        }
+
+        /// <summary>
+        /// Get the context functions.
+        /// </summary>
+        /// <returns>The context functions for this node.</returns>
+        public override IFunction[] GetContextFunctions()
+        {
+            return MergeFunctions(
+                base.GetContextFunctions(),
+                new IFunction[]
+                {
+                    App.Instance.GetFunction<NewSnippetSystemFunction>()
+                });
         }
 
         #endregion

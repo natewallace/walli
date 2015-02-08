@@ -55,7 +55,7 @@ namespace Wallace.IDE.SalesForce.Framework
         /// <summary>
         /// The root folder for global snippets.
         /// </summary>
-        private static readonly string GLOBAL_SNIPPETS_FOLDER = Path.Combine(APP_DATA_FOLDER, "Snippets");
+        public static readonly string SystemSnippetsFolder = Path.Combine(APP_DATA_FOLDER, "Snippets");
 
         /// <summary>
         /// Used for encryption of credentials.  Not real secure but it's better than storing them in plain text.
@@ -95,8 +95,8 @@ namespace Wallace.IDE.SalesForce.Framework
                 Directory.CreateDirectory(APP_DATA_FOLDER);
             if (!Directory.Exists(ROOT_FOLDER))
                 Directory.CreateDirectory(ROOT_FOLDER);
-            if (!Directory.Exists(GLOBAL_SNIPPETS_FOLDER))
-                Directory.CreateDirectory(GLOBAL_SNIPPETS_FOLDER);
+            if (!Directory.Exists(SystemSnippetsFolder))
+                Directory.CreateDirectory(SystemSnippetsFolder);
         }
 
         /// <summary>
@@ -398,9 +398,9 @@ namespace Wallace.IDE.SalesForce.Framework
         /// Get the global snippets.
         /// </summary>
         /// <returns>The global snippets.</returns>
-        public string[] GetGlobalSnippets()
+        public string[] GetSystemSnippets()
         {
-            return System.IO.Directory.GetFiles(GLOBAL_SNIPPETS_FOLDER);
+            return System.IO.Directory.GetFiles(SystemSnippetsFolder);
         }
 
         /// <summary>

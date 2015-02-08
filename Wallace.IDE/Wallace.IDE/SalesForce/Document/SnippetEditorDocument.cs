@@ -27,6 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.SalesForce.Framework;
+using Wallace.IDE.SalesForce.Function;
 using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Document
@@ -59,6 +60,8 @@ namespace Wallace.IDE.SalesForce.Document
                 throw new ArgumentException("path is null or whitespace.", "path");
 
             Path = path;
+
+            Reload();
         }
 
         #endregion
@@ -89,6 +92,31 @@ namespace Wallace.IDE.SalesForce.Document
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Reload the saved snippet text.
+        /// </summary>
+        /// <returns>true if the document was reloaded.</returns>
+        public override bool Reload()
+        {
+            bool canReload = true;
+            if (IsDirty)
+            {
+                canReload = (App.MessageUser(
+                    "You have unsaved changes which will be lost.  Do you want to proceed?",
+                    "Data Loss",
+                    System.Windows.MessageBoxImage.Warning,
+                    new string[] { "Yes", "No" }) == "Yes");
+            }
+
+            if (canReload)
+            {
+                View.Text = System.IO.File.ReadAllText(Path);
+                IsDirty = false;
+            }
+
+            return canReload;            
+        }
 
         /// <summary>
         /// Disable the navigation controls.
@@ -122,7 +150,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         protected override void OnViewCreated()
         {
-            View.ParseRequested += View_ParseRequested;
+            View.ParseRequested += View_ParseRequested;            
             View.LanguageManager = Project.Language;
         }
 
@@ -132,6 +160,7 @@ namespace Wallace.IDE.SalesForce.Document
         public override void Save()
         {
             System.IO.File.WriteAllText(Path, View.Text);
+            IsDirty = false;
         }
 
         /// <summary>
@@ -166,6 +195,25 @@ namespace Wallace.IDE.SalesForce.Document
 
             View.ParseData = result;
             App.Instance.UpdateWorkspaces();
+        }
+
+        /// <summary>
+        /// Listen for F5 key press to execute snippet.
+        /// </summary>
+        /// <param name="e">Key press arguments.</param>
+        protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            base.OnPreviewKeyDown(e);
+
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.F5:
+                    App.Instance.GetFunction<ExecuteSnippetFunction>().Execute();
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         #endregion

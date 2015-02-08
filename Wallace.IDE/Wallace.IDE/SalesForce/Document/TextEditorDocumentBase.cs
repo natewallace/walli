@@ -336,16 +336,11 @@ namespace Wallace.IDE.SalesForce.Document
             IsDirty = true;
         }
 
-        #endregion
-
-        #region Event Handlers        
-
         /// <summary>
-        /// Respond to shortcut keys.
+        /// Handle key presses for shortcuts.
         /// </summary>
-        /// <param name="sender">Object that raised the event.</param>
-        /// <param name="e">Event arguments.</param>
-        private void View_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        /// <param name="e">The key press arguments.</param>
+        protected virtual void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
         {
             if (System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
             {
@@ -359,6 +354,20 @@ namespace Wallace.IDE.SalesForce.Document
                         break;
                 }
             }
+        }
+
+        #endregion
+
+        #region Event Handlers        
+
+        /// <summary>
+        /// Respond to shortcut keys.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            OnPreviewKeyDown(e);
         }
 
         /// <summary>

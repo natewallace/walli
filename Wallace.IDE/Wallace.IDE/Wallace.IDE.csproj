@@ -112,8 +112,12 @@
     <Compile Include="SalesForce\Function\CompareServerContentFunction.cs" />
     <Compile Include="SalesForce\Function\DiffNextFunction.cs" />
     <Compile Include="SalesForce\Function\DiffPreviousFunction.cs" />
-    <Compile Include="SalesForce\Function\NewSnippetFunction.cs" />
+    <Compile Include="SalesForce\Function\ExecuteSnippetFunction.cs" />
+    <Compile Include="SalesForce\Function\NewSnippetProjectFunction.cs" />
+    <Compile Include="SalesForce\Function\NewSnippetSystemFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshCodeCoverageFunction.cs" />
+    <Compile Include="SalesForce\Function\RefreshSnippetFunction.cs" />
+    <Compile Include="SalesForce\Function\SaveSnippetFunction.cs" />
     <Compile Include="SalesForce\Settings\TeamSettings.cs" />
     <Compile Include="SalesForce\UI\CodeCoverageControl.xaml.cs">
       <DependentUpon>CodeCoverageControl.xaml</DependentUpon>
@@ -240,7 +244,7 @@
     <Compile Include="SalesForce\Node\PackageNode.cs" />
     <Compile Include="SalesForce\Node\SnippetNode.cs" />
     <Compile Include="SalesForce\Node\SnippetFolderNode.cs" />
-    <Compile Include="SalesForce\Node\SnippetGlobalFolderNode.cs" />
+    <Compile Include="SalesForce\Node\SnippetSystemFolderNode.cs" />
     <Compile Include="SalesForce\Node\SnippetProjectFolderNode.cs" />
     <Compile Include="SalesForce\Node\SourceFolderNode.cs" />
     <Compile Include="SalesForce\Settings\DefaultHeaderApexSettings.cs" />
