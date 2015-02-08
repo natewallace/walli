@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -547,6 +548,57 @@ namespace SalesForceData
             else
             {
                 throw new Exception("Couldn't delete checkpoint: Invalid response received.");
+            }
+        }
+
+        /// <summary>
+        /// Execute the given snippet of code on the server.
+        /// </summary>
+        /// <param name="code">The code to be executed.</param>
+        /// <returns>null of the operation succeeds or a SalesForceError if it fails.</returns>
+        public SalesForceError ExecuteSnippet(string code)
+        {
+            string path = String.Format(
+                "/tooling/executeAnonymous/?anonymousBody={0}", 
+                System.Net.WebUtility.UrlEncode(code));
+
+            string response = _client.ExecuteRestCall(path);
+
+            if (response == null)
+                return new SalesForceError(null, "Invalid response", null);
+
+            JObject json = JObject.Parse(response);
+            if (json == null)
+                return new SalesForceError(null, "Invalid JSON response", null);
+
+            if (String.Compare(json["success"].Value<string>(), "True", true) != 0)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                string compiled = json["compiled"].Value<string>();
+                string compileProblem = json["compileProblem"].Value<string>();
+                string exceptionMessage = json["exceptionMessage"].Value<string>();
+                string exceptionStackTrace = json["exceptionStackTrace"].Value<string>();
+                string line = json["line"].Value<string>();
+                string column = json["column"].Value<string>();
+
+                if (String.Compare(compiled, "True", true) != 0)
+                {
+                    sb.AppendLine(compileProblem);
+                    sb.AppendFormat("Line: {0} Column: {1}", line, column);
+                    return new SalesForceError("COMPILE FAILURE", sb.ToString(), null);
+                }
+                else
+                {
+                    sb.AppendLine(exceptionMessage);
+                    sb.AppendLine();
+                    sb.Append(exceptionStackTrace);
+                    return new SalesForceError("EXCEPTION", sb.ToString(), null);
+                }
+            }
+            else
+            {
+                return null;
             }
         }
 

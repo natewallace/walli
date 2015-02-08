@@ -136,6 +136,15 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Select the first log if there is one.
+        /// </summary>
+        public void SelectFirstLog()
+        {
+            if (Logs != null)
+                View.SelectedLog = Logs.First();
+        }
+
+        /// <summary>
         /// If this document represents the given entity this method should return true.
         /// </summary>
         /// <param name="entity">The entity to check.</param>

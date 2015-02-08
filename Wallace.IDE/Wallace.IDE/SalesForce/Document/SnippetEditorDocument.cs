@@ -20,12 +20,14 @@
  * THE SOFTWARE.
  */
 
+using SalesForceData;
 using SalesForceLanguage.Apex;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Function;
 using Wallace.IDE.SalesForce.UI;
@@ -195,6 +197,86 @@ namespace Wallace.IDE.SalesForce.Document
 
             View.ParseData = result;
             App.Instance.UpdateWorkspaces();
+        }
+
+        /// <summary>
+        /// Execute the snippet.
+        /// </summary>
+        public void Execute()
+        {
+            View.SetErrors(null);
+
+            // check if log exists and create one if it doesn't
+            bool logExists = false;
+            LogListener log = null;
+
+            foreach (LogListener l in Project.Client.Diagnostic.GetLogListeners())
+            {
+                if (l.TracedEntityId == Project.Client.User.Id)
+                {
+                    logExists = true;
+                    log = l;
+                    break;
+                }
+            }
+
+            if (!logExists)
+            {
+                log = Project.Client.Diagnostic.CreateLogListener(
+                    Project.Client.User.Id,
+                    Project.Client.User.Name,
+                    Project.Client.User.Id,
+                    Project.Client.User.Name,
+                    DateTime.Now.AddHours(1),
+                    LogLevel.Debug,
+                    LogLevel.Error,
+                    LogLevel.Fine,
+                    LogLevel.Error,
+                    LogLevel.Error,
+                    LogLevel.Error,
+                    LogLevel.Error,
+                    LogLevel.Error);
+            }
+
+            // execute the code
+            SalesForceError result = Project.Client.Diagnostic.ExecuteSnippet(View.Text);
+            if (result != null)
+            {
+                View.SetErrors(new string[] { result.ToString() });
+            }
+            
+            // show results
+            if (result == null || result.StatusCode != "COMPILE FAILURE")
+            {
+                LogViewerDocument logViewer = null;
+                IDocument[] documents = App.Instance.Content.GetDocumentsByEntity(log);
+                foreach (IDocument document in documents)
+                {
+                    if (document is LogViewerDocument)
+                    {
+                        logViewer = document as LogViewerDocument;
+                        break;
+                    }
+                }
+
+                if (logViewer == null)
+                {
+                    logViewer = new LogViewerDocument(Project, log);
+                    App.Instance.Content.OpenDocument(logViewer);
+                    logViewer.Refresh();
+                    logViewer.SelectFirstLog();
+                }
+                else
+                {
+                    App.Instance.Content.ActiveDocument = logViewer;
+                    logViewer.Refresh();
+                    logViewer.SelectFirstLog();
+                }
+            }
+
+            // delete log listener if it was created just for this
+            if (!logExists)
+                Project.Client.Diagnostic.DeleteLogListener(log);
         }
 
         /// <summary>

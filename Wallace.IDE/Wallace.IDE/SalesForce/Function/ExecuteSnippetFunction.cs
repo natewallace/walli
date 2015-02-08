@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+using SalesForceData;
 using System;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
@@ -80,8 +81,7 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         public override void Execute()
         {
-            Project project = App.Instance.SalesForceApp.CurrentProject;
-            if (project != null && CurrentDocument != null)
+            if (App.Instance.SalesForceApp.CurrentProject != null && CurrentDocument != null)
             {
                 if (App.MessageUser("You are about to execute your snippet code on the server.  Are you sure you want to continue?",
                                     "Execute Snippet",
@@ -90,7 +90,7 @@ namespace Wallace.IDE.SalesForce.Function
                 {
                     using (App.Wait("Executing snippet"))
                     {
-
+                        CurrentDocument.Execute();
                     }
                 }
             }

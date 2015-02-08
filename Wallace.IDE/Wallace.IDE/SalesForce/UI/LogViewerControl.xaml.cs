@@ -121,6 +121,10 @@ namespace Wallace.IDE.SalesForce.UI
             {
                 return dataGridLogs.SelectedItem as Log; 
             }
+            set
+            {
+                dataGridLogs.SelectedItem = value;
+            }
         }
 
         /// <summary>
