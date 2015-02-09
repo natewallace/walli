@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="SalesForce\Document\CodeCoverageDocument.cs" />
     <Compile Include="SalesForce\Document\ITextEditorDocument.cs" />
+    <Compile Include="SalesForce\Document\SearchFilesResultDocument.cs" />
     <Compile Include="SalesForce\Document\SnippetEditorDocument.cs" />
     <Compile Include="SalesForce\Document\TextEditorDocumentBase.cs" />
     <Compile Include="SalesForce\Framework\DiffUtility.cs" />
@@ -121,12 +122,16 @@
     <Compile Include="SalesForce\Function\RefreshCodeCoverageFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshSnippetFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSnippetFunction.cs" />
+    <Compile Include="SalesForce\Function\SearchFilesFunction.cs" />
     <Compile Include="SalesForce\Settings\TeamSettings.cs" />
     <Compile Include="SalesForce\UI\CodeCoverageControl.xaml.cs">
       <DependentUpon>CodeCoverageControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Framework\UI\ErrorDetailsWindow.xaml.cs">
       <DependentUpon>ErrorDetailsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SalesForce\UI\SearchFilesResultControl.xaml.cs">
+      <DependentUpon>SearchFilesResultControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SalesForce\UI\TeamSettingsControl.xaml.cs">
       <DependentUpon>TeamSettingsControl.xaml</DependentUpon>
@@ -500,6 +505,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SalesForce\UI\IdenticonControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesForce\UI\SearchFilesResultControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

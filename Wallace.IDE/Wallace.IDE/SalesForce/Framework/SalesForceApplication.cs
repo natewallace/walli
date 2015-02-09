@@ -194,12 +194,15 @@ namespace Wallace.IDE.SalesForce.Framework
             CodeCoverageAllFunction codeCoverageAllFunction = new CodeCoverageAllFunction();
             App.Instance.Menu.AddFunction(codeCoverageAllFunction, "TESTSALESFORCE");
 
+            SearchFilesFunction searchFilesFunction = new SearchFilesFunction();
+            App.Instance.ToolBar.AddFunction(searchFilesFunction);
+            App.Instance.Menu.AddFunction(searchFilesFunction, "PROJECT");
+
             DataEditFunction dataEdit = new DataEditFunction();
             App.Instance.ToolBar.AddFunction(dataEdit);
             App.Instance.Menu.AddFunction(dataEdit, "PROJECT");
 
             NewReportFunction newReport = new NewReportFunction();
-            App.Instance.ToolBar.AddFunction(newReport);
             App.Instance.Menu.AddFunction(newReport, "PROJECT");
 
             MergeManifestFunction mergeManifestFunction = new MergeManifestFunction();

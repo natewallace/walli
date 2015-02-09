@@ -245,8 +245,11 @@ namespace Wallace.IDE.Framework.UI
                     else
                     {
                         int index = Host.Items.IndexOf(tabItem);
-                        Host.Items.RemoveAt(index);
-                        Host.Items.Insert(0, tabItem);
+                        if (index != 0)
+                        {
+                            Host.Items.RemoveAt(index);
+                            Host.Items.Insert(0, tabItem);
+                        }
                         Host.SelectedItem = tabItem;
                     }
                 }

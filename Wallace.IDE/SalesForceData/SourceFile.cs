@@ -349,6 +349,9 @@ namespace SalesForceData
             if (other == null)
                 return false;
 
+            if (!String.IsNullOrWhiteSpace(this.Id) && !String.IsNullOrWhiteSpace(other.Id))
+                return (this.Id == other.Id);
+
             return (this.FileName == other.FileName && this.Name == other.Name);
         }
 

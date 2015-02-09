@@ -437,6 +437,67 @@ namespace SalesForceData
             return results.ToArray();
         }
 
+        /// <summary>
+        /// Search for files that have content which matches the query.
+        /// </summary>
+        /// <param name="query">The text to search for.</param>
+        /// <returns>Files that have content which matches the query.</returns>
+        public SourceFile[] SearchFiles(string query)
+        {
+            if (String.IsNullOrWhiteSpace(query))
+                throw new ArgumentException("query is null or whitespace", "query");
+
+            InitClients();
+
+            query = query.Replace("'", "\\'");
+
+            SalesForceAPI.Partner.searchRequest request = new SalesForceAPI.Partner.searchRequest(
+                new SalesForceAPI.Partner.SessionHeader() { sessionId = _session.Id },
+                null,
+                null,
+                String.Format("FIND {{{0}}} IN ALL FIELDS RETURNING ApexClass(id, name, namespaceprefix), ApexTrigger(id, name, namespaceprefix), ApexPage(id, name, namespaceprefix), ApexComponent(id, name, namespaceprefix)", query));
+
+            SalesForceAPI.Partner.searchResponse response = _partnerClient.search(request);
+
+            if (response == null || response.result == null)
+                throw new Exception("Invalid response received.");
+
+            List<SourceFile> results = new List<SourceFile>();
+            if (response.result.searchRecords != null)
+            {
+                foreach (SalesForceAPI.Partner.SearchRecord searchRecord in response.result.searchRecords)
+                {
+                    if (searchRecord.record != null && searchRecord.record.Any != null)
+                    {
+                        string id = null;
+                        string name = null;
+                        string namespacePrefix = null;
+
+                        foreach (System.Xml.XmlElement e in searchRecord.record.Any)
+                        {
+                            string value = null;
+                            if (searchRecord.record.fieldsToNull != null && searchRecord.record.fieldsToNull.Contains(e.LocalName))
+                                value = null;
+                            else
+                                value = e.InnerText;
+
+                            if (String.Compare("Id", e.LocalName, true) == 0)
+                                id = value;
+                            else if (String.Compare("Name", e.LocalName, true) == 0)
+                                name = value;
+                            else if (String.Compare("NamespacePrefix", e.LocalName, true) == 0)
+                                namespacePrefix = value;
+                        }
+
+                        if (id != null && name != null)
+                            results.Add(new SourceFile(id, searchRecord.record.type, name, null));
+                    }
+                }
+            }
+
+            return results.ToArray();
+        }
+
         #endregion
 
         #region IDisposable Members
