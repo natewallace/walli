@@ -423,16 +423,28 @@ namespace SalesForceData
             {
                 foreach (System.Xml.XmlElement e in first.Any)
                 {
-                    DataColumn column = dt.Columns.Add(e.LocalName);
-                    if (objectType != null)
+                    if (e.HasAttributes && e.HasChildNodes)
                     {
-                        SObjectFieldType field = objectType.Fields
-                            .Where(f => String.Compare(f.Name, column.ColumnName, true) == 0)
-                            .FirstOrDefault();
-
-                        if (field != null)
+                        for (int i = 2; i < e.ChildNodes.Count; i++)
                         {
-                            column.ReadOnly = !field.Updateable;
+                            string name = String.Format("{0}:{1}", e.LocalName, e.ChildNodes[i].LocalName);
+                            DataColumn column = dt.Columns.Add(name);
+                            column.ReadOnly = true;
+                        }
+                    }
+                    else
+                    {
+                        DataColumn column = dt.Columns.Add(e.LocalName);
+                        if (objectType != null)
+                        {
+                            SObjectFieldType field = objectType.Fields
+                                .Where(f => String.Compare(f.Name, column.ColumnName, true) == 0)
+                                .FirstOrDefault();
+
+                            if (field != null)
+                            {
+                                column.ReadOnly = !field.Updateable;
+                            }
                         }
                     }
                 }
@@ -449,10 +461,21 @@ namespace SalesForceData
                 {
                     foreach (System.Xml.XmlElement e in record.Any)
                     {
-                        if (record.fieldsToNull != null && record.fieldsToNull.Contains(e.LocalName))
-                            row[e.LocalName] = null;
+                        if (e.HasAttributes && e.HasChildNodes)
+                        {
+                            for (int i = 2; i < e.ChildNodes.Count; i++)
+                            {
+                                string name = String.Format("{0}:{1}", e.LocalName, e.ChildNodes[i].LocalName);
+                                row[name] = e.ChildNodes[i].InnerText;
+                            }                            
+                        }
                         else
-                            row[e.LocalName] = e.InnerText;
+                        {
+                            if (record.fieldsToNull != null && record.fieldsToNull.Contains(e.LocalName))
+                                row[e.LocalName] = null;
+                            else
+                                row[e.LocalName] = e.InnerText;
+                        }
                     }
                 }
 
