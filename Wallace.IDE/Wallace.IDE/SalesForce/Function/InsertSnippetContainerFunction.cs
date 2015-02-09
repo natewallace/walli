@@ -28,16 +28,26 @@ using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
 using Wallace.IDE.SalesForce.Framework;
-using Wallace.IDE.SalesForce.Node;
-using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Create a new snippet.
+    /// Manages all the snippets that can be inserted.
     /// </summary>
-    public class NewSnippetProjectFunction : FunctionBase
+    public class InsertSnippetContainerFunction : FunctionBase
     {
+        #region Properties
+
+        /// <summary>
+        /// The current document.
+        /// </summary>
+        private ITextEditorDocument CurrentDocument
+        {
+            get { return App.Instance.Content.ActiveDocument as ITextEditorDocument; }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -46,59 +56,51 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="host">The type of host.</param>
         /// <param name="presenter">The presenter to use.</param>
         public override void Init(FunctionHost host, IFunctionPresenter presenter)
-        {
+        {           
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "NewSnippet.png");
-                presenter.ToolTip = "New  project snippet...";
+                presenter.Header = VisualHelper.CreateIconHeader(null, "Empty.png");
+                presenter.ToolTip = "Insert snippet";
             }
             else
             {
-                presenter.Header = "New project snippet...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "NewSnippet.png");
+                presenter.Header = "Insert snippet";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "Empty.png");
             }
         }
 
         /// <summary>
-        /// Update the visibility.
+        /// Set visibility.
         /// </summary>
-        /// <param name="host">The type of host for this function.</param>
-        /// <param name="presenter">The presenter to use when updating the view.</param>
+        /// <param name="host">The type of host.</param>
+        /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (App.Instance.SalesForceApp.CurrentProject != null);
+            IsVisible = (CurrentDocument != null);
         }
 
         /// <summary>
-        /// Opens a new data edit view.
+        /// Build out the sub menu items.
         /// </summary>
-        public override void Execute()
+        /// <param name="manager">The manager that this </param>
+        public void Refresh(IFunctionManager manager)
         {
-            if (App.Instance.SalesForceApp.CurrentProject != null)
+            Project project = App.Instance.SalesForceApp.CurrentProject;
+            if (project != null)
             {
-                Project project = App.Instance.SalesForceApp.CurrentProject;
+                FunctionGrouping systemGroup = new FunctionGrouping("SALESFORCE_SYSTEM_SNIPPET", "System");
+                manager.RemoveFunction(systemGroup);
+                manager.AddFunction(systemGroup, Id);
+                foreach (string snippet in project.GetSystemSnippets())
+                    manager.AddFunction(new InsertSnippetFunction(snippet), "SALESFORCE_SYSTEM_SNIPPET");
 
-                EnterValueWindow dlg = new EnterValueWindow();
-                dlg.Title = "Create Snippet";
-                dlg.ActionLabel = "Enter Snippet Name:";
-                dlg.ActionLabel = "Create";
-                if (App.ShowDialog(dlg))
-                {
-                    string path = System.IO.Path.Combine(project.SnippetsFolder, String.Format("{0}.snippet", dlg.EnteredValue));
-                    if (System.IO.File.Exists(path))
-                        throw new Exception("There is already a snippet named: " + dlg.EnteredValue);
-
-                    using (System.IO.File.Create(path))
-                    {
-                    }
-
-                    SnippetProjectFolderNode snippetFolderNode = App.Instance.Navigation.GetNode<SnippetProjectFolderNode>();
-                    if (snippetFolderNode != null)
-                        snippetFolderNode.AddSnippet(path);
-
-                    App.Instance.Content.OpenDocument(new SnippetEditorDocument(project, path));
-                }
+                FunctionGrouping projectGroup = new FunctionGrouping("SALESFORCE_PROJECT_SNIPPET", "Project");
+                manager.RemoveFunction(projectGroup);
+                manager.AddFunction(projectGroup, Id);
+                foreach (string snippet in project.GetProjectSnippets())
+                    manager.AddFunction(new InsertSnippetFunction(snippet), "SALESFORCE_PROJECT_SNIPPET");
             }
+            
         }
 
         #endregion

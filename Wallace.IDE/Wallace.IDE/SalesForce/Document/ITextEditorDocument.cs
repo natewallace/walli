@@ -94,6 +94,12 @@ namespace Wallace.IDE.SalesForce.Document
         void SelectAllText();
 
         /// <summary>
+        /// Insert the given text.
+        /// </summary>
+        /// <param name="text">The text to insert.</param>
+        void InsertText(string text);
+
+        /// <summary>
         /// Go to the given line number in the document.
         /// </summary>
         /// <param name="line">The line number to go to. (1 based)</param>

@@ -97,6 +97,15 @@ namespace Wallace.IDE.SalesForce.UI
         void SelectAllText();
 
         /// <summary>
+        /// Insert the given text.
+        /// </summary>
+        /// <param name="text">The text to insert.</param>
+        /// <param name="matchPadding">
+        /// When set to true the left padding from the current cursor will be applied to each line inserted.
+        /// </param>
+        void InsertText(string text, bool matchPadding);
+
+        /// <summary>
         /// Go to the given line number in the document.
         /// </summary>
         /// <param name="line">The line number to go to. (1 based)</param>

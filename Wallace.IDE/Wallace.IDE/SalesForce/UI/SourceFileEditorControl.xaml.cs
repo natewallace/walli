@@ -28,6 +28,7 @@ using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Search;
 using Wallace.IDE.Framework;
 using Wallace.IDE.Framework.UI;
+using System.Text;
 
 namespace Wallace.IDE.SalesForce.UI
 {
@@ -176,6 +177,46 @@ namespace Wallace.IDE.SalesForce.UI
         public void SelectAllText()
         {
             textEditor.SelectAll();
+        }
+
+        /// <summary>
+        /// Insert the given text.
+        /// </summary>
+        /// <param name="text">The text to insert.</param>
+        /// <param name="matchPadding">
+        /// When set to true the left padding from the current cursor will be applied to each line inserted.
+        /// </param>
+        public void InsertText(string text, bool matchPadding)
+        {
+            if (!matchPadding)
+            {
+                textEditor.Document.Insert(textEditor.CaretOffset, text);
+            }
+            else if (text != null)
+            {
+                // get current line padding
+                StringBuilder sb = new StringBuilder();
+                for (int index = textEditor.TextArea.Caret.Offset - textEditor.TextArea.Caret.Column;
+                     index < textEditor.TextArea.Caret.Offset;
+                     index++)
+                {
+                    char c = textEditor.Document.GetCharAt(index);
+                    if (c == ' ' || c == '\t')
+                        sb.Append(c);
+                    else
+                        break;
+                }
+                string padding = sb.ToString();
+
+                using (System.IO.StringReader reader = new System.IO.StringReader(text))
+                {
+                    string line = reader.ReadLine();
+                    textEditor.Document.Insert(textEditor.CaretOffset, String.Format("{0}{1}", line, Environment.NewLine));
+
+                    while ((line = reader.ReadLine()) != null)
+                        textEditor.Document.Insert(textEditor.CaretOffset, String.Format("{0}{1}{2}", padding, line, Environment.NewLine));
+                }
+            }
         }
 
         /// <summary>

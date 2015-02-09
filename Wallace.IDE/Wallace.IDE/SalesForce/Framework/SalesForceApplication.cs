@@ -362,8 +362,12 @@ namespace Wallace.IDE.SalesForce.Framework
             TextPasteFunction pasteTextFunction = new TextPasteFunction();
             App.Instance.Menu.AddFunction(pasteTextFunction, "DOCUMENT");
 
+            InsertSnippetContainerFunction insertSnippetContainerFunction = new InsertSnippetContainerFunction();
+            App.Instance.Menu.AddFunction(new FunctionSeparator(insertSnippetContainerFunction), "DOCUMENT");
+            App.Instance.Menu.AddFunction(insertSnippetContainerFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(insertSnippetContainerFunction);            
+
             AddCommentFunction addCommentFunction = new AddCommentFunction();
-            App.Instance.Menu.AddFunction(new FunctionSeparator(addCommentFunction), "DOCUMENT");
             App.Instance.Menu.AddFunction(addCommentFunction, "DOCUMENT");
             App.Instance.ToolBar.AddFunction(addCommentFunction);
 
@@ -515,6 +519,8 @@ namespace Wallace.IDE.SalesForce.Framework
 
                 App.Instance.Menu.UpdateFunctions();
                 App.Instance.ToolBar.UpdateFunctions();
+
+                App.Instance.GetFunction<InsertSnippetContainerFunction>().Refresh(App.Instance.Menu);
             }
         }
 

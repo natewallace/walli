@@ -119,6 +119,46 @@ namespace Wallace.IDE.SalesForce.Node
                 });
         }
 
+        /// <summary>
+        /// Add a new node for the given snippet to this node.
+        /// </summary>
+        /// <param name="path">The path for the snippet.</param>
+        /// <returns>The newly added node.</returns>
+        public SnippetNode AddSnippet(string path)
+        {
+            if (String.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("path is null or whitespace.", "path");
+
+            Presenter.Expand();
+            SnippetNode snippetNode = new SnippetNode(Project, path);
+
+            int index = 0;
+            foreach (INode node in Presenter.Nodes)
+            {
+                if (node is SnippetNode)
+                {
+                    int result = String.Compare(path, (node as SnippetNode).Path, true);
+                    if (result == 0)
+                    {
+                        Presenter.NodeManager.ActiveNode = node;
+                        return node as SnippetNode; // node is already present
+                    }
+                    else if (result < 0)
+                    {
+                        break;
+                    }
+                }
+                index++;
+            }
+
+            Presenter.Nodes.Insert(index, snippetNode);
+            Presenter.NodeManager.ActiveNode = snippetNode;
+
+            App.Instance.GetFunction<InsertSnippetContainerFunction>().Refresh(App.Instance.Menu);
+
+            return snippetNode;
+        }
+
         #endregion
     }
 }

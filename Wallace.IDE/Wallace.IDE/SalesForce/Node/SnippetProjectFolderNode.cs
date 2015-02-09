@@ -154,6 +154,8 @@ namespace Wallace.IDE.SalesForce.Node
             Presenter.Nodes.Insert(index, snippetNode);
             Presenter.NodeManager.ActiveNode = snippetNode;
 
+            App.Instance.GetFunction<InsertSnippetContainerFunction>().Refresh(App.Instance.Menu);
+
             return snippetNode;
         }
 

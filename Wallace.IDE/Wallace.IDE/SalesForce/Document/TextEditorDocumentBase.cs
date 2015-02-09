@@ -310,6 +310,15 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Insert the given text.
+        /// </summary>
+        /// <param name="text">The text to insert.</param>
+        public void InsertText(string text)
+        {
+            View.InsertText(text, true);
+        }
+
+        /// <summary>
         /// Go to the given line number in the document.
         /// </summary>
         /// <param name="line">The line number to go to. (1 based)</param>
