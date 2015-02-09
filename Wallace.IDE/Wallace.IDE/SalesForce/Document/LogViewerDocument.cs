@@ -141,7 +141,7 @@ namespace Wallace.IDE.SalesForce.Document
         public void SelectFirstLog()
         {
             if (Logs != null)
-                View.SelectedLog = Logs.First();
+                View.SelectedLog = Logs.FirstOrDefault();
         }
 
         /// <summary>

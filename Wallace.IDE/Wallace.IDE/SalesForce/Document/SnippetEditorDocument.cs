@@ -214,9 +214,17 @@ namespace Wallace.IDE.SalesForce.Document
             {
                 if (l.TracedEntityId == Project.Client.User.Id)
                 {
-                    logExists = true;
-                    log = l;
-                    break;
+                    // if there is an expired log delete it
+                    if (l.ExpirationDate < DateTime.Now)
+                    {
+                        Project.Client.Diagnostic.DeleteLogListener(l);
+                    }
+                    else
+                    {
+                        logExists = true;
+                        log = l;
+                        break;
+                    }
                 }
             }
 
