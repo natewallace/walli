@@ -65,7 +65,8 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            IsVisible = (App.Instance.SalesForceApp.CurrentProject != null);
+            //IsVisible = (App.Instance.SalesForceApp.CurrentProject != null);
+            IsVisible = false; // The salesforce api for search isn't returning expected results.
         }
 
         /// <summary>

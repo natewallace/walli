@@ -455,7 +455,7 @@ namespace SalesForceData
                 new SalesForceAPI.Partner.SessionHeader() { sessionId = _session.Id },
                 null,
                 null,
-                String.Format("FIND {{{0}}} IN ALL FIELDS RETURNING ApexClass(id, name, namespaceprefix), ApexTrigger(id, name, namespaceprefix), ApexPage(id, name, namespaceprefix), ApexComponent(id, name, namespaceprefix)", query));
+                String.Format("FIND {{{0}}} IN ALL FIELDS RETURNING ApexClass(id, name), ApexTrigger(id, name), ApexPage(id, name), ApexComponent(id, name)", query));
 
             SalesForceAPI.Partner.searchResponse response = _partnerClient.search(request);
 
