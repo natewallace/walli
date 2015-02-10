@@ -304,7 +304,6 @@
 %%
  
 identifier:
-	KEYWORD_ANNOTATE IDENTIFIER |
 	non_reserved_identifier |
 	IDENTIFIER ;
 
