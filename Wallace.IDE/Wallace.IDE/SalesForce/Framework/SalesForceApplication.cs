@@ -238,8 +238,12 @@ namespace Wallace.IDE.SalesForce.Framework
             RefreshFolderFunction refreshFolderFunction = new RefreshFolderFunction();
             App.Instance.RegisterFunction(refreshFolderFunction);
 
+            IndexFileFunction indexFileFunction = new IndexFileFunction();
+            App.Instance.Menu.AddFunction(indexFileFunction, "PROJECT");
+            App.Instance.RegisterFunction(indexFileFunction);
+
             App.Instance.Menu.AddFunction(propertiesSourceFileFunction, "PROJECT");
-            App.Instance.RegisterFunction(propertiesSourceFileFunction);            
+            App.Instance.RegisterFunction(propertiesSourceFileFunction);
 
             //ViewCheckpointsFunction viewCheckpointsFunction = new ViewCheckpointsFunction();
             //App.Instance.Menu.AddFunction(viewCheckpointsFunction, "PROJECT");
@@ -436,9 +440,6 @@ namespace Wallace.IDE.SalesForce.Framework
             DiffNextFunction diffNextFunction = new DiffNextFunction();
             App.Instance.Menu.AddFunction(diffNextFunction, "DOCUMENT");
             App.Instance.ToolBar.AddFunction(diffNextFunction);
-
-            IndexFileFunction indexFileFunction = new IndexFileFunction();
-            App.Instance.RegisterFunction(indexFileFunction);
 
             RefreshCodeCoverageFunction refreshCodeCoverageFunction = new RefreshCodeCoverageFunction();
             App.Instance.Menu.AddFunction(refreshCodeCoverageFunction, "DOCUMENT");
