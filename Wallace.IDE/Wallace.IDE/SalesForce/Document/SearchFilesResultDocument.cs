@@ -44,8 +44,9 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         /// <param name="project">Project.</param>
         /// <param name="query">The query text.</param>
+        /// <param name="filesSearched">The number of files searched.</param>
         /// <param name="files">The result files.</param>
-        public SearchFilesResultDocument(Project project, string query, SourceFile[] files)
+        public SearchFilesResultDocument(Project project, string query, int filesSearched, SourceFile[] files)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -54,6 +55,7 @@ namespace Wallace.IDE.SalesForce.Document
 
             View = new SearchFilesResultControl();
             View.QueryText = query;
+            View.FilesSearched = filesSearched;
             View.Files = files;
             View.FileOpenClick += View_FileOpenClick;
         }
@@ -89,6 +91,11 @@ namespace Wallace.IDE.SalesForce.Document
             }
         }
 
+        public override void Activated()
+        {
+            base.Activated();
+        }
+
         #endregion
 
         #region Event Handlers
@@ -110,6 +117,7 @@ namespace Wallace.IDE.SalesForce.Document
                         (document as ISourceFileEditorDocument).File.Equals(file))
                     {
                         App.Instance.Content.ActiveDocument = document;
+                        (document as ITextEditorDocument).SearchText(View.QueryText);
                         return;
                     }
                 }
@@ -117,15 +125,14 @@ namespace Wallace.IDE.SalesForce.Document
                 // open new document
                 using (App.Wait("Opening file"))
                 {
-                    Project.Client.Checkout.RefreshCheckoutStatus(file);
+                    if (!String.IsNullOrWhiteSpace(file.Id))
+                        Project.Client.Checkout.RefreshCheckoutStatus(file);
+
                     IDocument document = null;
 
                     switch (file.FileType.Name)
                     {
                         case "ApexClass":
-                            document = new ClassEditorDocument(Project, file);                            
-                            break;
-
                         case "ApexTrigger":
                             document = new ClassEditorDocument(Project, file);
                             break;
@@ -136,11 +143,15 @@ namespace Wallace.IDE.SalesForce.Document
                             break;
 
                         default:
+                            document = new SourceFileEditorDocument(Project, file);
                             break;
                     }
 
                     if (document != null)
+                    {
                         App.Instance.Content.OpenDocument(document);
+                        (document as ITextEditorDocument).SearchText(View.QueryText);
+                    }
                 }
             }
         }

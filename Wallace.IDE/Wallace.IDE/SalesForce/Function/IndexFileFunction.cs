@@ -29,14 +29,13 @@ using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.Node;
-using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
 {
     /// <summary>
-    /// Check out a file.
+    /// Add selected files to the search index.
     /// </summary>
-    public class CheckoutFileFunction : FunctionBase
+    public class IndexFileFunction : TextFunctionBase
     {
         #region Methods
 
@@ -54,9 +53,8 @@ namespace Wallace.IDE.SalesForce.Function
                 foreach (INode node in App.Instance.Navigation.SelectedNodes)
                 {
                     if (node is SourceFileNode &&
-                        !String.IsNullOrWhiteSpace((node as SourceFileNode).SourceFile.Id) &&
                         (node as SourceFileNode).SourceFile.Parent == null &&
-                        (node as SourceFileNode).SourceFile.CheckedOutBy == null)
+                        !String.IsNullOrWhiteSpace((node as SourceFileNode).SourceFile.FileName))
                         result.Add(node as SourceFileNode);
                     else
                         return new SourceFileNode[0];
@@ -77,13 +75,13 @@ namespace Wallace.IDE.SalesForce.Function
 
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "CheckOut.png");
-                presenter.ToolTip = (selectedNodes.Length > 1) ? "Check out files" : "Check out file";
+                presenter.Header = VisualHelper.CreateIconHeader(null, "IndexSearch.png");
+                presenter.ToolTip = (selectedNodes.Length > 1) ? "Add/Update files in search index" : "Add/Update file in search index";
             }
             else
             {
-                presenter.Header = (selectedNodes.Length > 1) ? "Check out files" : "Check out file";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "CheckOut.png");
+                presenter.Header = (selectedNodes.Length > 1) ? "Add/Update files in search index" : "Add/Update file in search index";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "IndexSearch.png");
             }
 
             IsVisible = (selectedNodes.Length > 0);
@@ -95,7 +93,7 @@ namespace Wallace.IDE.SalesForce.Function
         public override void Execute()
         {
             Project project = App.Instance.SalesForceApp.CurrentProject;
-            if (project != null && project.Client.Checkout.IsEnabled())
+            if (project != null)
             {
                 SourceFileNode[] nodes = GetSelectedNodes();
                 if (nodes.Length > 0)
@@ -104,16 +102,36 @@ namespace Wallace.IDE.SalesForce.Function
                     foreach (SourceFileNode node in nodes)
                         files.Add(node.SourceFile);
 
-                    using (App.Wait("Checking out file."))
+                    using (App.Wait("Updating search index."))
                     {
-                        project.Client.Checkout.CheckoutFiles(files);
+                        byte[] package = project.Client.Meta.GetSourceFileContentAsPackage(files);
+                        using (SearchIndex searchIndex = new SearchIndex(project.SearchFolder, true))
+                        {
+                            using (PackageContent packageContent = new PackageContent(package))
+                            {
+                                foreach (SourceFile file in files)
+                                {
+                                    string content = packageContent.GetContent(file);
+                                    if (content != null)
+                                    {
+                                        searchIndex.Add(
+                                            file.Id,
+                                            file.FileName,
+                                            file.FileType.Name,
+                                            file.Name,
+                                            content);
+                                    }
+                                }
+                            }
+                        }
                     }
+
+                    App.MessageUser(
+                        "The search index has been updated.",
+                        "Search Index",
+                        System.Windows.MessageBoxImage.Information,
+                        new string[] { "OK" });
                 }
-
-                foreach (SourceFileNode node in nodes)
-                    node.UpdateHeader();
-
-                App.Instance.UpdateWorkspaces();
             }
         }
 

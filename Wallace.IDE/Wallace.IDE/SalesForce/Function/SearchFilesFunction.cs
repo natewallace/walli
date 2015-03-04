@@ -28,6 +28,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Document;
+using Wallace.IDE.SalesForce.Framework;
 using Wallace.IDE.SalesForce.UI;
 
 namespace Wallace.IDE.SalesForce.Function
@@ -48,13 +49,13 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (host == FunctionHost.Toolbar)
             {
-                presenter.Header = VisualHelper.CreateIconHeader(null, "Find.png");
-                presenter.ToolTip = "Search code and markup...";
+                presenter.Header = VisualHelper.CreateIconHeader(null, "FindInFiles.png");
+                presenter.ToolTip = "Search files...";
             }
             else
             {
-                presenter.Header = "Search code and markup...";
-                presenter.Icon = VisualHelper.CreateIconHeader(null, "Find.png");
+                presenter.Header = "Search files...";
+                presenter.Icon = VisualHelper.CreateIconHeader(null, "FindInFiles.png");
             }
         }
 
@@ -65,8 +66,7 @@ namespace Wallace.IDE.SalesForce.Function
         /// <param name="presenter">The presenter to use.</param>
         public override void Update(FunctionHost host, IFunctionPresenter presenter)
         {
-            //IsVisible = (App.Instance.SalesForceApp.CurrentProject != null);
-            IsVisible = false; // The salesforce api for search isn't returning expected results.
+            IsVisible = (App.Instance.SalesForceApp.CurrentProject != null);
         }
 
         /// <summary>
@@ -77,20 +77,23 @@ namespace Wallace.IDE.SalesForce.Function
             if (App.Instance.SalesForceApp.CurrentProject != null)
             {
                 EnterValueWindow dlg = new EnterValueWindow();
-                dlg.Title = "Search Code and Markup";
-                dlg.InputLabel = "Enter the text to search for:";
+                dlg.Title = "Search Files";
+                dlg.InputLabel = "Enter the text to search for\n(only files that have been indexed will be searched):";
                 dlg.ActionLabel = "Search";
                 if (App.ShowDialog(dlg))
                 {
                     using (App.Wait("Searching"))
                     {
-                        SourceFile[] files = App.Instance.SalesForceApp.CurrentProject.Client.SearchFiles(dlg.EnteredValue);
-                        SearchFilesResultDocument document = new SearchFilesResultDocument(
-                            App.Instance.SalesForceApp.CurrentProject,
-                            dlg.EnteredValue,
-                            files);
+                        using (SearchIndex searchIndex = new SearchIndex(App.Instance.SalesForceApp.CurrentProject.SearchFolder))
+                        {
+                            SearchFilesResultDocument document = new SearchFilesResultDocument(
+                                App.Instance.SalesForceApp.CurrentProject,
+                                dlg.EnteredValue,
+                                searchIndex.DocumentCount,
+                                searchIndex.Search(String.Format("\"{0}\"", dlg.EnteredValue)));
 
-                        App.Instance.Content.OpenDocument(document);
+                            App.Instance.Content.OpenDocument(document);
+                        }
                     }
                 }
             }

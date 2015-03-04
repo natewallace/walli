@@ -198,6 +198,19 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Open the text search dialog with the given text.
+        /// </summary>
+        /// <param name="text">The text to search with.</param>
+        public void SearchText(string text)
+        {
+            _searchPanel.SearchPattern = text;
+
+            Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                (Action)delegate { SearchText(); });
+        }
+
+        /// <summary>
         /// Copy selected text to the clipboard.
         /// </summary>
         public void CopyText()

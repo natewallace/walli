@@ -53,9 +53,18 @@
       <Component Id="LibGit2Sharp.dll" Guid="58095232-5C95-425A-A8A1-88C413BB86EC">
         <File Id="LibGit2Sharp.dll" Source="..\Wallace.IDE\bin\Release\LibGit2Sharp.dll" KeyPath="yes" Checksum="yes" />
       </Component>
+      <Component Id="LibGit2Sharp.pdb" Guid="ED9A2F0A-22BA-43E7-A47B-1D076CD0CF32">
+        <File Id="LibGit2Sharp.pdb" Source="..\Wallace.IDE\bin\Release\LibGit2Sharp.pdb" KeyPath="yes" Checksum="yes" />
+      </Component>
       <Component Id="LibGit2Sharp.xml" Guid="49D4457B-265B-4B90-8C94-46EE87D38815">
         <File Id="LibGit2Sharp.xml" Source="..\Wallace.IDE\bin\Release\LibGit2Sharp.xml" KeyPath="yes" Checksum="yes" />
       </Component>
+      <Component Id="Lucene.Net.dll" Guid="D85DF9AA-5C75-4C94-9349-DCD2FE235E24">
+        <File Id="Lucene.Net.dll" Source="..\Wallace.IDE\bin\Release\Lucene.Net.dll" KeyPath="yes" Checksum="yes" />
+      </Component>
+      <Component Id="Lucene.Net.pdb" Guid="33BE4D6B-62A8-46DC-B285-92B525AD83D3">
+        <File Id="Lucene.Net.pdb" Source="..\Wallace.IDE\bin\Release\Lucene.Net.pdb" KeyPath="yes" Checksum="yes" />
+      </Component>            
       <Component Id="SalesForceData.dll" Guid="C456DA60-D451-40EC-8BE7-96865A3242CE">
         <File Id="SalesForceData.dll" Source="..\Wallace.IDE\bin\Release\SalesForceData.dll" KeyPath="yes" Checksum="yes"/>
       </Component>
@@ -122,7 +131,10 @@
       <ComponentRef Id="Newtonsoft.Json.dll" />
       <ComponentRef Id="Newtonsoft.Json.xml" />
       <ComponentRef Id="LibGit2Sharp.dll" />
+      <ComponentRef Id="LibGit2Sharp.pdb" />
       <ComponentRef Id="LibGit2Sharp.xml" />
+      <ComponentRef Id="Lucene.Net.dll" />
+      <ComponentRef Id="Lucene.Net.pdb" />
       <ComponentRef Id="SalesForceData.dll" />
       <ComponentRef Id="SalesForceData.dll.config" />
       <ComponentRef Id="SalesForceData.pdb" />

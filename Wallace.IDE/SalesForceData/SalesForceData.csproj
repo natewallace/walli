@@ -66,6 +66,7 @@
     <Compile Include="Manifest.cs" />
     <Compile Include="ManifestItem.cs" />
     <Compile Include="ManifestItemGroup.cs" />
+    <Compile Include="PackageContent.cs" />
     <Compile Include="PackageDeployResult.cs" />
     <Compile Include="PackageDeployResultStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

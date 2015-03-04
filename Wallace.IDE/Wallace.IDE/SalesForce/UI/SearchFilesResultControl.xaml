@@ -8,6 +8,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
@@ -22,8 +23,19 @@
                         Margin="0,5,5,5"/>
         </StackPanel>
 
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal">
+            <TextBlock Text="Files searched:"
+                        FontWeight="Bold" 
+                        Foreground="Black"
+                        Margin="0,0,5,5"/>
+            <TextBlock x:Name="textBlockSize"
+                        Foreground="Black"
+                        Margin="0,0,5,5"/>
+        </StackPanel>
+
         <DataGrid x:Name="dataGridFiles"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   AutoGenerateColumns="False"
                   RowHeaderWidth="0"
                   HorizontalGridLinesBrush="Gray"

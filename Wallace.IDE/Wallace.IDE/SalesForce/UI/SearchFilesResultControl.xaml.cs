@@ -67,6 +67,22 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// The number of files searched.
+        /// </summary>
+        public int FilesSearched
+        {
+            get
+            {
+                int num = 0;
+                if (int.TryParse(textBlockSize.Text, out num))
+                    return num;
+
+                return 0;
+            }
+            set { textBlockSize.Text = value.ToString(); }
+        }
+
+        /// <summary>
         /// The files displayed.
         /// </summary>
         public IEnumerable<SourceFile> Files
@@ -111,7 +127,10 @@ namespace Wallace.IDE.SalesForce.UI
             try
             {
                 if (SelectedFile != null)
+                {
                     OnFileOpenClick(EventArgs.Empty);
+                    e.Handled = true;
+                }
             }
             catch (Exception err)
             {

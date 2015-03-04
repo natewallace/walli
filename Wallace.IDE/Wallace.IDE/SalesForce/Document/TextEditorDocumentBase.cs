@@ -262,6 +262,15 @@ namespace Wallace.IDE.SalesForce.Document
         }
 
         /// <summary>
+        /// Open the text search dialog with the given text.
+        /// </summary>
+        /// <param name="text">The text to search with.</param>
+        public virtual void SearchText(string text)
+        {
+            View.SearchText(text);
+        }
+
+        /// <summary>
         /// Copy selected text to the clipboard.
         /// </summary>
         public virtual void CopyText()

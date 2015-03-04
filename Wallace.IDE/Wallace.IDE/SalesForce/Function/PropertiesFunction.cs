@@ -25,6 +25,7 @@ using SalesForceData;
 using Wallace.IDE.Framework;
 using Wallace.IDE.SalesForce.Node;
 using Wallace.IDE.SalesForce.UI;
+using Wallace.IDE.SalesForce.Framework;
 
 namespace Wallace.IDE.SalesForce.Function
 {
@@ -120,6 +121,10 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.AddProperty("Changed on", file.ChangedOn.ToLocalTime().ToString());
                 dlg.AddProperty("Created by", file.CreatedBy == null ? String.Empty : file.CreatedBy.Name);                
                 dlg.AddProperty("Created on", file.CreatedOn.ToLocalTime().ToString());
+
+                if (!String.IsNullOrWhiteSpace(file.Id) && App.Instance.SalesForceApp.CurrentProject != null)
+                    using (SearchIndex searchIndex = new SearchIndex(App.Instance.SalesForceApp.CurrentProject.SearchFolder))
+                        dlg.AddProperty("Indexed for search", searchIndex.IsIndexed(file) ? "Yes" : "No");
 
                 if (!String.IsNullOrWhiteSpace(file.Id) && 
                     App.Instance.SalesForceApp.CurrentProject != null &&

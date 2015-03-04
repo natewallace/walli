@@ -178,8 +178,9 @@ namespace SalesForceData
         /// <param name="id">The id.</param>
         /// <param name="type">The file type name.</param>
         /// <param name="name">The name.</param>
+        /// <param name="fileName">The file name.</param>
         /// <param name="checkedOutBy">CheckedOutBy.</param>
-        public SourceFile(string id, string type, string name, User checkedOutBy)
+        public SourceFile(string id, string type, string name, string fileName, User checkedOutBy)
         {
             if (String.IsNullOrWhiteSpace(type))
                 throw new ArgumentException("type is null or whitespace.", "type");
@@ -190,7 +191,7 @@ namespace SalesForceData
             Name = name;
 
             Id = id;
-            FileName = null;
+            FileName = fileName;
             Parent = null;
             ChangedBy = null;
             ChangedOn = DateTime.MinValue;
@@ -199,6 +200,18 @@ namespace SalesForceData
             Children = new SourceFile[0];
             State = SourceFileState.None;
             CheckedOutBy = checkedOutBy;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="type">The file type name.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="checkedOutBy">CheckedOutBy.</param>
+        public SourceFile(string id, string type, string name, User checkedOutBy)
+            : this(id, type, name, null, checkedOutBy)
+        {
         }
 
         #endregion

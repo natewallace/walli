@@ -47,11 +47,11 @@ namespace Wallace.IDE.SalesForce.Function
             if (host == FunctionHost.Toolbar)
             {
                 presenter.Header = VisualHelper.CreateIconHeader(null, "Empty.png");
-                presenter.ToolTip = "Reload symbols";
+                presenter.ToolTip = "Reload symbols and search index";
             }
             else
             {
-                presenter.Header = "Reload symbols";
+                presenter.Header = "Reload symbols and search index";
                 presenter.Icon = VisualHelper.CreateIconHeader(null, "Empty.png");
             }
         }
@@ -73,7 +73,7 @@ namespace Wallace.IDE.SalesForce.Function
         {
             if (App.Instance.SalesForceApp.CurrentProject != null)
             {
-                if (App.MessageUser("Reloading symbols requires that all apex source code and sObject definitions be downloaded from the server.  This operation will run in the background and may take several mintues to complete.  Do you wish to continue?",
+                if (App.MessageUser("Reloading symbols and the search index requires that all apex source code and sObject definitions be downloaded from the server.  This operation will run in the background and may take several mintues to complete.  Do you wish to continue?",
                                     "Reload symbols",
                                     System.Windows.MessageBoxImage.Warning,
                                     new string[] { "Yes", "No" }) == "Yes")

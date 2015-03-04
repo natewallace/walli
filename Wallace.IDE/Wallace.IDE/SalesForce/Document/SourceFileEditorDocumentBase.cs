@@ -151,6 +151,20 @@ namespace Wallace.IDE.SalesForce.Document
 
                         IsDirty = false;
                     }
+
+                    // update search index
+                    if (!Project.IsDownloadingSymbols)
+                    {
+                        using (SearchIndex searchIndex = new SearchIndex(Project.SearchFolder, true))
+                        {
+                            searchIndex.Add(
+                                File.Id,
+                                File.FileName,
+                                File.FileType.Name,
+                                File.Name,
+                                _serverContent.ContentValue);
+                        }
+                    }
                 }
             }
             catch (Exception err)
@@ -183,6 +197,20 @@ namespace Wallace.IDE.SalesForce.Document
                     View.Text = _serverContent.ContentValue;
                     View.IsReadOnly = _serverContent.IsReadOnly;
                     IsDirty = false;
+
+                    // update search index
+                    if (!Project.IsDownloadingSymbols)
+                    {
+                        using (SearchIndex searchIndex = new SearchIndex(Project.SearchFolder, true))
+                        {
+                            searchIndex.Add(
+                                File.Id,
+                                File.FileName,
+                                File.FileType.Name,
+                                File.Name,
+                                _serverContent.ContentValue);
+                        }
+                    }
                 }
             }
 

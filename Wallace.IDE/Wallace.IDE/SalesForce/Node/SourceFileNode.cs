@@ -223,6 +223,7 @@ namespace Wallace.IDE.SalesForce.Node
                 App.Instance.GetFunction<CheckinFileFunction>(),
                 App.Instance.GetFunction<CheckoutFileUndoFunction>(),
                 App.Instance.GetFunction<CheckoutFileHistoryFunction>(),
+                App.Instance.GetFunction<IndexFileFunction>(),
                 App.Instance.GetFunction<PropertiesFunction>()
             };
         }

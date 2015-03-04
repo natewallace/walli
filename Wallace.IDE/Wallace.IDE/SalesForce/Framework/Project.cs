@@ -140,6 +140,10 @@ namespace Wallace.IDE.SalesForce.Framework
             Repository = new SimpleRepository();
             Repository.WorkingPath = RepositoryFolder;
 
+            SearchFolder = Path.Combine(ProjectFolder, "Search");
+            if (!Directory.Exists(SearchFolder))
+                Directory.CreateDirectory(SearchFolder);
+
             Language = new LanguageManager(SymbolsFolder);
 
             _symbolsDownloaded = new EventWaitHandle(true, EventResetMode.ManualReset);
@@ -234,6 +238,11 @@ namespace Wallace.IDE.SalesForce.Framework
         /// The repository used to store code in for this project.
         /// </summary>
         public SimpleRepository Repository { get; private set; }
+
+        /// <summary>
+        /// The search folder.
+        /// </summary>
+        public string SearchFolder { get; private set; }
 
         /// <summary>
         /// All of the project names of projects that have been saved.
@@ -581,14 +590,17 @@ namespace Wallace.IDE.SalesForce.Framework
                     try
                     {
                         // download apex, parse it and then save to cache
-                        if (forceReload || Directory.GetFiles(SymbolsFolder).Length == 0)
+                        if (forceReload || FileUtility.IsFolderEmpty(SymbolsFolder))
                         {
-                            App.Instance.Dispatcher.Invoke(() => App.SetStatus("Downloading symbols..."));
+                            App.Instance.Dispatcher.Invoke(() => App.SetStatus("Downloading symbols and building search index..."));
 
                             object[] parameters = state as object[];
                             Project project = parameters[0] as Project;
                             SalesForceClient client = parameters[1] as SalesForceClient;
                             LanguageManager language = parameters[2] as LanguageManager;
+
+                            FileUtility.DeleteFolderContents(project.SearchFolder);
+                            SearchIndex searchIndex = new SearchIndex(project.SearchFolder, true);
 
                             try
                             {
@@ -600,14 +612,14 @@ namespace Wallace.IDE.SalesForce.Framework
                                 foreach (DataRow row in data.Data.Rows)
                                     classIds.Enqueue(row["Id"] as string);
 
-                                // download symbols in groups of 10
+                                // download classes in groups of 25
                                 while (classIds.Count > 0)
                                 {
                                     if (project._symbolsDownloadCancel)
                                         break;
 
-                                    StringBuilder query = new StringBuilder("SELECT Id, Body FROM ApexClass WHERE Id IN (");
-                                    for (int i = 0; i < 10 && classIds.Count > 0; i++)
+                                    StringBuilder query = new StringBuilder("SELECT Id, Name, Body FROM ApexClass WHERE Id IN (");
+                                    for (int i = 0; i < 25 && classIds.Count > 0; i++)
                                         query.AppendFormat("'{0}',", classIds.Dequeue());
 
                                     query.Length = query.Length - 1;
@@ -615,7 +627,18 @@ namespace Wallace.IDE.SalesForce.Framework
 
                                     DataSelectResult classData = client.Data.Select(query.ToString());
                                     foreach (DataRow row in classData.Data.Rows)
+                                    {
+                                        // parse symbols
                                         language.ParseApex(row["Body"] as string, false, true);
+
+                                        // add to search index
+                                        searchIndex.Add(
+                                            row["Id"] as string,
+                                            String.Format("classes/{0}.cls", row["Name"]),
+                                            "ApexClass",
+                                            row["Name"] as string,
+                                            row["Body"] as string);
+                                    }
                                 }
 
                                 // download symbols for SObjects
@@ -636,14 +659,20 @@ namespace Wallace.IDE.SalesForce.Framework
                                     }
                                 }
 
-                                // remove symbols if the download was interupted
+                                // remove symbols and search index if the download was interupted
                                 if (_symbolsDownloadCancel)
                                 {
-                                    Directory.Delete(project.SymbolsFolder, true);
+                                    if (searchIndex != null)
+                                        searchIndex.Clear();
+
+                                    FileUtility.DeleteFolderContents(project.SymbolsFolder);
                                 }
                             }
                             finally
                             {
+                                if (searchIndex != null)
+                                    searchIndex.Dispose();
+
                                 project._symbolsDownloaded.Set();
                             }
                         }

@@ -67,6 +67,12 @@ namespace Wallace.IDE.SalesForce.UI
         void SearchText();
 
         /// <summary>
+        /// Open the text search dialog with the given text.
+        /// </summary>
+        /// <param name="text">The text to search with.</param>
+        void SearchText(string text);
+
+        /// <summary>
         /// Copy selected text to the clipboard.
         /// </summary>
         void CopyText();

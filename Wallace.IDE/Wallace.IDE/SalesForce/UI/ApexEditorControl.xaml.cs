@@ -454,6 +454,19 @@ namespace Wallace.IDE.SalesForce.UI
         }
 
         /// <summary>
+        /// Open the text search dialog with the given text.
+        /// </summary>
+        /// <param name="text">The text to search with.</param>
+        public void SearchText(string text)
+        {
+            _searchPanel.SearchPattern = text;
+
+            Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                (Action)delegate { SearchText(); });
+        }
+
+        /// <summary>
         /// Fold or unfold all foldings in the document.
         /// </summary>
         /// <param name="isFolded">If true all foldings are folded.  If false, all foldings are unfolded.</param>

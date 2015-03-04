@@ -437,6 +437,9 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(diffNextFunction, "DOCUMENT");
             App.Instance.ToolBar.AddFunction(diffNextFunction);
 
+            IndexFileFunction indexFileFunction = new IndexFileFunction();
+            App.Instance.RegisterFunction(indexFileFunction);
+
             RefreshCodeCoverageFunction refreshCodeCoverageFunction = new RefreshCodeCoverageFunction();
             App.Instance.Menu.AddFunction(refreshCodeCoverageFunction, "DOCUMENT");
             App.Instance.ToolBar.AddFunction(new FunctionSeparator(refreshCodeCoverageFunction));
