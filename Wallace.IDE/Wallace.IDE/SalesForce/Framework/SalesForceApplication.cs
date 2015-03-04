@@ -343,6 +343,9 @@ namespace Wallace.IDE.SalesForce.Framework
 
             App.Instance.Menu.AddFunction(new FunctionGrouping("COMPARESALESFORCE", "Compare", true), "DOCUMENT");
 
+            CompareSourceControlContentFunction compareSourceControlContentFunction = new CompareSourceControlContentFunction();
+            App.Instance.Menu.AddFunction(compareSourceControlContentFunction, "COMPARESALESFORCE");
+
             CompareServerContentFunction compareServerContentFunction = new CompareServerContentFunction();
             App.Instance.Menu.AddFunction(compareServerContentFunction, "COMPARESALESFORCE");
 

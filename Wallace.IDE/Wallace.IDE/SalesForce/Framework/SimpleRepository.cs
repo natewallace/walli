@@ -358,7 +358,7 @@ namespace Wallace.IDE.SalesForce.Framework
                         lastSha = null;
                     }
 
-                    if (currentEntry != null && lastSha != currentSha)
+                    if (currentEntry != null && (lastSha != currentSha || result.Count == 0))
                         result.Add(new SimpleRepositoryCommit(currentCommit));
                 }
             }
@@ -469,34 +469,44 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
-        /// Get the content of the file for the given commit.
+        /// The the content for the given file and the given version.
         /// </summary>
-        /// <param name="file">The file to get content for.</param>
-        /// <param name="commit">The commit to get content from.</param>
-        /// <returns>The requested content as of the given commit.</returns>
-        public string GetContent(SourceFile file, SimpleRepositoryCommit commit)
+        /// <param name="file">The file to get the content for.</param>
+        /// <param name="version">The version of the file content to get.  If null the most recent commit is returned.</param>
+        /// <returns>The requested content or null if not found.</returns>
+        public string GetContent(SourceFile file, SimpleRepositoryCommit version)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
-            if (commit == null)
-                throw new ArgumentNullException("commit");
 
-            Validate();
-
-            using (Repository repo = Init(false))
+            // get the requested version of the file
+            if (version == null)
             {
-                Commit c = repo.Lookup(commit.Sha) as Commit;
-                if (c != null)
+                SimpleRepositoryCommit[] commits = GetHistory(file);
+                if (commits.Length > 0)
+                    version = commits[0];
+            }
+
+            if (version != null)
+            {
+                Validate();
+
+                using (Repository repo = Init(false))
                 {
-                    TreeEntry entry = c[file.FileName];
-                    if (entry != null && entry.Target is Blob)
+                    Commit commit = repo.Lookup(version.Sha) as Commit;
+
+                    if (commit != null)
                     {
-                        return (entry.Target as Blob).GetContentText();
+                        TreeEntry entry = commit[file.FileName];
+
+                        if (entry != null && entry.Target is Blob)
+                            return (entry.Target as Blob).GetContentText();
                     }
                 }
             }
 
-            return String.Empty;
+            // not found
+            return null;
         }
 
         /// <summary>
