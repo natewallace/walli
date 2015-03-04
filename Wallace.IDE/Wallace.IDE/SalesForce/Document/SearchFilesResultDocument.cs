@@ -86,7 +86,7 @@ namespace Wallace.IDE.SalesForce.Document
         {
             if (isFirstUpdate)
             {
-                Presenter.Header = VisualHelper.CreateIconHeader("Search results", "Find.png");
+                Presenter.Header = VisualHelper.CreateIconHeader("Search results", "FindInFiles.png");
                 Presenter.Content = View;
             }
         }

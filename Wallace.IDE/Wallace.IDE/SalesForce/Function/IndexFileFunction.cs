@@ -95,6 +95,9 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null)
             {
+                if (project.IsDownloadingSymbols)
+                    throw new Exception("The search index is currently being rebuilt.  Please wait for this complete before adding new files.");
+
                 SourceFileNode[] nodes = GetSelectedNodes();
                 if (nodes.Length > 0)
                 {
