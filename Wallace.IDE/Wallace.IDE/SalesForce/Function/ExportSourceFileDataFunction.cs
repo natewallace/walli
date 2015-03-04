@@ -38,11 +38,11 @@ namespace Wallace.IDE.SalesForce.Function
         /// <summary>
         /// The current document if there is one, null if there isn't.
         /// </summary>
-        public ISourceFileEditorDocument CurrentDocument
+        public ITextEditorDocument CurrentDocument
         {
             get
             {
-                return (App.Instance.Content.ActiveDocument as ISourceFileEditorDocument);
+                return (App.Instance.Content.ActiveDocument as ITextEditorDocument);
             }
         }
 
@@ -88,13 +88,19 @@ namespace Wallace.IDE.SalesForce.Function
             Project project = App.Instance.SalesForceApp.CurrentProject;
             if (project != null)
             {
-                ISourceFileEditorDocument document = CurrentDocument;
+                ITextEditorDocument document = CurrentDocument;
                 if (document != null)
                 {
-                    string name = System.IO.Path.GetFileName(document.File.FileName);
-                    string extension = System.IO.Path.GetExtension(name);
-                    if (extension.StartsWith("."))
-                        extension = extension.Substring(1);
+                    string name = "file";
+                    string extension = "txt";
+
+                    if (document is ISourceFileEditorDocument)
+                    {
+                        name = System.IO.Path.GetFileName((document as ISourceFileEditorDocument).File.FileName);
+                        extension = System.IO.Path.GetExtension(name);
+                        if (extension.StartsWith("."))
+                            extension = extension.Substring(1);
+                    }
 
                     SaveFileDialog dlg = new SaveFileDialog();
                     dlg.Title = "Export file";

@@ -43,7 +43,14 @@ namespace Wallace.IDE.SalesForce.Function
         /// </summary>
         private ITextEditorDocument CurrentDocument
         {
-            get { return App.Instance.Content.ActiveDocument as ITextEditorDocument; }
+            get 
+            {
+                ITextEditorDocument doc = App.Instance.Content.ActiveDocument as ITextEditorDocument;
+                if (doc == null || doc.IsReadOnly)
+                    return null;
+
+                return doc;
+            }
         }
 
         #endregion
