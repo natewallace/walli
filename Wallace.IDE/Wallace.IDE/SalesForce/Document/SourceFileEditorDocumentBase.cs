@@ -45,6 +45,11 @@ namespace Wallace.IDE.SalesForce.Document
         /// </summary>
         private SourceFileContent _serverContent;
 
+        /// <summary>
+        /// When set to true, auto checkouts will not be done.
+        /// </summary>
+        private bool _suspendAutoCheckout;
+
         #endregion
 
         #region Constructors
@@ -179,42 +184,51 @@ namespace Wallace.IDE.SalesForce.Document
         /// <returns>true if the document was reloaded.</returns>
         public override bool Reload()
         {
-            bool canReload = true;
-            if (IsDirty)
+            try
             {
-                canReload = (App.MessageUser(
-                    "You have unsaved changes which will be lost.  Do you want to proceed?",
-                    "Data Loss",
-                    System.Windows.MessageBoxImage.Warning,
-                    new string[] { "Yes", "No" }) == "Yes");
-            }
+                _suspendAutoCheckout = true;
 
-            if (canReload)
-            {
-                using (App.Wait("Refreshing document."))
+                bool canReload = true;
+                if (IsDirty)
                 {
-                    _serverContent = Project.Client.Meta.GetSourceFileContent(File);
-                    View.Text = _serverContent.ContentValue;
-                    View.IsReadOnly = _serverContent.IsReadOnly;
-                    IsDirty = false;
+                    canReload = (App.MessageUser(
+                        "You have unsaved changes which will be lost.  Do you want to proceed?",
+                        "Data Loss",
+                        System.Windows.MessageBoxImage.Warning,
+                        new string[] { "Yes", "No" }) == "Yes");
+                }
 
-                    // update search index
-                    if (!Project.IsDownloadingSymbols)
+                if (canReload)
+                {
+                    using (App.Wait("Refreshing document."))
                     {
-                        using (SearchIndex searchIndex = new SearchIndex(Project.SearchFolder, true))
+                        _serverContent = Project.Client.Meta.GetSourceFileContent(File);
+                        View.Text = _serverContent.ContentValue;
+                        View.IsReadOnly = _serverContent.IsReadOnly;
+                        IsDirty = false;
+
+                        // update search index
+                        if (!Project.IsDownloadingSymbols)
                         {
-                            searchIndex.Add(
-                                File.Id,
-                                File.FileName,
-                                File.FileType.Name,
-                                File.Name,
-                                _serverContent.ContentValue);
+                            using (SearchIndex searchIndex = new SearchIndex(Project.SearchFolder, true))
+                            {
+                                searchIndex.Add(
+                                    File.Id,
+                                    File.FileName,
+                                    File.FileType.Name,
+                                    File.Name,
+                                    _serverContent.ContentValue);
+                            }
                         }
                     }
                 }
-            }
 
-            return canReload;
+                return canReload;
+            }
+            finally
+            {
+                _suspendAutoCheckout = false;
+            }
         }
 
         /// <summary>
@@ -235,7 +249,8 @@ namespace Wallace.IDE.SalesForce.Document
             bool isFirstChange = !IsDirty;
             IsDirty = true;
 
-            if (isFirstChange &&
+            if (!_suspendAutoCheckout &&
+                isFirstChange &&
                 Project.Client.Checkout.IsEnabled(false) &&
                 (bool)Properties.Settings.Default["AutoCheckoutFile"] &&
                 File.CheckedOutBy == null)
