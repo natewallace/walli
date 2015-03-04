@@ -472,6 +472,25 @@ namespace SalesForceData
                 indentCount++;
             }
 
+            // fields
+            if (symbolTable.variables != null && symbolTable.variables.Length > 0)
+            {
+                sb.Append(String.Empty.PadRight(indentCount, '\t'));
+                sb.Append("//region Fields\n\n");
+
+                foreach (SalesForceAPI.Tooling.Symbol field in symbolTable.variables)
+                {
+                    sb.Append(String.Empty.PadRight(indentCount, '\t'));
+                    sb.AppendFormat("public {0}{1} {2};\n\n",
+                        FormatModifiers(field.modifiers),
+                        field.type,
+                        field.name);
+                }
+
+                sb.Append(String.Empty.PadRight(indentCount, '\t'));
+                sb.Append("//endregion\n\n");
+            }
+
             // constructors
             if (symbolTable.constructors != null && symbolTable.constructors.Length > 0)
             {
@@ -481,8 +500,9 @@ namespace SalesForceData
                 foreach (SalesForceAPI.Tooling.Constructor constructor in symbolTable.constructors)
                 {
                     sb.Append(String.Empty.PadRight(indentCount, '\t'));
-                    sb.AppendFormat("{0} {1}(",
+                    sb.AppendFormat("{0} {1}{2}(",
                         constructor.visibility.ToString().ToLower(),
+                        FormatModifiers(constructor.modifiers),
                         constructor.name);
 
                     if (constructor.parameters != null && constructor.parameters.Length > 0)
@@ -509,8 +529,9 @@ namespace SalesForceData
                 foreach (SalesForceAPI.Tooling.VisibilitySymbol prop in symbolTable.properties)
                 {
                     sb.Append(String.Empty.PadRight(indentCount, '\t'));
-                    sb.AppendFormat("{0} {1} {2} {{ get; set; }}\n\n",
+                    sb.AppendFormat("{0} {1}{2} {3} {{ get; set; }}\n\n",
                         prop.visibility.ToString().ToLower(),
+                        FormatModifiers(prop.modifiers),
                         prop.type,
                         prop.name);
                 }
@@ -528,8 +549,9 @@ namespace SalesForceData
                 foreach (SalesForceAPI.Tooling.Method method in symbolTable.methods)
                 {
                     sb.Append(String.Empty.PadRight(indentCount, '\t'));
-                    sb.AppendFormat("{0} {1} {2}(",
+                    sb.AppendFormat("{0} {1}{2} {3}(",
                         method.visibility.ToString().ToLower(),
+                        FormatModifiers(method.modifiers),
                         method.returnType,
                         method.name);
 
@@ -580,6 +602,23 @@ namespace SalesForceData
                     sb.Append("}\n\n");
                 }
             }
+        }
+
+        /// <summary>
+        /// Format a collection of modifiers into a single string.
+        /// </summary>
+        /// <param name="modifiers">The modifiers to format.</param>
+        /// <returns>The formatted modifiers.</returns>
+        private string FormatModifiers(string[] modifiers)
+        {
+            if (modifiers == null || modifiers.Length == 0)
+                return String.Empty;
+
+            StringBuilder sb = new StringBuilder();
+            foreach (string modifier in modifiers)
+                sb.AppendFormat("{0} ", modifier);
+
+            return sb.ToString();
         }
 
         /// <summary>
