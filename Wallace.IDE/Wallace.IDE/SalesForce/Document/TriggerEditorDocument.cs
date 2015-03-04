@@ -156,7 +156,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// <param name="e">Event arguments.</param>
         private void View_ParseRequested(object sender, EventArgs e)
         {
-            View.ParseData = Project.Language.ParseApex(View.Text, true, false);
+            View.ParseData = Project.Language.ParseApex(View.Text, true, false, IsContentGenerated);
             App.Instance.UpdateWorkspaces();
         }
 

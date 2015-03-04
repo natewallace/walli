@@ -95,16 +95,7 @@ namespace SalesForceLanguage.Apex.CodeModel
             Interfaces = interfaces ?? new string[0];
             InnerClasses = innerClasses ?? new SymbolTable[0];
 
-            // change class type to a namespace if the only thing in the class are inner classes
-            if (TableType == SymbolTableType.Class &&
-                InnerClasses.Length > 0 &&
-                Fields.Length == 0 &&
-                Constructors.Length == 0 &&
-                Properties.Length == 0 &&
-                Methods.Length == 0 &&
-                Interfaces.Length == 0 &&
-                String.IsNullOrWhiteSpace(Extends))
-                TableType = SymbolTableType.Namespace;
+            CalculateTableType();
         }
 
         #endregion
@@ -172,6 +163,46 @@ namespace SalesForceLanguage.Apex.CodeModel
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Change class type to a namespace if the only thing in the class are inner classes
+        /// </summary>
+        private void CalculateTableType()
+        {
+            if (TableType == SymbolTableType.Class &&
+                InnerClasses.Length > 0 &&
+                Fields.Length == 0 &&
+                Constructors.Length == 0 &&
+                Properties.Length == 0 &&
+                Methods.Length == 0 &&
+                Interfaces.Length == 0 &&
+                String.IsNullOrWhiteSpace(Extends))
+                TableType = SymbolTableType.Namespace;
+        }
+
+        /// <summary>
+        /// Add inner class to this class.  If there is already an inner class with the same name it will be replaced.
+        /// </summary>
+        /// <param name="st">The inner class to merge in.</param>
+        internal void MergeInnerClass(SymbolTable st)
+        {
+            if (st == null)
+                throw new ArgumentNullException("st");
+
+            for (int i = 0; i < InnerClasses.Length; i++)
+            {
+                if (InnerClasses[i].Id == st.Id)
+                {
+                    InnerClasses[i] = st;
+                    return;
+                }
+            }
+
+            List<SymbolTable> list = new List<SymbolTable>(InnerClasses);
+            list.Add(st);
+            InnerClasses = list.ToArray();
+            CalculateTableType();
+        }
 
         /// <summary>
         /// Generate a concrete type from a template.

@@ -627,8 +627,17 @@ namespace Wallace.IDE.SalesForce.Framework
                                     DataSelectResult classData = client.Data.Select(query.ToString());
                                     foreach (DataRow row in classData.Data.Rows)
                                     {
+                                        string body = row["Body"] as string;
+                                        bool isGenerated = false;
+
+                                        if (body == "(hidden)")
+                                        {
+                                            body = Client.Meta.GetGeneratedContent(row["Id"] as string);
+                                            isGenerated = true;
+                                        }
+
                                         // parse symbols
-                                        language.ParseApex(row["Body"] as string, false, true);
+                                        language.ParseApex(body, false, true, isGenerated);
 
                                         // add to search index
                                         searchIndex.Add(
@@ -636,7 +645,7 @@ namespace Wallace.IDE.SalesForce.Framework
                                             String.Format("classes/{0}.cls", row["Name"]),
                                             "ApexClass",
                                             row["Name"] as string,
-                                            row["Body"] as string);
+                                            body);
                                     }
                                 }
 
@@ -654,7 +663,8 @@ namespace Wallace.IDE.SalesForce.Framework
                                         language.UpdateSymbols(
                                             ConvertToSymbolTable(sObjectDetail), 
                                             false, 
-                                            true);
+                                            true,
+                                            false);
                                     }
                                 }
 
@@ -687,7 +697,7 @@ namespace Wallace.IDE.SalesForce.Framework
                                 using (FileStream fs = File.OpenRead(file))
                                 {
                                     SymbolTable st = ser.Deserialize(fs) as SymbolTable;
-                                    Language.UpdateSymbols(st, false, false);
+                                    Language.UpdateSymbols(st, false, false, false);
                                     fs.Close();
                                 }
                             }

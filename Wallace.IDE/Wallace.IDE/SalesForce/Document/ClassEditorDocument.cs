@@ -122,7 +122,7 @@ namespace Wallace.IDE.SalesForce.Document
             bool result = base.Reload();
             if (result && View.ParseData != null)
             {
-                Project.Language.UpdateSymbols(View.ParseData.Symbols, true, true);
+                Project.Language.UpdateSymbols(View.ParseData.Symbols, true, true, IsContentGenerated);
             }
 
             return result;
@@ -152,7 +152,7 @@ namespace Wallace.IDE.SalesForce.Document
 
             // cache the symbols
             if (View.ParseData != null && View.ParseData.Symbols != null)
-                Project.Language.UpdateSymbols(View.ParseData.Symbols, true, true);
+                Project.Language.UpdateSymbols(View.ParseData.Symbols, true, true, IsContentGenerated);
 
             // process name change
             if (File.IsNameUpdated)
@@ -184,7 +184,7 @@ namespace Wallace.IDE.SalesForce.Document
         /// <param name="e">Event arguments.</param>
         private void View_ParseRequested(object sender, EventArgs e)
         {
-            View.ParseData = Project.Language.ParseApex(View.Text, true, false);
+            View.ParseData = Project.Language.ParseApex(View.Text, true, false, IsContentGenerated);
             App.Instance.UpdateWorkspaces();
         }
 

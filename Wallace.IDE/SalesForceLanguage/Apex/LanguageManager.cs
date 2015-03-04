@@ -237,9 +237,10 @@ namespace SalesForceLanguage.Apex
         /// <param name="symbols">The symbols to update.</param>
         /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
         /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
-        public void UpdateSymbols(SymbolTable symbols, bool replace, bool save)
+        /// <param name="merge">If set to true, inner classes will be merged into existing classes when available.</param>
+        public void UpdateSymbols(SymbolTable symbols, bool replace, bool save, bool merge)
         {
-            UpdateSymbols(new SymbolTable[] { symbols }, replace, save);
+            UpdateSymbols(new SymbolTable[] { symbols }, replace, save, merge);
         }
 
         /// <summary>
@@ -248,7 +249,8 @@ namespace SalesForceLanguage.Apex
         /// <param name="symbols">The symbols to update.</param>
         /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
         /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
-        public void UpdateSymbols(IEnumerable<SymbolTable> symbols, bool replace, bool save)
+        /// <param name="merge">If set to true, inner classes will be merged into existing classes when available.</param>
+        public void UpdateSymbols(IEnumerable<SymbolTable> symbols, bool replace, bool save, bool merge)
         {
             if (symbols == null)
                 throw new ArgumentNullException("symbols");
@@ -269,7 +271,20 @@ namespace SalesForceLanguage.Apex
                     }
 
                     // update symbols in memory
-                    if (replace)
+                    if (merge)
+                    {
+                        if (_classes.ContainsKey(st.Id))
+                        {
+                            SymbolTable container = _classes[st.Id];
+                            foreach (SymbolTable innerClass in st.InnerClasses)
+                                container.MergeInnerClass(innerClass);
+                        }
+                        else
+                        {
+                            _classes.Add(st.Id, st);
+                        }
+                    }
+                    else if (replace)
                     {
                         _classes.Remove(st.Id);
                         _classes.Add(st.Id, st);
@@ -299,7 +314,7 @@ namespace SalesForceLanguage.Apex
                     // process inner classes
                     foreach (SymbolTable innerClass in st.InnerClasses)
                     {
-                        UpdateSymbols(innerClass, replace, save);
+                        UpdateSymbols(innerClass, replace, save, false);
                     }
                 }
             }
@@ -330,8 +345,9 @@ namespace SalesForceLanguage.Apex
         /// <param name="stream">The stream to read text from to parse.</param>
         /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
         /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
+        /// <param name="merge">If set to true, inner classes will be merged into existing classes when available.</param>
         /// <returns>The result of the parse.</returns>
-        public ParseResult ParseApex(Stream stream, bool replace, bool save)
+        public ParseResult ParseApex(Stream stream, bool replace, bool save, bool merge)
         {
             if (stream == null)
                 return new ParseResult(null, null, new LanguageError[0]);
@@ -341,7 +357,7 @@ namespace SalesForceLanguage.Apex
             ParseResult result = parser.ParseApex();
 
             if (result.Symbols != null)
-                UpdateSymbols(new SymbolTable[] { result.Symbols }, replace, save);
+                UpdateSymbols(new SymbolTable[] { result.Symbols }, replace, save, merge);
 
             return result;
         }
@@ -352,15 +368,16 @@ namespace SalesForceLanguage.Apex
         /// <param name="text">The text to parse.</param>
         /// <param name="replace">If true, existing symbols will be replaced.  If false, existing symbols will not be replaced.</param>
         /// <param name="save">If set to true the symbols will be saved to file if a SymbolsFolder has been set.</param>
+        /// <param name="merge">If set to true, inner classes will be merged into existing classes when available.</param>
         /// <returns>The result of the parse.</returns>
-        public ParseResult ParseApex(string text, bool replace, bool save)
+        public ParseResult ParseApex(string text, bool replace, bool save, bool merge)
         {
             if (String.IsNullOrWhiteSpace(text))
                 return new ParseResult(null, null, new LanguageError[0]);
 
             using (MemoryStream reader = new MemoryStream(Encoding.ASCII.GetBytes(text)))
             {
-                return ParseApex(reader, replace, save);
+                return ParseApex(reader, replace, save, merge);
             }
         }
 

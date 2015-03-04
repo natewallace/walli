@@ -191,6 +191,7 @@ namespace Wallace.IDE.SalesForce.Document
             ParseResult result = Project.Language.ParseApex(
                 String.Format("public class WalliSnippetPlaceHolder52724597325 {{ public void f() {{ \n{0}\n }} }}", View.Text),
                 true,
+                false,
                 false);
 
             result.ApplyLineOffset(-1);

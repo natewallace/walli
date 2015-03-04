@@ -116,7 +116,8 @@ namespace Wallace.IDE.SalesForce.Node
             Project.Language.UpdateSymbols(
                 Project.ConvertToSymbolTable(fullObject),
                 true,
-                true);
+                true,
+                false);
 
             return nodes.ToArray();
         }
