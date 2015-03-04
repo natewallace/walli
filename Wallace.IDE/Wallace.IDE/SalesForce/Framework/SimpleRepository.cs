@@ -293,6 +293,19 @@ namespace Wallace.IDE.SalesForce.Framework
             if (file == null)
                 throw new ArgumentNullException("file");
 
+            return GetHistory(file.FileName);
+        }
+
+        /// <summary>
+        /// Get the commits that involve changes to the given file.
+        /// </summary>
+        /// <param name="file">The file to get revisions for.</param>
+        /// <returns>The revisions that occured for the given file.</returns>
+        public SimpleRepositoryCommit[] GetHistory(string fileName)
+        {
+            if (String.IsNullOrWhiteSpace(fileName))
+                throw new ArgumentException("fileName is null or whitespace.", "fileName");
+
             Validate();
 
             List<SimpleRepositoryCommit> result = new List<SimpleRepositoryCommit>();
@@ -317,12 +330,12 @@ namespace Wallace.IDE.SalesForce.Framework
                         count++;
 
                         // get values
-                        currentEntry = currentCommit[file.FileName];
+                        currentEntry = currentCommit[fileName];
                         currentSha = (currentEntry != null) ? currentEntry.Target.Sha : null;
 
                         if (lastCommit != null)
                         {
-                            lastEntry = lastCommit[file.FileName];
+                            lastEntry = lastCommit[fileName];
                             lastSha = (lastEntry != null) ? lastEntry.Target.Sha : null;
                         }
                         else
@@ -344,12 +357,12 @@ namespace Wallace.IDE.SalesForce.Framework
                     }
 
                     // check for final entry
-                    currentEntry = currentCommit[file.FileName];
+                    currentEntry = currentCommit[fileName];
                     currentSha = (currentEntry != null) ? currentEntry.Target.Sha : null;
 
                     if (lastCommit != null)
                     {
-                        lastEntry = lastCommit[file.FileName];
+                        lastEntry = lastCommit[fileName];
                         lastSha = (lastEntry != null) ? lastEntry.Target.Sha : null;
                     }
                     else
@@ -395,6 +408,49 @@ namespace Wallace.IDE.SalesForce.Framework
         }
 
         /// <summary>
+        /// Compare a file in the given commit with the previous version of the file.
+        /// </summary>
+        /// <param name="fileName">The file name to get the diff for.</param>
+        /// <param name="commit">The commit to compare with.</param>
+        /// <returns>The diff for the file.</returns>
+        public string GetChangedFileDiff(string fileName, SimpleRepositoryCommit commit)
+        {
+            if (commit == null)
+                throw new ArgumentNullException("commit");
+            if (String.IsNullOrWhiteSpace(fileName))
+                throw new ArgumentException("fileName is null or whitespace.", "fileName");
+
+            string newerText = String.Empty;
+            string olderText = String.Empty;
+
+            Validate();
+
+            using (Repository repo = Init(false))
+            {
+                Commit c = repo.Lookup(commit.Sha) as Commit;
+                if (c != null)
+                {
+                    TreeEntry newerEntry = c[fileName];
+                    if (newerEntry != null && newerEntry.Target is Blob)
+                        newerText = (newerEntry.Target as Blob).GetContentText();
+
+                    if (c.Parents != null)
+                    {
+                        Commit p = c.Parents.FirstOrDefault();
+                        if (p != null)
+                        {
+                            TreeEntry olderEntry = p[fileName];
+                            if (olderEntry != null && olderEntry.Target is Blob)
+                                olderText = (olderEntry.Target as Blob).GetContentText();
+                        }
+                    }
+                }
+            }
+
+            return DiffUtility.Diff(olderText, newerText);
+        }
+
+        /// <summary>
         /// Get a list of the files that were changed in the commit.
         /// </summary>
         /// <param name="commit">The commit to get changed files for.</param>
@@ -405,6 +461,8 @@ namespace Wallace.IDE.SalesForce.Framework
                 throw new ArgumentNullException("commit");
 
             List<string> result = new List<string>();
+
+            Validate();
 
             using (Repository repo = Init(false))
             {
@@ -479,10 +537,24 @@ namespace Wallace.IDE.SalesForce.Framework
             if (file == null)
                 throw new ArgumentNullException("file");
 
+            return GetContent(file.FileName, version);
+        }
+
+        /// <summary>
+        /// The the content for the given file and the given version.
+        /// </summary>
+        /// <param name="fileName">The file name to get the content for.</param>
+        /// <param name="version">The version of the file content to get.  If null the most recent commit is returned.</param>
+        /// <returns>The requested content or null if not found.</returns>
+        public string GetContent(string fileName, SimpleRepositoryCommit version)
+        {
+            if (String.IsNullOrWhiteSpace(fileName))
+                return null;
+
             // get the requested version of the file
             if (version == null)
             {
-                SimpleRepositoryCommit[] commits = GetHistory(file);
+                SimpleRepositoryCommit[] commits = GetHistory(fileName);
                 if (commits.Length > 0)
                     version = commits[0];
             }
@@ -497,7 +569,7 @@ namespace Wallace.IDE.SalesForce.Framework
 
                     if (commit != null)
                     {
-                        TreeEntry entry = commit[file.FileName];
+                        TreeEntry entry = commit[fileName];
 
                         if (entry != null && entry.Target is Blob)
                             return (entry.Target as Blob).GetContentText();

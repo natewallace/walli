@@ -54,7 +54,9 @@
         
             <ScrollViewer Grid.Row="1">
                 <ListBox x:Name="listBoxDetails"
-                         BorderThickness="0" />
+                         BorderThickness="0"
+                         SelectionChanged="listBoxDetails_SelectionChanged"
+                         MouseDoubleClick="listBoxDetails_MouseDoubleClick"/>
             </ScrollViewer>
         </Grid>
     </Grid>

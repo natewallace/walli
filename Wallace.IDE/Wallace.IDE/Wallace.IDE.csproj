@@ -113,6 +113,7 @@
     <Compile Include="SalesForce\Framework\DiffLib\SubSequence.cs" />
     <Compile Include="SalesForce\Framework\SearchIndex.cs" />
     <Compile Include="SalesForce\Function\CodeCoverageAllFunction.cs" />
+    <Compile Include="SalesForce\Function\CommitDetailOpenFunction.cs" />
     <Compile Include="SalesForce\Function\CompareLocalContentFunction.cs" />
     <Compile Include="SalesForce\Function\CompareOtherServerContentFunction.cs" />
     <Compile Include="SalesForce\Function\CompareServerContentFunction.cs" />

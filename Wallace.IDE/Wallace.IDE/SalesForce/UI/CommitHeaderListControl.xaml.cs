@@ -163,6 +163,20 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// The selected detail.
+        /// </summary>
+        public string SelectedDetail
+        {
+            get
+            {
+                if (!(listBoxDetails.SelectedItem is ListViewItem))
+                    return null;
+
+                return ((listBoxDetails.SelectedItem as ListViewItem).Content as TextBlock).Text;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -185,6 +199,26 @@ namespace Wallace.IDE.SalesForce.UI
         {
             if (SelectionChanged != null)
                 SelectionChanged(this, e);
+        }
+
+        /// <summary>
+        /// Raises the SelectionDetailChanged event.
+        /// </summary>
+        /// <param name="e">Arguments passed with the event.</param>
+        protected virtual void OnSelectionDetailChanged(EventArgs e)
+        {
+            if (SelectionDetailChanged != null)
+                SelectionDetailChanged(this, e);
+        }
+
+        /// <summary>
+        /// Raises the OpenSelectionDetailClick event.
+        /// </summary>
+        /// <param name="e">Arguments to pass with the event.</param>
+        protected virtual void OnOpenSelectionDetailClick(EventArgs e)
+        {
+            if (OpenSelectionDetailClick != null)
+                OpenSelectionDetailClick(this, e);
         }
 
         #endregion
@@ -258,6 +292,41 @@ namespace Wallace.IDE.SalesForce.UI
             }
         }
 
+        /// <summary>
+        /// Raises the SelectionDetailChanged event.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void listBoxDetails_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                OnSelectionDetailChanged(EventArgs.Empty);
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
+        /// <summary>
+        /// Raise commit detail clicked event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listBoxDetails_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                OnOpenSelectionDetailClick(EventArgs.Empty);
+                e.Handled = true;
+            }
+            catch (Exception err)
+            {
+                App.HandleException(err);
+            }
+        }
+
         #endregion
 
         #region Events
@@ -271,6 +340,16 @@ namespace Wallace.IDE.SalesForce.UI
         /// Raised when the selected commits change.
         /// </summary>
         public event EventHandler SelectionChanged;
+
+        /// <summary>
+        /// Raised when the selected detail is changed.
+        /// </summary>
+        public event EventHandler SelectionDetailChanged;
+
+        /// <summary>
+        /// Raised when a commit detail is clicked to be opened.
+        /// </summary>
+        public event EventHandler OpenSelectionDetailClick;
 
         #endregion
     }

@@ -431,6 +431,10 @@ namespace Wallace.IDE.SalesForce.Framework
             App.Instance.Menu.AddFunction(commitOpenFunction, "DOCUMENT");
             App.Instance.RegisterFunction(commitOpenFunction);
 
+            CommitDetailOpenFunction commitDetailOpenFunction = new CommitDetailOpenFunction();
+            App.Instance.Menu.AddFunction(commitDetailOpenFunction, "DOCUMENT");
+            App.Instance.RegisterFunction(commitDetailOpenFunction);
+
             CommitFileCompareFunction commitCompareFunction = new CommitFileCompareFunction();
             App.Instance.Menu.AddFunction(commitCompareFunction, "DOCUMENT");
             App.Instance.RegisterFunction(commitCompareFunction);

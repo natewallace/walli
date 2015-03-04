@@ -61,6 +61,8 @@ namespace Wallace.IDE.SalesForce.Document
             View.Commits = Commits;
             View.OpenClick += View_OpenClick;
             View.SelectionChanged += View_SelectionChanged;
+            View.OpenSelectionDetailClick += View_OpenSelectionDetailClick;
+            View.SelectionDetailChanged += View_SelectionDetailChanged;
 
             MenuFunctionManager menuManager = new MenuFunctionManager(View.ListContextMenu);
             menuManager.AddFunction(App.Instance.GetFunction<CommitFileOpenFunction>());
@@ -98,6 +100,21 @@ namespace Wallace.IDE.SalesForce.Document
         public SimpleRepositoryCommit[] SelectedCommits
         {
             get { return View.SelectedCommits; }
+        }
+
+        /// <summary>
+        /// Get the currently selected detail.
+        /// </summary>
+        public string SelectedDetail
+        {
+            get
+            {
+                string detail = View.SelectedDetail;
+                if (detail == null || detail.Length < 3)
+                    return null;
+
+                return detail.Substring(2);
+            }
         }
 
         #endregion
@@ -149,6 +166,26 @@ namespace Wallace.IDE.SalesForce.Document
 
                 App.Instance.UpdateWorkspaces();
             }
+        }
+
+        /// <summary>
+        /// Show diff for currently selected detail.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_OpenSelectionDetailClick(object sender, EventArgs e)
+        {
+            App.Instance.GetFunction<CommitDetailOpenFunction>().Execute();
+        }
+
+        /// <summary>
+        /// Update workspaces.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void View_SelectionDetailChanged(object sender, EventArgs e)
+        {
+            App.Instance.UpdateWorkspaces();
         }
 
         #endregion
