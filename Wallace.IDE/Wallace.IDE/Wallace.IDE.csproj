@@ -127,6 +127,7 @@
     <Compile Include="SalesForce\Function\NewSnippetSystemFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshCodeCoverageFunction.cs" />
     <Compile Include="SalesForce\Function\RefreshSnippetFunction.cs" />
+    <Compile Include="SalesForce\Function\ResetSearchIndexFunction.cs" />
     <Compile Include="SalesForce\Function\SaveSnippetFunction.cs" />
     <Compile Include="SalesForce\Function\SearchFilesFunction.cs" />
     <Compile Include="SalesForce\Settings\TeamSettings.cs" />

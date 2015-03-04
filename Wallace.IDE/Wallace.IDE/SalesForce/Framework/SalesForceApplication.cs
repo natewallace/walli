@@ -216,6 +216,9 @@ namespace Wallace.IDE.SalesForce.Framework
             ReloadSymbolsFunction reloadSymbols = new ReloadSymbolsFunction();
             App.Instance.Menu.AddFunction(reloadSymbols, "PROJECT");
 
+            ResetSearchIndexFunction resetSearchIndexFunction = new ResetSearchIndexFunction();
+            App.Instance.Menu.AddFunction(resetSearchIndexFunction, "PROJECT");
+
             PropertiesFunction propertiesSourceFileFunction = new PropertiesFunction();
             App.Instance.Menu.AddFunction(new FunctionSeparator(propertiesSourceFileFunction), "PROJECT");
 

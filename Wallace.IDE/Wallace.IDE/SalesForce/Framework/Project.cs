@@ -599,7 +599,6 @@ namespace Wallace.IDE.SalesForce.Framework
                             SalesForceClient client = parameters[1] as SalesForceClient;
                             LanguageManager language = parameters[2] as LanguageManager;
 
-                            FileUtility.DeleteFolderContents(project.SearchFolder);
                             SearchIndex searchIndex = new SearchIndex(project.SearchFolder, true);
 
                             try

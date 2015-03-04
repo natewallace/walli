@@ -96,7 +96,7 @@ namespace Wallace.IDE.SalesForce.Function
             if (project != null)
             {
                 if (project.IsDownloadingSymbols)
-                    throw new Exception("The search index is currently being rebuilt.  Please wait for this complete before adding new files.");
+                    throw new Exception("The search index is currently being updated by the Reload symbols process.  Please wait for this to complete and then try again.");
 
                 SourceFileNode[] nodes = GetSelectedNodes();
                 if (nodes.Length > 0)
