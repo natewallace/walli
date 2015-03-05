@@ -34,9 +34,19 @@ namespace Wallace.IDE.SalesForce.UI
     /// <summary>
     /// Folding strategy for apex code.
     /// </summary>
-    public class ApexFoldingStrategy : AbstractFoldingStrategy
+    public class ApexFoldingStrategy
     {
         #region Methods
+
+        /// <summary>
+        /// Create NewFoldings for the specified document and updates the folding manager with them.
+        /// </summary>
+        public void UpdateFoldings(FoldingManager manager, TextDocument document)
+        {
+            int firstErrorOffset;
+            IEnumerable<NewFolding> foldings = CreateNewFoldings(document, out firstErrorOffset);
+            manager.UpdateFoldings(foldings, firstErrorOffset);
+        }
 
         /// <summary>
         /// Get foldings.
@@ -44,7 +54,7 @@ namespace Wallace.IDE.SalesForce.UI
         /// <param name="document">The document to provide foldings for.</param>
         /// <param name="firstErrorOffset">Not used.</param>
         /// <returns>The foldings for this document.</returns>
-        public override IEnumerable<NewFolding> CreateNewFoldings(TextDocument document, out int firstErrorOffset)
+        public IEnumerable<NewFolding> CreateNewFoldings(TextDocument document, out int firstErrorOffset)
         {
             if (document == null)
                 throw new ArgumentNullException("document");

@@ -17,7 +17,8 @@
                                UseLayoutRounding="True">
             <avalonEdit:TextEditor.Options>
                 <avalonEdit:TextEditorOptions EnableHyperlinks="False" 
-                                              EnableEmailHyperlinks="False"/>
+                                              EnableEmailHyperlinks="False"
+                                              AllowScrollBelowDocument="True" />
             </avalonEdit:TextEditor.Options>
         </avalonEdit:TextEditor>
     </Grid>
