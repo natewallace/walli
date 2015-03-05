@@ -219,6 +219,7 @@ namespace Wallace.IDE.SalesForce.Document
                         _serverContent = Project.Client.Meta.GetSourceFileContent(File);
                         View.Text = _serverContent.ContentValue;
                         View.IsReadOnly = _serverContent.IsGenerated;
+                        View.SetErrors(null);
                         IsDirty = false;
 
                         // update search index

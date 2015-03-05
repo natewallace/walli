@@ -120,7 +120,6 @@ namespace Wallace.IDE.SalesForce.Document
         public override bool Reload()
         {
             bool result = base.Reload();
-            View.SetErrors(null);
             if (result && View.ParseData != null)
             {
                 Project.Language.UpdateSymbols(View.ParseData.Symbols, true, true, IsContentGenerated);
