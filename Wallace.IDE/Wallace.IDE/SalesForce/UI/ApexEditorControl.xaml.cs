@@ -749,6 +749,21 @@ namespace Wallace.IDE.SalesForce.UI
                 _completionWindow.SnapsToDevicePixels = true;
                 _completionWindow.UseLayoutRounding = true;
 
+                // handle when text is typed to replace selected text
+                if (textEditor.TextArea.Selection.StartPosition.Line != 0 &&
+                    textEditor.TextArea.Selection.StartPosition.Column != 0 &&
+                    textEditor.TextArea.Selection.EndPosition.Line != 0 &&
+                    textEditor.TextArea.Selection.EndPosition.Column != 0)
+                {
+                    int startOffset = textEditor.Document.GetOffset(textEditor.TextArea.Selection.StartPosition.Line,
+                                                                    textEditor.TextArea.Selection.StartPosition.Column);
+                    int endOffset = textEditor.Document.GetOffset(textEditor.TextArea.Selection.EndPosition.Line,
+                                                                  textEditor.TextArea.Selection.EndPosition.Column);
+
+                    _completionWindow.StartOffset = Math.Min(startOffset, endOffset);
+                    _completionWindow.EndOffset = Math.Max(startOffset, endOffset);
+                }
+
                 foreach (Symbol symbol in symbols)
                     _completionWindow.CompletionList.CompletionData.Add(new ApexCodeCompletionData(symbol));
 
@@ -1333,11 +1348,34 @@ namespace Wallace.IDE.SalesForce.UI
                     if ((e.Text != "\r\n" && e.Text != "\n") && (_lastTextEntered == "\r\n" || _lastTextEntered == "\n"))
                         OnParseRequested(EventArgs.Empty);
 
+                    int offset = textEditor.TextArea.Caret.Offset;
+                    int line = textEditor.TextArea.Caret.Line;
+                    int column = textEditor.TextArea.Caret.Column;
+
+                    // handle selected text being replaced with new text
+                    if (textEditor.TextArea.Selection.StartPosition.Line != 0 &&
+                                        textEditor.TextArea.Selection.StartPosition.Column != 0 &&
+                                        textEditor.TextArea.Selection.EndPosition.Line != 0 &&
+                                        textEditor.TextArea.Selection.EndPosition.Column != 0)
+                    {
+                        int startOffset = textEditor.Document.GetOffset(textEditor.TextArea.Selection.StartPosition.Line,
+                                                                        textEditor.TextArea.Selection.StartPosition.Column);
+                        int endOffset = textEditor.Document.GetOffset(textEditor.TextArea.Selection.EndPosition.Line,
+                                                                      textEditor.TextArea.Selection.EndPosition.Column);
+
+                        if (startOffset < endOffset)
+                        {
+                            offset = startOffset;
+                            line = textEditor.TextArea.Selection.StartPosition.Line;
+                            column = textEditor.TextArea.Selection.StartPosition.Column;
+                        }
+                    }
+
                     // show completions
                     ShowCodeCompletions(LanguageManager.Completion.GetCodeCompletionsLetter(
-                        new DocumentCharStream(textEditor.Document, textEditor.TextArea.Caret.Offset),
+                        new DocumentCharStream(textEditor.Document, offset),
                         _className,
-                        new TextPosition(textEditor.TextArea.Caret.Line, textEditor.TextArea.Caret.Column)));
+                        new TextPosition(line, column)));
                 }
             }
             catch (Exception err)
