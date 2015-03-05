@@ -592,7 +592,7 @@ namespace Wallace.IDE.SalesForce.Framework
                         // download apex, parse it and then save to cache
                         if (forceReload || FileUtility.IsFolderEmpty(SymbolsFolder))
                         {
-                            App.Instance.Dispatcher.Invoke(() => App.SetStatus("Downloading symbols and building search index..."));
+                            App.Instance.Dispatcher.Invoke(() => App.SetStatus("Downloading symbols and updating search index..."));
 
                             object[] parameters = state as object[];
                             Project project = parameters[0] as Project;
