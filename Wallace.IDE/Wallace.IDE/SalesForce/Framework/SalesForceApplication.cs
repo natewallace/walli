@@ -501,9 +501,12 @@ namespace Wallace.IDE.SalesForce.Framework
                     using (App.Wait("Verifying credentials..."))
                         SalesForceClient.TestLogin(credential);
 
-                    project.Repository.AuthorName = project.Client.User.Name;
-                    project.Repository.AuthorEmail = project.Client.UserEmail;
-                    project.LoadSymbolsAsync(false);
+                    using (App.Wait("Initializing project..."))
+                    {
+                        project.Repository.AuthorName = project.Client.User.Name;
+                        project.Repository.AuthorEmail = project.Client.UserEmail;
+                        project.LoadSymbolsAsync(false);
+                    }
 
                     break;
                 }
@@ -525,7 +528,7 @@ namespace Wallace.IDE.SalesForce.Framework
             }
 
             // open the project
-            using (App.Wait("opening project..."))
+            using (App.Wait("Opening project..."))
             {
                 CurrentProject = project;
                 App.Instance.SessionTitle = project.Credential.Username;
