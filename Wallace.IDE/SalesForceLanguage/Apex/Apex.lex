@@ -21,7 +21,7 @@ Digit					[0-9]
 LetterOrDigit			{Letter}|{Digit}
 Identifier				{Letter}({LetterOrDigit}*_+{LetterOrDigit})*{LetterOrDigit}*
 IntegerLiteral			{Digit}+
-RealLiteral				{Digit}?\.?{Digit}+
+RealLiteral				{Digit}*\.?{Digit}+
 LongLiteral				{IntegerLiteral}[lL]
 DoubleLiteral			{RealLiteral}[dD]?
 
