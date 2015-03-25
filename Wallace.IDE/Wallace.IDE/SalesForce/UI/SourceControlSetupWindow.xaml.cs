@@ -82,11 +82,13 @@ namespace Wallace.IDE.SalesForce.UI
                     textBoxUsername.Visibility = Visibility.Visible;
                     passwordBoxPassword.Visibility = Visibility.Visible;
                     textBoxBranchName.Visibility = Visibility.Visible;
+                    textBoxSubFolder.Visibility = Visibility.Visible;
 
                     textBlockGitRepositoryUrl.Visibility = Visibility.Visible;
                     textBlockUsername.Visibility = Visibility.Visible;
                     textBlockPassword.Visibility = Visibility.Visible;
                     textBlockBranchName.Visibility = Visibility.Visible;
+                    textBlockSubFolder.Visibility = Visibility.Visible;
 
                     buttonEnableCheckoutSystem.Content = "Click here to disable the check out system";                    
                 }
@@ -96,11 +98,13 @@ namespace Wallace.IDE.SalesForce.UI
                     textBoxUsername.Visibility = Visibility.Collapsed;
                     passwordBoxPassword.Visibility = Visibility.Collapsed;
                     textBoxBranchName.Visibility = Visibility.Collapsed;
+                    textBoxSubFolder.Visibility = Visibility.Collapsed;
 
                     textBlockGitRepositoryUrl.Visibility = Visibility.Collapsed;
                     textBlockUsername.Visibility = Visibility.Collapsed;
                     textBlockPassword.Visibility = Visibility.Collapsed;
                     textBlockBranchName.Visibility = Visibility.Collapsed;
+                    textBlockSubFolder.Visibility = Visibility.Collapsed;
 
                     textBoxGitRepositoryUrl.Clear();
                     textBoxUsername.Clear();
@@ -146,6 +150,15 @@ namespace Wallace.IDE.SalesForce.UI
         {
             get { return textBoxBranchName.Text; }
             set { textBoxBranchName.Text = value; }
+        }
+
+        /// <summary>
+        /// The sub folder.
+        /// </summary>
+        public string SubFolder
+        {
+            get { return textBoxSubFolder.Text; }
+            set { textBoxSubFolder.Text = value; }
         }
 
         /// <summary>

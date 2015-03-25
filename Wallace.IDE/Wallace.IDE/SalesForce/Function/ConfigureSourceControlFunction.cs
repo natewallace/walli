@@ -82,6 +82,7 @@ namespace Wallace.IDE.SalesForce.Function
                 dlg.Username = project.Repository.Username;
                 dlg.Password = project.Repository.Password;
                 dlg.BranchName = project.Repository.BranchName;
+                dlg.SubFolder = project.Repository.SubFolder;
                 dlg.IsCheckoutEnabled = project.Client.Checkout.IsEnabled();
                 dlg.IsDeleteRepositoryEnabled = !FileUtility.IsFolderEmpty(project.RepositoryFolder);
 
@@ -96,6 +97,7 @@ namespace Wallace.IDE.SalesForce.Function
                         project.Repository.Username = dlg.Username;
                         project.Repository.Password = dlg.Password;
                         project.Repository.BranchName = dlg.BranchName;
+                        project.Repository.SubFolder = dlg.SubFolder;
                         project.Save();
                     }
                 }

@@ -72,6 +72,11 @@ namespace Wallace.IDE.SalesForce.Framework
         private Branch Branch { get; set; }
 
         /// <summary>
+        /// A sub folder under the branch where commits are made.
+        /// </summary>
+        public string SubFolder { get; set; }
+
+        /// <summary>
         /// The username used to login to the remote with.
         /// </summary>
         public string Username { get; set; }
@@ -98,15 +103,38 @@ namespace Wallace.IDE.SalesForce.Framework
         {
             get
             {
+                string workPath = ParseLocalUrl(RemoteUrl) ?? WorkingPath;
                 return (!String.IsNullOrWhiteSpace(RemoteUrl) &&
                         !String.IsNullOrWhiteSpace(BranchName) &&
-                        Directory.Exists(WorkingPath));
+                        Directory.Exists(workPath));
             }
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Parse the url to get the local path.
+        /// </summary>
+        /// <param name="url">The url to parse.</param>
+        /// <returns>The local path if the url is a local url, null if it's not.</returns>
+        private string ParseLocalUrl(string url)
+        {
+            if (url == null)
+                return null;
+
+            url = url.Trim();
+            if (url.StartsWith("local://", StringComparison.CurrentCultureIgnoreCase))
+            {
+                int index = url.IndexOf("//");
+                return url.Substring(index + 2);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// Throws an exception if this repository isn't valid.
@@ -116,13 +144,15 @@ namespace Wallace.IDE.SalesForce.Framework
             if (String.IsNullOrWhiteSpace(RemoteUrl))
                 throw new Exception("RemoteUrl is not set.");
             if (String.IsNullOrWhiteSpace(BranchName))
-                throw new Exception("Branch is not set.");
-            if (!Directory.Exists(WorkingPath))
-                throw new Exception("WorkingPath doesn't exist: " + WorkingPath);
+                throw new Exception("Branch is not set.");            
             if (String.IsNullOrWhiteSpace(AuthorName))
                 throw new Exception("AuthorName is null or whitespace.");
             if (String.IsNullOrWhiteSpace(AuthorEmail))
                 throw new Exception("AuthorEmail is null or whitespace.");
+
+            string workPath = ParseLocalUrl(RemoteUrl) ?? WorkingPath;
+            if (!Directory.Exists(WorkingPath))
+                throw new Exception("WorkingPath doesn't exist: " + WorkingPath);
         }
 
         /// <summary>
@@ -137,11 +167,58 @@ namespace Wallace.IDE.SalesForce.Framework
         /// <summary>
         /// Get repository.
         /// </summary>
+        /// <param name="latest">If true, ensure the repository is up to date.</param>
+        /// <param name="reset">If true, the repository is cloned from scratch.</param>
         public Repository Init(bool latest, bool reset)
         {
             Validate();
 
-            // don't get latest our clone from remote
+            // special local path logic
+            string workPath = ParseLocalUrl(RemoteUrl);
+            if (workPath != null)
+            {
+                Repository local = null;
+                if (FileUtility.IsFolderEmpty(workPath))
+                {
+                    local = new Repository(Repository.Init(workPath));
+                }
+                else
+                {
+                    local = new Repository(workPath);
+                }
+                
+                // get latest from remote
+                if (latest && local.Network.Remotes["origin"] != null)
+                {
+                    FetchOptions localFetchOptions = new FetchOptions();
+                    localFetchOptions.CredentialsProvider += ProvideCredentials;
+
+                    PullOptions pullOptions = new PullOptions();
+                    pullOptions.FetchOptions = localFetchOptions;
+                    local.Network.Pull(new Signature(AuthorName, AuthorEmail, DateTime.Now), pullOptions);
+                }
+
+                // get branch
+                Branch branch = local.Branches[BranchName];
+                if (branch == null)
+                {
+                    Branch remoteBranch = local.Branches[String.Format("origin/{0}", BranchName)];
+                    if (remoteBranch != null)
+                    {
+                        branch = local.CreateBranch(BranchName, remoteBranch.Tip);
+                        branch = local.Branches.Update(
+                            branch,
+                            b => b.TrackedBranch = remoteBranch.CanonicalName);
+                    }
+                }
+
+                if (branch != null)
+                    local.Checkout(branch);
+
+                return local;
+            }
+
+            // don't get latest or clone from remote
             if (!latest)
             {
                 if (FileUtility.IsFolderEmpty(WorkingPath))
@@ -262,18 +339,33 @@ namespace Wallace.IDE.SalesForce.Framework
 
                 try
                 {
-                    // extract package to the working directory
-                    string[] files = Package.Extract(package, WorkingPath, true, false);
+                    string workPath = ParseLocalUrl(RemoteUrl);
+                    bool isLocal = true;
+                    if (workPath == null)
+                    {
+                        workPath = WorkingPath;
+                        isLocal = false;
+                    }
 
-                    // stage, commit, and then push
+                    // extract package to the working directory
+                    string path = (!String.IsNullOrWhiteSpace(SubFolder)) ?
+                        Path.Combine(workPath, SubFolder) :
+                        workPath;
+
+                    string[] files = Package.Extract(package, path, true, false);
+
+                    // stage, commit, and then push (if not local)
                     repo.Stage(files);
 
                     Signature author = new Signature(AuthorName, AuthorEmail, DateTime.Now);
                     repo.Commit(comment, author, author);
 
-                    pushOptions = new PushOptions();
-                    pushOptions.CredentialsProvider += ProvideCredentials;
-                    repo.Network.Push(Branch, pushOptions);
+                    if (!isLocal)
+                    {
+                        pushOptions = new PushOptions();
+                        pushOptions.CredentialsProvider += ProvideCredentials;
+                        repo.Network.Push(Branch, pushOptions);
+                    }
                 }
                 finally
                 {
@@ -305,6 +397,9 @@ namespace Wallace.IDE.SalesForce.Framework
         {
             if (String.IsNullOrWhiteSpace(fileName))
                 throw new ArgumentException("fileName is null or whitespace.", "fileName");
+
+            if (!String.IsNullOrWhiteSpace(SubFolder))
+                fileName = Path.Combine(SubFolder, fileName);
 
             Validate();
 
@@ -419,6 +514,9 @@ namespace Wallace.IDE.SalesForce.Framework
                 throw new ArgumentNullException("commit");
             if (String.IsNullOrWhiteSpace(fileName))
                 throw new ArgumentException("fileName is null or whitespace.", "fileName");
+
+            if (!String.IsNullOrWhiteSpace(SubFolder))
+                fileName = Path.Combine(SubFolder, fileName);
 
             string newerText = String.Empty;
             string olderText = String.Empty;
@@ -551,6 +649,9 @@ namespace Wallace.IDE.SalesForce.Framework
             if (String.IsNullOrWhiteSpace(fileName))
                 return null;
 
+            if (!String.IsNullOrWhiteSpace(SubFolder))
+                fileName = Path.Combine(SubFolder, fileName);
+
             // get the requested version of the file
             if (version == null)
             {
@@ -597,6 +698,10 @@ namespace Wallace.IDE.SalesForce.Framework
             if (newer == null)
                 throw new ArgumentNullException("newer");
 
+            string fileName = (!String.IsNullOrWhiteSpace(SubFolder)) ?
+                Path.Combine(SubFolder, file.FileName) :
+                file.FileName;
+
             Validate();
             
             using (Repository repo = Init(false))
@@ -607,8 +712,8 @@ namespace Wallace.IDE.SalesForce.Framework
 
                 if (olderCommit != null && newerCommit != null)
                 {
-                    TreeEntry olderEntry = olderCommit[file.FileName];
-                    TreeEntry newerEntry = newerCommit[file.FileName];
+                    TreeEntry olderEntry = olderCommit[fileName];
+                    TreeEntry newerEntry = newerCommit[fileName];
 
                     if (olderEntry != null && olderEntry.Target is Blob && 
                         newerEntry != null && newerEntry.Target is Blob)
@@ -666,6 +771,7 @@ namespace Wallace.IDE.SalesForce.Framework
         {
             RemoteUrl = reader["remoteUrl"];
             BranchName = reader["branch"];
+            SubFolder = reader["subFolder"];
             Username = reader["username"];
             Password = reader["password"];
         }
@@ -678,6 +784,7 @@ namespace Wallace.IDE.SalesForce.Framework
         {
             writer.WriteAttributeString("remoteUrl", RemoteUrl);
             writer.WriteAttributeString("branch", BranchName);
+            writer.WriteAttributeString("subFolder", SubFolder);
             writer.WriteAttributeString("username", Username);
             writer.WriteAttributeString("password", Password);
         }

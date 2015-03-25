@@ -16,6 +16,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             
@@ -89,7 +90,21 @@
                      Grid.Column="1"
                      Margin="5"/>
 
-            <DockPanel Grid.Row="5"
+            <TextBlock x:Name="textBlockSubFolder"
+                       Grid.Row="5"
+                       Grid.Column="0"
+                       Margin="5"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Text="Sub folder:" />
+
+            <TextBox x:Name="textBoxSubFolder"
+                     Grid.Row="5"
+                     Grid.Column="1"
+                     Margin="5"/>
+
+            <DockPanel Grid.Row="6"
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
                        VerticalAlignment="Bottom"
