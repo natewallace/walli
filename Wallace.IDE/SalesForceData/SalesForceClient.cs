@@ -397,7 +397,7 @@ namespace SalesForceData
                 new SalesForceAPI.Partner.SessionHeader() { sessionId = _session.Id },
                 null,
                 null,
-                String.Format("FIND {{{0}}} IN ALL FIELDS RETURNING User (Id, Name)", query));
+                String.Format("FIND {{{0}}} IN ALL FIELDS RETURNING User (Id, Name, Username)", query));
 
             SalesForceAPI.Partner.searchResponse response = _partnerClient.search(request);
 
@@ -413,6 +413,7 @@ namespace SalesForceData
                     {
                         string id = null;
                         string name = null;
+                        string username = null;
 
                         foreach (System.Xml.XmlElement e in searchRecord.record.Any)
                         {
@@ -426,10 +427,12 @@ namespace SalesForceData
                                 id = value;
                             else if (String.Compare("Name", e.LocalName, true) == 0)
                                 name = value;
+                            else if (String.Compare("Username", e.LocalName, true) == 0)
+                                username = value;
                         }
 
                         if (id != null && name != null)
-                            results.Add(new User(id, name));
+                            results.Add(new User(id, name, username));
                     }
                 }
             }

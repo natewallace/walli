@@ -41,9 +41,21 @@ namespace SalesForceData
         /// <param name="id">Id.</param>
         /// <param name="name">Name.</param>
         public User(string id, string name)
+            : this(id, name, null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="id">Id.</param>
+        /// <param name="name">Name.</param>
+        /// <param name="username">Username.</param>
+        public User(string id, string name, string username)
         {
             Id = id;
             Name = name;
+            Username = username;
         }
 
         #endregion
@@ -56,9 +68,14 @@ namespace SalesForceData
         public string Id { get; private set; }
 
         /// <summary>
-        /// The user name.
+        /// The user name for display.
         /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// The username such as natewallace@yourorg.com.
+        /// </summary>
+        public string Username { get; private set; }
 
         #endregion
 
@@ -100,12 +117,15 @@ namespace SalesForceData
         }
 
         /// <summary>
-        /// Returns the Name property.
+        /// Returns the Name and Username(if set) properties.
         /// </summary>
-        /// <returns>The Name property.</returns>
+        /// <returns>The Name and Username(if set) properties.</returns>
         public override string ToString()
         {
-            return Name;
+            if (!String.IsNullOrWhiteSpace(Username))
+                return String.Format("{0} ({1})", Name, Username);
+            else
+                return Name;
         }
 
         #endregion
