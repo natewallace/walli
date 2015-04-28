@@ -214,6 +214,7 @@ WithoutSharing 			WITHOUT{WhiteSpace}*SHARING
 	"\\n"               { UpdateState(); }
 	"\\f"               { UpdateState(); }
 	"\\r"               { UpdateState(); }	
+	"\\u"               { UpdateState(); }
 	"\\'"               { UpdateState(); }
 	"\\\\"              { UpdateState(); }
   
