@@ -48,7 +48,7 @@ namespace Wallace.IDE.SalesForce.Function
             List<SourceFileNode> result = new List<SourceFileNode>();
 
             Project project = App.Instance.SalesForceApp.CurrentProject;
-            if (project != null && project.Client.Checkout.IsEnabled())
+            if (project != null)
             {
                 foreach (INode node in App.Instance.Navigation.SelectedNodes)
                 {
