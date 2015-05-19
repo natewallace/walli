@@ -60,6 +60,18 @@ namespace Wallace.IDE.SalesForce.Framework.DiffLib
 
             foreach (var item in matches)
             {
+                // need to record differences at beginning of sequence
+                if (lastLeftIndex == -1 && lastRightIndex == -1)
+                {
+                    int diff = item.RightIndex - item.LeftIndex;
+                    if (diff > 0)
+                        yield return new DifferenceInstruction(DifferenceOperation.Inserted,
+                            new SubSequence(0, item.LeftIndex, 0, diff));
+                    else if (diff < 0)
+                        yield return new DifferenceInstruction(DifferenceOperation.Removed,
+                            new SubSequence(item.RightIndex, 0, diff * -1, 0));
+                }
+
                 if (lastLeftIndex != -1)
                 {
                     var diff = item.LeftIndex - lastLeftIndex;
