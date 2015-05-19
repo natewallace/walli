@@ -38,6 +38,15 @@ namespace Wallace.IDE.SalesForce.Framework
     /// </summary>
     public class SimpleRepository : IXmlSerializable
     {
+        #region Fields
+
+        /// <summary>
+        /// Supports the SubFolder property.
+        /// </summary>
+        private string _subFolder;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -74,7 +83,26 @@ namespace Wallace.IDE.SalesForce.Framework
         /// <summary>
         /// A sub folder under the branch where commits are made.
         /// </summary>
-        public string SubFolder { get; set; }
+        public string SubFolder 
+        {
+            get
+            {
+                return _subFolder;
+            }
+            set
+            {
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    _subFolder = null;
+                }
+                else
+                {
+                    _subFolder = value.Replace('/', '\\').Trim();
+                    if (!_subFolder.EndsWith("\\"))
+                        _subFolder = String.Format("{0}\\", _subFolder);
+                }
+            }
+        }
 
         /// <summary>
         /// The username used to login to the remote with.
@@ -581,7 +609,7 @@ namespace Wallace.IDE.SalesForce.Framework
                         if (te.Mode == Mode.Directory)
                             folderStack.Push(te);
                         else
-                            result.Add(String.Format("+ {0}", te.Path));
+                            result.Add(String.Format("+ {0}", RemoveSubFolderFromPath(te.Path)));
                     }
 
                     while (folderStack.Count > 0)
@@ -595,7 +623,7 @@ namespace Wallace.IDE.SalesForce.Framework
                                 if (child.Mode == Mode.Directory)
                                     folderStack.Push(child);
                                 else
-                                    result.Add(String.Format("+ {0}", child.Path));
+                                    result.Add(String.Format("+ {0}", RemoveSubFolderFromPath(child.Path)));
                             }
                         }
                     }
@@ -609,15 +637,15 @@ namespace Wallace.IDE.SalesForce.Framework
 
                     if (changes.Modified != null)
                         foreach (TreeEntryChanges tec in changes.Modified)
-                            result.Add(String.Format("  {0}", tec.Path));
+                            result.Add(String.Format("  {0}", RemoveSubFolderFromPath(tec.Path)));
 
                     if (changes.Added != null)
                         foreach (TreeEntryChanges tec in changes.Added)
-                            result.Add(String.Format("+ {0}", tec.Path));
+                            result.Add(String.Format("+ {0}", RemoveSubFolderFromPath(tec.Path)));
 
                     if (changes.Deleted != null)
                         foreach (TreeEntryChanges tec in changes.Deleted)
-                            result.Add(String.Format("- {0}", tec.Path));
+                            result.Add(String.Format("- {0}", RemoveSubFolderFromPath(tec.Path)));
                 }
             }
 
@@ -728,6 +756,25 @@ namespace Wallace.IDE.SalesForce.Framework
             }
 
             return String.Empty;
+        }
+
+        /// <summary>
+        /// Removes the sub folder from the beginning of the path if it's present.
+        /// </summary>
+        /// <param name="path">The path to remove the sub folder from.</param>
+        /// <returns>The path without the sub folder.</returns>
+        private string RemoveSubFolderFromPath(string path)
+        {
+            if (path == null)
+                return path;
+
+            if (String.IsNullOrWhiteSpace(SubFolder))
+                return path;
+
+            if (path.StartsWith(SubFolder, StringComparison.CurrentCultureIgnoreCase))
+                return path.Substring(SubFolder.Length);
+
+            return path;
         }
 
         #endregion
