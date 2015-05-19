@@ -649,9 +649,6 @@ namespace Wallace.IDE.SalesForce.Framework
             if (String.IsNullOrWhiteSpace(fileName))
                 return null;
 
-            if (!String.IsNullOrWhiteSpace(SubFolder))
-                fileName = Path.Combine(SubFolder, fileName);
-
             // get the requested version of the file
             if (version == null)
             {
@@ -659,6 +656,9 @@ namespace Wallace.IDE.SalesForce.Framework
                 if (commits.Length > 0)
                     version = commits[0];
             }
+
+            if (!String.IsNullOrWhiteSpace(SubFolder))
+                fileName = Path.Combine(SubFolder, fileName);
 
             if (version != null)
             {
