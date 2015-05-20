@@ -544,10 +544,10 @@ namespace SalesForceLanguage.Apex
         private bool IsInToken(TextPosition position, Stream text, Tokens[] tokens)
         {
             long currentPosition = text.Position;
-
-            bool result = false;
             text.Position = 0;
             ApexLexer lexer = new ApexLexer(text, true);
+            Tokens previousToken = Tokens.error;
+
             while (lexer.yylex() > 2)
             {
                 if (lexer.yylval != null)
@@ -555,17 +555,23 @@ namespace SalesForceLanguage.Apex
                     if (lexer.yylval.TextSpan.Contains(position) ||
                         lexer.yylval.TextSpan.StartLine > position.Line)
                         break;
-                }
+
+                    previousToken = lexer.yylval.Token;
+                }                
             }
 
             text.Position = currentPosition;
 
-            if (lexer.yylval != null &&
-                lexer.yylval.TextSpan.Contains(position) &&
-                tokens.Contains(lexer.yylval.Token))
-                return true;
+            if (lexer.yylval != null)
+            {
+                if (lexer.yylval.Token == Tokens.EOF && tokens.Contains(previousToken))
+                    return true;
 
-            return result;
+                if (lexer.yylval.TextSpan.Contains(position) && tokens.Contains(lexer.yylval.Token))
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
