@@ -1,5 +1,8 @@
 ﻿public class Gen {
 
+	public class Object {
+	}
+
 	public class Trigger {
 		public static boolean isExecuting { get; set; }
 		public static boolean isInsert { get; set; }
@@ -147,6 +150,25 @@
 	}
 
 	public class Auth {
+
+		public class AuthConfiguration {
+			public AuthConfiguration(String communityOrCustomUrl, String startUrl);
+			public AuthConfig getAuthConfig();
+			public List<AuthConfigProviders> getAuthConfigProviders();
+			public List<AuthProvider> getAuthProviders();
+			public String getBackgroundColor();
+			public String getDefaultProfileForRegistration();
+			public String getFooterText();
+			public String getForgotPasswordUrl();
+			public String getLogoUrl();
+			public List<SamlSsoConfig> getSamlProviders();
+			public static String getSamlSsoUrl(String communityOrCustomUrl, String startURL, String samlId);
+			public Boolean getSelfRegistrationEnabled();
+			public String getSelfRegistrationUrl();
+			public String getStartUrl();
+			public Boolean getUsernamePasswordEnabled();
+		}
+
 		public class AuthToken {
 			public String getAccessToken(String authProviderId, String providerName);
 			public Map<String, String> getAccessTokenMap(String authProviderId, String providerName);
@@ -448,6 +470,23 @@
 			public static ConnectApi.FeedItem shareFeedItem(String communityId, ConnectApi.FeedType feedType, String subjectId, String originalFeedItemId);
 			public static ConnectApi.FeedItem updateBookmark(String communityId, String feedItemId, Boolean isBookmarkedByCurrentUser);
 			public static ConnectApi.FeedPoll voteOnFeedPoll(String communityId, String feedItemId, String myChoiceId);
+			public static ConnectApi.FeedEntityIsEditable isCommentEditableByMe(String communityId, String commentId);
+			public static ConnectApi.FeedEntityIsEditable isFeedElementEditableByMe(String communityId, String feedElementId);
+			public static ConnectApi.Comment updateComment(String communityId, String commentId, ConnectApi.CommentInput comment);
+			public static ConnectApi.FeedElement updateFeedElement(String communityId, String feedElementId, ConnectApi.FeedElementInput feedElement);
+		}
+
+		public class Recommendations {
+			public static ConnectApi.RecommendationCollection getRecommendationForUser(String communityId, String userId, ConnectApi.RecommendationActionType action, String objectId);
+			public static ConnectApi.RecommendationCollection getRecommendationsForUser(String communityId, String userId, ConnectApi.RecommendationActionType contextAction, String contextObjectId, Integer maxResults);
+			public static ConnectApi.RecommendationCollection getRecommendationsForUser(String communityId, String userId, ConnectApi.RecommendationActionType action, ConnectApi.RecommendationActionType contextAction, String contextObjectId, Integer maxResults);
+			public static ConnectApi.RecommendationCollection getRecommendationsForUser(String communityId, String userId, ConnectApi.RecommendationActionType action, String objectCategory, ConnectApi.RecommendationActionType contextAction, String contextObjectId, Integer maxResults);
+			public static rejectRecommendationForUser(String communityId, String userId, ConnectApi.RecommendationActionType action, String objectId);
+			public static rejectRecommendationForUser(String communityId, String userId, ConnectApi.RecommendationActionType action, ConnectApi.RecommendedObjectType objectEnum);
+			public static Void setTestGetRecommendationForUser(String communityId, String userId, ConnectApi.RecommendationActionType action, String objectId, ConnectApi.RecommendationCollection result);
+			public static Void setTestGetRecommendationsForUser(String communityId, String userId, ConnectApi.RecommendationActionType contextAction, String contextObjectId, Integer maxResults, ConnectApi.RecommendationCollection result);
+			public static Void setTestGetRecommendationsForUser(String communityId, String userId, ConnectApi.RecommendationActionType action, ConnectApi.RecommendationActionType contextAction, String contextObjectId, Integer maxResults, ConnectApi.RecommendationCollection result);
+			public static Void setTestGetRecommendationsForUser(String communityId, String userId, ConnectApi.RecommendationActionType action, String objectCategory, ConnectApi.RecommendationActionType contextAction, String contextObjectId, Integer maxResults, ConnectApi.RecommendationCollection result);
 		}
 
 		public class ChatterGroups {
@@ -488,6 +527,11 @@
 			public static ConnectApi.ChatterGroup updateGroupMember(String communityId, String membershipId, ConnectApi.GroupMembershipType role);
 			public static ConnectApi.GroupChatterSettings updateMyChatterSettings(String communityId, String groupId, ConnectApi.GroupEmailFrequency emailFrequency);
 			public static ConnectApi.GroupMembershipRequest updateRequestStatus(String communityId, String requestId, ConnectApi.GroupMembershipRequestStatus status);
+			public static ConnectApi.GroupRecord addRecord(String communityId, String groupId, String recordId);
+			public static ConnectApi.GroupRecord getRecord(String communityId, String groupRecordId);
+			public static Void removeRecord(String communityId, String groupRecordId);
+			public static ConnectApi.GroupRecordPage getRecords(String communityId, String groupId);
+			public static ConnectApi.GroupRecordPage getRecords(String communityId, String groupId, Integer pageParam, Integer pageSize);
 		}
 
 		public class ChatterMessages {
@@ -744,6 +788,10 @@
 
 		public class MessageBodyInput {
 			public List<ConnectApi.MessageSegmentInput> messageSegments { get; set; }
+		}
+
+		public class GroupRecordInput {
+			public string recordId { get; set; }
 		}
 
 		public abstract class MessageSegmentInput {
@@ -1779,6 +1827,30 @@
 			public string userDefaultCurrencyIsoCode { get; set; }
 			public string userId { get; set; }
 			public string userLocale { get; set; }
+			public boolean canViewCommunitySwitcher { get; set; }
+		}
+
+		public class ActionLinkDefinition {
+			public string actionUrl { get; set; }
+			public DateTime createdDate { get; set; }
+			public string excludedUserId { get; set; }
+			public boolean groupDefault { get; set; }
+			public List<ConnectApi.RequestHeader> headers { get; set; }
+			public string id { get; set; }
+			public string label { get; set; }
+			public string labelKey { get; set; }
+			public ConnectApi.HttpRequestMethod method { get; set; }
+			public DateTime modifiedDate { get; set; }
+			public string requestBody { get; set; }
+			public boolean requiresConfirmation { get; set; }
+			public string templateId { get; set; }
+			public ConnectApi.ActionLinkType type { get; set; }
+			public string userId { get; set; }
+		}
+
+		public class CommentCapabilities {
+			public ConnectApi.ContentCapability content { get; set; }
+			public ConnectApi.EditCapability edit { get; set; }
 		}
 
 		public class UserSummary extends ConnectApi.User {
@@ -2254,7 +2326,8 @@
 			public Boolean allowFieldTruncation {get; set;}
 			public Database.DmlOptions.Assignmentruleheader assignmentRuleHeader {get; set;}
 			public Database.DmlOptions.EmailHeader emailHeader {get; set;}
-			public Database.DmlOptions.LocaleOptions localeOptions {get; set;}
+			public Database.DmlOptions.LocaleOptions localeOptions { get; set;}
+			public Database.DmlOptions DuplicateRuleHeader { get; set; }
 			public Boolean optAllOrNone {get; set;}
 
 			public class AssignmentRuleHeader {
@@ -2266,6 +2339,12 @@
 				public Boolean triggerAutoResponseEmail {get; set;}
 				public Boolean triggerOtherEmail {get; set;}
 				public Boolean triggerUserEmail {get; set;}
+			}
+
+			public class DuplicateRuleHeader {
+				public Boolean allowSave {get; set;}
+				public Boolean includeRecordDetails {get; set;}
+				public Boolean runAsCurrentUser {get; set;}
 			}
 		}
 
@@ -2358,6 +2437,219 @@
 			public ID getId();
 			public Boolean isCreated();
 			public Boolean isSuccess();
+		}
+	}
+
+	public class DataSource {
+		
+		public enum AuthenticationCapability {
+			ANONYMOUS,
+			BASIC,
+			CERTIFICATE,
+			OAUTH
+		}
+
+		public enum AuthenticationProtocol {
+			NONE,
+			OAUTH,
+			PASSWORD
+		}
+
+		public enum Capability {
+			QUERY_PAGINATION_SERVER_DRIVEN,
+			QUERY_TOTAL_SIZE,
+			REQUIRE_ENDPOINT,
+			REQUIRE_HTTPS,
+			ROW_QUERY,
+			SEARCH
+		}
+
+		public class Column {
+			public Integer decimalPlaces {get; set;}
+			public String description {get; set;}
+			public Boolean filterable {get; set;}
+			public String label {get; set;}
+			public Integer length {get; set;}
+			public String name {get; set;}
+			public String referenceTargetField {get; set;}
+			public String referenceTo {get; set;}
+			public Boolean sortable {get; set;}
+			public DataSource.DataType type {get; set;}
+			public static DataSource.Column boolean(String name);
+			public static DataSource.Column externalLookup(String name, String domain);
+			public static DataSource.Column get(String name, String label, String description, Boolean isSortable, Boolean isFilterable, DataSource.DataType type, Integer length, Integer decimalPlaces, String referenceTo, String referenceTargetField);
+			public static DataSource.Column get(String name, String label, String description, Boolean isSortable, Boolean isFilterable, DataSource.DataType type, Integer length, Integer decimalPlaces);
+			public static DataSource.Column get(String name, String label, String description, Boolean isSortable, Boolean isFilterable, DataSource.DataType type, Integer length);
+			public static DataSource.Column indirectLookup(String name, String domain, String targetField);
+			public static DataSource.Column lookup(String name, String domain);
+			public static DataSource.Column number(String name, Integer length, Integer decimalPlaces);
+			public static DataSource.Column text(String name, String label, Integer length);
+			public static DataSource.Column text(String name, Integer length);
+			public static DataSource.Column text(String name);
+			public static DataSource.Column textarea(String name);
+			public static DataSource.Column url(String name, Integer length);
+			public static DataSource.Column url(String name);
+		}
+
+		public class ColumnSelection {
+			public DataSource.QueryAggregation aggregation {get; set;}
+			public String columnName {get; set;}
+			public String tableName {get; set;}
+		}
+
+		public class Connection {
+			public DataSource.TableResult query(DataSource.QueryContext queryContext);
+			public List<DataSource.TableResult> search(DataSource.SearchContext searchContext);
+			public List<DataSource.Table> sync();
+		}
+
+		public class ConnectionParams {
+			public String certificateName {get; set;}
+			public String endpoint {get; set;}
+			public String oauthToken {get; set;}
+			public String password {get; set;}
+			public DataSource.IdentityType principalType {get; set;}
+			public DataSource.AuthenticationProtocol protocol {get; set;}
+			public String repository {get; set;}
+			public String username {get; set;}
+		}
+
+		public class DataSourceUtil {
+			public void logWarning(String message);
+			public void throwException(String message);
+		}
+
+		public enum DataType {
+			BOOLEAN_TYPE,
+			DATETIME_TYPE,
+			EXTERNAL_LOOKUP_TYPE,
+			INDIRECT_LOOKUP_TYPE,
+			LOOKUP_TYPE,
+			NUMBER_TYPE,
+			STRING_LONG_TYPE,
+			STRING_SHORT_TYPE,
+			URL_TYPE
+		}
+
+		public class Filter {
+			public String columnName {get; set;}
+			public Object columnValue {get; set;}
+			public List<DataSource.Filter> subfilters {get; set;}
+			public String tableName {get; set;}
+			public DataSource.FilterType type {get; set;}
+		}
+
+		public enum FilterType {
+			CONTAINS,
+			ENDS_WITH,
+			EQUALS,
+			GREATER_THAN,
+			GREATER_THAN_OR_EQUAL_TO,
+			LESS_THAN,
+			LESS_THAN_OR_EQUAL_TO,
+			NOT_EQUALS,
+			STARTS_WITH
+		}
+
+		public enum IdentityType {
+			ANONYMOUS,
+			NAMED_USER,
+			PER_USER
+		}
+
+		public class Order {
+			public String columnName {get; set;}
+			public DataSource.OrderDirection direction {get; set;}
+			public String tableName {get; set;}
+			public static DataSource.Order get(String tableName, String columnName, DataSource.OrderDirection direction);
+		}
+
+		public enum OrderDirection {
+			ASCENDING,
+			DESCENDING
+		}
+
+		public class Provider {
+			public List<DataSource.AuthenticationCapability> getAuthenticationCapabilities();
+			public List<DataSource.Capability> getCapabilities();
+			public DataSource.Connection getConnection(DataSource.ConnectionParams connectionParams);
+		}
+
+		public enum QueryAggregation {
+			AVG,
+			COUNT,
+			MAX,
+			MIN,
+			NONE,
+			SUM
+		}
+
+		public class QueryContext {
+			public String queryMoreToken {get; set;}
+			public DataSource.TableSelection tableSelection {get; set;}
+			public static DataSource.QueryContext get(List<DataSource.Table> metadata, Integer offset, Integer maxResults, DataSource.TableSelection tableSelection);
+		}
+
+		public class QueryUtils {
+			public static List<Map<String,Object>> applyLimitAndOffset(DataSource.QueryContext queryContext, List<Map<String,Object>> rows);
+			public static List<Map<String,bject>> filter(DataSource.QueryContext queryContext, List<Map<String,Object>> rows);
+			public static List<Map<String,bject>> process(DataSource.QueryContext queryContext, List<Map<String,Object>> rows);
+			public static List<Map<String,ject>> sort(DataSource.QueryContext queryContext, List<Map<String,bject>> rows);
+		}
+
+		public class ReadContext {
+			public Integer maxResults {get; set;}
+			public List<DataSource.Table> metadata {get; set;}
+			public Integer offset {get; set;}
+		}
+
+		public class SearchContext {
+			public SearchContext(List<DataSource.Table> metadata, Integer offset, Integer maxResults, List<DataSource.TableSelection> tableSelections, String searchPhrase);
+			public SearchContext();
+			public String searchPhrase {get; set;}
+			public List<DataSource.TableSelection> tableSelections {get; set;}
+		}
+
+		public class SearchUtils {
+			public static List<DataSource.TableResult> searchByName(DataSource.SearchContext searchDetails, DataSource.Connection connection);
+		}
+
+		public class Table {
+			public List<DataSource.Column> columns {get; set;}
+			public String description {get; set;}
+			public String labelPlural {get; set;}
+			public String labelSingular {get; set;}
+			public String name {get; set;}
+			public String nameColumn {get; set;}
+			public static DataSource.Table get(String name, String labelSingular, String labelPlural, String description, String nameColumn, List<DataSource.Column> columns);
+			public static DataSource.Table get(String name, String nameColumn, List<DataSource.Column> columns);
+		}
+
+		public class TableResult {
+			public String errorMessage {get; set;}
+			public String queryMoreToken {get; set;}
+			public List<Map<String,Object>> rows {get; set;}
+			public Boolean success {get; set;}
+			public String tableName {get; set;}
+			public Integer totalSize {get; set;}
+			public static DataSource.TableResult error(String errorMessage);
+			public static DataSource.TableResult get(Boolean success, String errorMessage, String tableName, List<Map<String,Object>> rows, Integer totalSize);
+			public static DataSource.TableResult get(Boolean success, String errorMessage, String tableName, List<Map<String,Object>> rows);
+			public static DataSource.TableResult get(DataSource.QueryContext queryContext, List<Map<String,Object>> rows);
+			public static DataSource.TableResult get(DataSource.TableSelection tableSelection, List<Map<String,Object>> rows);
+		}
+
+		public class TableSelection {
+			public List<DataSource.ColumnSelection> columnsSelected {get; set;}
+			public DataSource.Filter filter {get; set;}
+			public List<DataSource.Order> order {get; set;}
+			public String tableSelected {get; set;}
+		}
+
+		public class DataSourceException extends Exception {
+		}
+
+		public class OAuthTokenExpiredException extends Exception {
 		}
 	}
 
@@ -3561,7 +3853,49 @@
 	}
 
 	public class Search {
-		public static sObject[] query(String query);
+		public static List<List<sObject>> query(String query);
+		public static Search.SearchResults query(String searchQuery);
+		public static Search.SuggestionResults suggest(String searchQuery, String sObjectType, Search.SuggestionOption suggestions);
+
+		public class SearchResult {
+			public SObject getSObject();
+			public String getSnippet(String fieldName);
+			public String getSnippet();
+		}
+
+		public class SearchResults {
+			public List<Search.SearchResult> get(String sObjectType);
+		}
+
+		public class SuggestionOption {
+			public void setFilter(Search.KnowledegeSuggestionFilter knowledgeSuggestionFilter);
+			public void setLimit(Integer limit);
+		}
+
+		public class SuggestionResult {
+			public SObject getSObject();
+		}
+
+		public class SuggestionResults {
+			public List<Search.SuggestionResult> getSuggestionResults();
+			public Boolean hasMoreResults();
+		}
+
+		public class KnowledgeSuggestionFilter {
+			public void addArticleType(String articleType);
+			public void addDataCategory(String dataCategoryGroupName, String dataCategoryName);
+			public void setChannel(String channelName);
+			public void setDataCategories(Map dataCategoryFilters);
+			public void setLanguage(String localeCode);
+			public void setPublishStatus(String publishStatus);
+			public void setValidationStatus(String validationStatus);
+		}
+	}
+
+	public class TerritoryMgmt {
+		public interface OpportunityTerritory2AssignmentFilter {
+			Map<Id,Id> getOpportunityTerritory2Assignments(List<Id> opportunityIds);
+		}
 	}
 
 	public class SelectOption {
@@ -3632,6 +3966,9 @@
 		public static Boolean isRegistrationEnabled();
 		public static System.PageReference login(String username, String password, String startUrl);
 		public static Void setPortalUserAsAuthProvider(sObject user, String contactId);
+		public static Id createExternalUser(SObject name, String accountId);
+		public static Id createExternalUser(SObject name, String accountId, String password);
+		public static Id createExternalUser(SObject name, String accountId, String password, Boolean sendEmailConfirmation);
 
 		public interface UrlRewriter {
 			System.PageReference[] generateUrlFor(System.PageReference[] urls);
@@ -3697,6 +4034,7 @@
 		public Boolean endsWith(String suffix);
 		public Boolean endsWithIgnoreCase(String suffix);
 		public Boolean equals(String compString);
+		public Boolean equals(Object stringOrId);
 		public Boolean equalsIgnoreCase(String compString);
 		public String escapeCsv();
 		public String escapeEcmaScript();
@@ -3798,6 +4136,7 @@
 		public static String valueOf(Long longToConvert);
 		public static String valueOf(Object toConvert);
 		public static String valueOfGmt(Datetime datetimeToConvert);
+
 	}
 
 	public enum LoggingLevel {
@@ -4042,6 +4381,19 @@
 			public Void setHistoricalSnapshotDates(LIST<String> historicalSnapshot);
 			public Void setReportBooleanFilter(String reportBooleanFilter);
 			public Void setReportFilters(LIST<Reports.ReportFilter> reportFilters);
+			public String getDivision();
+			public Boolean getHasDetailRows();
+			public Boolean getHasRecordCount();
+			public String getScope();
+			public List<Reports.SortColumn> getSortBy();
+			public Reports.StandardDateFilter getStandardDateFilter();
+			public void setDivision(String division);
+			public void setHasDetailRows(Boolean hasDetailRows);
+			public void setHasRecordCount(Boolean hasRecordCount);
+			public void setScope(String scopeName);
+			public void setSortBy(List<Reports.SortColumn> column);
+			public void setStandardDateFilter(Reports.StandardDateFilter dateFilter);
+			public void setStandardFilters(List<Reports.StandardFilter> filters);
 		}
 
 		public class ReportResults {
