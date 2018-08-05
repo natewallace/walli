@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wallace.IDE", "Wallace.IDE\Wallace.IDE.csproj", "{C7DF8A83-463C-4F7C-BF5B-F0106B922B47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesForceData", "SalesForceData\SalesForceData.csproj", "{F542F46A-3E41-405D-83D1-DF675C810673}"
@@ -79,5 +81,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C2AC9BE-458D-4596-918A-C8783FEB5072}
 	EndGlobalSection
 EndGlobal
