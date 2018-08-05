@@ -128,7 +128,7 @@ namespace Wallace.IDE.Framework.UI
             try
             {
                 using (App.Wait("Opening home page..."))
-                    ClientBrowser.GetDefaultBrowser().OpenUrl("https://walli.codeplex.com/");
+                    ClientBrowser.GetDefaultBrowser().OpenUrl("https://github.com/natewallace/walli");
             }
             catch
             {

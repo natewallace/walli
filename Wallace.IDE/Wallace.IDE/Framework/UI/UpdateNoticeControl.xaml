@@ -18,9 +18,9 @@
                     <TextBlock Foreground="Black"
                                Text="Go download it from the Walli home page: " />
                     <TextBlock>
-                        <Hyperlink NavigateUri="https://walli.codeplex.com/"
+                        <Hyperlink NavigateUri="https://github.com/natewallace/walli"
                                    Click="Hyperlink_Click">
-                            https://walli.codeplex.com/
+                            https://github.com/natewallace/walli
                         </Hyperlink>
                     </TextBlock>
                 </StackPanel>

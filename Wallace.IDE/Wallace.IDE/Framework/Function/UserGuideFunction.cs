@@ -49,7 +49,7 @@ namespace Wallace.IDE.Framework.Function
             try
             {
                 using (App.Wait("Opening user guide..."))
-                    ClientBrowser.GetDefaultBrowser().OpenUrl("https://walli.codeplex.com/documentation");
+                    ClientBrowser.GetDefaultBrowser().OpenUrl("https://github.com/natewallace/walli/wiki");
             }
             catch
             {
